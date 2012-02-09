@@ -1,0 +1,59 @@
+
+.meta_course:before {
+	content: "Web 2.0";
+}
+
+.meta_author:before {
+	content: "doc. Ing. Tomáš Vitvar, Ph.D.";
+}
+
+.meta_email:before {
+	content: "tomas@vitvar.com";
+}
+
+.meta_twitter:before {
+	content: "@TomasVitvar";
+}
+
+.meta_web:before {
+	content: "http://vitvar.com";
+}
+
+.meta_semester:before {
+	content: "CTU Summer Semester 2011/2012";
+}
+
+.meta_org:before {
+	content: "Czech Technical University in Prague";
+}
+
+.meta_orgfac:before {
+	content: "Faculty of Information Technologies";
+}
+
+.meta_field:before {
+	content: "Software and Web Engineering";
+}
+
+.meta_orgweb:before {
+	content: "http://vitvar.com/courses/w20";
+}
+
+div.oppa {
+	width: 400px;
+	/*float: left;*/
+	background: url('oppa2.png') left top no-repeat;
+	margin-left: 110px;
+	margin-top: 3px;
+	height: 50px;
+    opacity: 0.7;
+}
+
+.meta_logo {
+	background-image: url('cvut_logo.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	height: 188px;
+	margin: 25px auto 25px auto;
+	zoom: 0.8;
+}

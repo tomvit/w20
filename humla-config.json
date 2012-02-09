@@ -1,0 +1,34 @@
+{
+    "extensions": [
+        
+        {   "id" : "latex",
+            "object" : "ex_latex",
+            "scripts"  : [ { "src" : "humla/lib/ext/latex.js" } ],    
+            "styles"   : [ { "src" : "humla/lib/ext/latex.css", "media" : "screen, print" } ],
+            "params"   : {
+                "mathtex" : "http://www.vitvar.com:7070/cgi-bin/mt/mathtex.cgi?\\dpi{300}\\gammacorrection{0.5}"
+            },
+            "enabled" : true 
+        },
+        
+        {   "id" : "github",
+            "object" : "ex_github",
+            "scripts" : [ { "src" : "humla/lib/ext/github.js" } ],
+            "styles"  : [ { "src" : "humla/lib/ext/github.css", "media" : "screen, print" } ],
+            "params"  : {
+                "url"  : "http://proxy.vitvar.com/raw.github",
+                "user-repo" : "tomvit/mdw-examples"
+            },
+            "enabled" : true 
+        },
+
+        {   "id" : "references",
+            "object" : "ex_references",
+            "scripts" : [ { "src" : "lib/feed-tables/lib/feed-tables.js" },
+                          { "src" : "lib/humla/ext/references.js", "g": 1 },
+                          { "src" : "https://spreadsheets.google.com/feeds/list/0AoooUkEfVrhldENEczhyeFU5MVZNZFo4amwtVURxdEE/oda/public/basic?alt=json&callback=ex_references.loadReferences", "g": 5 }],
+            "styles"  : [ { "src" : "lib/humla/ext/references.css",  "media" : "screen, print" } ],               
+            "enabled" : true 
+        }        
+    ]
+}

@@ -1,0 +1,150 @@
+.test {
+    font-family: "Avenir";
+    font-size: 12px;
+}
+
+div.license {
+	width: 0px;
+	float: left;
+	background: url('cc-logo.png') left top no-repeat;
+	padding-left: 95px;
+	height: 50px;
+	padding-top: 3px;
+    opacity: 0.7;
+}
+
+.text-info {
+	float: right;
+	padding-top: 8px;
+    padding-right: 30px;
+}
+
+.intro > div.author {
+    width: auto;
+	font-size: 25px;
+	text-align: center;
+	margin: 30px 30px 0px 30px;
+	color: DimGray;
+}
+
+.intro > div.author p {
+	font-family: "Arial";
+	font-size: 14px;
+	margin: 3px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+}
+
+.intro > div.author p:nth-child(1) {	
+	font-family: "Times New Roman";
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.intro > div.org {
+	width: auto;
+	font-size: 16px;
+	text-align: center;
+	color: DimGray;
+	margin: 0px;
+	padding: 0px;
+}
+
+.intro > div.org p {
+	font-family: "Arial";
+	font-size: 14px;
+	margin: 3px;
+}
+
+.intro > img.logo {
+	width: 250px;
+	display: block;
+    margin: 20px auto 20px auto;
+}
+
+.intro > div.etc {
+    font: 13px Arial,Verdana,sans-serif; 	
+	font-size: 11px;
+	color: #333333;
+	padding: 10px 30px 10px 30px;	
+	margin-top: 10px;
+	color: DarkGray;
+}
+
+.intro > div.etc a, 
+.intro > div.etc a:visited, 
+.intro > div.etc a:link {
+    color: #888888;
+}
+
+/* different gutter colors for java and javascript */
+
+.syntaxhighlighter.java .gutter .line {
+    border-color: SkyBlue !important;
+}
+
+.syntaxhighlighter.xml .gutter .line {
+    border-color: Thistle !important;
+}
+
+.syntaxhighlighter.js .gutter .line {
+    border-color: BurlyWood !important;
+}
+
+.syntaxhighlighter .gutter {
+}
+
+/* GitHub repo */
+
+a[rel='code'] {
+    background: transparent url('github-icon.png') no-repeat center right;
+    background-size: auto;
+    padding: 5px 38px 5px 0px;
+    text-decoration: none;
+
+    color: inherit;
+    font-style: inherit;
+    font-size: inherit;
+    font-family: inherit;
+}
+/*
+a[rel='code']:after {
+    background: url('../img/github-icon.png') right top no-repeat !important;
+}
+
+a[rel='code'] {
+    color: red !important;
+}
+*/
+
+li.task {
+    list-style-type: none;
+    padding-top: -20px;
+    font-weight: bold;
+    
+    /* version with a picture */
+    background: transparent url('task.png') no-repeat center left;
+    background-size: contain;
+    padding-left: 50px;
+    margin-left: -40px;
+}
+
+/*li.task:before {
+    font-family: "Pictos";
+    content: "x\20";
+    margin-left: -35px;
+    color: SteelBlue;
+}*/
+
+li.task + ul {
+    border-left: 2px solid SteelBlue;
+    margin-left: -15px;
+}
+
+li.task + ul li {
+    margin-left: 30px;
+}
+
+
+
+
+
