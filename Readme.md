@@ -5,5 +5,5 @@ The slides are written in <a href="http://github.com/tomvit/humla">Humla</a>, th
 presentation envrionment. If you want to display the slides in your host, you need to 
 install humla and other submodules by running `bin/install-submodules.sh`.
 
-You can find these slides at http://vitvar.com/courses/w20/slides/lecture1.html.
+You can find these slides at http://vitvar.com/courses/slides/w20/lecture1.html.
 
