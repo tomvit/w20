@@ -144,7 +144,13 @@ li.task + ul li {
     margin-left: 30px;
 }
 
+/* this should go to the humla core css */
 
+figure {
+	margin: 0px auto 0px auto;
+	padding: 0px auto 0px auto;
+}
 
-
-
+figure figcaption {
+	font-size: 18px;
+}
