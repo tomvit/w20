@@ -49,7 +49,394 @@
 				<a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
 				<div class="oppa"></div>
 			</div>
-		</div>		
+		</div>	
+        
+    
+        <div class="slide outline">
+        </div>    
+                
+        <section>
+            <header>Graph Partitioning, Community detection</header>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Graph Partitioning</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Identifying communities of nodes in network</li>
+                    <li>TBD</li>
+                    <img src="http://www-personal.umich.edu/~ladamic/img/politicalblogs.jpg" alt=""/>
+                    <!-- http://www-personal.umich.edu/~ladamic/img/politicalblogs.jpg -->
+                    <li>Communities of bloggers, 2004 US Presidential elections</li>
+                </ul>
+            </div>    
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Clustering</h1>
+                </hgroup>
+                <ul class="x-small">                    
+                    <li>Algorithms try to maximize the number of edges that fall within the same cluster</li>
+                    <li>Indicates presence of different communities in a network</li>
+                    <div class="h-drawing" style="height: 300px;" alt="Clustering" id="1c-OXOtASf1CihK09byscN7BbZNGKAcVCcKA8oxjHXX8"></div>
+                    <li style="font-style: italic;">Clustering coefficient - probability - friends are friends too</li>
+                    <li style="font-style: italic;">Neighborhood overlap - common friends/ all friends</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>The island method</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <li>height = value of node or edge</li>
+                    <div class="h-drawing" style="height: 450px;" alt="Graph Partitioning" id="1PjPOJrsI3EMrRkWZjXELqkGUj76pozde2o11khjMvk8"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Triads</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>simply three nodes interlinked in some way</li>
+                    <ul>
+                        <li>things are really not so simple</li>
+                    </ul>
+                    <div class="h-drawing" style="height: 150px;" alt="Triads" id="1mq-WAxzVWC_3PdBWZMhGyakSSQgJvWJGAOJ71PWZNTg"></div>                    
+                    <li>the third individual becomes at a source of balance (providing second opinions and calming nerves)</li>
+                    <li>also a feedback loop</li>                    
+                    <li>“Forbidden Triad” and Structural Holes</li>
+                    <ul>
+                        <li>Bob and two girlfriends</li>
+                        <li>Banker and two corporations</li>
+                    </ul>
+                    <li>Structural Holes and Boundary Spanning</li>
+                    <ul>
+                        <li>span asymmetric information, bridge entire communities</li>
+                    </ul>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Cliques</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <li>cohesive group of people that are tightly connected to each other</li>
+                    <li>maximal complete subgraph of a given graph</li>
+                    <li>clique consists of several overlapping closed triads</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Graph Partitioning</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <li>Many methods - Hierarchical Clustering</li>
+                    <div class="h-drawing" style="height: 250px;" alt="Graph Partitioning" id="1qqs4OEdD_H3E6nem08REJDYslzWeiDXXG1HLl5PXuIY"></div>
+                    <li>Divisive</li>
+                    <ul>
+                        <li>Identifying and removing the "spanning links"</li>                                                                        
+                    </ul>
+                    <li>Agglomerative</li>
+                    <ul>
+                        <li>Glue nodes together into regions</li>                                                                        
+                    </ul>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Problems</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <li>Several bridges</li>
+                    <ul>
+                        <li>Which to remove first?</li>                                                                        
+                    </ul>
+                    <li>No edge is local bridge</li>
+                    <div class="h-drawing" style="height: 250px;" alt="Bridge Issue" id="1W6SfJ6cW1PMn6lQqAWnkd4MisugS9zQjp8q8G97fXNk"></div>
+                    <li>Solution - "trafic" - shortest paths</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Betweeness</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>Shortest path</li>
+                    <ul>
+                        <li>path that connects the two nodes with the shortest number of edges</li>                                                                        
+                    </ul>
+                    <li>Betweeness</li>
+                    <ul>
+                        <li>total amount of flow (shortest paths) through the edge</li>                                                                        
+                    </ul>
+                    <div class="h-drawing" style="height: 200px;" alt="Bridge Issue" id="1qqs4OEdD_H3E6nem08REJDYslzWeiDXXG1HLl5PXuIY"></div>
+                    <li>Example</li>
+                    <ul>
+                        <li>7-8</li>
+                        <ul>
+                            <li>7x7=49</li>                            
+                        </ul>
+                        <li>1-2</li>                                                                        
+                        <ul>
+                            <li>1</li>                            
+                        </ul>
+                    </ul>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>The Girvan-Newman Methodg</h1>
+                </hgroup>
+                <ul class="xx-small">                    
+                    <li>Repeat following steps as long as edges remain in graph</li>
+                    <ol>
+                        <li>find the edge of highest betweenness and remove from graph</li>                                                                        
+                        <li>recalculate all betweennesses</li>
+                    </ol>
+                    <div class="h-drawing" style="height: 380px;" alt="Graph Partitioning" id="1r90jdoWCz_EIq5DmKzbYystbX2vBDfz83nTZ065OPRQ"></div>
+                    <li>Modularity Optimisation</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Computing Betweeness</h1>
+                </hgroup>
+                <ol class="small spacing">                    
+                    <li>Perform a breadth-first search of the graph, starting at A</li>
+                    <li>Determine the number of shortest paths from A to each other node</li>
+                    <li>Based on these numbers, determine the amount of flow from A to all other nodes that uses each edge</li>
+                </ol>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Breadth-first search</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <li>TBD</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Counting Paths</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <li>TBD</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Determine the flow values</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <li>TBD</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Overlapping Communities</h1>
+                </hgroup>
+                <ul class="x-small">                    
+                    <li>Is it realistic/useful to assign nodes to only a single community?</li>
+                    <li>Communities overlap pervasively, making it impossible to partition the networks without splitting communities </li>
+                    <li>Algorithm: CFinder - http://cfinder.org/</li>
+                    <ul>
+                        <li>Identify k-cliques: a fully connected subgraph k nodes</li>
+                        <li>Pair of k-cliques are "adjacent" if they share k−1 nodes</li>
+                        <li>Form overlapping communities from maximal union of k-cliques that can be reached from each other through adjacent k-cliques</li>
+                    </ul>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Dynamic Community Finding</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <li>In many SNA tasks we will want to analyse how communities in the network form and evolve over time</li>
+                    <li>Often perform this analysis in an "offline" manner by examining successive snapshots of the network</li>
+                    <li>TBD</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Dynamic Community Finding</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <li>We can characterise dynamic communities in terms of key life-cycle events</li>
+                    <li>Birth &amp; Death of communities</li>
+                    <li>Expansion &amp; Contraction of communities</li>
+                    <li>Merging &amp; Splitting of communities</li>
+                    <li>TBD</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Dynamic Community Finding</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <li>Apply community finding algorithm to each snapshot of the graph</li>
+                    <li>Match newly-generated "step communities" with those that have been identified in the past</li>
+                    <li>TBD</li>
+                </ul>
+            </div>        
+            
+            
+            
+            
+        </section>
+        
+        <div class="slide outline">
+        </div>    
+                
+        <section>
+            <header>Affiliation networks</header>
+        
+            <div class="slide">
+                <hgroup>
+                    <h1>Affiliation</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <li>Node for each person</li>
+                    <li>Node for each focus</li>
+                    <li>connect person A to focus X by an edge if A participates in X</li>
+                    <ul>
+                        <li>affiliation network</li>
+                        <li>bipartite graphs</li>
+                    </ul>
+                    <div class="h-drawing" style="height: 250px;" alt="Affiliation network" id="1UV3KW9ToiNIuAZWPdec7VJXgCRoeDoUDidKSJUqNJRk"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Social-affiliation network</h1>
+                </hgroup>                
+                <ul class="x-small">                    
+                    <li>Co-evolution:social-affiliation network</li>
+                    <div class="h-drawing" style="height: 200px;" alt="social-affiliation network" id="1fDHqzGtnYJVv3oRA0rWNyxxq9XPcHEJ2qbIBRxWGDXE"></div>
+                    <li>Triangles in a social-affiliation network</li>
+                    <div class="h-drawing" style="height: 200px;" alt="social-affiliation network" id="1fDe3VXN7uB-D0-PWQi-mShXUA-V_z9XccZTQSCXPhdw"></div>
+                </ul>
+            </div>            
+            
+            
+        </section>
+        
+        <div class="slide outline">
+        </div>    
+                
+        <section>
+            <header>Spatial Model</header>
+        
+            <div class="slide">
+                <hgroup>
+                    <h1>A Spatial Model of Segregation</h1>
+                </hgroup>
+                <ul class="x-small">                    
+                    <div class="h-drawing" style="height: 400px;" alt="A Spatial Model of Segregation" id="1cRlKv9zCmVkGblUQJBAJZ4A_A6NVt33MaNaWQ0Q6fgU" format="png"></div>
+                    <li>Markus M. Mobius and Tanya S. Rosenblat. The process of ghetto formation: Evidence from Chicago, 2001. Working paper.</li>
+                    <!-- http://www.surveyor.nber.org/home/harvard/papers/chicago-dec7.pdf -->
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>The Schelling model</h1>
+                </hgroup>
+                <ul class="small spacing">       
+                    <li>the effect of homophily operating at a local level</li>
+                    <div class="h-drawing" style="height: 400px;" alt="The Schelling model" id="1KI6bu4lzCpNziy6RElGkjG5OM-GBHT5S31j7UtMbuUI" format="png"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>The Schelling model</h1>
+                </hgroup>
+                <ul class="small spacing">       
+                    <div class="h-drawing" style="height: 400px;" alt="The Schelling model" id="188khLXnVOqgrMVEJbXnmOUjVeHO1P6HrJ6IN9_D5EYI" format="png"></div>
+                </ul>
+            </div>           
+            
+        </section>
+        
+        <div class="slide outline">
+        </div>    
+                
+        <section>
+            <header>Structural Balance</header>
+        
+            <div class="slide">
+                <hgroup>
+                    <h1>Structural Balance</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <li>each edge labeled with either + or −</li>
+                    <li>The most plausible</li>                    
+                    <div class="h-drawing" style="height: 420px;" alt="Structural Balance" id="1rnGzJDnaHIL4K8IjEtcIoZenHP9hLprkFAPSVY8bz88"></div>
+                </ul>
+            </div>  
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Structural Balance</h1>
+                </hgroup>
+                <ul class="x-small">                                                            
+                    <li>Structural Balance Property</li>
+                    <ul>
+                        <li>For every set of three nodes, if we consider the three edges connecting them, either all three of these edges are labeled +, or else exactly one of them is labeled +</li>
+                    </ul>
+                    <li>Balance Theorem</li>
+                    <ul>
+                        <li>If a labeled complete graph is balanced, then either all pairs of nodes are friends, or else the nodes can be divided into two groups, X and Y , such that every pair of nodes in X like each other, every pair of nodes in Y like each other, and everyone in X is the enemy of everyone in Y </li>
+                    </ul>
+                    <div class="h-drawing" style="height: 220px;" alt="Structural Balance" id="1-MqLcAv0-RT0eyHZpXJbx5eb_yF7TdIyKPYEJgdoWhk"></div>
+                </ul>
+            </div>
+            
+              <div class="slide">
+                <hgroup>
+                    <h1>Structural Balance - Example</h1>
+                </hgroup>
+                <ul class="small">                                                                                
+                    <div class="h-drawing" style="height: 430px;" alt="Structural Balance" id="1iXyIWCbMFMtcb7MUW7qoQS1cH7iA-sPfxGf2trISNfg" format="png"></div>
+                    <li><i>http://www.feem-web.it/ctn/41_publ_newsl_15.11.php</i></li>
+                </ul>
+            </div>  
+            
+        </section>
+        
+        <div class="slide outline">
+        </div>    
+                
+        <section>
+            <header>Examples, Applications</header>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Examples, Applications</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                  
+                </ul>
+            </div>
+            
+            
+        </section>
 		
 	</body>
 </html>	
