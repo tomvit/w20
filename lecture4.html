@@ -64,12 +64,48 @@
                 </hgroup>
                 <ul class="xx-small">
                     <li>Identifying communities of nodes in network</li>
-                    <li>TBD</li>
-                    <img src="http://www-personal.umich.edu/~ladamic/img/politicalblogs.jpg" alt=""/>
+                    <!--<img src="http://www-personal.umich.edu/~ladamic/img/politicalblogs.jpg" alt=""/>-->
                     <!-- http://www-personal.umich.edu/~ladamic/img/politicalblogs.jpg -->
+                    <div class="h-drawing" style="height: 400px;" alt="Graph Partitioning" id="155LRa85C_DcjrpGBn6K6ztE7t-gqfwD88tfiqoLOZRY" format="png"></div>
                     <li>Communities of bloggers, 2004 US Presidential elections</li>
                 </ul>
-            </div>    
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Approaches</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Computer science approaches</li>
+                    <ul>
+                    	<li>Graph partitioning</li>
+						<ul>
+							<li>Minimum cuts</li>                    	
+							<li>Ratio cuts and variants</li>
+						</ul>
+						<li>Algorithms</li>
+						<ul>
+							<li>Kernighan­Lin method and variants</li>                    	
+							<li>Geometric methods</li>
+							<li>Spectral partitioning</li>
+						</ul>
+					</ul>
+                    <li>Social science approaches</li>
+                    <ul>
+                    	<li>Clustering</li>
+						<ul>
+							<li>Block modeling</li>
+							<li>Community structure</li>
+						</ul>
+						<li>Algorithms</li>
+						<ul>
+							<li>Best fits to stochastic block models</li>                    	
+							<li>Hierarchical clustering based on single­ or average­linkage clustering of similarity indices</li>
+							<li>Betweenness­based methods</li>
+						</ul>
+					</ul>
+                </ul>
+            </div>            
             
             <div class="slide">
                 <hgroup>
@@ -250,12 +286,39 @@
                 <ul class="x-small">                    
                     <li>Is it realistic/useful to assign nodes to only a single community?</li>
                     <li>Communities overlap pervasively, making it impossible to partition the networks without splitting communities </li>
-                    <li>Algorithm: CFinder - http://cfinder.org/</li>
+                    <div class="h-drawing" style="height: 200px;" alt="Overlapping Communities" id="123cwqdToq0nrogtc2vMn88UfDI5IcKs-0wiNWFZCm4E" format="png"></div>
+                    <!-- http://mlg.ucd.ie/files/summer/tutorial.pdf -->
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Overlapping Communities - Algorithms</h1>
+                </hgroup>
+                <ul class="x-small">                    
+                    <li><a href="http://cfinder.org/">CFinder</a></li>
                     <ul>
-                        <li>Identify k-cliques: a fully connected subgraph k nodes</li>
-                        <li>Pair of k-cliques are "adjacent" if they share k−1 nodes</li>
-                        <li>Form overlapping communities from maximal union of k-cliques that can be reached from each other through adjacent k-cliques</li>
+                    	<li>algorithm based on the clique percolation method</li>
+                    	<ul>
+							<li>Identify k-cliques: a fully connected subgraph k nodes</li>
+							<li>Pair of k-cliques are "adjacent" if they share k−1 nodes</li>
+							<li>Form overlapping communities from maximal union of k-cliques that can be reached from each other through adjacent k-cliques</li>
+                        </ul>
                     </ul>
+                    <li><a href="https://sites.google.com/site/greedycliqueexpansion/">Greedy Clique Expansion (GCE)</a></li>
+                    <ul>
+                        <li>identify distinct cliques as seeds, expands the seeds by greedily optimising a local fitness function</li>
+                    </ul>
+                    <li><a href="https://sites.google.com/site/aaronmcdaid/moses">MOSES</a></li>
+                    <ul>
+                        <li>scalable approach for identifying highlyoverlapping communities</li>
+                        <ul>
+                        	<li>Randomly select an edge, greedily expand a community around the edge to optimise an objective function</li>
+                        	<li>Delete "poor quality" communities</li>
+                        	<li>Fine-tune communities by re-assigning individual nodes</li>
+                        </ul>
+                    </ul>
+                    <!-- http://mlg.ucd.ie/files/summer/tutorial.pdf -->
                 </ul>
             </div>
             
@@ -263,10 +326,11 @@
                 <hgroup>
                     <h1>Dynamic Community Finding</h1>
                 </hgroup>
-                <ul class="small spacing">                    
+                <ul class="small">                    
                     <li>In many SNA tasks we will want to analyse how communities in the network form and evolve over time</li>
                     <li>Often perform this analysis in an "offline" manner by examining successive snapshots of the network</li>
-                    <li>TBD</li>
+                    <div class="h-drawing" style="height: 330px;" alt="Dynamic Community Finding" id="16JtZAcG5Q7534n_bjQ4QvUG7aifUG2nQQ13kV_i-MoM"></div>
+                    <!-- http://mlg.ucd.ie/files/summer/tutorial.pdf -->
                 </ul>
             </div>
             
@@ -275,11 +339,8 @@
                     <h1>Dynamic Community Finding</h1>
                 </hgroup>
                 <ul class="small spacing">                    
-                    <li>We can characterise dynamic communities in terms of key life-cycle events</li>
-                    <li>Birth &amp; Death of communities</li>
-                    <li>Expansion &amp; Contraction of communities</li>
-                    <li>Merging &amp; Splitting of communities</li>
-                    <li>TBD</li>
+                    <li>We can characterise dynamic communities in terms of key life-cycle events</li>                    
+                    <div class="h-drawing" style="height: 330px;" alt="Dynamic Community Finding" id="1CfnGy4yMSu5EYbjF4ieiHS7D5Mdir6OW8QMR06WYe3A" format="png"></div>
                 </ul>
             </div>
             
@@ -287,10 +348,11 @@
                 <hgroup>
                     <h1>Dynamic Community Finding</h1>
                 </hgroup>
-                <ul class="small spacing">                    
+                <ul class="xx-small">                    
                     <li>Apply community finding algorithm to each snapshot of the graph</li>
                     <li>Match newly-generated "step communities" with those that have been identified in the past</li>
                     <li>TBD</li>
+                    <li><a href="http://mlg.ucd.ie/dynamic">Dynamic community tracking software</a></li>
                 </ul>
             </div>        
             
