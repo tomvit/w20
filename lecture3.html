@@ -7,7 +7,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
         <meta name="course"   content="Web 2.0"/>
-		<meta name="lecture"  content="Lecture 1"/>
+		<meta name="lecture"  content="Lecture 3"/>
    		<meta name="keywords" content="social networks, analysis, graphs, visualization"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
@@ -50,6 +50,972 @@
 				<div class="oppa"></div>
 			</div>
 		</div>		
+        
+        <div class="slide outline">
+        </div>        
+        
+        
+        <section>
+            <header>Introduction</header>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Social Network Analysis</h1>
+                </hgroup>
+                <div style = "font-style: italic; font-size: 90%;">                
+                    <span style = "color: red;" >&rarr;</span> "So...what do you do?"<br />
+                    <span style = "color: green;" >&larr;</span> "I’m a social network analysis researcher." <br />
+                    <span style = "color: red;" >&rarr;</span> "Oh, so you play on Facebook and get paid for it?" <br />                
+                    <span style = "color: green;" >&larr;</span>"Yes, but it’s much more then Facebook"<br />                                    
+                </div>
+                <br />
+                <ul class="x-spacing">
+                    <li>SNA is an extremely versatile methodology that predates Twitter and Facebook by at least 30 years.</li>
+                    <ul>
+                        <li style="font-size: 60%; font-style: italic;">J. Moreno. "Who shall survive?: A new approach to the problem of human interrelations". Nervous and Mental Disease Publishing Co, 1934.</li>
+                    </ul>
+                    <li>Study of human relationships by means of graph theory</li>
+                </ul>
+                
+            </div>        
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Social Network Analysis</h1>
+                </hgroup>
+                <ul class="spacing">
+                    <li>Analyzing Relationships to Understand People and Groups</li>
+                    <!--<li>Our relationships, taken together, define who we are and how we act</li>-->
+                    <li>Relationships</li>
+                    <ul>
+                        <li>Binary and Valued Relationships</li>
+                        <ul>
+                            <li>A follows B on Twitter</li>
+                            <li>A retweeted 4 tweets from B</li>
+                            <li>A talked to B 5 times last week</li>
+                        </ul>
+                        <li>Symmetric and Asymmetric Relationships</li>
+                        <ul>
+                            <li>teacher/student, followers</li>
+                            <li>friends, romantic relationships</li>
+                        </ul>
+                        <li>Multimode Relationships</li>
+                        <ul>
+                            <li>student studies at the university</li>
+                        </ul>
+                    </ul>    
+                </ul>
+            </div> 
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Karate Club</h1>
+                </hgroup>                
+                <ul class="small spacing">
+                    <div class="h-drawing" style="height: 350px;" alt="Karate club" id="13a_MLvIEPmrwYNmRjYiRjFoae8WUFFp5zgySq_TF9ck" format="png"></div>
+                    <li>Wayne Zachary. An information flow model for conflict and fission in small groups.Journal of Anthropological Research, 33(4):452–473, 1977.</li>
+                </ul>
+            </div>        
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Applications</h1>
+                </hgroup>
+                <ul class="x-spacing">
+                    <li>Businesses</li> 
+                    <ul>
+                        <li>analyze and improve communication flow in organization, partners, customers</li>
+                    </ul>                        
+                    <li>Law enforcement agencies (army)</li>
+                    <ul>
+                        <li>identify criminal and terrorist networks, key players</li>
+                    </ul>
+                    <li>Web Sites</li>
+                    <ul>
+                        <li>identify and recommend potential friends</li>
+                    </ul>
+                    <li>Organizations</li>
+                    <ul>
+                        <li>uncover conflicts of interests (government, lobbies, businesses)</li>
+                    </ul>
+                </ul>
+            </div>
+            <div class="slide">
+                <hgroup>
+                    <h1>Network datasets</h1>
+                </hgroup>
+                <ul class="x-spacing">
+                    <li>Collaboration Graphs</li> 
+                    <ul>
+                        <li>who works with whom</li>
+                    </ul>                        
+                    <li>Who-talks-to-Whom Graphs</li>
+                    <ul>
+                        <li>IM, call graphs</li>
+                    </ul>
+                    <li>Information Linkage Graphs</li>
+                    <ul>
+                        <li>pages and links, citations</li>
+                    </ul>
+                    <li>Technological Networks</li>
+                    <ul>
+                        <li>computers, power grid</li>
+                    </ul>
+                    <li>Networks in the Natural World</li>
+                    <ul>
+                        <li>food webs, cascading extinctions, neural connections</li>
+                    </ul>
+
+                </ul>
+            </div>   
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Arpanet</h1>
+                </hgroup>
+                <ul class="small spacing">                
+                    <div class="h-drawing" style="height: 400px" alt="Arpanet 1970" id="1FfT1kOTsmdO5trJpJW_7jqgoLb8aM6zv4aldWUpA-oU" format="png"></div>                    
+                    <li>Arpanet in December 1970 - http://som.csudh.edu/cis/lpress/history/arpamaps/</li>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Public transport</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <div class="h-drawing" style="height: 400px" alt="Transit Schematics" id="1aW6PiPM7ONvYdJbaq8B9mSRRiYYVlAf4SG--m9toC54" format="png"></div>                    
+                    <li>Transit Schematics - http://www.dpp.cz/dopravni-schemata/</li>
+                </ul>
+            </div>
+            
+        </section>
+        
+        <div class="slide outline">
+        </div> 
+        
+        <section>
+            <header>Graph Theory</header>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Graphs</h1>
+                </hgroup>
+                <ul class="small">
+                    <li>A graph is a way of specifying relationships among a collection of items</li>
+                    <li>Objects</li>
+                    <ul>
+                        <li><b>Nodes</b> - Alice, Bob, ...</li>
+                        <li><b>Edges</b></li>
+                        <ul>
+                            <li><b>undirected</b> - knows, …</li>
+                            <li><b>directed</b> - follows, …</li>
+                        </ul>
+                        <li><b>Values</b> - weights, distances, scores, 0-5 scale, …</li>
+                        <li><b>Attributes</b> - name, time, ...</li>
+                    </ul>                    
+                    <li>Mathematical models and network structures</li>
+                    <div class="h-drawing" style="height: 130px;" alt="Graph types" id="1wR-kQ6xWON94pWCvVt05lt0Dz1rQc-BsIHlkuUs73RQ"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Scales</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li><b>Likert scale</b> - sociologist, hard to distinguish</li>
+                    <ol start="0">
+                        <li>Don't know</li>
+                        <li>Strongly dislike</li>
+                        <li>Dislike</li>
+                        <li>Neither dislike nor like</li>
+                        <li>Like</li>
+                        <li>Strongly like</li>
+                    </ol>                    
+                    <li><b>David Krackhardt</b> - minimizes self-reporting errors, can be objectively measured</li>
+                    <ol start="0">
+                        <li>Never</li>
+                        <li>At most once a year</li>
+                        <li>At most once a month</li>
+                        <li>At most once a week</li>
+                        <li>At most once a day</li>
+                        <li>Many times a day</li>
+                    </ol>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Graph representation</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>Adjacency Matrices</li>
+                    <table>
+                        <tr><td>&nbsp;</td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td></tr>
+                        <tr><td>A</td><td>0</td><td>2</td><td>0</td><td>5</td><td>5</td></tr>
+                        <tr><td>B</td><td>2</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+                        <tr><td>C</td><td>0</td><td>0</td><td>0</td><td>3</td><td>4</td></tr>
+                        <tr><td>D</td><td>5</td><td>1</td><td>3</td><td>0</td><td>0</td></tr>
+                        <tr><td>E</td><td>5</td><td>0</td><td>4</td><td>0</td><td>0</td></tr>
+                    </table>
+                        
+                    <li>Edge-Lists and Adjacency Lists</li>
+                    <table>
+                        <tr><td>from</td><td>to</td><td>value</td></tr>
+                        <tr><td>A</td><td>B</td><td>2</td></tr>
+                        <tr><td>A</td><td>D</td><td>5</td></tr>
+                        <tr><td colspan="3">…</td></tr>
+                    </table>
+                    <br />
+                    <table>
+                        <tr><td>from</td><td>edges</td></tr>
+                        <tr><td>A</td><td>(B 2), (D 5), (E 5)</td></tr>
+                        <tr><td colspan="2">…</td></tr>
+                    </table>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Graph Theory</h1>
+                </hgroup>
+                <ul class="spacing">
+                    <li><i>"terminological jungle, in which any newcomer may plant a tree"</i></li> 
+                    <ul>
+                        <li>John A. Barnes.  Social Networks. Number 26 in Modules in Anthropology. Addison Wesley, 1972.</li>
+                    </ul>     
+                    <li>Walk</li>
+                    <ul>
+                        <li>sequence of nodes connected by edges</li>
+                        <li>open, closed, length</li>
+                    </ul>                   
+                    <li>Path</li>
+                    <ul>
+                        <li>open sequence of nodes connected by edges</li>
+                    </ul>
+                    <li>Cycles</li>
+                    <ul>
+                        <li>path with at least three edges, first and last nodes are the same</li>
+                    </ul>                                        
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Graph Theory</h1>
+                </hgroup>
+                <ul class="small">                    
+                    <li>Connectivity</li>
+                    <ul>
+                        <li>if exists path between nodes</li>
+                    </ul>
+                    <li>Components</li>
+                    <ul>
+                        <li>group of nodes, which are connected</li>
+                        <ul>
+                            <li>every node has a path to every other</li>
+                            <li>the group is not part of some larger group</li>
+                        </ul>
+                    </ul>
+                    <li>Giant Components</li>
+                    <ul>
+                        <li>connected component that contains a significant fraction of all the nodes</li>
+                    </ul>
+                    <li>Singletons</li>
+                    <ul>
+                        <li>who have no connections and are least central</li>
+                    </ul>
+                    <li>Middle region</li>
+                    <ul>
+                        <li>isolated groups which interact amongst themselves, forming isolated stars</li>
+                    </ul>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Giant component, middle region, singleton</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <div class="h-drawing" style="height: 400px" alt="Giant Component" id="1DS4GdXyhlTybQfet_AxBXzpIFY5h_QbOlY_d63c1f08" format="png"></div>
+                    <li>tendency to connect</li>
+                    <li>http://www.boxesandarrows.com/view/social-networks</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Facebook Giant Component</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <div class="h-drawing" style="height: 400px" alt="Facebook Visualization" id="17W4KpdkMdfwpbiJ5AcSACuHHJLdCV8Nzu7NWW5nw-fM" format="png"></div>
+                    <li>http://www.facebook.com/note.php?note_id=469716398919</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>American High School – 18 month period</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <div class="h-drawing" style="height: 420px" alt="High School" id="1G0c8xjouXrxicK_4VEGGUsFRxfYvkC2AxAFgLqUFtzY" format="png"></div>
+                    <li>http://researchnews.osu.edu/archive/chainspix.htm</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Graph Theory</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Length</i></li> 
+                    <ul>
+                        <li>number of edges in the sequence</li>
+                    </ul>                        
+                    <li>Distance</li>
+                    <ul>
+                        <li>shortest path between nodes</li>
+                    </ul> 
+                    <!--<br />-->
+                    <li>Shortest path (unweighted graph)</li>
+                    <li>Cost-based shortest path (weighted graph)</li>
+                    <!--
+                    <li>Euclidean distance</li>                                                                                           
+                    <ul>
+                        <li>similarity of nodes</li>
+                        <li>point in Euclidean space - row (column) of adjacency matrix</li>
+                        <li>proportional to the number of common neighbors shared between the nodes</li>
+                        <li>vector similarity</li>
+                    </ul>
+                    -->
+                    <li>Depth-First search</li>
+                    <li>Breadth-first search</li>
+                    <div class="h-drawing" style="height: 250px" alt="Graph types" 
+    				id="1rHXpRMwjgysH0OkMnQlF6spTvkYuxItG6UDKQnSTjlo"></div>  
+                </ul>
+            </div>
+            
+            <!--
+            <div class="slide">
+                <hgroup>
+                    <h1>Graph Theory</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <li>Depth-First search</li>
+                    <li>Breadth-first search</li>
+                    <div class="h-drawing" style="height: 350px" alt="Graph types" 
+    				id="1rHXpRMwjgysH0OkMnQlF6spTvkYuxItG6UDKQnSTjlo"></div>                    
+                </ul>
+            </div>
+            -->
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Types of Social Network Analysis</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <li>Sociocentric - whole network analysis</li>
+                    <ul>
+                        <li>emerged in sociology</li>
+                        <li>involves quantification of interaction among a socially welldefined group of people</li>
+                        <li>focus on identifying global structural patterns</li>
+                    </ul>
+                    <li>Egocentric - personal (local) network analysis</li>
+                    <ul>
+                        <li>emerged in anthropology and psychology</li>
+                        <li>involves quantification of interactions between an individual (called ego) and all other persons (called alters) related (directly or indirectly) to ego</li>
+                    </ul>
+                    <li>Knowledge Based Network Analysis</li>
+                    <ul>
+                        <li>emerged in Computer Science</li>
+                        <li>involves quantification of interaction between individuals, groups and other entities</li>
+                    </ul>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>InMaps</h1>
+                </hgroup>
+                <ul class="x-small spacing">
+                    <div class="h-drawing" style="height: 350px;" alt="InMaps" id="1EjN1D-1ATtqCe-QsU0vUFjWm33YnDbcx4yc7HNeT-zQ" format="png"></div>                                        
+                    <li>http://inmaps.linkedinlabs.com/</li>                                        
+                    <li>http://www.randomwire.com/wp-content/uploads/linkedin-inmap.gif</li>
+                </ul>
+            </div>
+        </section>
+        
+        <div class="slide outline">
+        </div>         
+        
+        <section>
+            <header>Small-World Phenomenon</header>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>The Small-World Phenomenon</h1>
+                </hgroup>
+                <ul class="x-spacing">
+                    <li>The idea that the world looks "small"</li>
+                    <li>How short a path of friends it takes to get from you to almost anyone else</li>
+                    <li><b>Six degrees of separation</b></li>
+                    <li>"I read somewhere that everybody on this planet is separated by only six other people. Six degrees of separation between us and everyone else on this planet."</li>
+                    <ul>
+                        <li>John Guare. Six Degrees of Separation: A Play. Vintage Books, 1990.</li>
+                    </ul>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Myth or not?</h1>
+                </hgroup>
+                <ul class="spacing">
+                    <li>there are no more then six connections between any two people on this planet</li>
+                    <ul>                    
+                        <li>on average, every person has 150 friends or acquaintances</li>
+                        <li>within 6 degrees of separation is 150<sup>6</sup> = 11 trillion</li>
+                        <li>more then the overall number of people in the world</li>
+                        <ul>
+                            <li>no overlap</li>
+                        </ul>
+                        <li>real networks - overlap factor is quite high</li>
+                        <ul>
+                            <li>not enough</li>
+                        </ul>
+                        <li>many experiments</li>
+                        <li>exact degree of separation of our society remains unknown</li>
+                        <li>online networks represent a specific part of our population</li>
+                        <li>not constant in time</li>
+                    </ul>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>First experimental study</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <li>Stanley Milgram – 1960s</li>
+                    <li>$680 budget</li>
+                    <li>296 random starters</li>
+                    <ul>
+                        <li>Forward letter to target person</li>
+                        <ul>
+                            <li>Stockbroker who lived in a suburb of Boston</li>
+                        </ul>
+                        <li>Given personal information about target</li>
+                        <li>Forward to someone the knew</li>
+                        <ul>
+                            <li>Same instructions</li>
+                        </ul>
+                    </ul>
+                    <div class="h-drawing" style="height: 200px;" alt="Milgram" id="1lcNQuNQay8dJxbWwpw9kl95fR752RHhnhDTbpMjWp-Y" format="png"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Instant Messaging</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <li>The distribution of distances in the graph of all active Microsoft Instant Messenger user accounts, with an edge joining two users if they communicated at least once during a month-long observation period</li>
+                    <li>240 million active user accounts</li>
+                    <li>average distance of 6.6</li>
+                    <div class="h-drawing" style="height: 200px;" alt="Microsoft" id="1OF4RZ9h0xE8fPkh-jWIF4JMQk4BqWF8eux3VHngeUNo" format="png"></div>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Paul Erdös</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <div class="h-drawing" style="height: 200px;" alt="Microsoft" id="1hixHDhCimrq0i2t_T0MFRPMZeEaVEGNiu1O6TpNFl_M" format="png"></div>
+                    <li>Itinerant mathematician</li>
+                    <li>1500 papers</li>
+                    <li>Erdös number</li>
+                    <ul>
+                        <li>the distance from him or her to Erdös – 4 or 5</li>
+                        <li>Albert Einstein – 2</li>
+                        <li>Enrico Fermi – 3</li>
+                        <li>James Watson - 6</li>                                                                        
+                    </ul>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Kevin Bacon</h1>
+                </hgroup>
+                <ul class="x-spacing">                    
+                    <li>Movie actors and actress</li>
+                    <li>His or her distance in this graph to Kevin Bacon</li>
+                    <li>Average = 2.9</li>
+                    <li>"I found an incredibly obscure 1928 Soviet pirate film, Plenniki Morya, starring P. Savin with a Bacon number of 7, and whose supporting cast of 8 appeared nowhere else"</li>
+                    <div class="h-drawing" style="height: 150px;" alt="Microsoft" id="1xM9ZodKMsKvAgdh6LpEZPokRUSFffyR8WasIRmRZiuY"></div>
+                </ul>
+            </div>
+            
+        </section>    
+        
+        <div class="slide outline">
+        </div>    
+                
+        <section>
+            <header>Measures of Centrality</header>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Measures of Centrality</h1>
+                </hgroup>
+                <ul class="x-spacing">                    
+                    <li>A variety of different measures exist to measure the importance, popularity, or social capital of a node in a social network</li>
+                    <li>Measure power, influence, or other individual characteristics of people (based on their connection patterns)</li>
+                    <li>Who is more important in this network?</li>
+                    <li>Who has the power?</li>
+                    <li>...it depends</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Degree centrality</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <li>(in-) or (out-) degree is the number of edges that lead into or out of the node</li>
+                    <div class="h-drawing" style="height: 400px;" alt="Degree centrality" id="1A-N-Xw0-XqzpcxqogEyCQbamGxkm5aH2TpUHiWcEqnk"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Dreaded hairball</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <div class="h-drawing" style="height: 400px;" alt="Dreaded hairball" id="1Y_mvIRAwEYCFILDEnlymOvBvwA9lpJy5xbG6yD_HXlg" format="png"></div>
+                    <!-- http://melihsozdinler.blogspot.com/2010/03/graph-of-day-9-hairball.html -->
+                    <!-- http://eagereyes.org/techniques/graphs-hairball -->
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Closeness centrality</h1>
+                </hgroup>
+                <ul class="xx-small">                    
+                    <li>The mean length of all shortest paths from a node to all other nodes</li>
+                    <li>Measure of reach, distance to others</li>
+                    <li>Horizon of observability (Gossipmongers)</li>
+                    <div class="h-drawing" style="height: 380px;" alt="Closeness centrality" id="1grk5QzGiAv77gPu9sT9k0ICNEbvviQZwPl7da1kqMGU"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Betweeness centrality</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <li>The number of shortest paths that pass through a node divided by all shortest paths</li>
+                    <div class="h-drawing" style="height: 400px;" alt="Betweeness Centrality" id="14Tr_NnD5pvt95rF5oDoUQmbdVu5lFHbVDGun4YLB3GY"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Betweeness centrality</h1>
+                </hgroup>
+                <ul class="x-spacing">                    
+                    <li>Communication Bottlenecks and/or Community Bridges</li>                    
+                    <li>Boundary spanners - people that act as bridges between two or more communities that otherwise would not be able to communicate to each other</li>
+                    <li>"Ph.D. in computer science, and a long career as an in-demand sideman for both jazz and rock gigs"</li>                    
+                </ul>
+            </div>        
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Gray Cardinal</h1>
+                </hgroup>
+                <ul class="spacing">                    
+                    <li>Don Corleone</li>
+                    <ul>
+                        <li>did not have many strong ties</li>
+                        <li>surrounded himself with his sons and his trusted capos</li>
+                        <li>invisible for degree centrality, betweenness or closeness</li>
+                        <li>point of how his organization was created</li>
+                    </ul>
+                    <li>"by knowing well-connected people, they can exploit this information and information asymmetry to further their own plans, while staying largely in the shadows"</li>
+                    <li>An éminence grise (French for “gray cardinal”) is a powerful advisor or decision-maker who operates secretly or unofficially.</li>
+                </ul>
+            </div>                                
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Eigenvector centrality</h1>
+                </hgroup>
+                <ul class="x-small spacing">                    
+                    <li>A node with high eigenvector centrality is connected to other nodes with high eigenvector centrality</li>
+                    <li>Similar to Google PageRank</li>
+                    <li>Who is connected to the most connected nodes</li>
+                    <div class="h-drawing" style="height: 350px;" alt="Eigenvector centrality" id="12pZykEh3GTeTZyy0lsY_88prwmtrw-6oPgKT6o76jRs"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Eigenvector centrality</h1>
+                </hgroup>
+                <ul class="spacing">                    
+                    <li>weight each of the links by the degree of the node at the other end of the link</li>
+                    <li>recursive version of degree centrality</li>
+                    <li>Algorithm</li>
+                    <ol>
+                        <li>Start by assigning a centrality score of 1 to all nodes</li>
+                        <li>Recompute the scores of each node as a weighted sum of centralities of all nodes in a node’s neighborhood:</li>
+                        <span class="h-latex">v_i = \sum_{j \in N}^{} x_{i,j}*v_j</span>
+                        <li>Normalize v by dividing each value by the largest value</li>
+                        <li>Repeat steps 2 and 3 until the values of v stop changing</li>
+                    </ol>
+                </ul>
+            </div>
+            
+            <!--
+            <div class="slide">
+                <hgroup>
+                    <h1>Combinations/Overlaps</h1>
+                </hgroup>
+                <ul class="x-small spacing">                    
+                    <table>
+                        <tr></tr>
+                    </table>
+                </ul>
+            </div>
+            -->                            
+            
+            
+        </section>
+        
+        <div class="slide outline">
+        </div>    
+                
+        <section>
+            <header>Strong and Weak Ties</header>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Strong and Weak Ties</h1>
+                </hgroup>
+                <ul class="x-spacing">
+                    <li>How information flows through a social network</li>
+                    <li>How different nodes can play structurally distinct roles</li>
+                    <li>Shape the evolution of the network</li>
+                    <li>Weight of Edge - Frequency of interaction, number of exchanged items, strength of relationship</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Dunbar Number and Weak Ties</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <li>average size of a human social network is 150</li>
+                	<div class="h-drawing" style="height: 400px;" alt="The Dunbar pyramid" id="17ncGz7DGinADwMg8_6bBgg-LX81kGSFE73eANLjfv1w"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Triadic Closure</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li><b>Dyad</b> - a pair of actors (connected by a relationship) in the network</li>
+                    <li><b>Triad</b> - a subset of three actors or nodes connected to each other by the social relationship</li>
+                    <div class="h-drawing" style="height: 200px;" alt="Triadic Closure" id="1B37MD7gaPxQYPHhU1jBa9Ccbt8GfcBrDuPioVKCRDRc"></div>
+                    <li>"If two people in a social network have a friend in common, then there is an increased likelihood that they will become friends themselves at some point in the future"</li>
+                    <ul>
+                        <li style="font-size:50%;">Anatole Rapoport. Spread of information through a population with socio-structural bias I: Assumption of transitivity. Bulletin of Mathematical Biophysics, 15(4):523–533, December 1953.</li>                                                                        
+                    </ul>                    
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>The Clustering Coefficients</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>probability that two randomly selected friends are friends with each other</li>
+                    <li>fraction of pairs of friends that are connected to each other by edges</li>
+                    <li>vertex <span class="h-latex">v_i</span> has <span class="h-latex">k_i</span> neighbors, <span class="h-latex">k_i(k_i-1)/2</span> edges can exist</li>
+                    <span class="h-latex">C_i = \frac{2\|\{e_{jk}\}\|}{k_i(k_i-1)}:v_j,v_k \in N_i, e_{ij} \in E</span>
+                    <li>locally indicates how concentrated the neighbourhood of a node is, globally indicates level of clustering in a graph.</li>
+                    <div class="h-drawing" style="height: 150px;" alt="Triadic Closure" id="1B37MD7gaPxQYPHhU1jBa9Ccbt8GfcBrDuPioVKCRDRc"></div>
+                    <span style="width: 45%; float: left;">
+                        A
+                        <ul>
+                            <li>coefficient = 1/6</li>
+                            <li> only C-D from all possible (C-D,D-E, B-E, B-C,C-E,D-B)</li>
+                        </ul>
+                    </span>
+                    <span style="width: 45%; float: right;">
+                        A
+                        <ul>
+                            <li>coefficient = 2/6 = 1/3</li>
+                            <li>C-D and B-C from all possible (C-D,D-E, B-E, B-C,C-E,D-B)</li>
+                        </ul>
+                    </span>                                        
+                </ul>
+                
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Bridge and Local Bridges</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <div class="h-drawing" style="height: 400px;" alt="(Local)Bridge" id="1eP59M1wKsm9Xn9iRq1cdHzl_58D7aW_31AAKwe8t5T0"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Neighborhood overlap</h1>
+                </hgroup>
+                <ul class="x-spacing">
+                    <li>Helps identify local bridges</li>
+                    <li>Edge between A and B</li>
+                    <li>Local Bridge -> NO = 0</li>
+                    <br />
+                    <span class="h-latex">\tiny NO = \frac{number\;of\;nodes\;who\;are\;neighbors\;of\;both\;A\;and\;B}{number\;of\;nodes\;who\;are\;neighbors\;of\;at\;least\;one\;of\;A\;or\;B}</span>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Example</h1>
+                </hgroup>
+                <ul class="small">
+                    <div class="h-drawing" style="height: 380px;" alt="Neighborhood overlap" id="1OfvRUbo-ZD8S0SJYXPN_EdeKUage9B4P_ga6nX11ISI"></div>
+                    <span style="width: 45%; float: left;">
+                        Edge A-F:<br />
+                        <span class="h-latex">NO = \frac{1}{6}</span>
+                    </span>
+                    <span style="width: 45%; float: right;">
+                        Edge A-B: <br />
+                        <span class="h-latex">NO = \frac{0}{8}</span>
+                    </span>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Different node plays different role</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <div class="h-drawing" style="height: 380px;" alt="Different node plays different role" id="1g2-6_3M93IEBMpRgrPMsXcYSAL8mDdeIeB0724i9p-g"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Embeddedness</h1>
+                </hgroup>
+                <ul class="x-spacing">
+                    <li>Embeddedness of edge</li>
+                    <ul>
+                        <li>number of common neighbors the two endpoints have</li>                                                                        
+                    </ul>
+                    <li>A-B = 2</li>
+                    <ul>
+                        <li>Common E and F</li>                                                                        
+                    </ul>
+                    <li>Local bridges has embeddedness = 0</li>
+                    <li>Signifficant embeddedness</li>
+                    <ul>
+                        <li>easier trust, confidence (social, economic)</li>                    
+                    </ul>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Structural hole</h1>
+                </hgroup>
+                <ul class="x-spacing">
+                    <li>Characterics</li>
+                    <ul>
+                        <li>Access information from non-interacting parts</li>                                                                        
+                        <li>Interface</li>                                                                        
+                        <li>Novel ideas</li>                                                                        
+                        <li>Gatekeeping</li>                                                                        
+                    </ul>
+                    <li>Example</li>
+                    <ul>
+                        <li>Node B</li>                                                                        
+                    </ul>
+                </ul>
+            </div>
+        
+        </section>
+            
+        <div class="slide outline">
+        </div>    
+                
+        <section>
+            <header>Additional Measures and Characteristics</header>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Reciprocity</h1>
+                </hgroup>
+                <ul class="x-small spacing">                    
+                    <li>Oriented graphs</li>
+                    <li>Edge in both directions</li>
+                    <li>The ration of the number of relations which are reciprocated over the total number of relations</li>
+                    <div class="h-drawing" style="height: 350px;" alt="Reciprocity" id="1Hexfcirf4HCzwpzW4_QrYAzHuf_s3-QM_ycZ1ZE3sRQ"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Density</h1>
+                </hgroup>
+                <ul class="x-small spacing">                    
+                    <li>The ratio of the number of edges over the total number of possible edges</li>
+                    <li>Total number</li>
+                    <ul>
+                    	<li>Undirected – n(n-1)/2</li>
+                    	<li>Directed – n(n-1)</li>
+                    </ul>
+                    <div class="h-drawing" style="height: 350px;" alt="Density" id="1qpTWDswQLpMeehPPZc290sbk60wXaLoafrOxHy9fX2k"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Preferential Attachment</h1>
+                </hgroup>
+                <ul class="x-small  ">                    
+                    <li>The great majority of new edges are to nodes with an already high degree</li>
+                    <!--<img src="http://www.technologyreview.com/files/14511/0308-PHOTO-I_x600.jpg" />-->
+                    <div class="h-drawing" style="height: 350px;" alt="Preferential Attachment" id="1p4UtnU96eRb1e3os8SWzWu22wIyp_MZkQl60vCaW3lE" format="png"></div>
+                    <!-- http://www.technologyreview.com/printer_friendly_article.aspx?id=20223 -->
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Homophily</h1>
+                </hgroup>
+                <ul class="x-spacing">                    
+                    <li>The principle that we tend to be similar to our friends</li>
+                    <li>Plato</li>
+                    <ul>
+                        <li>"similarity begets friendship"</li>                    
+                    </ul>
+                    <li>Aristotle</li>
+                    <ul>
+                        <li>people "love those who are like themselves"</li>                    
+                    </ul>
+                    <li>"birds of a feather flock together"</li>
+                    <li>(racial, ethnic, age, place, occupation, affluence, interest, opinions)</li>                    
+                </ul>
+            </div>
+            
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Homophily</h1>
+                </hgroup>
+                <ul class="xx-small">                    
+                    <div class="h-drawing" style="height: 420px;" alt="Density" id="1APjals1xh1RgW1kwt6aWhwB5xLHbPn7NTcVhPdA6P9Y" format="png"></div>
+                    <!-- https://sriks6711.wordpress.com/2005/01/05/gallery-of-social-networks-2/ -->
+                    <li>Homophily: race (different colors of nodes), friendships in the middle, high schools    </li>                    
+                </ul>
+            </div>        
+            
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Measuring Homophily</h1>
+                </hgroup>
+                <ul class="xx-small">                    
+                    <li><b>p</b> fraction of all = male</li>
+                    <li><b>q</b> fraction of all = female</li>
+                    <li>Same gender = p^2, (q^2)</li>
+                    <li>Cross-gender = 2pq</li>                    
+                    <li>Homophily Test: If the fraction of cross-gender edges is significantly less than 2pq, then there is evidence for homophily</li>
+                    <div class="h-drawing" style="height: 220px;" alt="Measuring Homophily" id="1Dic5AqW1ncNkIhrTgzo8_BUmG1D_RELebcgurPIzeWg"></div>
+                    <li>5 of 18 cross-gender, p=2/3, q=1/3</li>
+                    <li>2pq = 4/9 = 8/18   >  5/18</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Transitivity</h1>
+                </hgroup>
+                <ul class="xx-small">                    
+                    <li>Property of ties</li>
+                    <li>If there is a tie between A and B and one between B and C, in transitive network A and C will also be connected</li>
+                    <li>Transitivity and homophily together lead to the formation of cliques (fully connected clusters)</li>
+                    <div class="h-drawing" style="height: 350px;" alt="Homophily, Heterophily" id="1iyp39qs0AJVjHGsEY87ZXy_323VW-t4chOQE0q6NyJ8"></div>
+                    <!-- Giorgos Cheliotis, http://www.slideshare.net/gcheliotis/social-network-analysis-3273045?src=related_normal&rel=5452574 --> 
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Homophily vs. Curiosity</h1>
+                </hgroup>
+                <ul class="xx-small">                    
+                    <li>two people are not very similar but not so different as to limit their ability to find topics for conversation</li>
+                    <!--
+                    <ul>
+                    	<li>different for every person</li>
+                    </ul>
+                    -->
+                    <li>boredom trap</li>
+                    <ul>
+                    	<li>person who is exactly the same as you in every aspect provides no new information or stimulation</li>
+                    </ul>
+                    <div class="h-drawing" style="height: 170px;" alt="Curiosity" id="1319T-52uq5taIVg9YRbAkZnPID6a80SYv5V2XBqOiyA"></div>
+                    <li>Example: young couple</li>
+                    <ul>
+                    	<li>just have met - quite low homophily, curiosity is at its peak</li>
+                    	<li>in progress - learn more about each other, bottom of a trough between curiosity and true homophily</li>
+                    	<li>later in progress - know nearly everything about each other</li>
+                    	<li>last 10 years - hardly speak a word to each other...why speak if you have nothing new to say?</li>
+                    </ul>
+                </ul>
+            </div>
+            
+            
+        </section>
+        
+        <section>
+            <header>References</header>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>References</h1>
+                </hgroup>
+                <ul style="font-size: 76%" class="xx-small">                    
+                    <li>D. Easley, J. Kleinberg: Networks, Crowds and Markets: Reasoning About a Highly Connected World, Cambridge University Press, 2010, ISBN 0521195330.<a href="http://www.cs.cornell.edu/home/kleinber/networks-book/">[on-line]</a></li>
+                    <li>Maksim Tsvetovat and Alexander Kouznetsov: Social Network Analysis for Startups, O'Reilly, 2011, ISBN: 978-1-449-30646-5</li>
+                    <li>Jonathan LeBlanc: Programming Social Applications, O'Reilly, 2011,ISBN: 978-1-449-39491-2</li>
+                    <li>Jason Falls and Erik Deckers: No Bullshit Social Media, QUE, 2012</li>
+                    <li>Paul Adams: GROUPED - How small groups of friends are the key to influence on the social web, New Riders, 2012, ISBN 13: 978-0-321-80411-2</li>
+                    <li>Dr. Giorgos Cheliotis: Social Network Analysis - including a tutorial on concepts and methods. 2010. <a href = "http://www.slideshare.net/gcheliotis/social-network-analysis-3273045">[on-line]</a></li>                                        
+                    <li>Dr. Derek Greene: Graph and Network Analysis - Web Science Doctoral Summer School 2011. <a href="http://mlg.ucd.ie/files/summer/tutorial.pdf">[on-line]</a></li>
+                    <li>Jaideep Srivastava, Muhammad A. Ahmad, Nishith Pathak, David Kuo-Wei Hsu: Data Mining Based Social Network from Online Behaviour. 2008.<a href="http://www.siam.org/meetings/sdm08/TS1.pdf">[on-line]</a></li>
+                    <li>Lynne Hamill and Nigel Gilbert: Social Circles: A Simple Structure for Agent-Based Social Network Models. 2009. <a href="http://jasss.soc.surrey.ac.uk/12/2/3.html">[on-line]</a></li>
+                    <li>Mark Newman: Modularity, Community Structure and Spectral properties of networks. 2006.<a href="http://vw.indiana.edu/netsci06/conf-slides/conf-mon/netsci-talk-mark-newman.pdf">[on-line]</a></li>
+                    <li>...</li>
+                </ul>
+            </div>
+            
+        </section>
 		
 	</body>
 </html>	

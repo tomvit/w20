@@ -49,7 +49,620 @@
 				<a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
 				<div class="oppa"></div>
 			</div>
-		</div>		
-		
+		</div>	
+        
+    
+        <div class="slide outline">
+        </div>    
+                
+        <section>
+            <header>Graph Partitioning, Community detection</header>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Graph Partitioning</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Identifying communities of nodes in network</li>
+                    <!-- http://www-personal.umich.edu/~ladamic/img/politicalblogs.jpg -->
+                    <div class="h-drawing" style="height: 400px;" alt="Graph Partitioning" id="155LRa85C_DcjrpGBn6K6ztE7t-gqfwD88tfiqoLOZRY" format="png"></div>
+                    <li>Communities of bloggers, 2004 US Presidential elections</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Approaches</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Computer science approaches</li>
+                    <ul>
+                    	<li>Graph partitioning</li>
+						<ul>
+							<li>Minimum cuts</li>                    	
+							<li>Ratio cuts and variants</li>
+						</ul>
+						<li>Algorithms</li>
+						<ul>
+							<li>Kernighan­Lin method and variants</li>                    	
+							<li>Geometric methods</li>
+							<li>Spectral partitioning</li>
+						</ul>
+					</ul>
+                    <li>Social science approaches</li>
+                    <ul>
+                    	<li>Clustering</li>
+						<ul>
+							<li>Block modeling</li>
+							<li>Community structure</li>
+						</ul>
+						<li>Algorithms</li>
+						<ul>
+							<li>Best fits to stochastic block models</li>                    	
+							<li>Hierarchical clustering based on single­ or average­linkage clustering of similarity indices</li>
+							<li>Betweenness­based methods</li>
+						</ul>
+					</ul>
+                </ul>
+            </div>            
+            
+            <!--
+            <div class="slide">
+                <hgroup>
+                    <h1>Clustering???</h1>
+                </hgroup>
+                <ul class="x-small">                    
+                    <li>Algorithms try to maximize the number of edges that fall within the same cluster</li>
+                    <li>Indicates presence of different communities in a network</li>
+                    <div class="h-drawing" style="height: 300px;" alt="Clustering" id="1c-OXOtASf1CihK09byscN7BbZNGKAcVCcKA8oxjHXX8"></div>
+                    <li style="font-style: italic;">Clustering coefficient - probability - friends are friends too</li>
+                    <li style="font-style: italic;">Neighborhood overlap - common friends/ all friends</li>
+                </ul>
+            </div>
+            -->
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>The island method</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <li>Height = value of node or edge</li>
+                    <div class="h-drawing" style="height: 450px;" alt="Graph Partitioning" id="1PjPOJrsI3EMrRkWZjXELqkGUj76pozde2o11khjMvk8"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Triads</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>simply three nodes interlinked in some way</li>
+                    <ul>
+                        <li>things are really not so simple</li>
+                    </ul>
+                    <div class="h-drawing" style="height: 150px;" alt="Triads" id="1mq-WAxzVWC_3PdBWZMhGyakSSQgJvWJGAOJ71PWZNTg"></div>                    
+                    <li>the third individual becomes at a source of balance (providing second opinions and calming nerves)</li>
+                    <li>also a feedback loop</li>                    
+                    <li>“Forbidden Triad” and Structural Holes</li>
+                    <ul>
+                        <li>Bob and two girlfriends</li>
+                        <li>Banker and two corporations</li>
+                    </ul>
+                    <li>Structural Holes and Boundary Spanning</li>
+                    <ul>
+                        <li>span asymmetric information, bridge entire communities</li>
+                    </ul>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Cliques</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>cohesive group of people that are tightly connected to each other</li>
+                    <li>maximal complete subgraph of a given graph</li>
+                    <li>clique consists of several overlapping closed triads</li>                    
+                    <div class="h-drawing" style="height: 100px;" alt="Cliques" id="1-qjDiJeUjt43ChBqyIMBhGzwXuC8GPWb75Xx6MKIjhI"></div>
+                    <li>A maximal clique is a clique that is not a subset of any other clique in the graph</li>
+                    <div class="h-drawing" style="height: 200px;" alt="Maximal Cliques" id="1BxHkqJIMHxMcXk1_Xh89DvFDxvEFOjeI7ZEWrCC64og"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Graph Partitioning</h1>
+                </hgroup>
+                <ul class="x-small">                	                    
+                    <li>Min-cut simply involves minimising number (or weight) of edges cut by the partition.</li>
+                    <li>Recent approaches use more sophisticated criteria (e.g. normalised cuts)</li>
+                    <div class="h-drawing" style="height: 350px;" alt="Graph Partitioning" id="1qqs4OEdD_H3E6nem08REJDYslzWeiDXXG1HLl5PXuIY"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Hierarchical Clustering</h1>
+                </hgroup>
+                <ul class="x-small">       
+                	<li>Construct a tree of clusters to identify groups of nodes with high similarity according to some similarity measure</li>
+                    
+                    <li>Divisive</li>
+                    <ul>
+                        <li>Identifying and removing the "spanning links"</li>                                                                        
+                    </ul>
+                    <li>Agglomerative</li>
+                    <ul>
+                        <li>Glue nodes together into regions</li>                                                                        
+                    </ul>
+                    <div class="h-drawing" style="height: 250px;" alt="Hierarchical Clustering" id="1fJmaGq8oT21uD7EVohVA_Xv6KHQ-q-5vuM1YLtmllBk"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Problems</h1>
+                </hgroup>
+                <ul class="small spacing">
+                    <li>Several bridges</li>
+                    <ul>
+                        <li>Which to remove first?</li>                                                                        
+                    </ul>
+                    <li>No edge is local bridge</li>
+                    <div class="h-drawing" style="height: 250px;" alt="Bridge Issue" id="1W6SfJ6cW1PMn6lQqAWnkd4MisugS9zQjp8q8G97fXNk"></div>
+                    <li>Solution - "trafic" - shortest paths</li>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Betweeness</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>Shortest path</li>
+                    <ul>
+                        <li>path that connects the two nodes with the shortest number of edges</li>                                                                        
+                    </ul>
+                    <li>Betweeness</li>
+                    <ul>
+                        <li>total amount of flow (shortest paths) through the edge</li>                                                                        
+                    </ul>
+                    <div class="h-drawing" style="height: 200px;" alt="Bridge Issue" id="1qqs4OEdD_H3E6nem08REJDYslzWeiDXXG1HLl5PXuIY"></div>
+                    <li>Example</li>
+                    <ul>
+                        <li>7-8</li>
+                        <ul>
+                            <li>7x7=49</li>                            
+                        </ul>
+                        <li>1-2</li>                                                                        
+                        <ul>
+                            <li>1</li>                            
+                        </ul>
+                    </ul>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>The Girvan-Newman Methodg</h1>
+                </hgroup>
+                <ul class="xx-small">                    
+                    <li>Repeat following steps as long as edges remain in graph</li>
+                    <ol>
+                        <li>find the edge of highest betweenness and remove from graph</li>                                                                        
+                        <li>recalculate all betweennesses</li>
+                    </ol>
+                    <div class="h-drawing" style="height: 380px;" alt="Graph Partitioning" id="1r90jdoWCz_EIq5DmKzbYystbX2vBDfz83nTZ065OPRQ"></div>
+                    <!--<li>Modularity Optimisation</li>-->
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Computing Betweeness</h1>
+                </hgroup>
+                <ul class="x-spacing">   
+                	<li>Algorithm</li>
+					<ol class="x-spacing">                    
+						<li>Perform a breadth-first search of the graph, starting at A</li>
+						<li>Determine the number of shortest paths from A to each other node</li>
+						<li>Based on these numbers, determine the amount of flow from A to all other nodes that uses each edge</li>
+					</ol>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Breadth-first search</h1>
+                </hgroup>
+                <ul class="spacing">                    
+                    <div class="h-drawing" style="height: 380px;" alt="Breadth-first search" id="1sWOvy1qFgqXkOD15aqmd7oCiaapJYdM7NhJBdcK0DAI" format="png"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Counting Paths</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <div class="h-drawing" style="height: 380px;" alt="Counting Paths" id="10vDDHmlMZFkbmPPFiL4ubYs4cnOHYOYU7XoEPmeiIK0" format="png"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Determine the flow values</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <div class="h-drawing" style="height: 380px;" alt="Determine the flow values" id="11PMCY0yPvT2zWzxDfOBhdkZz2zTPO2_cm8vZOo9Uopk" format="png"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Overlapping Communities</h1>
+                </hgroup>
+                <ul class="x-small">                    
+                    <li>Is it realistic/useful to assign nodes to only a single community?</li>
+                    <li>Communities overlap pervasively, making it impossible to partition the networks without splitting communities </li>
+                    <div class="h-drawing" style="height: 200px;" alt="Overlapping Communities" id="123cwqdToq0nrogtc2vMn88UfDI5IcKs-0wiNWFZCm4E" format="png"></div>
+                    <!-- http://mlg.ucd.ie/files/summer/tutorial.pdf -->
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Overlapping Communities - Algorithms</h1>
+                </hgroup>
+                <ul class="x-small">                    
+                    <li><a href="http://cfinder.org/">CFinder</a></li>
+                    <ul>
+                    	<li>algorithm based on the clique percolation method</li>
+                    	<ul>
+							<li>Identify k-cliques: a fully connected subgraph k nodes</li>
+							<li>Pair of k-cliques are "adjacent" if they share k−1 nodes</li>
+							<li>Form overlapping communities from maximal union of k-cliques that can be reached from each other through adjacent k-cliques</li>
+                        </ul>
+                    </ul>
+                    <li><a href="https://sites.google.com/site/greedycliqueexpansion/">Greedy Clique Expansion (GCE)</a></li>
+                    <ul>
+                        <li>identify distinct cliques as seeds, expands the seeds by greedily optimising a local fitness function</li>
+                    </ul>
+                    <li><a href="https://sites.google.com/site/aaronmcdaid/moses">MOSES</a></li>
+                    <ul>
+                        <li>scalable approach for identifying highlyoverlapping communities</li>
+                        <ul>
+                        	<li>Randomly select an edge, greedily expand a community around the edge to optimise an objective function</li>
+                        	<li>Delete "poor quality" communities</li>
+                        	<li>Fine-tune communities by re-assigning individual nodes</li>
+                        </ul>
+                    </ul>
+                    <!-- http://mlg.ucd.ie/files/summer/tutorial.pdf -->
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Dynamic Community Finding</h1>
+                </hgroup>
+                <ul class="small">                    
+                    <li>In many SNA tasks we will want to analyse how communities in the network form and evolve over time</li>
+                    <li>Often perform this analysis in an "offline" manner by examining successive snapshots of the network</li>
+                    <div class="h-drawing" style="height: 330px;" alt="Dynamic Community Finding" id="16JtZAcG5Q7534n_bjQ4QvUG7aifUG2nQQ13kV_i-MoM"></div>
+                    <!-- http://mlg.ucd.ie/files/summer/tutorial.pdf -->
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Dynamic Community Finding</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <li>We can characterise dynamic communities in terms of key life-cycle events</li>                    
+                    <div class="h-drawing" style="height: 330px;" alt="Dynamic Community Finding" id="1CfnGy4yMSu5EYbjF4ieiHS7D5Mdir6OW8QMR06WYe3A" format="png"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Dynamic Community Finding</h1>
+                </hgroup>
+                <ul class="xx-small">                    
+                    <li>Apply community finding algorithm to each snapshot of the graph</li>
+                    <li>Match newly-generated "step communities" with those that have been identified in the past</li>                    
+                    <div class="h-drawing" style="height: 330px;" alt="Dynamic Community Finding" id="1n5b7WbZgDo9_PWY_ONneSFm2Ztd-zjUkb5JZmuYdk_o" format="png"></div>
+                    <li><a href="http://mlg.ucd.ie/dynamic">Dynamic community tracking software</a></li>
+                </ul>
+            </div>            
+            
+        </section>
+        
+        <div class="slide outline">
+        </div>    
+                
+        <section>
+            <header>Affiliation networks</header>
+        
+            <div class="slide">
+                <hgroup>
+                    <h1>Affiliation</h1>
+                </hgroup>
+                <ul class="xx-small">      
+                	<li>More than one type of node</li>
+                	<ul>
+                		<li>Node for each person</li>
+ 	                	<li>Node for each focus</li>
+                	</ul>                   
+                    <li>Connect person A to focus X by an edge if A participates in X</li>
+                    <li>Political contributions (PAC contributing to a Candidate), employment (People employed by Organizations), social media (People liking Pages)</li>
+                    <ul>
+                        <li>affiliation network</li>
+                        <li>bipartite graphs</li>
+                        <li>2-mode networks</li>
+                    </ul>
+                    <div class="h-drawing" style="height: 210px;" alt="Affiliation network" id="1UV3KW9ToiNIuAZWPdec7VJXgCRoeDoUDidKSJUqNJRk"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Social-affiliation network</h1>
+                </hgroup>                
+                <ul class="x-small">                    
+                    <li>Co-evolution:social-affiliation network</li>
+                    <div class="h-drawing" style="height: 200px;" alt="social-affiliation network" id="1fDHqzGtnYJVv3oRA0rWNyxxq9XPcHEJ2qbIBRxWGDXE"></div>
+                    <li>Triangles in a social-affiliation network</li>
+                    <div class="h-drawing" style="height: 200px;" alt="social-affiliation network" id="1fDe3VXN7uB-D0-PWQi-mShXUA-V_z9XccZTQSCXPhdw"></div>
+                </ul>
+            </div>    
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Affiliation networks</h1>
+                </hgroup>
+                <ul class="xx-small">                                        
+                    <div class="h-drawing" style="height: 450px;" alt="Affiliation network" id="1sLkL6nPCzzj0H3H-pCwZqdOHYhd2ufV6NJL7jvuq8i4"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Attribute Networks</h1>
+                </hgroup>
+                <ul class="xx-small">         
+                	<li>Based on the idea of homophily</li>
+                	<li>Example - build a “suggest a friend” mechanism</li>
+                	<ul>
+                		<li>treating an attribute or interest matrix as a 2-mode network</li>                		
+                		<li>treat every one of the pieces of information (tags, keywords, etc.) as a node in a 2-mode network</li>
+                		<li>compute a person-to-person affiliation network</li>
+                		<li>apply the island method or clustering to find potential groupings of people</li>
+                		<li>to suggest friends, simply pick the top links in the affiliation network</li>
+                	</ul>
+                	<br />
+                	<li>Inverse affiliation network - attributes through people</li>
+                	<li>Example - mapping political discourse on Twitter.</li>
+                	<ul>
+                		<li>harvest tweets from people with #election</li>
+                		<li>build a 2-mode network from people to hashtags</li>
+                		<li>compute a hashtag-through-people affiliation network</li>
+                		<li>clusters will act as prox- ies for entire areas of discourse—and will likely separate liberal and conservative</li>
+                	</ul>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Math</h1>
+                </hgroup>
+                <ul class="xx-small">         
+                	<li>Adjacency matrix</li>
+                	<table>
+                		<tr><td>&nbsp;</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+                        <tr><td>A</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+                        <tr><td>B</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>C</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>D</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+                        <tr><td>E</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+                        <tr><td>F</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+                	</table>
+                	<li>Matrix multiplication</li>
+                	<table>
+                		<tr><td>&nbsp;</td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td></tr>
+                        <tr><td>A</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+                        <tr><td>B</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>C</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+                        <tr><td>D</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>2</td></tr>
+                        <tr><td>E</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+                        <tr><td>F</td><td>0</td><td>0</td><td>0</td><td>2</td><td>1</td><td>0</td></tr>
+                	</table>
+                	<li>PA*(PA<sup>T</sup>) = PA*AP = PP</li>   
+                	<li>What does AB*BC*CD*DA equal?</li>
+                	<ul>
+                		<li>AB*BC=AC; AC * CD = AD; AD * DA == AA</li>
+                	</ul>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Multimode Networks</h1>
+                </hgroup>
+                <ul class="xx-small">                                        
+                    <div class="h-drawing" style="height: 250px;" alt="Multimode Networks" id="1ivyXYwecnjTtG1m1bjr2SOozYEt3kHoaDXlsBQ3G224" format="png"></div>
+                    <table>
+                		<tr><td>&nbsp;</td><td>People</td><td></td><td>Resources</td><td>Tasks</td></tr>
+                        <tr><td>People</td><td>PP: Who knows whom?</td><td>PS: Who knows what?</td><td>PR: Who has what?</td><td>PT: Who does what?</td></tr>
+                        <tr><td>Skills</td><td>&nbsp;</td><td>SS: What skills go together?</td><td>SR: What skills are needed for a resource?</td><td>ST: What skills are needed for a task?</td></tr>
+                        <tr><td>Resources</td><td>&nbsp;</td><td>&nbsp;</td><td>RR: What resources go together?</td><td>RT: What resources are needed for a task?</td></tr>
+                        <tr><td>Tasks</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>TT: What is the task precedence?</td></tr>
+                	</table>
+                </ul>
+            </div> 
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Multimode Networks</h1>
+                </hgroup>
+                <ul class="small">                                        
+                	<li>PP * PP = PP</li>
+                	<ul>
+                		<li>The new network means “who are friends-of-friends?”</li>
+                	</ul>
+                	<li>PT * PT<sup>T</sup> = PT * TP = PP</li>
+                	<ul>
+                		<li>this means: “who is working together, and on how many tasks?”</li>
+                	</ul>
+                	<li>PT * TT = PT</li>
+                	<ul>
+                		<li>For each person, what tasks are in their critical path?</li>
+                	</ul>
+                	<li>TT * TT = TT</li>
+                	<ul>
+                		<li>Interdependent tasks</li>
+                	</ul>
+                	<li>PT * TT * TP = PP</li>
+                	<ul>
+                		<li>What people are in a person’s critical path?</li>
+                	</ul>
+                	<li>PT * TT * TT’ * TP = PP</li>
+                	<ul>
+                		<li>Who is working together on concurrent tasks?</li>
+                	</ul>
+                </ul>
+            </div> 
+            
+        </section>
+        
+        <div class="slide outline">
+        </div>    
+                
+        <section>
+            <header>Spatial Model</header>
+        
+            <div class="slide">
+                <hgroup>
+                    <h1>A Spatial Model of Segregation</h1>
+                </hgroup>
+                <ul class="x-small">                    
+                    <div class="h-drawing" style="height: 400px;" alt="A Spatial Model of Segregation" id="1cRlKv9zCmVkGblUQJBAJZ4A_A6NVt33MaNaWQ0Q6fgU" format="png"></div>
+                    <li>Markus M. Mobius and Tanya S. Rosenblat. The process of ghetto formation: Evidence from Chicago, 2001. Working paper.</li>
+                    <!-- http://www.surveyor.nber.org/home/harvard/papers/chicago-dec7.pdf -->
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>The Schelling model</h1>
+                </hgroup>
+                <ul class="small spacing">       
+                    <li>the effect of homophily operating at a local level</li>
+                    <div class="h-drawing" style="height: 400px;" alt="The Schelling model" id="1KI6bu4lzCpNziy6RElGkjG5OM-GBHT5S31j7UtMbuUI" format="png"></div>
+                </ul>
+            </div>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>The Schelling model</h1>
+                </hgroup>
+                <ul class="small spacing">       
+                    <div class="h-drawing" style="height: 400px;" alt="The Schelling model" id="188khLXnVOqgrMVEJbXnmOUjVeHO1P6HrJ6IN9_D5EYI" format="png"></div>
+                </ul>
+            </div>           
+            
+        </section>
+        
+        <div class="slide outline">
+        </div>    
+                
+        <section>
+            <header>Structural Balance</header>
+        
+            <div class="slide">
+                <hgroup>
+                    <h1>Structural Balance</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                    <li>each edge labeled with either + or −</li>
+                    <li>The most plausible</li>                    
+                    <div class="h-drawing" style="height: 420px;" alt="Structural Balance" id="1rnGzJDnaHIL4K8IjEtcIoZenHP9hLprkFAPSVY8bz88"></div>
+                </ul>
+            </div>  
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Structural Balance</h1>
+                </hgroup>
+                <ul class="x-small">                                                            
+                    <li>Structural Balance Property</li>
+                    <ul>
+                        <li>For every set of three nodes, if we consider the three edges connecting them, either all three of these edges are labeled +, or else exactly one of them is labeled +</li>
+                    </ul>
+                    <li>Balance Theorem</li>
+                    <ul>
+                        <li>If a labeled complete graph is balanced, then either all pairs of nodes are friends, or else the nodes can be divided into two groups, X and Y , such that every pair of nodes in X like each other, every pair of nodes in Y like each other, and everyone in X is the enemy of everyone in Y </li>
+                    </ul>
+                    <div class="h-drawing" style="height: 220px;" alt="Structural Balance" id="1-MqLcAv0-RT0eyHZpXJbx5eb_yF7TdIyKPYEJgdoWhk"></div>
+                </ul>
+            </div>
+            
+              <div class="slide">
+                <hgroup>
+                    <h1>Structural Balance - Example</h1>
+                </hgroup>
+                <ul class="small">                                                                                
+                    <div class="h-drawing" style="height: 430px;" alt="Structural Balance" id="1iXyIWCbMFMtcb7MUW7qoQS1cH7iA-sPfxGf2trISNfg" format="png"></div>
+                    <li><i>http://www.feem-web.it/ctn/41_publ_newsl_15.11.php</i></li>
+                </ul>
+            </div>  
+            
+        </section>
+        
+        <!--
+        
+        <div class="slide outline">
+        </div>    
+                
+        <section>
+            <header>Examples, Applications</header>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Examples, Applications</h1>
+                </hgroup>
+                <ul class="small spacing">                    
+                  
+                </ul>
+            </div>
+            
+            
+        </section>
+        
+        -->		
+        
+        <section>
+            <header>References</header>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>References</h1>
+                </hgroup>
+                <ul style="font-size: 76%" class="xx-small">                    
+                    <li>D. Easley, J. Kleinberg: Networks, Crowds and Markets: Reasoning About a Highly Connected World, Cambridge University Press, 2010, ISBN 0521195330.<a href="http://www.cs.cornell.edu/home/kleinber/networks-book/">[on-line]</a></li>
+                    <li>Maksim Tsvetovat and Alexander Kouznetsov: Social Network Analysis for Startups, O'Reilly, 2011, ISBN: 978-1-449-30646-5</li>
+                    <li>Jonathan LeBlanc: Programming Social Applications, O'Reilly, 2011,ISBN: 978-1-449-39491-2</li>
+                    <li>Jason Falls and Erik Deckers: No Bullshit Social Media, QUE, 2012</li>
+                    <li>Paul Adams: GROUPED - How small groups of friends are the key to influence on the social web, New Riders, 2012, ISBN 13: 978-0-321-80411-2</li>
+                    <li>Dr. Giorgos Cheliotis: Social Network Analysis - including a tutorial on concepts and methods. 2010. <a href = "http://www.slideshare.net/gcheliotis/social-network-analysis-3273045">[on-line]</a></li>                                        
+                    <li>Dr. Derek Greene: Graph and Network Analysis - Web Science Doctoral Summer School 2011. <a href="http://mlg.ucd.ie/files/summer/tutorial.pdf">[on-line]</a></li>
+                    <li>Jaideep Srivastava, Muhammad A. Ahmad, Nishith Pathak, David Kuo-Wei Hsu: Data Mining Based Social Network from Online Behaviour. 2008.<a href="http://www.siam.org/meetings/sdm08/TS1.pdf">[on-line]</a></li>
+                    <li>Lynne Hamill and Nigel Gilbert: Social Circles: A Simple Structure for Agent-Based Social Network Models. 2009. <a href="http://jasss.soc.surrey.ac.uk/12/2/3.html">[on-line]</a></li>
+                    <li>Mark Newman: Modularity, Community Structure and Spectral properties of networks. 2006.<a href="http://vw.indiana.edu/netsci06/conf-slides/conf-mon/netsci-talk-mark-newman.pdf">[on-line]</a></li>
+                    <li>...</li>
+                </ul>
+            </div>
+            
+        </section>
+        
 	</body>
 </html>	
