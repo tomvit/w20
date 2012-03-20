@@ -1,0 +1,754 @@
+<html xmlns="http://www.w3.org/1999/xhtml" >
+    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+		<meta name="description"  content="Humla Testing Slides"/>
+   		<meta name="keywords" content="Humla, HTML5, presentation"/>
+		
+        <link type="text/css" rel="stylesheet" href="../lib/core/humla.css"></link>   
+        <script type="text/javascript" src="../lib/humla.js"></script>
+        <title>NoSQL &ndash; Databases</title>
+	</head>
+	
+	<body>
+		<footer>
+			<p><b>#TITLE#</b></p><p><b>&#8211; #SLIDE_NO# &#8211;</b></p>
+		</footer>
+
+		<div class="slide intro">
+    		<hgroup>
+				<h1>Web 2.0</h1>
+                <h2>Lecture 9: NoSQL &ndash; Databases</h2>
+			</hgroup>
+        </div>
+
+        <div class="slide outline" id="formatting-slide-content">
+        </div>
+
+        <section>
+            <header>Classification</header>
+
+            	<div class="slide" id="advanced-text">
+            		<hgroup>
+        				<h1>Taxonomies by Data Model</h1>
+        			</hgroup>
+                    <ul>
+                    <li>Different key-value datastores</li>
+                        <table>
+                            <thead>
+                                <th>Term</th><th>Matching Databases</th>
+                            </thead>
+                            <tbody>
+                                <tr><td>Key-Value-Cache</td><td>Memcached<br>Repcached<br>Coherence</td></tr>
+                                <tr><td>Key-Value-Store</td><td>Flare<br>Schema Free</td></tr>
+                                <tr><td>Eventually-Consistent Key-Value-Store</td><td>Dynamo<br>Voldemort<br>Dynomite</td></tr>
+                                <tr><td>Ordered-Key-Value-Store</td><td>Tokyo Tyrant<br>Lightcloud</td></tr>                             
+                            </tbody>
+                        </table>    
+                    </ul>
+                </div>  
+        
+                <div class="slide">
+            		<hgroup>
+        				<h1>Taxonomies by Data Model</h1>
+        			</hgroup>
+                    <ul>
+                    <li>Other kinds of datastores</li>
+                        <table>
+                            <thead>
+                                <th>Term</th><th>Matching Databases</th>
+                            </thead>
+                            <tbody>
+                                <tr><td>Document Store</td><td>CouchDB<br>Mongo<br>XML Databases</td></tr>
+                                <tr><td>Wide Columnar Store</td><td>Bigtable<br>Hbase<br>Cassandra<br>Hypertable</td></tr>
+                                <tr><td>Object Database</td><td>ZopeDB<br>DB4O<br>Shoal</td></tr>
+                                <tr><td>Graph Store</td><td>Neo4j<br>HyperGraphDB</td></tr>             
+                            </tbody>
+                        </table>    
+                    </ul>
+                </div>   
+
+        </section>
+        
+        <section>
+            <header>Key-Value Databases</header>
+            
+            
+            
+                <div class="slide">
+            		<hgroup>
+        				<h1>Properties</h1>
+        			</hgroup>
+                    <ul>
+                    <li>Simple data model - map/dictionary</li>
+                    <li>High scalability over consistency</li>
+                    <li>Omit rich ad-hoc querying and analytics features</li>
+                    <ul>
+                      <li>Especially joins and aggregate operations are set aside</li>
+                    </ul>
+                    <li>Heavily influenced by Amazon’s Dynamo (2007)</li>
+    
+                    </ul>
+                </div>              
+            
+              <div class="slide outline"></div>        
+              
+                
+                  <div class="slide">
+              		<hgroup>
+          				<h1>Basic characteristics</h1>
+          			</hgroup>
+                      <ul>
+                      <li>P2P key-value store</li>
+                      <li>Object versioning</li>
+                      <li>Consistent hashing</li>
+                      <li>Gossip – membership & failure detection</li>
+                      <li>Quorum reads</li>
+                      <li>Simple query model</li>
+                      <li>Eventual consistency</li>
+    
+                      </ul>
+                  </div>
+                  
+              <div class="slide outline"></div>       
+                  
+              <section>
+                <header>Apache Dynamo</header>
+                
+                  <div class="slide">
+              		<hgroup>
+          				<h1>Partitioning</h1>
+          			</hgroup>
+                      <ul>
+                      <li>Consistent hashing</li>
+                      <li>Replication (N replicas)</li>
+                      <li>Versioning</li>
+                      <ul>
+                        <li>Vector clock</li>
+                        <li>Conflict reconciliation by clients</li>
+                      </ul>
+                      </ul>
+                  </div> 
+                  
+                  
+                <div class="slide">
+              	<hgroup>
+          			<h1>Operations</h1>
+          			</hgroup>
+                      <ul>
+                      <li>Read/Write requests</li>
+                      <ul>
+                        <li>Clients sends a request to a random node (coordinator) then the request is forwarded to the proper node</li>                        
+                      </ul>
+                      <li>Consistency - Quorum protocol (R + W > N)</li>
+                      <ul>
+                        <li>Writes</li>
+                          <ul>
+                            <li>Coordinator take care of versioning and vector clock</li>
+                            <li>Then sends requests to N replicas, if W replicas confirm then write is sucessful</li>
+                          </ul>
+                      </ul>
+                      <ul>
+                        <li>Reads</li>
+                          <ul>
+                            <li>Coordinator sends requests to N replicas, if R replicas respond then read is sucessful</li>
+                            <li>If different versions of data are returned then do read repair</li>                                                
+                          </ul>                        
+                                                                        
+                      </ul>                                              
+                                            
+                      </ul>
+                  </div>
+                  
+                  <div class="slide">
+              		<hgroup>
+          				<h1>Failure Handling</h1>
+          			 </hgroup>
+                      <ul>
+                      <li>Dynamo is “always writable”</li>
+                      <li>Hinted handoff</li>
+                      <ul>                        
+                        <li>If a replica node Nr is down, coordinator writes data to a random node Nh</li>
+                        <li>Nhnode save all the data and hint with intended recipient</li>
+                        <li>Hinted writes are not readable</li>
+                        <li>Nh will try to send data back to Nr. If Nr is available Nh deletes local copy.</li>
+                      </ul>
+                      <li>What if hinted replica Nh fails before resending data to Nr?</li>
+                      </ul>
+                  </div>
+                  
+                  
+                  <div class="slide">
+              		<hgroup>
+          				<h1>Node architecture</h1>
+          			 </hgroup>
+                      <ul>
+                      <li>Bootstrapping & node removal</li>                      
+                      <ul>                        
+                        <li>New node gets a position in the ring</li>
+                        <li>Re-balancing strategies</li>
+                        <ul>
+                          <li>Partition split</li>
+                          <li>Fixed size partitions</li>
+                        </ul>  
+                      </ul>
+                      <li>Local persistence engine</li>
+                      <ul>
+                        <li>MySQL</li>
+                        <li>BerkleyDB</li>
+                        <li>In-memory buffer + persistence</li>
+                      </ul>
+                      </ul>
+                  </div>
+               
+              </section> 
+                  
+              <div class="slide outline"></div>       
+                  
+              <section>
+                <header>Voldemort</header>
+                
+                 <div class="slide">
+              		<hgroup>
+          				<h1>Node architecture</h1>
+          			 </hgroup>
+                      <ul>
+                      <li>Based and similar on Apache Dynamo</li>
+                      <li>Originally developed by LinkedIn - now open source</li>
+                      <li>Simple data model</li>
+                      <li>No joins or complex queries</li>
+                      <li>Fixed partitions</li>
+                      <li>Values can be saved as e.g</li>
+                      <ul>
+                        <li>JSON</li>
+                        <li>Thrift</li>
+                        <li>String</li>
+                        <li>Java serialization</li>
+                        <li>etc.</li>                        
+                      </ul>                      
+                 
+                  </div>                                                                                                               
+                        
+                            
+                 <div class="slide">
+              		<hgroup>
+          				<h1>Database "schema"</h1>
+          			 </hgroup>
+                      <ul>
+                      <li>Picture of DB schema</li>
+                      </ul>                      
+                 
+                  </div>                          
+                        
+                 <div class="slide">
+              		<hgroup>
+          				<h1>How to do "queries and joins"</h1>
+          			 </hgroup>
+                      <ul>
+                      <li>Programmically - writing</li>
+                       <pre class="brush: java; class-name: 'tight'">
+                          Address address = new Address("Na konci světa", "Zatavi", "12345");
+                          User user = new User("john", "doe", address);
+                        
+                          Map addressValue = new HashMap();
+                          addressValue.put("street", address.getStreet());
+                          addressValue.put("city", address.getCity());
+                          addressValue.put("zipcode", address.getZipcode());
+                        
+                          addressClient.put(1, addressValue);
+                        
+                          Map userValue = new HashMap();
+                          userValue.put("firstName", user.getFirstName());
+                          userValue.put("lastName", user.getLastName());
+                          //uložíme se klíče asociovaných adress
+                          userValue.put("addressKeys", Arrays.asList(new Integer[]{1}); 
+                        
+                          userClient.put(1, userValue);
+                       </pre>
+                      </ul>                      
+                 
+                  </div>
+                  
+                 <div class="slide">
+              		<hgroup>
+          				<h1>How to do "queries and joins"</h1>
+          			 </hgroup>
+                      <ul>
+                      <li>Programmically - reading (query and join)</li>
+                       <pre class="brush: java; class-name: 'tight'">
+                        Map userValue = userClient.get(1);
+                        List addressKeys = userValue.get("addressKeys");
+                        for(int key: addressKeys) 
+                         Map addressValue = addressClient.get(key);
+                        
+                       </pre>
+                       
+                       <li>Picture of DB schema</li>
+                      </ul>
+                  </div>                    
+                                           
+                 <div class="slide">
+              		<hgroup>
+          				<h1>How to do "queries and joins"</h1>
+          			 </hgroup>
+                      <ul>
+                      <li>Store design - save data together</li>
+                      <li>For example using Java serilization</li>
+                       <pre class="brush: java; class-name: 'tight'">
+                        Address address = new Address("Na konci světa", "Zatavi", "12345");
+                        User user = new User("john", "doe", address);
+                        client.put(1, user);
+                       </pre>                       
+                       <li>Picture of DB schema</li>
+                      </ul>
+                  </div>                         
+                        
+                                
+               </section><!-- Voldemort -->
+              
+            </section><!-- Key-Value DB -->  
+         
+         <div class="slide outline"></div>
+            
+         <section>
+                <header>Document Databases</header> 
+            
+            
+                 <div class="slide">
+              		<hgroup>
+          				<h1>Properties</h1>
+          			 </hgroup>
+                      <ul>
+                      <li>More complex and meaningful data structures than key-value DBs</li>
+                      <ul>
+                        <li>Support of encapsulation of key-/value-pairs in documents</li>                        
+                      </ul>
+                      <li>Main difference</li>
+                      <ul>
+                        <li>Set of query APIs or query language</li>                        
+                      </ul>
+                      <li>No strict documents schema</li>
+                      <ul>
+                        <li>Structure of same document may vary</li>                        
+                      </ul>
+                      <li>Node architecture, replication etc. has same basics as key-value DBs</li>                                           
+                      </ul>
+                  </div>               
+            
+            
+                <div class="slide outline"></div>
+            
+                <section>
+                 <header>Apache CouchDB</header>
+
+                       <div class="slide">
+                    		<hgroup>
+                				<h1>Properties</h1>
+                			 </hgroup>
+                            <ul>
+                              <li>Cluster Of Unreliable Commodity Hardware</li>
+                              <li>Documents stored in JSON format</li>
+                              <li>B-tree storage engine</li>
+                              <li>MVCC model, no locking</li>
+                              <li>No joins, no PK/FK (UUIDs are auto assigned)</li>
+                              <li>Implemented in Erlang</li>
+                              <li>REST API</li>                                                                                                       
+                            </ul>
+                        </div> 
+                        
+                        
+                       <div class="slide">
+                    		<hgroup>
+                				<h1>Views</h1>
+                			 </hgroup>
+                            <ul>
+                                <li>Created on demand (by HTTP GET request)</li>
+                                <li>Filter, sort, "join", aggregate</li>
+                                <li>Map/Reduce based, language independent (JavaScript by default)</li>
+                                <li>K/V pairs from Map/Reduce are stored in the B-tree engine</li>
+                                <li>Parameters - key, start key, end key, offset, limit, stale, etc.</li>                                                                          
+                            </ul>
+                        </div>
+                        
+                       <div class="slide">
+                    		<hgroup>
+                				<h1>Basic query</h1>
+                			 </hgroup>
+                            <ul>
+                                <li>SELECT field FROM table WHERE value="searchterm"</li>                                
+                                <li>/database/_design/application/_view/viewname?key="searchterm"</li>
+                                <li>Map function</li>
+                                <pre class="brush: javascript; class-name: 'tight'">
+                                function(doc) {
+                                  if(doc.value) {
+                                    emit(doc.value, null);
+                                  }
+                                }
+                                </pre>                                         
+                            </ul>
+                        </div>
+                        
+                        
+                       <div class="slide">
+                    		<hgroup>
+                				<h1>Aggregate query</h1>
+                			 </hgroup>
+                            <ul>
+                                <li>SELECT age, COUNT(*) FROM table GROUP BY age</li>                                                                
+                                <li>Map function</li>
+                                <pre class="brush: javascript; class-name: 'tight'">    
+                                function(doc){
+                                  if (doc.name){
+                                    emit(doc.age,1);
+                                  }
+                                }
+                                </pre>
+                                <li>Reduce function</li>
+                                <pre class="brush: javascript; class-name: 'tight'">
+                                function(keys, values) {
+                                  return sum(values);
+                                }
+                                </pre>                                         
+                            </ul>
+                        </div>
+                        
+                       <div class="slide">
+                    		<hgroup>
+                				<h1>Aggregate query</h1>
+                			 </hgroup>
+                            <ul>
+                                <li>Result of previous query</li>                                                                
+                                
+                                <pre class="brush: javascript; class-name: 'tight'">    
+                                {
+                                  "total_rows": 4, "offset": 0, "rows":
+                                  [
+                                    {"key":18, "value":2},
+                                    {"key":25, "value":6},
+                                    {"key":29, "value":3},
+                                    {"key":32, "value":1}   
+                                  ]
+                                }
+                                </pre>                                         
+                            </ul>
+                        </div>                                                                         
+                
+                
+                
+                </section><!-- Couch DB -->
+            
+                <div class="slide outline"></div>
+            
+                <section>
+                 <header>MongoDB</header>
+                 
+                       <div class="slide">
+                    		<hgroup>
+                				<h1>Properties</h1>
+                			 </hgroup>
+                            <ul>                              
+                              <li>Open source</li>
+                              <li>Written in C++</li>                                                          
+                              <li>Stores documents using BSON (Binary JSON)</li>
+                              <li>Documents are stored in collections (named groupings of documents)</li>                              
+                              <li>Drivers for access to DB available for multiple languages</li>
+                              <li>Supports multiple types of indexing</li>
+                              <li>Replication uses master/slave model</li>                                                                                                                                                                   
+                            </ul>
+                        </div> 
+                        
+                       <div class="slide">
+                    		<hgroup>
+                				<h1>Queries</h1>
+                			 </hgroup>
+                            <ul>                                                            
+                              <li>Queries wrriten using specialized JSON Object</li>
+                              <li>AdHoc queries</li>
+                              <li>Map/Reduce used mainly for batch data processing, not for queries</li> 
+                              <li>Find operation:</li>
+                              <pre class="brush: javascript; class-name: 'tight'">   
+                              db.&#60;collection&#62;.find( { title : " MongoDB " );                                                            
+                              </pre>
+                              <li>Find operation with selection</li>
+                              <pre class="brush: javascript; class-name: 'tight'">
+                              db.users.find({last_name: 'Smith'}, {'Age': 1});
+                              </pre>
+                              <li>Skip, limit, sort:</li>
+                              <pre class="brush: javascript; class-name: 'tight'"> 
+                              db.users.find().skip(20).limit(10).sort({last_name: 1});
+                              </pre>
+                              <li>Similar operations are used for insert, update, delete</li>                                                                                                                                                                 
+                            </ul>
+                        </div>                         
+                        
+                 
+                 
+                </section>            
+  
+          </section><!-- Document DB-->
+         
+         
+          <div class="slide outline"></div>
+         
+         <section>
+         <header>Column-Oriented Databases</header>
+         
+         
+                 <div class="slide">
+              		<hgroup>
+          				<h1>Properties</h1>
+          			 </hgroup>
+                      <ul>
+                      <li>First implementation in 1970s</li>
+                      <li>Store and process data by column instead of row</li>
+                      <li>Usefull for computing over large numbers of similar data items</li>
+                      <li>Table in relational database:</li>
+                         <table>
+                            <thead>
+                                <th>ID</th><th>Name</th><th>Salary</th>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>Baker</td><td>30000<td></tr>
+                                <tr><td>2</td><td>Smith</td><td>60000<td></tr>
+                                <tr><td>3</td><td>Taylor</td><td>50000<td></tr>                                             
+                            </tbody>
+                        </table>                                                                    
+                      </ul>
+                  </div>
+                  
+                  
+                 <div class="slide">
+              		<hgroup>
+          				<h1>Row-oriented vs. Column-oriented DBs</h1>
+          			 </hgroup>
+                      <ul>
+                        <li>Data serialization on HDD, RAM etc. is different in both cases</li>
+                        <li>Row-oriented database</li>
+                        <pre class="brush: text; class-name: 'tight'"> 
+                            1,Baker,30000;
+                            2,Smith,60000;
+                            3,Taylor,50000;
+                        </pre>
+                        
+                        <li>Column-oriented database</li>
+                        <pre class="brush: text; class-name: 'tight'"> 
+                            1,2,3;
+                            Baker,Smith,Taylor;
+                            30000,60000,50000;
+                        </pre>                                                                                                                                
+                      </ul>
+                  </div>                                  
+            
+            
+                 <div class="slide">
+              		<hgroup>
+          				<h1>Row-oriented vs. Column-oriented DBs</h1>
+          			 </hgroup>
+                      <ul>
+                        <li>Advantages of column-oriented DBs</li>
+                        <ul>
+                          <li>Aggregation over many rows but only for smaller subset of all column data</li>
+                          <li>Supplying new column values for all rows at once. Write or replace of old data is more efficient. There is no need to touch any other columns for the rows</li>
+                        </ul>                      
+                        <li>Advantages of row-oriented DBs</li>
+                          <ul>
+                            <li>Many columns of a single row are required. Especially when entire row can be read with a single disk seek</li>
+                            <li>Writing a new row if all of the column data is supplied at the same time</li>
+                          </ul>                                                                                                                                              
+                      </ul>
+                  </div>
+                  
+                  
+                 <div class="slide">
+              		<hgroup>
+          				<h1>OLTP vs. OLAP</h1>
+          			 </hgroup>
+                      <ul>
+                        <li>Online transaction protocol (OLTP)</li>
+                        <ul>
+                          <li>Class of systems used for managing transaction-oriented applications</li>
+                          <li>Transactions can include many nodes in different companies</li>
+                          <li>Integration into SOA and Web services</li>
+                          <li>Row-oriented DBs are well-suited for OLTP</li>
+                        </ul>                      
+                        <li>Online analytical processing (OLAP)</li>
+                          <ul>
+                            <li>Class of systems suitable for multi-dimensional analytical queries</li>
+                            <li>Used for data mining, business reporting, forecasting, etc.</li>
+                            <li>Column-oriented DBs are well-suited for OLAP</li>
+                          </ul>                                                                                                                                              
+                      </ul>
+                  </div>                                
+            
+            
+            
+                <div class="slide outline"></div>            
+         
+         
+                <section>
+                <header>BigTable</header>
+                
+                
+                 <div class="slide">
+              		<hgroup>
+          				<h1>Properties</h1>
+          			 </hgroup>
+                      <ul>
+                      <li>Introduced by Google in 2006</li>
+                      <li>Sparse, distributed, persistent multidimensional sorted map</li>
+                      <li>Row, column, timestamp dimensions, value is string</li> 
+                      <li>Single master (stand-by replica)</li>
+                      <li>Picture of one row</li>                                        
+                      </ul>
+                  </div>
+                  
+                 <div class="slide">
+              		<hgroup>
+          				<h1>Data model</h1>
+          			 </hgroup>
+                      <ul class=small>
+                      <li>Row</li>
+                          <ul>
+                            <li>Keys are arbitrary strings</li>
+                            <li>Data is sorted by row key</li>
+                          </ul>
+                      <li>Tablet</li>
+                          <ul>
+                            <li>Row range is dynamically partitioned into tablets (sequence of rows)</li>
+                            <li>Range scans are very efficient</li>
+                            <li>Row keys should be chosen to improve locality of data access</li>
+                          </ul>
+                      <li>Column</li>    
+                          <ul>
+                            <li>Arbitrary strings</li>
+                            <li>Can be grouped into families (e.g. anchor, language)</li>
+                            <li>Data in a column families is stored and compressed together</li>                            
+                          </ul>                                                                                                                                       
+                      </ul>
+                  </div>
+                  
+                  
+                 <div class="slide">
+              		<hgroup>
+          				<h1>Data model</h1>
+          			 </hgroup>
+                      <ul>
+                      <li>Timestamps</li>
+                          <ul>
+                            <li>Each cell has multiple versions</li>
+                            <li>Can be manually assigned</li>
+                          </ul>
+                      <li>Versioning</li>
+                          <ul>
+                            <li>Automated garbage collection</li>
+                            <li>Retain last N versions or versions newer than TS</li>
+                          </ul>                                                                                      
+                      </ul>
+                  </div>
+                  
+                 <div class="slide">
+              		<hgroup>
+          				<h1>Achitecture</h1>
+          			 </hgroup>
+                      <ul>
+                      <li>Master server</li>
+                          <ul>
+                            <li>Assign tablets to Tablet Servers and balance control</li>
+                            <li>Garbage collection</li>
+                            <li>Client data does not move through master server</li>
+                            <li>Tablet location is not handled by master server</li> 
+                          </ul>
+                      <li>Tablet server</li>
+                          <ul>
+                            <li>Thousands of tablets per TS</li>
+                            <li>Manages read, write and split of its tablets</li>
+                          </ul>                                                                                      
+                      </ul>
+                  </div>
+                  
+                 <div class="slide">
+              		<hgroup>
+          				<h1>Tablet location</h1>
+          			 </hgroup>
+                      <ul>
+                      <li>Picture of workflow</li>                                                                                      
+                      </ul>
+                  </div>
+
+                </section><!-- BigTable -->
+         
+         
+                <div class="slide outline"></div> 
+         
+                <section>
+                <header>Casandra</header>
+                
+                
+                 <div class="slide">
+                		<hgroup>
+            				<h1>Properties</h1>
+            			 </hgroup>
+                        <ul>
+                        <li>Developed by Facebook (for inbox), now under Apache</li>
+                        <li>Facebook now developing its own version again</li>
+                        <li>Data model based on Google BigTable</li>
+                        <li>Partitioning and consistency based on Amazon Dynamo</li>
+                        <li>Eventual consistency</li>
+                        <li>Optimistic replication</li>
+                        <li>Reading and writing almost the same as for BigTable</li>                                                                                                              
+                        </ul>
+                    </div>
+                    
+                    
+                 <div class="slide">
+                		<hgroup>
+            				<h1>Partitioning</h1>
+            			 </hgroup>
+                        <ul>
+                        <li>Every node knows about all other nodes in the cluster</li>
+                        <li>Gossip messages
+                        <ul>
+                          <li>Every nodes gossips to 1-3 other nodes about the state of the cluster</li>
+                          <li>Merging incoming info with its own</li>
+                          <li>Changes in the cluster propagate quickly</li>
+                        </ul>
+                        <li>Partitioning</li>
+                        <ul>
+                          <li>Consistent hashing</li>
+                          <li>Ring of nodes</li>
+                          <li>Load balancing via "moving" of nodes</li>
+                        </ul>
+                                                                                                                                 
+                        </ul>
+                    </div> 
+                    
+                 <div class="slide">
+              		<hgroup>
+          				<h1>Operations</h1>
+          			 </hgroup>
+                      <ul>
+                      <li>Writing</li>
+                      <ul>
+                        <li>Client sends request to a random node. This node determines the node responsible for storing the data</li>
+                        <li>Data replicated to N nodes</li>
+                      </ul>
+                      <li>Reading</li>
+                        <li>Send request to a random node, which forwards it to all the N nodes having the data</li>
+                        <li>Then return first response or do quorum read</li>                                                                                                        
+                      </ul>
+                  </div>                                                               
+                
+                
+                
+                
+                </section><!-- Casandra -->>         
+         
+         
+         
+         </section><!-- Column-Oriented DB-->
+                   
+            
+            
+        </section>            
+        
+    </body>
+</html>
