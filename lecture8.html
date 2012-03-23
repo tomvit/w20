@@ -31,11 +31,12 @@
         		<hgroup>
     				<h1>Not Only SQL</h1>
     			  </hgroup>
-                <ul>
-                    <li>Not No To SQL</li>
+                <ul>                    
+                    <li>NoSQL means <b>N</b>o <b>O</b>nly SQL</li>
+                    <li><b>Not No to SQL</b></li>
                     <li>First mentioned in 1998</li>
-                    <li>Used to describe "lightweight, open-source relational database without standard SQL interface"</li>
-                    <li>Term reintroduced in 2009 as describtion of growing number of non-relational distributed data stores often without ACID guarantees</li>                     
+                    <li>Used to describe lightweight, open-source relational database without standard SQL interface</li>
+                    <li>Term reintroduced in 2009 as describtion of growing number of non-relational distributed data stores <b>often without ACID guarantees</b></li>                     
                 </ul>
             </div>  
 
@@ -70,27 +71,27 @@
                         <ul>
                           <li>Growing need to process larger amounts of data in shorter time</li>
                           <li>Cost preasure</li>
-                          <li>Google process 20 petabyte a day stored in Bigtable</li>
+                          <li>Google process <b>20 petabyte a day</b> stored in Bigtable</li>
                         </ul>
-                        <li>NoSQL DBs</li>
+                        <li>NoSQL DBs specifics</li>
                         <ul>
                             <li>Scale horizontal very well</li>
                             <li>Not rely on highly available hardware</li>
                             <li>Don't have so rigid DB scheme</li>
-                            <li>In some cases provides automatic sharding (MongoDB)</li>                      
+                            <li>In some cases provide automatic sharding</li>                      
                         </ul>                      
                     </ul>
                 </div>  
         
                 <div class="slide">
                 	<hgroup>
-        				<h1>Avoidance of expensive ORM</h1>
+        				<h1>Avoidance of Expensive ORM</h1>
         			</hgroup>
                     <ul>
-                        <li>NoSQL DBs</li>
+                        <li>NoSQL DBs specifics</li>
                           <ul>
-                            <li>Stores data structures in simple form</li>
-                            <li>Stored structures are similar to those used in OO programing languages</li>
+                            <li>Store data structures in simple form</li>
+                            <li>Stored structures are similar to those used in OO programming languages</li>
                             <li>No need to do expensive ORM</li>
                                                                               
                         </ul>
@@ -104,15 +105,13 @@
         				<h1>"One size fit's all" thinking is wrong</h1>
         			</hgroup>
                     <ul>
-                        <li>Growing number of application which cannot be satisfied with relation DBs</li>                          
+                        <li>Growing number of applications which cannot be satisfied with relational DBs</li>                          
                         <li>Growth of data volumes to be stored and processed</li>  
                         <li>Difference between bank and social network</li>
                          <ul>   
                             <li>No need of ACID for Facebook status</li>
                             <li>Temporaly inconsistency, service interruption etc. can good trade for flexibility and speed</li>                 
                           </ul>
-                        
-                        
                     </ul>
                 </div> 
                 
@@ -133,7 +132,7 @@
         				<h1>Movement in Programming Languages</h1>
         			</hgroup>
                     <ul>
-                        <li>Modern programming languages and developer frameworks provide abstractions to hide use of SQL and relation databases</li>
+                        <li>Modern programming languages and developer frameworks provide abstractions <b>to hide use of SQL</b> and relational databases</li>
                         <li>Object relational mapping</li>
                         <ul>
                           <li>Java - JPA (Hibernate)</li>
@@ -207,17 +206,31 @@
                         <ul>
                           <li>ability of the system to continue operation in the presence of
                           network partitions</li>
-                          <li>the database can be split over multiple servers</li>                        
+                          <li>database can be split over multiple servers</li>                        
                         </ul>                                                                        
                     </ul>
                 </div>
+  
+               <div class="slide">
+                	<hgroup>
+        				<h1>CAP Theorem</h1>
+        			</hgroup>
+                    <ul>
+                    <figure>                    
+				          	<img src="img\l8\cap.png" 
+						          style="zoom: 1.4; alt="Consistent Hashing"></img>                      
+                   </figure>                                                                                                              
+                    </ul>
+                </div>  
+  
+  
                 
                <div class="slide">
                 	<hgroup>
         				<h1>CAP Theorem</h1>
         			</hgroup>
                     <ul>
-                        <li>You can choose at most two of these characteristics</li>
+                        <li>You can choose at most the <b>two</b> of these characteristics</li>
                         <table>
                             <thead>
                                 <th>Choise</th><th>Properties</th><th>System</th>
@@ -231,22 +244,25 @@
                     </ul>
                 </div>
                 
+                
+                
+                
                <div class="slide">
                 	<hgroup>
         				<h1>BASE system</h1>
         			</hgroup>
                     <ul>
-                        <li>Basically available</li>
+                        <li><b>B</b>asically <b>A</b>vailable</li>
                         <ul>
-                          <li>works basically all the time</li>                                                    
+                          <li>DB works basically all the time</li>                                                    
                         </ul>                        
-                        <li>Soft-state</li>
+                        <li><b>S</b>oft-state</li>
                         <ul>
-                          <li>does not have to be consistent all the time</li>                                                    
+                          <li>DB <b>does not</b> have to be consistent all the time</li>                                                    
                         </ul>                        
-                        <li>Eventual consistency</li>
+                        <li><b>E</b>ventual consistency</li>
                         <ul>
-                          <li>is in some known-state (see in next section)</li>                                                    
+                          <li>DB is in some known-state (see in next section)</li>                                                    
                         </ul>                        
                     </ul>
                 </div>
@@ -257,7 +273,7 @@
         				<h1>ACID vs. BASE</h1>
         			</hgroup>
                     <ul>
-                    <li>Comparation of ACID and BASE systems</li>
+                    <li>Comparsion of the ACID and BASE system</li>
                         <table>
                             <thead>
                                 <th>ACID</th><th>BASE</th>
@@ -308,12 +324,30 @@
         				<h1>Machines layout</h1>
         			</hgroup>
                     <ul>
-                        <li>Large number (hundreds or thousands) of cheap, commoditized, unreliable machines (physical nodes)</li>                  
+                        <li>Large number (hundreds or thousands) of cheap, commoditized, unreliable machines (physical nodes)</li>                         
+                  
                         <li>Same set of software configuration</li>                    
                         <li>Varying hardware capacity</li>
-                        <li>Within each physical node (PN), there will be a variable number of virtual node (VN)</li>                                                                           
+                        <li>Within each physical node (PN), there will be a variable number of virtual nodes (VN)</li>                                                                                        
                     </ul>
+                             
                 </div>
+                
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Machines layout</h1>
+        			</hgroup>
+                    <ul>
+
+                   <figure>                    
+				          	<img src="img\l8\mach.png" 
+						          style="zoom: 0.8; margin-left: 100px ;alt="Consistent Hashing"></img>
+                      
+                   </figure>                                                                                             
+                    </ul>
+                             
+                </div>                
                 
                 
               <div class="slide">
@@ -340,8 +374,12 @@
                 	<hgroup>
         				<h1>Consistent Hashing</h1>
         			</hgroup>
-                    <ul>
-                        <li>Consistent Hashing picture</li>                                                                                           
+                    <ul class="small">
+                    <figure>                    
+				          	<img src="img\l8\cons_hashing.png" 
+						          style="zoom: 0.58; alt="Consistent Hashing"></img>
+                      
+                   </figure>                                                                                         
                     </ul>
                 </div>
                 
@@ -353,9 +391,23 @@
                         <li>Replicate the data partitions for high reliability</li>
                         <li>Spread of workload across multiple replicas</li>
                         <li>Read-only request can be dispatched to any replicas</li>
-                        <li>Problems with update operations</li>                                                                                           
+                        <li>Problems with update operations</li>                                                                                                               
                     </ul>
-                </div>  
+                </div>
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Data replication</h1>
+        			</hgroup>
+                    <ul>
+                   <figure>                    
+				          	<img src="img\l8\repl.png" 
+						          style="zoom: 0.58; margin-left: 100px ;alt="Consistent Hashing"></img>
+                      
+                   </figure>                                                                     
+                    </ul>
+                             
+                </div>                    
                 
               <div class="slide">
                 	<hgroup>
@@ -369,7 +421,7 @@
                         <li>Read your write consistency</li>
                         <ul>
                           <li>client sees his own update immediately (not the updates made by other clients)</li>
-                          <li>client can change server between requests</li>
+                          <li>client <b>can change</b> server between requests</li>
                         </ul>                        
                         <li>Session consistency</li>
                         <ul>
@@ -407,8 +459,8 @@
         				<h1>Vector clocks</h1>
         			</hgroup>
                     <ul>
-                        <li>Vector clock is V[0], V[1], ..., V[n] of clock values from each node
-                        <li>Each replica keeps vector clock Vi</li>                        
+                        <li>Vector clock is V[0], V[1], ..., V[n] of clock values from each node</li>
+                        <li>Each replica keeps vector clock V<sub>i</sub></li>                        
                         <li>Clock values may be timestamps derived, version numbers or other ordinal values</li>                        
                         <ul>
                           <li>unique counter or clock value is saved for each piece of data</li>                          
@@ -429,12 +481,12 @@
                     <ul>
                         <li>Update of clock defined by the following rules</li>
                         <ul>
-                          <li>If an internal operation happens at node i, this node will increment its clock Vi[i]</li>
-                          <li>If node i sends a message to node k, it first advances its own clock value Vi[i] and attaches the vector
-                              clock Vi to the message to node k.</li>
-                          <li>If node i receives a message from node j, it first advances its vector clock Vi[i] and then merges its
+                          <li>If an internal operation happens at node i, this node will increment its clock V<sub>i</sub>[i]</li>
+                          <li>If node i sends a message to node k, it first advances its own clock value V<sub>i</sub>[i] and attaches the vector
+                              clock V<sub>i</sub> to the message to node k</li>
+                          <li>If node i receives a message from node j, it first advances its vector clock V<sub>i</sub>[i] and then merges its
                               own vector clock with the vector clock Vmessage</li> 
-                           <li>Vi = max(Vi, Vmessage)</li>                                                                                                                      
+                           <li>V<sub>i</sub> = max(V<sub>i</sub>, V<sub>message</sub>)</li>                                                                                                                      
                     </ul>
                 </div>
                 
@@ -444,9 +496,9 @@
         				<h1>Vector clocks</h1>
         			</hgroup>
                     <ul>
-                          <li>To compare two vector clocks Vi and Vj in order to derive a partial ordering</li>
-                          <li>Vi > Vj , if for each k Vi[k] > Vj [k]</li>
-                          <li>If neither Vi > Vj nor Vi &lt; Vj applies, a conflict caused by concurrent updates has occurred</li>
+                          <li>To compare two vector clocks V<sub>i</sub> and V<sub>j</sub> in order to derive a partial ordering</li>
+                          <li>V<sub>i</sub> > V<sub>j</sub> , if for each k V<sub>i</sub>[k] > V<sub>j</sub> [k]</li>
+                          <li>If neither V<sub>i</sub> > V<sub>j</sub> nor V<sub>i</sub> &lt; V<sub>j</sub> applies, a conflict caused by concurrent updates has occurred</li>
                           <li>Message includes</li>
                           <ul>
                             <li>vector clocks</li>
@@ -537,6 +589,21 @@
         				<h1>Distributed Data Processing via MapReduce</h1>
         			</hgroup>
                     <ul>
+
+                   <figure>                    
+				          	<img src="img\l8\reduce.png" 
+						          style="zoom: 0.58; alt="Consistent Hashing"></img>
+                      
+                   </figure>                                                                                             
+                    </ul>
+                             
+                </div>                  
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Distributed Data Processing via MapReduce</h1>
+        			</hgroup>
+                    <ul>
                           <li>For example count of appearances of each different word in set of documents</li>
                           <li>Map method</li>                       
                           <pre class="brush: javascript; class-name: 'tight'">
@@ -553,15 +620,23 @@
                                 Emit(word, AsString(sum));
                           </pre>                          
                                                            
-                        <ul>                                                                                                                      
+                        <ul>
                     </ul>
-                </div>                                                                                                                         
+                </div>
                 
-                 
-
-                
-                
-            </section>             
+            </section>
+            
+              <div class="slide">
+                	<hgroup>
+        				<h1>Sources and Pictures</h1>
+        			</hgroup>
+                    <ul>
+                      <li>NoSQL Databases, Christof Strauch</li>
+                      <ul>
+                        <li><a href="http://www.christof-strauch.de/nosqldb.pdf">www.christof-strauch.de</a</li>
+                      </ul>
+                    </ul>
+                </div>            
 
         </section>
         
