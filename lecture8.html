@@ -1,3 +1,23 @@
+<!DOCTYPE html>
+<!--
+	Web 2.0, CTU course slides
+	(cc) 2010-2012 Tomas Vitvar, tomas@vitvar.com
+-->
+<html>   
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+        <meta name="course"   content="Web 2.0"/>
+		<meta name="lecture"  content="Lecture 7"/>
+   		<meta name="keywords" content="NoSQL, principles"/>
+           
+        <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
+        <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
+        <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
+
+        <script type="text/javascript" src="humla/lib/humla.js"></script>
+        <title>NoSQL &ndash; Motivation and Principles</title>
+	</head>
+<!--
 <html xmlns="http://www.w3.org/1999/xhtml" >
     <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
@@ -8,18 +28,53 @@
         <script type="text/javascript" src="../lib/humla.js"></script>
         <title>NoSQL &ndash; Motivation and Principles</title>
 	</head>
-	
+-->	
 	<body>
+		<!--
 		<footer>
 			<p><b>#TITLE#</b></p><p><b>&#8211; #SLIDE_NO# &#8211;</b></p>
 		</footer>
+		-->
+		<footer>
+			<p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester"/>,&nbsp;
+			<span class="meta_twitter"/></p>
+			<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
+		</footer>
 
+		<!--
 		<div class="slide intro">
     		<hgroup>
 				<h1>Web 2.0</h1>
                 <h2>Lecture 8: NoSQL &ndash; Motivation and Principles</h2>
 			</hgroup>
         </div>
+        -->
+        
+        <div class="slide intro">
+			<hgroup>
+				<h1><span class="meta_course"/></h1>
+ 				<h2>#META_LECTURE#: #TITLE#</h2>
+			</hgroup>
+			<div class="author">
+				<p class="meta_author"/>
+				<p><span class="meta_email"/> &bull; <span class="meta_twitter"/> &bull; 
+				<span class="meta_web"/></p>
+			</div>
+			<center><div class="meta_logo"></div></center>
+			<div class="org">
+				<p class="meta_org"/>
+				<p><span class="meta_orgfac"/> &bull; <span class="meta_field"/> 
+				&bull; <span class="meta_orgweb"/></p>
+			</div>
+			<div class="etc">
+        		<div class="text-info">
+    				Modified: #LAST_MODIFIED#<br/>
+					Humla v#HUMLA_VERSION#
+				</div>
+				<a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
+				<div class="oppa"></div>
+			</div>
+		</div>
 
         <div class="slide outline" id="formatting-slide-content">
         </div>
@@ -31,7 +86,7 @@
         		<hgroup>
     				<h1>Not Only SQL</h1>
     			  </hgroup>
-                <ul>                    
+                <ul class="x-spacing">                    
                     <li>NoSQL means <b>N</b>o <b>O</b>nly SQL</li>
                     <li><b>Not No to SQL</b></li>
                     <li>First mentioned in 1998</li>
@@ -50,7 +105,7 @@
             		<hgroup>
         				<h1>Avoidance of Unneeded Complexity</h1>
         			</hgroup>
-                    <ul>
+                    <ul class="x-spacing">
                         <li>Lot of features and strict consistency of data in relational DBs</li>
                         <li>In many cases this is unwanted</li>
                         <li>For example user session data</li>
