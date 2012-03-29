@@ -98,7 +98,7 @@
           				<h1>Basic characteristics</h1>
           			</hgroup>
                       <ul>
-                      <li>P2P key-value store</li>
+                      <li>Key-value store</li>
                       <li>Object versioning</li>
                       <li>Consistent hashing</li>
                       <li>Gossip – membership & failure detection</li>
@@ -139,7 +139,7 @@
                       <ul>
                         <li>Clients sends a request to a random node (coordinator) then the request is forwarded to the proper node</li>                        
                       </ul>
-                      <li>Consistency - Quorum protocol (R + W > N)</li>
+                      <li>Consistency - <b>Quorum protocol</b> (R + W > N)</li>
                       <ul>
                         <li>Writes</li>
                           <ul>
@@ -165,14 +165,14 @@
           			 </hgroup>
                       <ul>
                       <li>Dynamo is “always writable”</li>
-                      <li>Hinted handoff</li>
+                      <li><b>Hinted handoff</b></li>
                       <ul>                        
-                        <li>If a replica node Nr is down, coordinator writes data to a random node Nh</li>
-                        <li>Nhnode save all the data and hint with intended recipient</li>
+                        <li>If a replica node N<sub>r</sub> is down, coordinator writes data to a random node N<sub>h</sub></li>
+                        <li>N<sub>h</sub> node save all the data and hint with intended recipient</li>
                         <li>Hinted writes are not readable</li>
-                        <li>Nh will try to send data back to Nr. If Nr is available Nh deletes local copy.</li>
+                        <li>N<sub>h</sub> will try to send data back to N<sub>r</sub>. If N<sub>r</sub> is available N<sub>h</sub> deletes local copy.</li>
                       </ul>
-                      <li>What if hinted replica Nh fails before resending data to Nr?</li>
+                      <li>What if hinted replica N<sub>h</sub> fails before resending data to N<sub>r</sub>?</li>
                       </ul>
                   </div>
                   
@@ -212,12 +212,12 @@
           				<h1>Node architecture</h1>
           			 </hgroup>
                       <ul>
-                      <li>Based and similar on Apache Dynamo</li>
+                      <li>Based and similar to Apache Dynamo</li>
                       <li>Originally developed by LinkedIn - now open source</li>
                       <li>Simple data model</li>
                       <li>No joins or complex queries</li>
                       <li>Fixed partitions</li>
-                      <li>Values can be saved as e.g</li>
+                      <li>Values can be saved as</li>
                       <ul>
                         <li>JSON</li>
                         <li>Thrift</li>
@@ -233,9 +233,11 @@
               		<hgroup>
           				<h1>Database "schema"</h1>
           			 </hgroup>
-                      <ul>
-                      <li>Picture of DB schema</li>
-                      </ul>                      
+          			 
+                    <figure>                    
+				          	<img src="img\l9\vold1.png" 
+						          style="zoom: 1.25; alt="Database schema"></img>                    
+                   </figure>              
                  
                   </div>                          
                         
@@ -258,8 +260,7 @@
                         
                           Map userValue = new HashMap();
                           userValue.put("firstName", user.getFirstName());
-                          userValue.put("lastName", user.getLastName());
-                          //uložíme se klíče asociovaných adress
+                          userValue.put("lastName", user.getLastName());                          
                           userValue.put("addressKeys", Arrays.asList(new Integer[]{1}); 
                         
                           userClient.put(1, userValue);
@@ -278,11 +279,14 @@
                         Map userValue = userClient.get(1);
                         List addressKeys = userValue.get("addressKeys");
                         for(int key: addressKeys) 
-                         Map addressValue = addressClient.get(key);
-                        
+                           Map addressValue = addressClient.get(key);                      
                        </pre>
                        
-                       <li>Picture of DB schema</li>
+                    <figure>
+				          	<img src="img\l9\vold2.png" 
+						          style="zoom: 1.1; alt="Database schema"></img>                    
+                   </figure> 
+                    
                       </ul>
                   </div>                    
                                            
@@ -298,8 +302,10 @@
                         User user = new User("john", "doe", address);
                         client.put(1, user);
                        </pre>                       
-                       <li>Picture of DB schema</li>
-                      </ul>
+                    <figure>
+				          	<img src="img\l9\vold3.png" 
+						          style="zoom: 1.1; alt="Database schema"></img>                    
+                   </figure> 
                   </div>                         
                         
                                 
@@ -320,9 +326,9 @@
                       <ul>
                       <li>More complex and meaningful data structures than key-value DBs</li>
                       <ul>
-                        <li>Support of encapsulation of key-/value-pairs in documents</li>                        
+                        <li>Support of encapsulation of key/value pairs in documents</li>                        
                       </ul>
-                      <li>Main difference</li>
+                      <li><b>Main difference</b></li>
                       <ul>
                         <li>Set of query APIs or query language</li>                        
                       </ul>
@@ -348,12 +354,28 @@
                               <li>Cluster Of Unreliable Commodity Hardware</li>
                               <li>Documents stored in JSON format</li>
                               <li>B-tree storage engine</li>
-                              <li>MVCC model, no locking</li>
+                              <li><b>MVCC model</b></li>
                               <li>No joins, no PK/FK (UUIDs are auto assigned)</li>
                               <li>Implemented in Erlang</li>
                               <li>REST API</li>                                                                                                       
                             </ul>
-                        </div> 
+                        </div>
+                        
+                        
+                       <div class="slide">
+                    		<hgroup>
+                				<h1>Multi-Version Concurrency Control</h1>
+                			 </hgroup>
+                			     
+                           <figure>
+				          	       <img src="img\l9\MVCC.png" 
+						               style="zoom: 1.1; alt="MVCC"></img>                    
+                          </figure>
+                          <ul>
+                          <li>No locking</li>
+                          <li>Read request will  see the most recent snapshot <b>at the time of the beginning of the request</b></li> 
+                          </ul>
+                        </div>                          
                         
                         
                        <div class="slide">
@@ -393,7 +415,7 @@
                 				<h1>Aggregate query</h1>
                 			 </hgroup>
                             <ul>
-                                <li>SELECT age, COUNT(*) FROM table GROUP BY age</li>                                                                
+                                <li>SELECT age COUNT(*) FROM table GROUP BY age</li>                                                                
                                 <li>Map function</li>
                                 <pre class="brush: javascript; class-name: 'tight'">    
                                 function(doc){
@@ -428,7 +450,9 @@
                                     {"key":32, "value":1}   
                                   ]
                                 }
-                                </pre>                                         
+                                </pre>
+                            <li>Key - age</li>
+                            <li>Value - age aggregation</li>                                             
                             </ul>
                         </div>                                                                         
                 
@@ -461,7 +485,7 @@
                 				<h1>Queries</h1>
                 			 </hgroup>
                             <ul>                                                            
-                              <li>Queries wrriten using specialized JSON Object</li>
+                              <li>Queries written using specialized JSON Object</li>
                               <li>AdHoc queries</li>
                               <li>Map/Reduce used mainly for batch data processing, not for queries</li> 
                               <li>Find operation:</li>
@@ -596,8 +620,7 @@
                       <li>Introduced by Google in 2006</li>
                       <li>Sparse, distributed, persistent multidimensional sorted map</li>
                       <li>Row, column, timestamp dimensions, value is string</li> 
-                      <li>Single master (stand-by replica)</li>
-                      <li>Picture of one row</li>                                        
+                      <li>Single master (stand-by replica)</li>                                                            
                       </ul>
                   </div>
                   
@@ -605,7 +628,7 @@
               		<hgroup>
           				<h1>Data model</h1>
           			 </hgroup>
-                      <ul class=small>
+                      <ul>
                       <li>Row</li>
                           <ul>
                             <li>Keys are arbitrary strings</li>
@@ -613,19 +636,30 @@
                           </ul>
                       <li>Tablet</li>
                           <ul>
-                            <li>Row range is dynamically partitioned into tablets (sequence of rows)</li>
+                            <li>Row range is dynamically partitioned into <b>tablets</b> (sequence of rows)</li>
                             <li>Range scans are very efficient</li>
                             <li>Row keys should be chosen to improve locality of data access</li>
-                          </ul>
-                      <li>Column</li>    
-                          <ul>
-                            <li>Arbitrary strings</li>
-                            <li>Can be grouped into families (e.g. anchor, language)</li>
-                            <li>Data in a column families is stored and compressed together</li>                            
-                          </ul>                                                                                                                                       
+                          </ul>                                                                                                                                                                                         
                       </ul>
                   </div>
                   
+                 <div class="slide">
+              		<hgroup>
+          				<h1>Data model</h1>
+          			 </hgroup>
+                      <ul>
+                        <li>Column</li>    
+                          <ul>
+                            <li>Arbitrary strings</li>
+                            <li>Can be grouped into <b>families</b> (e.g. anchor, language)</li>
+                            <li>Data in a column families is stored and compressed together</li>                            
+                          </ul>                                                                                                                                                                
+                      </ul>
+                       <figure>
+				          	<img src="img\l9\bigtable1.png" 
+						          style="zoom: 0.6; alt="Big table"></img>                    
+                   </figure>                       
+                  </div>                  
                   
                  <div class="slide">
               		<hgroup>
@@ -670,9 +704,27 @@
           				<h1>Tablet location</h1>
           			 </hgroup>
                       <ul>
-                      <li>Picture of workflow</li>                                                                                      
+                      <li>B+ tree index</li>
+                      <li>Root (Chubby file) - location of the Root Metadata tablet</li>
+                      <li>1st level (Root Metadata tablet) – locations of all Metadata tablets</li>
+                      <li>2nd level (Metadata tablet) – location of a set of tablets</li>
+                      <ul>
+                        <li>SSTable – persistent, ordered immutable map from keys to values</li>
+                        <li>Each row is SSTable ID + end row ID</li>
+                      </ul>
+                      <li>Clients cache tablet locations</li>                                                                                        
                       </ul>
                   </div>
+                  
+                 <div class="slide">
+              		<hgroup>
+          				<h1>Tablet location</h1>
+          			 </hgroup>
+                    <figure>
+				          	<img src="img\l9\bigtable2.png" 
+						          style="zoom: 0.85; alt="Big table"></img>                    
+                   </figure> 
+                  </div>                  
 
                 </section><!-- BigTable -->
          
@@ -732,8 +784,10 @@
                         <li>Data replicated to N nodes</li>
                       </ul>
                       <li>Reading</li>
-                        <li>Send request to a random node, which forwards it to all the N nodes having the data</li>
-                        <li>Then return first response or do quorum read</li>                                                                                                        
+                        <ul>
+                        <li>Client sends request to a random node, which forwards it to all the N nodes having the data</li>
+                        <li>Then return first response or do quorum read</li>
+                        </ul>                                                                                                        
                       </ul>
                   </div>                                                               
                 
@@ -745,6 +799,27 @@
          
          
          </section><!-- Column-Oriented DB-->
+         
+         
+              <div class="slide">
+                	<hgroup>
+        				<h1>Sources and Pictures</h1>
+        			</hgroup>
+                    <ul>
+                      <li>NoSQL Databases, Christof Strauch</li>
+                      <ul>
+                        <li><a href="http://www.christof-strauch.de/nosqldb.pdf">www.christof-strauch.de</a></li>
+                      </ul>
+                      <li>World of NoSQL Databases, Kevin Ort</li>
+                      <ul>
+                        <li><a href="http://ortnosqlsql.blogspot.com">ortnosqlsql.blogspot.com</a></li>
+                      </ul>
+                      <li>Dagblog, Roman Pichlík </li>
+                      <ul>
+                        <li><a href="http://www.dagblog.cz">www.dagblog.cz</a></li>
+                      </ul>                                              
+                    </ul>
+                </div>           
                    
             
             
