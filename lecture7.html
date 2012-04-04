@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<!--
+	Web 2.0, CTU course slides
+	(cc) 2010-2012 Tomas Vitvar, tomas@vitvar.com
+-->
+<html>   
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+        <meta name="course"   content="Web 2.0"/>
+		<meta name="lecture"  content="Lecture 7"/>
+   		<meta name="keywords" content="NoSQL, principles"/>
+           
+        <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
+        <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
+        <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
+
+        <script type="text/javascript" src="humla/lib/humla.js"></script>
+        <title>NoSQL &ndash; Motivation and Principles</title>
+	</head>
+<!--
+<html xmlns="http://www.w3.org/1999/xhtml" >
+    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+		<meta name="description"  content="Humla Testing Slides"/>
+   		<meta name="keywords" content="Humla, HTML5, presentation"/>
+		
+        <link type="text/css" rel="stylesheet" href="../lib/core/humla.css"></link>   
+        <script type="text/javascript" src="../lib/humla.js"></script>
+        <title>NoSQL &ndash; Motivation and Principles</title>
+	</head>
+-->	
+	<body>
+		<!--
+		<footer>
+			<p><b>#TITLE#</b></p><p><b>&#8211; #SLIDE_NO# &#8211;</b></p>
+		</footer>
+		-->
+		<footer>
+			<p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester"/>,&nbsp;
+			<span class="meta_twitter"/></p>
+			<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
+		</footer>
+
+		<!--
+		<div class="slide intro">
+    		<hgroup>
+				<h1>Web 2.0</h1>
+                <h2>Lecture 8: NoSQL &ndash; Motivation and Principles</h2>
+			</hgroup>
+        </div>
+        -->
+        
+        <div class="slide intro">
+			<hgroup>
+				<h1><span class="meta_course"/></h1>
+ 				<h2>#META_LECTURE#: #TITLE#</h2>
+			</hgroup>
+			<div class="author">
+				<p class="meta_author"/>
+				<p><span class="meta_email"/> &bull; <span class="meta_twitter"/> &bull; 
+				<span class="meta_web"/></p>
+			</div>
+			<center><div class="meta_logo"></div></center>
+			<div class="org">
+				<p class="meta_org"/>
+				<p><span class="meta_orgfac"/> &bull; <span class="meta_field"/> 
+				&bull; <span class="meta_orgweb"/></p>
+			</div>
+			<div class="etc">
+        		<div class="text-info">
+    				Modified: #LAST_MODIFIED#<br/>
+					Humla v#HUMLA_VERSION#
+				</div>
+				<a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
+				<div class="oppa"></div>
+			</div>
+		</div>
+
+        <div class="slide outline" id="formatting-slide-content">
+        </div>
+
+        <section>
+            <header>NoSQL Tendencies</header>
+
+            <div class="slide">
+        		<hgroup>
+    				<h1>Not Only SQL</h1>
+    			  </hgroup>
+                <ul class="x-spacing">                    
+                    <li>NoSQL means <b>N</b>o <b>O</b>nly SQL</li>
+                    <li><b>Not No to SQL</b></li>
+                    <li>First mentioned in 1998</li>
+                    <li>Used to describe lightweight, open-source relational database without standard SQL interface</li>
+                    <li>Term reintroduced in 2009 as describtion of growing number of non-relational distributed data stores <b>often without ACID guarantees</b></li>                     
+                </ul>
+            </div>  
+
+            <div class="slide outline">
+            </div>
+
+            <section>
+              <header>Motives for NoSQL</header>
+
+            	<div class="slide" id="advanced-text">
+            		<hgroup>
+        				<h1>Avoidance of Unneeded Complexity</h1>
+        			</hgroup>
+                    <ul class="x-spacing">
+                        <li>Lot of features and strict consistency of data in relational DBs</li>
+                        <li>In many cases this is unwanted</li>
+                        <li>For example user session data</li>
+                        <ul>                            
+                            <li>No need to do all consistency checks</li>
+                            <li>No need to be persisted</li>
+                            <li>Can be saved only in memory</li>
+                        </ul>
+                    </ul>
+                </div>  
+        
+                <div class="slide">
+            		<hgroup>
+        				<h1>High Throughput and Horizontal Scalability</h1>
+        			</hgroup>
+                    <ul class="small">
+                        <li>Growing volume of data to be stored</li>
+                        <ul>
+                          <li>Growing need to process larger amounts of data in shorter time</li>
+                          <li>Cost preasure</li>
+                          <li>Google process <b>20 petabyte a day</b> stored in Bigtable</li>
+                        </ul>
+                        <li>NoSQL DBs specifics</li>
+                        <ul>
+                            <li>Scale horizontal very well</li>
+                            <li>Not rely on highly available hardware</li>
+                            <li>Don't have so rigid DB scheme</li>
+                            <li>In some cases provide automatic sharding</li>                      
+                        </ul>                      
+                    </ul>
+                </div>  
+        
+                <div class="slide">
+                	<hgroup>
+        				<h1>Avoidance of Expensive ORM</h1>
+        			</hgroup>
+                    <ul>
+                        <li>NoSQL DBs specifics</li>
+                          <ul>
+                            <li>Store data structures in simple form</li>
+                            <li>Stored structures are similar to those used in OO programming languages</li>
+                            <li>No need to do expensive ORM</li>
+                                                                              
+                        </ul>
+                        <li>More benefits with simple data structures on NoSQL DBs</li>   
+                        
+                    </ul>
+                </div>  
+        
+                <div class="slide">
+                	<hgroup>
+        				<h1>"One size fit's all" thinking is wrong</h1>
+        			</hgroup>
+                    <ul>
+                        <li>Growing number of applications which cannot be satisfied with relational DBs</li>                          
+                        <li>Growth of data volumes to be stored and processed</li>  
+                        <li>Difference between bank and social network</li>
+                         <ul>   
+                            <li>No need of ACID for Facebook status</li>
+                            <li>Temporaly inconsistency, service interruption etc. can good trade for flexibility and speed</li>                 
+                          </ul>
+                    </ul>
+                </div> 
+                
+               <div class="slide">
+                	<hgroup>
+        				<h1>Expensive Sharding of Centralized Data Models</h1>
+        			</hgroup>
+                    <ul>
+                        <li>Difficult distribution and partitioning among database servers</li>
+                        <li>Managing of replication servers</li>
+                        <li>More failure states within network than on single machine</li>
+                        <li>More complex application which need to be aware of latency and distributed failures etc.</li>
+                    </ul>
+                </div>
+                
+               <div class="slide">
+                	<hgroup>
+        				<h1>Movement in Programming Languages</h1>
+        			</hgroup>
+                    <ul>
+                        <li>Modern programming languages and developer frameworks provide abstractions <b>to hide use of SQL</b> and relational databases</li>
+                        <li>Object relational mapping</li>
+                        <ul>
+                          <li>Java - JPA (Hibernate)</li>
+                          <li>.NET - ADO.NET Entity Framework</li>
+                          <li>Ruby on Rails</li>
+                        </ul>
+                    </ul>
+                </div>  
+                
+                
+               <div class="slide">
+                	<hgroup>
+        				<h1>Cloud Computing Requirements</h1>
+        			</hgroup>
+                    <ul>
+                        <li>High (horizontal) scalability</li>
+                        <li>Low administration overhead</li>
+                        <li>Fault tolerance</li>
+                        <li>High throughput</li>
+                        <li>Fast key-value stores</li>
+                        <li>Stores that will fit the gap between key-value stores and relational databases</li>                        
+                    </ul>
+                </div>     
+                
+               <div class="slide">
+                	<hgroup>
+        				<h1>Yesterday’s vs. Today’s Needs</h1>
+        			</hgroup>
+                    <ul>
+                        <li>Yesterday's needs</li>
+                        <ul>
+                          <li>designed for large single high-end machines</li>
+                          <li>rigid schemas and relations</li>
+                          <li>queries expressed in a sophisticated language</li>
+                          <li>designed for centralized deployments (distribution support added later for a high price)</li>
+                        </ul>
+                        <li>Today’s needs</li>
+                        <ul>
+                          <li>running on commodity hardware (designed to handle failures)</li>
+                          <li>simple schemas (particulary in web sector)</li>
+                          <li>predefined statements and stored procedures</li>
+                          <li>designed for distributed deployments</li>
+                        </ul>                                                
+                    </ul>
+                </div>                                                                       
+                
+
+            </section>
+
+            <div class="slide outline">
+            </div>
+
+            <section>
+                <header>Database characteristics</header>
+
+               <div class="slide">
+                	<hgroup>
+        				<h1>CAP Theorem</h1>
+        			</hgroup>
+                    <ul>
+                        <li>Consistency</li>
+                        <ul>
+                          <li>consistency state of system after the execution of an operation</li>                                                    
+                        </ul>
+                        <li>Availability</li>
+                        <ul>
+                          <li>continue of R/W operation after node in cluster crash</li> 
+                          <li>all database clients are able to access some version of the data</li>                       
+                        </ul>
+                        <li>Partition Tolerance</li>
+                        <ul>
+                          <li>ability of the system to continue operation in the presence of
+                          network partitions</li>
+                          <li>database can be split over multiple servers</li>                        
+                        </ul>                                                                        
+                    </ul>
+                </div>
+  
+               <div class="slide">
+                	<hgroup>
+        				<h1>CAP Theorem</h1>
+        			</hgroup>
+                    <ul>
+                    <figure>                    
+				          	<img src="img\l8\cap.png" 
+						          style="zoom: 1.4; alt="Consistent Hashing"></img>                      
+                   </figure>                                                                                                              
+                    </ul>
+                </div>  
+  
+  
+                
+               <div class="slide">
+                	<hgroup>
+        				<h1>CAP Theorem</h1>
+        			</hgroup>
+                    <ul>
+                        <li>You can choose at most the <b>two</b> of these characteristics</li>
+                        <table>
+                            <thead>
+                                <th>Choise</th><th>Properties</th><th>System</th>
+                            </thead>
+                            <tbody>
+                                <tr><td>C + A</td><td>2-phase commit<br>cache-validation protocols</td><td>Single-site databases<br>Cluster databases<br>LDAP<br>xFS file system</td></tr>
+                                <tr><td>C + P</td><td>pessimistic locking<br> make minority partitions unavailable</td><td>Distributed databases<br>Distributed locking<br>Majority protocols</td></tr>
+                                <tr><td>A + P</td><td>conflict resolution<br> optimistic<br> expiration/leases</td><td>DNS<br>Coda (distributed FS)</td></tr>
+                            </tbody>
+                        </table>                                                                                                               
+                    </ul>
+                </div>
+                
+                
+                
+                
+               <div class="slide">
+                	<hgroup>
+        				<h1>BASE system</h1>
+        			</hgroup>
+                    <ul>
+                        <li><b>B</b>asically <b>A</b>vailable</li>
+                        <ul>
+                          <li>DB works basically all the time</li>                                                    
+                        </ul>                        
+                        <li><b>S</b>oft-state</li>
+                        <ul>
+                          <li>DB <b>does not</b> have to be consistent all the time</li>                                                    
+                        </ul>                        
+                        <li><b>E</b>ventual consistency</li>
+                        <ul>
+                          <li>DB is in some known-state (see in next section)</li>                                                    
+                        </ul>                        
+                    </ul>
+                </div>
+                
+                
+               <div class="slide">
+                	<hgroup>
+        				<h1>ACID vs. BASE</h1>
+        			</hgroup>
+                    <ul>
+                    <li>Comparsion of the ACID and BASE system</li>
+                        <table>
+                            <thead>
+                                <th>ACID</th><th>BASE</th>
+                            </thead>
+                            <tbody>
+                                <tr><td>Strong consistency</td><td>Weak consistency</td></tr>
+                                <tr><td>Isolation</td><td>Availability first</td></tr>
+                                <tr><td>Focus on "commit"</td><td>Best effort</td></tr>
+                                <tr><td>Nested transactions</td><td>Approximate answers</td></tr>
+                                <tr><td>Availability?</td><td>Aggressive (optimistic)</td></tr>
+                                <tr><td>Conservative (pessimistic)</td><td>Simpler</td></tr>
+                                <tr><td>Difficult evolution (e.g. schema)</td><td>Faster<br>Easier evolution</td></tr>
+                                
+                            </tbody>
+                        </table>                     
+                    </ul>
+                </div>    
+
+            </section>
+            
+        </section>
+        
+        <div class="slide outline">
+        </div>
+        
+        <section>
+            <header>NoSQL Patterns</header>
+ 
+              <div class="slide">
+                	<hgroup>
+        				<h1>API model</h1>
+        			</hgroup>
+                    <ul>
+                      <li>Data model can be considered as a large Hashtable</li>
+                      <li>Forms of API access</li>
+                      <ul>                  
+                        <li>get(key) - retrive value</li>                    
+                        <li>put(key, value) - create or update value</li>
+                        <li>delete(key) - delete value</li>
+                        <li>mapreduce(keyList, mapFunc, reduceFunc) - invoke a map/reduce function across a key range</li>
+                      </ul>                                                                         
+                    </ul>
+                </div> 
+ 
+            
+              <div class="slide">
+                	<hgroup>
+        				<h1>Machines layout</h1>
+        			</hgroup>
+                    <ul>
+                        <li>Large number (hundreds or thousands) of cheap, commoditized, unreliable machines (physical nodes)</li>                         
+                  
+                        <li>Same set of software configuration</li>                    
+                        <li>Varying hardware capacity</li>
+                        <li>Within each physical node (PN), there will be a variable number of virtual nodes (VN)</li>                                                                                        
+                    </ul>
+                             
+                </div>
+                
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Machines layout</h1>
+        			</hgroup>
+                    <ul>
+
+                   <figure>                    
+				          	<img src="img\l8\mach.png" 
+						          style="zoom: 0.8; margin-left: 100px ;alt="Consistent Hashing"></img>
+                      
+                   </figure>                                                                                             
+                    </ul>
+                             
+                </div>                
+                
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Data partitioning</h1>
+        			</hgroup>
+                    <ul>
+                        <li>Hashtable is distributed across many VNs</li>                  
+                        <li>Simple map fuction</li>
+                        <ul>
+                          <li>partition = key mod (total number of VNs)</li>
+                          <li>problem with altering number of VNs</li> 
+                        </ul>                    
+                        <li>Consistent Hashing</li>
+                        <ul>
+                          <li>key space is finite and lie on the circumference of a ring</li>
+                          <li>for any key, its owner VN is defined as the first encountered VN (walking clockwise)</li>
+                        </ul>                                                                          
+                    </ul>
+                </div>
+                
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Consistent Hashing</h1>
+        			</hgroup>
+                    <ul class="small">
+                    <figure>                    
+				          	<img src="img\l8\cons_hashing.png" 
+						          style="zoom: 0.58; alt="Consistent Hashing"></img>
+                      
+                   </figure>                                                                                         
+                    </ul>
+                </div>
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Data replication</h1>
+        			</hgroup>
+                    <ul>
+                        <li>Replicate the data partitions for high reliability</li>
+                        <li>Spread of workload across multiple replicas</li>
+                        <li>Read-only request can be dispatched to any replicas</li>
+                        <li>Problems with update operations</li>                                                                                                               
+                    </ul>
+                </div>
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Data replication</h1>
+        			</hgroup>
+                    <ul>
+                   <figure>                    
+				          	<img src="img\l8\repl.png" 
+						          style="zoom: 0.58; margin-left: 100px ;alt="Consistent Hashing"></img>
+                      
+                   </figure>                                                                     
+                    </ul>
+                             
+                </div>                    
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Client Consistency</h1>
+        			</hgroup>
+                    <ul>
+                        <li>Strict Consistency (one copy serializability)</li>
+                        <ul>
+                          <li>all read operations must return data from the latest completed write operation (regardless of choosen replica)</li>
+                        </ul>
+                        <li>Read your write consistency</li>
+                        <ul>
+                          <li>client sees his own update immediately (not the updates made by other clients)</li>
+                          <li>client <b>can change</b> server between requests</li>
+                        </ul>                        
+                        <li>Session consistency</li>
+                        <ul>
+                          <li>read-your-write consistency only under same session scope</li>
+                        </ul>                                                
+                        <li>Eventual Consistency</li>
+                        <ul>
+                          <li>client can see an inconsistent view as the update are in progress</li>
+                        </ul>                                                                                                                    
+                    </ul>
+                </div>                                                                                               
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Versioning of Datasets</h1>
+        			</hgroup>
+                    <ul>
+                        <li>Timestamps</li>
+                        <ul>
+                          <li>rely on synchronized clocks</li>
+                        </ul>                        
+                        <li>Optimistic Locking</li>
+                        <ul>
+                          <li>unique counter or clock value is saved for each piece of data</li>                          
+                        </ul>
+                        <li>Vector Clocks</li>
+                        <ul>
+                          <li>capturing order and allow reasoning between updates</li>
+                        </ul>                                                                                                                          
+                    </ul>
+                </div> 
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Vector clocks</h1>
+        			</hgroup>
+                    <ul>
+                        <li>Vector clock is V[0], V[1], ..., V[n] of clock values from each node</li>
+                        <li>Each replica keeps vector clock V<sub>i</sub></li>                        
+                        <li>Clock values may be timestamps derived, version numbers or other ordinal values</li>                        
+                        <ul>
+                          <li>unique counter or clock value is saved for each piece of data</li>                          
+                        </ul>
+                        <li>For example (on second node)</li>
+                        <ul>
+                          <li>V2[0] = 12, V2[1] = 5, V2[2] = 15</li>
+                          <li>update on node 1 produced revision 5, on node 0 rev. 12 and most recent update on node 2 rev. 15</li>
+                        </ul>                                                                                                                          
+                    </ul>
+                </div>
+                
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Vector clocks</h1>
+        			</hgroup>
+                    <ul>
+                        <li>Update of clock defined by the following rules</li>
+                        <ul>
+                          <li>If an internal operation happens at node i, this node will increment its clock V<sub>i</sub>[i]</li>
+                          <li>If node i sends a message to node k, it first advances its own clock value V<sub>i</sub>[i] and attaches the vector
+                              clock V<sub>i</sub> to the message to node k</li>
+                          <li>If node i receives a message from node j, it first advances its vector clock V<sub>i</sub>[i] and then merges its
+                              own vector clock with the vector clock Vmessage</li> 
+                           <li>V<sub>i</sub> = max(V<sub>i</sub>, V<sub>message</sub>)</li>                                                                                                                      
+                    </ul>
+                </div>
+                
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Vector clocks</h1>
+        			</hgroup>
+                    <ul>
+                          <li>To compare two vector clocks V<sub>i</sub> and V<sub>j</sub> in order to derive a partial ordering</li>
+                          <li>V<sub>i</sub> > V<sub>j</sub> , if for each k V<sub>i</sub>[k] > V<sub>j</sub> [k]</li>
+                          <li>If neither V<sub>i</sub> > V<sub>j</sub> nor V<sub>i</sub> &lt; V<sub>j</sub> applies, a conflict caused by concurrent updates has occurred</li>
+                          <li>Message includes</li>
+                          <ul>
+                            <li>vector clocks</li>
+                            <li>situation of the sending node</li>
+                          </ul>
+                          <li>Situation can be described with</li>
+                          <ul>
+                            <li>state transfer model</li>
+                            <li>operation transfer model</li>
+                          </ul>                          
+                          
+                        <ul>                                                                                                                      
+                    </ul>
+                </div> 
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Partitioning</h1>
+        			</hgroup>
+                    <ul>
+                          <li>Memory Caches</li>
+                          <ul>
+                            <li>for most frequently requested data parts</li>                            
+                          </ul>                          
+                          <li>Clustering</li>
+                          <ul>
+                            <li>transparency towards clients</li>
+                          </ul>                          
+                          <li>Separating Reads from Writes</li>
+                          <ul>
+                            <li>specify one or more masters which propagade writes to slaves</li>
+                          </ul>                          
+                          <li>Sharding</li>
+                          <ul>
+                            <li>partition of data (e.g. rows or columns of DB table) on separate servers</li>
+                          </ul>
+                        <ul>                                                                                                                      
+                    </ul>
+                </div> 
+                
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Query Models</h1>
+        			</hgroup>
+                    <ul>
+                          <li>Companion SQL-database</li>
+                          <ul>
+                            <li>searchable attributes are copied to a SQL or text database</li>                            
+                          </ul>                          
+                          <li>Scatter/Gather Local Search</li>
+                          <ul>
+                            <li>query processor sends query to the nodes and then collect results</li>
+                          </ul>                          
+                          <li>Distributed B+Trees</li>
+                          <ul>
+                            <li>hash the searchable attribute to locate the root node of a distributed B+tree</li>
+                          </ul>                          
+                          <li>Prefix Hash Table (Distributed Trie)</li>
+                          <ul>
+                            <li>tree-datastructure where every path from the root-node to the leafs contains the prefix of the key</li>                            
+                          </ul>
+                        <ul>                                                                                                                      
+                    </ul>
+                </div>
+                
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Distributed Data Processing via MapReduce</h1>
+        			</hgroup>
+                    <ul>
+                          <li>Processing highly distributable problems across huge datasets</li>                       
+                          <li>Map step</li>
+                          <ul>
+                            <li>master partitions the input into smaller problems and distributes them to worker nodes (multi-level tree)</li>
+                          </ul>                          
+                          <li>Reduce step</li>
+                          <ul>
+                            <li>master node then collects the answers and combines them to form the output</li>
+                          </ul>                                   
+                        <ul>                                                                                                                      
+                    </ul>
+                </div>
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Distributed Data Processing via MapReduce</h1>
+        			</hgroup>
+                    <ul>
+
+                   <figure>                    
+				          	<img src="img\l8\reduce.png" 
+						          style="zoom: 0.58; alt="Consistent Hashing"></img>
+                      
+                   </figure>                                                                                             
+                    </ul>
+                             
+                </div>                  
+                
+              <div class="slide">
+                	<hgroup>
+        				<h1>Distributed Data Processing via MapReduce</h1>
+        			</hgroup>
+                    <ul>
+                          <li>For example count of appearances of each different word in set of documents</li>
+                          <li>Map method</li>                       
+                          <pre class="brush: javascript; class-name: 'tight'">
+                              void map(String name, String document):
+                                for each word w in document:
+                                EmitIntermediate(w, "1");
+                          </pre>
+                          <li>Reduce method</li>  
+                          <pre class="brush: javascript; class-name: 'tight'">
+                              void reduce(String word, Iterator partialCounts):
+                                int sum = 0;
+                                for each pc in partialCounts:
+                                  sum += ParseInt(pc);
+                                Emit(word, AsString(sum));
+                          </pre>                          
+                                                           
+                        <ul>
+                    </ul>
+                </div>
+                
+            </section>
+            
+              <div class="slide">
+                	<hgroup>
+        				<h1>Sources and Pictures</h1>
+        			</hgroup>
+                    <ul>
+                      <li>NoSQL Databases, Christof Strauch</li>
+                      <ul>
+                        <li><a href="http://www.christof-strauch.de/nosqldb.pdf">www.christof-strauch.de</a</li>
+                      </ul>
+                    </ul>
+                </div>            
+
+        </section>
+        
+    </body>
+</html>
