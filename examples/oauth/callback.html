@@ -1,0 +1,24 @@
+<script type="text/javascript">
+
+function setCookie(c_name,value,exdays) {
+        var exdate=new Date();
+        exdate.setDate(exdate.getDate() + exdays);
+        var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+        document.cookie=c_name + "=" + c_value;
+}
+
+window.onload = function() {
+        var p = document.getElementById("info");
+        re = new RegExp("#.*access_token=([0-9a-zA-Z\/_-]+).*", "gims");
+        if (re.test(window.location.hash)) {
+                setCookie("w20-token", RegExp.$1, 7);
+                p.innerHTML = "The access token is:<br/>" + RegExp.$1 + "<br/><br/>It has been set to a cookie so that " +
+                "it will accessible from the original window (only if it runs on dropbox.vitvar.com domain). You can now close this window and click " +
+                "the button 'Show Contacts' again.<br/><br/>If you want to revoke access to the <b>W20-test</b> application, " +
+                "you can do so at <a href='https://www.google.com/accounts/IssuedAuthSubTokens'>your Google Account settings page</a>.";
+        } else
+                p.innerHTML = "The access was rejected, no access token found!";
+}
+
+</script>
+<div id="info" style="font-size: 14px"></div>
