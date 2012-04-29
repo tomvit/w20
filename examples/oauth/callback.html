@@ -9,7 +9,7 @@ function setCookie(c_name,value,exdays) {
 
 window.onload = function() {
         var p = document.getElementById("info");
-        re = new RegExp("#.*access_token=([0-9a-zA-Z\/_-]+).*", "gims");
+        re = new RegExp("#.*access_token=([0-9a-zA-Z\/_\-\.]+).*", "gi");
         if (re.test(window.location.hash)) {
                 setCookie("w20-token", RegExp.$1, 7);
                 p.innerHTML = "The access token is:<br/>" + RegExp.$1 + "<br/><br/>It has been set to a cookie so that " +
