@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
 	Web 2.0, CTU course slides
-	(cc) 2010-2012 Tomas Vitvar, tomas@vitvar.com
+	(cc) 2010-2013 Tomas Vitvar, tomas@vitvar.com
 -->
 <html>   
 	<head>
@@ -72,7 +72,7 @@
 				</ul>
 				<li>Jaroslav Kuchař</li>
 				<ul>
-					<li>CTU FIT research assistant, Ph.D. at CTU FEL</li>
+					<li>CTU FIT research assistant, Ph.D. at CTU FIT</li>
 					<li>Web services, data mining, analytics, Web technologies</li>
 				</ul>
 				<li>Milan Dojchinovski</li>
@@ -114,15 +114,51 @@
 					<li>The Web is a huge database</li>
 					<ul>
 						<li>users generate content (explicit and implicit knowledge)</li>
-						<li>large portion of this database is <b>social data</b></li>					
+						<li>large portion of this database is social data</li>					
 					</ul>
-					<li>The Web is Social</li>
+					<li>The Web is programmable</li>
 					<ul>
-						<li>obvious stuff: Facebook, Twitter<br/>
-						&rarr; user profiles and social links (public, private)</li>
-						<li>less obvious (or less known) stuff: Wikipedia, Amazon Mechanical Turk, ...</li>
-						<li>it is a basis for personalized services, targeted delivery of products, commercials, etc.</li>
+						<li>Applications provide GUI, end-users (non-technical)</li>
+						<li>Applications provide API, users are programmers</li>
+						<li>Any company with the Web presence has an API</li>
+						<ul>
+								<li>Google, Amazon, LinkedIn, Facebook, ...</li>
+								<li>Wikipedia - Linked Data</li>  
+						</ul>
 					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>W20 and MDW Courses</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li><b>W20 builds on MDW!</b></li>
+					<li>Application Architecture</li>
+					<ul>
+						<li>Multi-tier client-server architecture</li>
+						<li>More focus on the client side of the architecture, JavaScript, AJAX</li>
+						<ul>
+							<li>Assume a robust infrastructure is in place, will not talk about it</li>
+							<li>Usually empowered by public cloud environments (Google AppEngine, Amazon EC2, etc.)
+						</ul>
+					</ul>
+					<li>Technology, Platform</li>
+					<ul>
+						<li>JEE was a platform in enterprise environments</li>
+						<li>JavaScript</li>
+						<ul>
+							<li>client-side + related technologies</li>
+							<li>server-side &ndash; asynchronous I/O, node.js</li>
+						</ul>
+						<li>It does not mean you cannot combine technologies</li>
+						<ul>
+							<li>Node.js as a Web server, Oracle Service Bus for middleware to build interfaces with back-end systems,
+								all running in a cloud environment (auto scaling, load balancers, message queuees, etc.)</li>
+						</ul>
+					</ul>
+
 				</ul>
 			</div>
 	
@@ -142,53 +178,27 @@
 					<ul>
 						<li>Read/Write Web, Programmable Web, Social Web, ...</li>
 					</ul>
+
+					<li>REST Architecture</li>
+					<ul>
+						<li>Principles, Architecture</li>
+						<li>HTTP protocol in very detail</li>
+					</ul>
 					
 					<li>Data on the Web</li>
 					<ul>
 						<li>metadata, microformats, microdata</li>
+					</ul>
+	
+					<li>AJAX applications</li>
+					<ul>
+						<li>JavaScript</li>
 						<li>accessing the data, protocols</li>
-					</ul>
-	
-					<li>Social Network Analysis</li>
-					<ul>
-						<li>social network structures and behavior</li> 
-						<li>visualization</li>
-					</ul>
-	
-					<li>Highly dependable back-end technologies</li>
-					<ul>
-						<li>cloud-based</li>
-						<li>distributed computing, databases (Cassandra, FlockDB)</li> 
 					</ul>
 					
 				</ul>
 			</div>
 			
-			<div class="slide">
-				<hgroup>
-					<h1>Requirements in General</h1>
-				</hgroup>				
-				<ul class="small">
-					<li>Software engineering</li>
-					<ul>
-						<li>know to model requirements, UML</li>
-						<li>programming in general</li>
-					</ul>
-					<li>Java and Javascript</li>
-					<ul>
-						<li>all examples in Java and Javascript!</li>
-					</ul>
-					<li>Web architecture</li>
-					<ul>
-						<li>URI, XML, HTTP, RESTful services</li>
-					</ul>
-					<li>Algorithms</li>
-					<ul>
-						<li>some knowledge of the graph theory</li>
-					</ul>
-				</ul>
-			</div>
-	
 			<div class="slide">
 				<hgroup>
 					<h1>What You Will Learn in Lectures</h1>
@@ -221,69 +231,45 @@
     				<li>13 Lectures</li>
                     <ul>
                         <li>Czech: Mo 7:15-8:45, T9:155</li>
-                        <li>English: Tue 16:15-17:45, TH:A-1030</li>
+                        <li>English: TBA</li>
                     </ul>
     				
     				<li>Plan</li>
     				<ol class="xx-small">
-                        <li>13.02.2012 &#150; Motivation and Course Overview (<a href="lecture1.html">html</a>)</li>
-                        <li>20.02.2012 &#150; Concepts, Statistics and Technologies (<a href="lecture2.html">html</a>)</li>
-                        <li>27.02.2012 &#150; Social Network Analysis 1 (<a href="lecture3.html">html</a>)</li>
-                        <li>05.03.2012 &#150; Social Network Analysis 2 (<a href="lecture4.html">html</a>)</li>
-                        <li>12.03.2012 &#150; Atom and AtomPub (<a href="lecture5.html">html</a>)</li>
-                        <li>19.03.2012 &#150; Annotations: Microformats and Microdata (<a href="lecture6.html">html</a>)</li>
-                        <li>26.03.2012 &#150; NOSQL Databases 1 (<a href="lecture7.html">html</a>)</li>
-                        <li>02.04.2012 &#150; NOSQL Databases 2 (<a href="lecture8.html">html</a>)</li>
-                        <li>16.03.2012 &#150; Annotations: RDF and RDFa (<a href="lecture9.html">html</a>)</li>
-                        <li>23.04.2012 &#150; Accessing and Utilizing Services (<a href="lecture10.html">html</a>)</li>
-                        <li>30.04.2012 &#150; OAuth and OpenID (<a href="lecture11.html">html</a>)</li>
-                        <li>07.04.2012 &#150; Protocols for the Realtime Web (<a href="lecture12.html">html</a>)</li>
+                        <li>11.02.2012 &#150; Motivation and Course Overview (<a href="lecture1.html">html</a>)</li>
+                        <li>11.02.2012 &#150; Introduction to JavaScript (<a href="lecture2.html">html</a>)</li>
+                        <li>18.02.2012 &#150; Concepts, Statistics and Technologies (<a href="lecture3.html">html</a>)</li>
+                        <li>25.02.2012 &#150; Representational State Transfer (<a href="lecture4.html">html</a>)</li>
+                        <li>04.03.2012 &#150; Uniform Interface (<a href="lecture5.html">html</a>)</li>
+                        <li>11.03.2012 &#150; HATEOAS, Scalability, Description (<a href="lecture6.html">html</a>)</li>
+                        <li>18.03.2012 &#150; Atom and AtomPub (<a href="lecture7.html">html</a>)</li>
+                        <li>25.03.2012 &#150; Microformats, Microdata, Web Forms (<a href="lecture8.html">html</a>)</li>
+                        <li>08.04.2012 &#150; Resource Description Framework (<a href="lecture9.html">html</a>)</li>
+                        <li>15.03.2012 &#150; Accessing and Utilizing Services (<a href="lecture10.html">html</a>)</li>
+                        <li>22.04.2012 &#150; OAuth and OpenID (<a href="lecture11.html">html</a>)</li>
+                        <li>29.04.2012 &#150; Protocols for the Realtime Web (<a href="lecture12.html">html</a>)</li>
+                        <li>06.05.2012 &#150; Reserve</li>
     				</ol> 				
     			</ul>
     		</div>			
 	
 			<div class="slide">
 				<hgroup>
-					<h1>What You Will Train in Practicals</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Iterative development of a system for<br/><b>social data analysis</b></li>
-					<ul>
-						<li>assignment every second week</li>
-						<li>development cycle according to the schedule</li>
-					</ul>
-					
-					<li>Design</li>
-					<ul>
-						<li>requirements, algorithms, data models</li>
-					</ul>
-	
-					<li>Implementation</li>
-					<ul>
-						<li>a data capture and analysis service</li>
-						<li>algorithms for social data analysis</li>
-						<li>visualization of the data using <span class="reference" id="gephi"></span></li>
-						<li>GAE infrastructure services (tasks), if you use GAE</li>
-						<li>we do not care about the platform but we do care about your implementation!</li>
-					</ul>
-				</ul>
-			</div>
-	
-			<div class="slide">
-				<hgroup>
 					<h1>Organization of Practicals</h1>
 				</hgroup>
-				<ul class="small">
-					<li>Work in teams of 3 people</li>
+				<ul class="x-small">
+					<li>Work alone, you can collaborate</li>
 					<li>Practicals every second week</li>
 					<li>Number of sessions: 6-7, 5 major tasks</li>
 					<ol>
-						<li>Design of your system, endpoint registration</li>
-						<li>Data capture implementation, mashups development</li>
-						<li>Data export, visualization</li>
-						<li>Data analysis</li>
-						<li>TBD</li>
+						<li>Introduction, Apps Script (JavaScript)</li>
+						<li>Pipes, Mashup</li>
+						<li>A RESTful service - development, consumption</li>
+						<li>Atom, HATEOAS, Scalability</li>
+						<li>Microformats, Microdata, RDFa</li>
+						<li>OAuth, Realtime Web</li>
 					</ol>		
+					<li>Plus a number of tasks to complete off-line (at home)</li>
 					<li>All textual/design diagrams results in the wiki<br/>
 					&rarr; <a href="https://edux.fit.cvut.cz/courses/MI-W20/">https://edux.fit.cvut.cz/courses/MI-W20/</a></li>
 					<li>All (nicely commented!) code results in the svn<br/>
@@ -293,371 +279,6 @@
 			
 		</section>
 
-        <div class="slide outline"></div>		
-
-		<section>
-			<header>Your project, basic concepts</header>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>Development Platform</h1>
-				</hgroup>				
-				<ul>
-					<li>Google App Engine (optional)</li>
-					<ul>
-						<li>Free available daily quota for:</li>
-						<ul>
-							<li>instance hours (28 + 9 Instance Hours)</li>
-							<li>data storage (1GB)</li>
-							<li>data transfer (1GB in and 1GB out)</li>
-						</ul>
-						<li>your service will have to be accessible somewhere</li>
-						<ul>
-							<li>if you do not use GAE</li>
-						</ul>
-					</ul>
-					<li>RESTful service endpoint</li>
-					<ul>
-						<li>In GAE you can use <span class="reference" id="resteasy"></span></li>
-						<li>Or implement HTTP Servlets</li>
-					</ul>
-					<li>Eclipse/NetBeans IDE</li>
-					<ul>
-						<li>Dev environment for Java</li>
-						<li>Google App Engine convenient plugins</li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Your Conceptual Architecture</h1>
-				</hgroup>				
-				<div class="h-drawing" 
-					style="height: 440px; margin-top: 20px" id="19kEq0SF0-zYX-fX3AzrCmLfRdGb550HWqh648_gT2MM"></div>
-			</div>
-	
-			<div class="slide">
-				<hgroup>
-					<h1>Example Data Views: Wikipedia</h1>
-				</hgroup>				
-				<div class="h-drawing" 
-					style="height: 400px; margin-top: 50px" id="1qNCoZj89T27vftGdmBTmHVof3LRz3SZiPhf0JEufo3c"></div>
-			</div>
-	
-			<div class="slide">
-				<hgroup>
-					<h1>Other Examples</h1>
-				</hgroup>			
-				<ul>
-					<li>Facebook/Twitter: social networks</li>
-					<ul><li>social links: people in a social network of a FB app</li></ul>
-					<li>IMDB or Wikipedia: actors in movies</li>
-					<ul><li>social links: two actors appear in the same movie</li></ul>
-					<li>Mailing lists: people who talk to each other</li>
-					<ul><li>social links: two people appear in the same message</li></ul>
-					<li>Blogs/Forums: people who discuss</li>
-					<ul><li>social links: two people discuss the same blog post</li></ul>
-					<li>Flickr: people taking pictures</li>
-					<ul><li>social links: two people own a picture with the same tag</li></ul>
-					<li>LinkedIn: people in organizations</li>
-					<ul><li>social links: two people work in the same company</li></ul>
-				</ul>
-			</div>
-	
-			<div class="slide">
-				<hgroup>
-					<h1>Things to keep in mind</h1>
-				</hgroup>			
-				<ul class="small x-spacing">
-					<li>Size of the data</li>
-					<ul>
-						<li>Limit the dataset to fit your computing resources</li>
-						<ul>
-							<li>should fit all data</li>
-						</ul>	
-						<li>Resource quotas example in GAE</li>
-						<ul>
-							<li>1GB of storage, 1GB of in and out, 28 + 9 Instance Hourss</li>
-						</ul>
-						<li>if you exceed daily quotas, you should divide your tasks</li>
-					</ul>
-					<li>Methods for data capture</li>
-					<ul>
-						<li><b>Complete Capture</b>: a complete dataset as one snapshot</li>
-						<ul>
-							<li>repeat regularly in intervals</li>
-							<li>when you need to access historical data</li>
-							<li>example: your social network</li>
-						</ul>
-						<li><b>Incremental Capture</b>: capture data incrementally</li>
-						<ul>
-							<li>you only capture the last data (no history)</li>
-							<li>example: posts in a forum</li>
-						</ul>
-					</ul>
-					<li>Optimal data structure</li>
-					<ul>
-						<li>nodes and edges with timestamps</li>
-						<ul>
-							<li>snapshots as time-views on your data</li>
-						</ul>						
-					</ul>
-				</ul>
-			</div>
-	
-			<div class="slide">
-				<hgroup>
-					<h1>Complete Capture</h1>
-				</hgroup>
-				<div class="h-drawing" 
-					style="height: 270px; margin-left: -20px" id="1hgS8MFicnKot1aam33ZKpJjZ1BrkJU5tVjb7IE1-pow"></div>
-					<ul class="x-small">
-						<li>When you can access historical data</li>
-						<ul>
-							<li>you do not have an access to changes (increments)</li>
-							<ul>
-								<li>Twitter social links, Facebook friends, pool of URLs of a site, etc.</li>								
-								<li>often can access through API (be aware of API call limits)</li>
-								<li>Twitter [API calls/hour]: 350 (auth), 150 (anonymous)</li>
-							</ul>
-							<li>No API?</li>
-							<ul>
-								<li>screen scraping</li>
-							</ul>
-						</ul>
-					</ul>
-			</div>
-	
-			<div class="slide">
-				<hgroup>
-					<h1>Complete Capture: Sleeping</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Determine the data capture interval</li>
-					<ul>
-						<li>Big enough to capture changes in data</li>
-						<ul>
-							<li>ideally diff in snapshots should be ~30%</li>
-						</ul>
-						<li>Small enough to fit your computing resources constraints</li>
-						<li>A simple method to adjust the interval dynamically:</li> 
-					</ul>
-					<pre class="brush: java"> 
-					// initial interval; for example 1 day (in minutes, 60*24)
-					interval = 1440; 
-				
-					// read the first snapshot
-					last_snapshot = read();
-				
-					while (true) {
-					    sleep(interval);
-					    data = read();
-					    diff = calcDiff(last_snapshot, data);
-				    
-					    // if diff > 0.3 interval will decrease, if diff < 0.3 interval will increase
-					    // let's not be so aggressive in interval changes...
-					    interval += interval * (0.3 - diff);
-					    last_snapshot = data;
-				    
-					    // set the minimum interval so that we do not overload our service
-					    if (interval < 120) interval = 120;
-					}</pre>				
-				</ul>
-			</div>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>Incremental Capture</h1>
-				</hgroup>
-				<div class="h-drawing" style="margin-top: 10px; margin-left: -20px; height: 260px" 
-				  id="1y-YwoWoWLq787_J3m0ver7H7HbrQrw0qBD1S-gZjvF0"></div>
-				<ul class="x-small">
-					<li>When you can access changes in data</li>
-					<ul>
-						<li><b>polling</b>: using an atom/RSS feed<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp; polling interval can be between 10-60 minutes (depends)</li>
-						<li><b>pushing</b>: using a streaming API (e.g., Twitter status updates)</li>
-					</ul>
-					<ul>
-						<li>No API?</li>
-						<ul>
-							<li>Screen scraping</li>
-							<li>example: list of items from a RSS give you HTML pages you scrape</li>
-						</ul>
-					</li>	
-				</ul>
-			</div>
-		
-			<div class="slide outline">
-			</div>
-		
-			<section>
-				<header>Example: Discussion Forum</header>
-
-				<div class="slide">
-					<hgroup>
-						<h1>People discussing in a forum</h1>
-					</hgroup>			
-					<ul class="small">
-						<li>Identify Data Source</li>
-						<ul>
-							<li>Date source: University forum (CTU FIT)</li>
-							<li>We get all forum pages from the forum's RSS feed</li>
-							<ul>
-								<li><a href="https://www.fit.cvut.cz/forum/index.php?type=rss;action=.xml">
-							  https://www.fit.cvut.cz/forum/index.php?type=rss;action=.xml</a></li>
-							</ul>
-						</ul>
-						<li>Define data structure</li>
-						<ul>
-							<li>Data structure entities, persistence</li>
-							<li>Classes and methods</li>
-						</ul>
-						<li>Design methods/operations</li>
-						<ul>
-							<li>Reading data (using screen scraping)</li>
-							<li>Graph analysis</li>
-						</ul>
-						<li>API</li>
-						<ul>
-							<li>expose metadata and data through API</li>
-							<li>RESTful architecture: resources, URLs, etc.</li>
-						</ul>
-					</ul>
-				</div>
-	
-				<div class="slide">
-					<hgroup>
-						<h1>Data Structure: Timestamped Graph</h1>
-					</hgroup>
-					<div class="h-drawing" 
-						style="margin-top: 20px; height: 450px" id="1mf47BL0dxPOjnqj8qnfOcfKM768VC-eehfEMGplxLHA"></div>
-				</div>
-	
-				<div class="slide">
-					<hgroup>
-						<h1>Reading Data using Screen Scraping</h1>
-					</hgroup>
-					<ul class="xx-small">
-						<li style="margin-top: 10px">polling: run every 10-60 minutes (as a cron job):</li>
-	                <pre class="brush: java; class-name: 'tight'" style="zoom: 0.6">
-						public void read(Graph graph) {
-						    // fetch all pages' url from the RSS feed (each page corresponds to a topic)
-						    List&lt;String> urls = RssParser.getUrls
-						       ("https://www.fit.cvut.cz/forum/index.php?type=rss;action=.xml");
-				
-						    // create the screen scraping object, org.htmlcleaner.HtmlCleaner
-						    HtmlCleaner cleaner = new HtmlCleaner();
-				    
-						    // create a new snapshot with the current time as the starting time
-						    Snapshot snapshot = new Snapshot();
-				
-						    for (String url : urls) {
-						        // fetch the page at the url (this will invoke GET on the url)
-						        TagNode html = cleaner.clean(url, "utf-8");
-					    
-						        // use the title as a caption for an edge
-						        Edge edge = graph.addEdge((TagNode) html.evaluateXPath("//title")[0]
-						    	    .getText().toString(), snapshot);
-					    	
-						        // the page contains all people's names discussing the topic (use them as names for a node)
-						        Object[] names = html.evaluateXPath("//form[@id='quickModForm']//td[@rowspan]/b");
-						        for (Object name : names) 
-						            graph.addNode(edge, ((TagNode)node).getText().toString(), snapshot);
-				    
-						        // be polite, sleep for 30 seconds between fetching the pages
-						        Thread.sleep(30000);
-						    }
-				    
-						    snapshot.end(); // mark the end of the snapshot   
-						}</pre>
-					</ul>					
-				</div>
-		
-				<div class="slide">
-					<hgroup>
-						<h1>Register your service</h1>
-					</hgroup>
-					<ul style="zoom: 0.9">
-						<li>Registration API</li>
-						<ul class="small">
-							<li>URI: <code style="zoom: 0.95">http://mi-w20.appspot.com/api/endpoints/{team-id}</code></li>
-							<li>Methods: PUT, GET<br/>
-							<li>Parameters:<br/>
-							&rarr; <code>team-id</code> &ndash; id of your team</li>
-							<li style="margin-top: 20px"><b>PUT</b> &ndash; to register/update your endpoint send:</li> 
-							<pre class="brush: bash">
-								&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-								&lt;endPoint&gt;
-								    &lt;!-- base uri (without version) --&gt;
-								    &lt;endPointUrl&gt;http://base_uri/&lt;/endPointUrl&gt;
-								&lt;/endPoint&gt;</pre>
-				
-							<li>To use <code>curl</code> where <code>endpoint.xml</code> contains the above data, run:</li>
-							<pre class="brush: bash">
-								curl -X PUT --data @endpoint.xml \ 
-									http://mi-w20.appspot.com/api/endpoints/{team-id} \
-									-v -H "Content-Type: application/xml"</pre>
-							<li><b>GET</b> &ndash; to retrieve the information about your endpoint:</li>
-							<pre class="brush: bash">
-								curl http://mi-w20.appspot.com/api/endpoints/{team-id}</pre>
-						</ul>
-					</ul>
-				</div>
-		
-				<div class="slide">
-					<hgroup>
-						<h1>API v1</h1>
-					</hgroup>
-					<ul style="zoom: 0.9">
-						<li>Expose metadata about your dataset</li>
-						<ul class="small">
-							<li>URI: <code>base_uri/{version}/metadata</code></li>
-							<li>Method: GET</li>
-							<li>Parameters:</li>
-							<ul>
-								<li><code>version</code> &ndash; API version, <code>v1</code> is the first one</li>
-							</ul>
-							<pre class="brush: xml">
-							&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-							&lt;metadata&gt;
-							    &lt;!-- short name and description of your dataset --&gt;
-							    &lt;name&gt;CTU FIT Forum&lt;/name&gt;
-							    &lt;description&gt;people discussing in a forum&lt;/description&gt;
-				    
-							    &lt;!-- date the dataset was last updated (last snapshot) --&gt;
-							    &lt;lastUpdate&gt;2011-02-03T20:26:00.501Z&lt;/lastUpdate&gt;
-				    
-							    &lt;!-- interval in minutes you are applying to update the dataset (or polling interval) --&gt;
-							    &lt;updateInterval&gt;10080&lt;/updateInterval&gt;
-
-							    &lt;!-- list of all authors in your team and a city where you come from --&gt;
-							    &lt;authors&gt;
-							        &lt;author name="name1" city="city2" /&gt;
-							        &lt;author name="name2" city="city1" /&gt;
-							    &lt;/authors&gt;
-							&lt;/metadata&gt;</pre>	
-						</ul>				
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Visualization</h1>
-					</hgroup>
-					<ul>
-						<li>Your Data</li>
-						<ul>
-							<li>Expose your data through your API in GEXF format</li>
-						</ul>
-						<li>Visual Analysis in <span class="reference" id="gephi"></span></li>
-						<img src="img/l1/CTU-forum-gephi.png" style="height: 370px" alt="CTU FIT Forum"></img>
-					</ul>
-				</div>
-			</section>
-		</section>
-		
 		<div class="slide outline">
 		</div>
 
@@ -745,12 +366,13 @@
 					<ul class="xx-small">
 						<li>G. Vossen, S. Hagermann: <i>Unleashing Web 2.0: from concepts to creativity</i>, 
 						  Elsevier/Morgan Kaufmann, 2007, ISBN&nbsp;9780123740342. (&rarr;&nbsp;Web 2.0 Concepts)</li>
-						<li>D. Easley, J. Kleinberg: <i>Networks, Crowds and Markets: Reasoning About a Highly Connected World</i>, 
-						  Cambridge University Press, 2010, ISBN&nbsp;0521195330. (&rarr;&nbsp;Social Network Analysis)</li>
+						<li>L. Richardson, S. Ruby: <i>RESTful Web Services: Web services for the real world</i>,
+						  O'Reilly Media, May 2007, ISBN&nbsp;9780596529260.</li>
 					</ul>
 					<li>Other</li>
 					<ul>
 						<li>Many sources on the Web, to be listed throughout the course</li>
+						<li>A lot of W3C sources, Web architecture, HTTP</li>
 					</ul>
 				</ul>
 			</div>
@@ -818,17 +440,14 @@
 				<hgroup>
 					<h1>Communication</h1>
 				</hgroup>
-				<ul>
+				<ul class="small">
 					<li>Language</li>
-					<ul class="small">
+					<ul>
 						<li>Text: English (slides, tweets, posts, instructions, etc.)</li>
-						<ul>
-							<li>choose English or Czech for your own contributions to the wiki</li>
-						</ul>
 						<li>Voice: Czech</li>
 					</ul>
 					<li>Channels</li>
-					<ul class="small">	
+					<ul>	
 						<li>limit emails in general</li>
 						<li>Twitter: <a href="http://twitter.com/Web2e">@Web2e</a></li>
 						<ul>
@@ -841,7 +460,7 @@
 						</ul>
 					</ul>
 					<li>Direct</li>
-					<ul class="small">
+					<ul>
 						<li>ask me anything directly, if not of interest to public</li>
 						<li>email me at tomas@vitvar.com, follow me on Twitter 
 						<a href="http://twitter.com/TomasVitvar">@TomasVitvar</a></li>

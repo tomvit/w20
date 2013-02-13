@@ -1,866 +1,782 @@
 <!DOCTYPE html>
 <!--
-	Web 2.0, CTU course slides
-	(cc) 2010-2011 Tomas Vitvar, tomas@vitvar.com
+    Middleware and Web Services, CTU course slides
+    (cc) 2010-2011 Tomas Vitvar, http://vitvar.com
+    written for Humla, an open source HTML5 presentation environment
 -->
-<html>   
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-        <meta name="course"   content="Web 2.0"/>
-		<meta name="lecture"  content="Lecture 6"/>
-   		<meta name="keywords" content="microformats, vCard, hCard, microdata, schema.org, HTML5 Web Forms"/>
+<html>  
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+        <meta name="course"   content="Middleware and Web Services"/>
+        <meta name="lecture"  content="Lecture 6"/>
+        <meta name="keywords" content="REST, caching, concurrency, content negotiation"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
         <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
         <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
 
         <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>Microformats, Microdata, Web Forms</title>
-	</head>
-	<body> 
-		
-		<footer>
-			<p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester"/>,&nbsp;
-			<span class="meta_twitter"/></p>
-			<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
-		</footer>
+        <title>HATEOAS, Scalability and Description</title>
+    </head>
+    
+    <body>
+        <footer>
+            <p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester"/>,&nbsp;
+            <span class="meta_twitter"/></p>
+            <p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
+        </footer>
 
-    	<div class="slide intro">
-			<hgroup>
-				<h1><span class="meta_course"/></h1>
- 				<h2>#META_LECTURE#: #TITLE#</h2>
+        <div class="slide intro">
+            <hgroup>
+                <h1><span class="meta_course"/></h1>
+                <h2>#META_LECTURE#: #TITLE#</h2>
+            </hgroup>
+            <div class="author">
+                <p class="meta_author"/>
+                <p><span class="meta_email"/> &bull; <span class="meta_twitter"/> &bull; 
+                <span class="meta_web"/></p>
+            </div>
+            <center><div class="meta_logo"></div></center>
+            <div class="org">
+                <p class="meta_org"/>
+                <p><span class="meta_orgfac"/> &bull; <span class="meta_field"/> 
+                &bull; <span class="meta_orgweb"/></p>
+            </div>
+            <div class="etc">
+                <div class="text-info">
+                    Modified: #LAST_MODIFIED#<br/>
+                    Humla v#HUMLA_VERSION#
+                </div>
+                <a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
+                <div class="oppa"></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <hgroup>
+				<h1>REST Core Principles</h1>
 			</hgroup>
-			<div class="author">
-				<p class="meta_author"/>
-				<p><span class="meta_email"/> &bull; <span class="meta_twitter"/> &bull; 
-				<span class="meta_web"/></p>
-			</div>
-			<center><div class="meta_logo"></div></center>
-			<div class="org">
-				<p class="meta_org"/>
-				<p><span class="meta_orgfac"/> &bull; <span class="meta_field"/> 
-				&bull; <span class="meta_orgweb"/></p>
-			</div>
-			<div class="etc">
-        		<div class="text-info">
-    				Modified: #LAST_MODIFIED#<br/>
-					Humla v#HUMLA_VERSION#
-				</div>
-				<a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
-				<div class="oppa"></div>
-			</div>
-		</div>		
-		
-		<div class="slide">
-			<hgroup>
-				<h1>Recall: Data Syntax, Structure and Semantics</h1>
-			</hgroup>
-			<div class="h-drawing" style="height: 430px" id="1sm2ZB4YcB2FHzj5uD0xBLeIDZjmz14NzjyGeSgmBl0U"></div>
+            <ul class="small">
+                <li>REST architectural style defines constraints</li>
+                <ul>
+                    <li>if you follow them, they help you to achieve a good design, 
+                    interoperability and scalability.</li>
+                </ul>
+                <li>Constraints</li>
+                <ul>
+                    <li>Client/Server</li>
+                    <li><b>Statelessness</b></li>
+                    <li><b>Cacheability</b></li>
+                    <li><b>Layered system</b></li>
+                    <li>Uniform interface</li>
+                </ul>
+                <li>Guiding principles</li>                        
+                <ul>    
+                    <li>Identification of resources</li>
+                    <li>Representations of resources and self-descriptive messages</li>
+                    <li><b>Hypermedia as the engine of application state (HATEOAS)</b></li> 
+                </ul>
+            </ul>
 		</div>
+      
+        <div class="slide outline"></div>
 
-		<div class="slide outline"></div>
-						
-		<section>
-			<header>Microformats</header>
+        <section>
+            <header>HATEOAS</header>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>HATEOAS</h1>
+                </hgroup>
+                <ul>
+                    <li>HATEOAS = Hypertext as the Engine for Application State</li>
+                    <ul>
+                        <li>The REST core principle</li> 
+                        <li><b>Hypertext</b></li>
+                        <ul>
+                            <li>Hypertext is a representation of a resource with <b>links</b></li>
+                            <li>A link is an URI of a resource</li>
+                            <li>Applying an access to a resource via its link = state transition</li>
+                        </ul>
+                    </ul>
+                    <li>Statelessness</li>
+                    <ul>
+                        <li>A service does not use a memory to remember a state</li>
+                        <li>HATEOAS enables stateless implementation of services</li>
+                    </ul>
+                </ul>
+            </div>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Microformats</h1>
-				</hgroup>
-				<ul classs="small">
-					<li>What is a microformat</li>
-					<ul class="x-small">
-						<li>How to embed data in HTML, XHTML, Atom, and XML</li>
-						<ul>
-							<li>data: vCard, vResume, vRecipe</li>
-							<li>micorformat: hCard, hResume, hRecipe</li>
-						</ul>
-						<li>Browsers display HTML, machines process data</li>
-						<li>Microformat vs. POSH format</li>
-						<ul>
-							<li>POSH is same as microformat but data is not a standard format</li>
-						</ul>
-					</ul>
-					<li>Difference to Atom feeds</li>
-					<ul class="x-small">
-						<li>Microformats require only a <b>single HTML document</b></li>
-						<ul>
-							<li>clients run GET to retrieve all data (human 
-								readable and machine readable)</li>
-						</ul>
-						<li><b>No significant increase of the size of document</b></li>
-						<li><b>No requirements on data representation</b></li>
-						<ul>
-							<li>can be in any representation</li>
-							<li>should be defined in a well-established format spec</li>
-							<li>a microformat spec needs to be defined for every data</li>
-						</ul>
-					<ul>
-				</ul>
-			</div>
+            <div class="slide outline"></div>
+            
+            <section>
+                <header>Stateful vs. Stateless</header>
+            
+                <div class="slide">
+                    <hgroup>
+                        <h1>Stateful server</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>Sessions to store the application state</li>
+                        <ul>
+                            <li>Recall HTTP state management in MDW</li>
+                            <li>The app uses a server memory to remember the app's state</li>
+                            <li>when server restarts, the app state is lost</li>
+                        </ul>
+                    </ul>
+                    <div class="h-drawing" style="height: 350px" 
+                        id="1CcGvRSm-RMa00XbHLlk2YhU8Wqz9Bl7nuWrynaFG3Sk"></div>                    
+                </div>
+    
+                <div class="slide">
+                    <hgroup>
+                        <h1>Stateless server</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>HTTP and hypermedia to transfer the app state</li>
+                        <ul>
+                            <li>Does not use a server memory to remember the app state</li>
+                            <li>State transferred between a client and a service via HTTP metadata and resources' representations</li>
+                        </ul>
+                    </ul>
+                    <div class="h-drawing" style="height: 350px" 
+                        id="1ZZsczsf7O-4HLuf_Flk0Ruttv5buKRmM7afQvgGWK8w"></div>                    
+                </div>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Microformats Usage</h1>
-				</hgroup>
-				<div class="h-drawing" style="height: 480px" id="1AQptmKZV_DzKQa2JhhxgIMzd01DfabBwrufPz3_vliI"></div>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Principles</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Design Patterns</li>
-					<ul>
-						<li>How to embed data in HTML elements or elements' attributes</li>
-						<li>Applied for a particular microformat specification</li>
-					</ul>
-					<li>Follow semantics of (X)HTML elements</li>
-					<ul>
-						<li>Use the most appropriate <span id="semantic-html" class="h-ref">semantic HTML element</span></li>
-						<ul>
-							<li>if not available, use <code>&lt;span></code> or <code>&lt;div></code></li>
-						</ul>
-					</ul>
-					<li>XHTML Metadata Profiles (XMDP)</li>
+                <div class="slide">
+                    <hgroup>
+                        <h1>Persistent Storage and Session Memory</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>Persistent Storage</li>
+                        <ul>
+                            <li>Contains app data</li>
+                            <li>Data is serialized into resource representation formats</li>
+                            <li>All sessions may access the data via resource IDs</li>
+                            <li>Note</li>
+                            <ul>
+                                <li>Our simple examples implement a storage in a server memory!</li>
+                            </ul>
+                        </ul>
+                        <li>Session Memory</li>
+                        <ul>
+                            <li>Server memory that contains a state of the app</li>
+                            <li>A session may only access its session memory</li>
+                            <li>Access through cookies</li>
+                            <li>Note</li>
+                            <ul>
+                                <li>A session memory may be implemented via a persistent storage (such as in Google AppEngine)</li>
+                            </ul>
+                        </ul>
+                    </ul>
+                </div>
+            </section>
+            
+            <div class="slide outline"></div>
+            
+            <section> 
+                <header>Links and Preconditions</header>
+                
+    			<div class="slide">
+					<hgroup>
+						<h1>Link</h1>
+					</hgroup>
 					<ul class="small">
-						<li>Definition of metadata of a microformat in (X)HTML page</li>
-						<li>Machine and human readable, not a Web standard</li>
-						<li>Uses <code>profile</code> attribute on <code>&lt;head></code> element</li>
-						<li>Is deprecated in HTML5</li>
-						<li>Is an analogy to a namespace but not really a namespace!</li>
-						<li>See <span id="xmdp" class="h-ref"></span> specification</li>
+						<li>Service operation</li>
+                        <ul>
+                            <li>Applying an access to a link (GET, PUT, POST, DELETE)</li>
+                            <li>Link: HTTP method + resource URI + optional link semantics</li>
+                        </ul>
+                        <li>Example: <code>getOrder</code>, <code>addOrder</code>, and <code>updateItem</code></li>
 					</ul>
-				</ul>
-			</div>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>vCard Example</h1>
-				</hgroup>	
-				<ul class="x-small">
-					<li>Describes contact information</li>
-					<pre class="brush: plain; class-name: 'tight'">
-						PROPERTY:value1;value2;...;valueN
-						PROPERTY:SUBPROPERTY1="value";...SUBPROPERTY2="value";...
-					</pre>
-					<pre class="brush: plain; class-name: 'tight'">
-						BEGIN:VCARD
-						VERSION:4.0
-						N:Vitvar;Tomas;Ing.;Doc.;PhD
-						FN: Doc. Ing. Tomas Vitvar, Ph.D.
-						ORG:Czech Technical University in Prague
-						TITLE:Associate Professor
-						PHOTO:http://vitvar.com/img/tomvit-portrait.jpg
-						TEL;TYPE="work,voice";VALUE=uri:tel:+420-2-334-334
-						TEL;TYPE="home,voice";VALUE=uri:tel:+420-2-443-554
-						ADR;TYPE=work;LABEL="Thákurova 6, Praha 6, Czech Republic"
-						 :;;Thákurova 6;Praha 6;Czech Republic
-						EMAIL:tomas.vitvar@fit.cvut.cz
-						END:VCARD					
-					</pre>
-					<ul class="xx-small">
-						<li><code>N</code> &ndash; a structured representation of the name (person/organization)</li>
-						<li><code>FN</code> &ndash; formatted name string</li>
-						<li><code>ORG</code> &ndash; name of the organization and associated units</li>
-						<li><code>TITLE</code> &ndash; job title, functional position</li>
-						<li><code>LABEL</code> &ndash; Addressing label</li>
-						
-					</ul>		
-				</ul>
-			</div>	
+					<div class="h-drawing" id="16vcb0AGdT3N5Jd4FFw9YADqYoF_QQlP46UsYngjfTKs"
+						style="height: 320px"></div>
+				</div>			
+
+				<div class="slide">
+					<hgroup>
+						<h1>Atom Links</h1>
+					</hgroup>
+					<ul class="small">
+						<li>Atom Syndication Format</li>
+						<ul>
+							<li>XML-based document format; Atom feeds</li>
+							<li>Atom links becoming popular for RESTful applications</li>
+							<pre class="brush: xml; highlight : [2,3,4,5]">
+							&lt;order a:xmlns="http://www.w3.org/2005/Atom" xmlns="..."&gt;
+							    &lt;a:link 
+                                    rel="next" 
+								    href="http://company.com/orders/5543" 
+								    type="application/xml"/>
+							    &lt;customer&gt;Tomas&lt;/customer>
+    						    &lt;items&gt;...&lt;/items>
+							&lt;/order>
+                            </pre>
+                            <li>Link structure</li>
+                            <ul class="no-bullet">
+    							<li><code>rel</code> &ndash; name of the link<br/> 
+                                ~ semantics of an operation behind the link</li>
+    							<li><code>href</code> &ndash; URI to the resource described by the link</li>
+    							<li><code>type</code> &ndash; media type of the resource the link points to</li>
+                            </ul>
+						</ul>
+                    </ul>
+				</div>			
+
+    			<div class="slide">
+					<hgroup>
+						<h1>Link Semantics</h1>
+					</hgroup>
+                    <ul class="small">
+                        <li>Standard <code>rel</code> values</li>
+                        <ul>
+                            <li>Navigation: <code>next</code>, <code>previous</code>, <code>self</code></li>
+                            <li>Does not reflect a HTTP method you can use</li>
+                        </ul>
+                        <li>Extension <code>rel</code> values</li>
+                        <ul>
+                            <li>You can use <code>rel</code> to indicate a semantics of an operation</li>
+                            <li>Example: add item, delete order, update order, etc.</li>
+                            <li>A client associates this semantics with an operation it may apply at a particular state</li>
+                            <li>The semantics should be defined by using an URI</li>
+    						<pre class="brush: xml;">
+							&lt;order a:xmlns="http://www.w3.org/2005/Atom" xmlns="..."&gt;
+                                &lt;id>2324&lt;/id>
+							    &lt;a:link rel="http://company.com/op/addItem" 
+                                    href="http://company.com/orders/2324"/>
+    						    &lt;a:link rel="http://company.com/op/deleteOrder" 
+                                    href="http://company.com/orders/2324"/>
+							&lt;/order>
+                            </pre>                            
+                        </ul>
+                    </ul>
+				</div>			
+
+        		<div class="slide">
+					<hgroup>
+						<h1>Pagination</h1>
+					</hgroup>
+                    <ul class="small">
+                        <li>Dividing a resource into a number of pages</li>
+                        <ul>
+                            <li>A client retrieves a resource in pages to optimize interactions</li>
+    						<li>Example: <code>/orders?page={startPage}&size={numberReturned}</code></li>
+							<li>A client needs to ask for (or have default values for) a 
+							  start page and a number of orders to return (must have a pre-defined knowledge)</li>
+                        </ul>
+						<li>Example <code>/orders</code> resource:</li>
+    					<pre class="brush: xml;">
+						&lt;orders a:xmlns="http://www.w3.org/2005/Atom" xmlns="..."&gt;
+                            &lt;order>...&lt;/order>
+						    &lt;a:link rel="next" href="http://company.com/orders?page=2&amp;size=10"/>
+    					    &lt;a:link rel="last" href="http://company.com/orders?page=10&amp;size=10"/>
+						&lt;/order>
+                        </pre>
+                        <ul>
+						    <li>client does not need to remember which page of orders it is viewing</li>
+                        </ul>
+                    </ul>
+				</div>			
+
+    			<div class="slide">
+					<hgroup>
+						<h1>Link Headers</h1>
+					</hgroup>
+					<ul class="small">
+						<li>An alternative to Atom links in resource representations</li>
+						<ul>
+							<li>links defined in HTTP Link header, <span class="h-ref" id="rfc-5988">Web Linking IETF spec</a></li>
+							<li>They have the same semantics as Atom Links</li>
+                            <li>Example:</li>
+                            <pre class="brush: plain; gutter: 'false'">
+                                &gt; HEAD /orders HTTP/1.1
+                                
+                                &lt; Content-Type: application/xml
+                                &lt; Link: &lt;http://company.com/orders/?page=2&amp;size=10&gt;; rel="next"
+                                &lt; Link: &lt;http://company.com/orders/?page=10&amp;size=10&gt;; rel="last"
+                            </pre>
+                        </ul>
+                        <li>Advantages</li>
+                        <ul>
+							<li>no need to get the entire document</li>
+                            <li>no need to parse the document to retrieve links</li>
+                            <li>use HTTP HEAD only</li>
+						</ul>						
+					</ul>
+				</div>			
+            </section>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Preconditions and HATEOAS</li>
+                </hgroup>
+                <ul class="x-small">
+                    <li>Precondition</li>
+                    <ul>
+                        <li>Recall Preconditions and effects in MDW</li>
+                        <ul>
+                            <li>A conditions that must hold in a state before an operation can be executed.</li>
+                        </ul>
+                    </ul>
+                    <li>Preconditions in HATEOAS</li>
+                    <ul>
+                        <li>Service in a current state generates only valid transitions 
+                        that it includes in the representation of the resource.</li>
+                        <li>Transition logic is realized at the server-side</li>
+                    </ul>
+                </ul>
+                <div class="h-drawing" style="height: 230px" 
+                    id="1H_GfN8C1DZObNC_9HcRLa6Nk-EuJUEr0h6-65HhHs0U"></div>
+            </div>                
 
 			<div class="slide">
 				<hgroup>
-					<h1>Design Patterns Rules</h1>
+					<h1>Advantages</h1>
 				</hgroup>
-					<ul class="x-small">
-						<li><code>class-design-pattern</code></li>
-						<ul>
-							<li>semantic meaning indicated on HTML content by <code>class</code> attribute</li>
-							<pre class="brush: 'xml'; class-name: 'tight'">
-							&lt;div class="vcard">
-							    &lt;a class="url fn" href="http://www.vitvar.com">
-							       Tomas Vitvar&lt;/a>,
-							    &lt;span class="org">UIBK&lt;/span>
-							&lt;/div></pre>
-						</ul>
-						<li><code>value-class-pattern</code></li>
-						<ul>
-							<li>embedding data structure when a property has subproperties<br/>
-								(vCard fragment is <code>TEL;TYPE=WORK:+43 554 554 556</code>)</li>
-							<pre class="brush: 'xml'; class-name: 'tight'">
-							&lt;span class="tel">
-							    &lt;span class="type">Work&lt;/span>:
-							    &lt;span class="value">+43 554 554 556&lt;/span>
-							&lt;/span></pre>
-							<li>sometimes value needs to be split into multiple pieces as follows<br/>
-								(note that dialing <code>+43<b>0</b>554554556</code> is not valid)</li>
-							<pre class="brush: 'xml'; class-name: 'tight'">
-							&lt;span class="tel">
-							    &lt;span class="type">Work&lt;/span>:
-							    &lt;span class="value">+43&lt;/span>(0)
-							    &lt;span class="value">554 554 556&lt;/span>
-							&lt;/span></pre>
-						</ul>
-					</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Design Patterns Rules (cont.)</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li><code>include-pattern</code></li>
+				<ul >
+					<li>Location transparency</li>
 					<ul>
-						<li>to include a subset of data from one area of a page to the other area of the 
-					same page (same data to be reused by multiple microformats)</li>
-						<li><b>cannot be used to include content from other URLs!</b></li>
-						<li>Example, a verbose hCard on a page:</li>
-						<pre class="brush: 'xml'; class-name: 'tight'">						
-						&lt;div class="vcard" id="uibk-card">
-						    &lt;div class="fn org">University of Innsbruck&lt;/div>
-						        &lt;div class="adr">
-						            &lt;span class="street-address">Technikestrasse 21a&lt;/span>,
-						            &lt;span class="locality">Tirol&lt;/span>
-						            &lt;span class="postal-code">6020&lt;/span>
-						        &lt;/div>
-						     &lt;/div>
-						&lt;/div></pre>
-						<li>Reviews on the same page:<br/>
-							(parser replaces the whole <code>&lt;a></code> element including its content)</li>
-						<pre class="brush: 'xml'; class-name: 'tight'">						
-						&lt;div class="hreview">
-						    &lt;h1 class="summary">A place to study computer science!&lt;/h1>
-						    &lt;div class="item">&lt;a class="include" href="#uibk-card">Innsbruck Uni&lt;/a>&lt;/div>
-						    &lt;p class="description">Courses in English, fields of computer science.&lt;/p>
-						&lt;/div></pre>
+						<li>only "entry-level" links published to the World</li>
+						<li>other links within documents can change without changing client's logic</li>
+                        <li>HATEOAS may reflect current user's rights in the app</li>                        
+					</ul>
+					<li>Loose coupling</li>
+					<ul>
+						<li>no need for a logic to construct the links</li>
+                        <li>Clients know to which states they can move via links</li>
 					</ul>
 				</ul>
-			</div>
+			</div>			
 
+        </section>
+        
+        <div class="slide outline"></div>
+        
+        <section>
+            <header>Scalability</header>
+            
 			<div class="slide">
 				<hgroup>
-					<h1>hCard Microformat Example</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>hCard profile, options:</li>
-					<pre class="brush: xml; class-name: 'tight'">						
-						&lt;link rel="profile" href="http://microformats.org/profile/hcard"></pre>
-					<pre class="brush: xml; class-name: 'tight'">	
-						&lt;...>This content uses &lt;a rel="profile" 
-							href="http://microformats.org/profile/hcard">hCard</a>.&lt;/...></pre>
-					<pre class="brush: xml; class-name: 'tight'">
-						&lt;head profile="http://microformats.org/profile/hcard">..&lt;/head> </pre>
-					<li>Example specific rules</li>
-					<ul class="xx-small">
-						<li>vCard properties that do not make sense for hCard</li>
-						<ul>
-							<li>e.g., NAME, PROFILE, SOURCE, PRODID, VERSION</li>
-							<li>publishers should not use them, parses should ignore them</li>
-						</ul>
-						<li>if <code>fn == org</code> (i.e, <code>class="fn org"</code>)</li>
-						<ul>
-							<li>hCard is a contact for a company, organization or a place</li>
-							<li><code>N</code> (person's name) property should not be used or be the empty string</li>
-						</ul>
-						<li>if <code>fn != org</code> AND <code>fn</code> contains two words</li>
-						<ul>
-							<li><code>fn</code> is split into <code>given-name</code> and <code>last-name</code></li> 
-							<li>sub-properties of <code>N</code> peoperty (by a whitespace or a comma)</li>
-						</ul> 
-						<li>see a complete specification in <span id="hcard" class="h-ref"></span></li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Known Issues</h1>
+					<h1>Scalability</h1>
 				</hgroup>
 				<ul>
-					<li>Name conflicts and scalability</li>
+					<li>Need for scalability</li>
 					<ul>
-						<li>More microformats on a page may cause naming conflicts</li>
-						<ul>
-							<li>no namespace support, <b>microformats do not scale</b></li>
-							<li>functionality of tools may break when data formats change</li>
-						</ul>
+						<li>Huge amount of requests on the Web every day</li>
+						<li>Huge amount of data downloaded</li>
 					</ul>
-					<li>No formal semantics, no reasoning support</li>
+					<li>Some examples</li>
 					<ul>
-						<li>How important is it?</li>
-						<li>Semantics defined in XMDP profiles</li>
-						<ul>
-							<li>no formal basis though machine processable</li>
-							<li>lack of compatibility with RDF/RDFa</li>
-							<li>See <span id="microformat-rdf-compatibility" class="h-ref"></span> for details.</li>
-						</ul>
+						<li>Google, Facebook: 5 billion API calls/day</li>
+						<li>Twitter: 3 billions of API calls/day (75% of all the traffic)<br/>
+						  &rarr; 50 million tweets a day</li>
+						<li>eBay: 8 billion API calls/month</li>
+						<li>Bing: 3 billion API calls/month</li>
+						<li>Amazon WS: over 100 billion objects stored in S3</li>
+					</ul>
+					<li>Scalability in REST</li>
+					<ul>
+						<li>Caching and revalidation</li>
+						<li>Concurrency control</li>
 					</ul>
 				</ul>
 			</div>
+            
+            <div class="slide outline"></div>            
+            
+            <section>
+                <header>Caching and Revalidation</header>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Uptake and some statistics</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Two billion pages annotated with hCard</li> 
-					<li>Google Rich Snippets</li>
-					<ul>
-						<li>Content indexing with microformats, microdata, RDFa</li>
-						<ul>
-							<li>see <span id="rich-snippets" class="h-ref"></span></li>
-							<li>94% of the rich snippets data uses microformats</li>
-							<a href="http://www.google.com/search?q=pizza+recipe">
-								<img src="img/l6/rs-review.png" style="height: 90px; margin-bottom: -20px" 
-								alt="Review Rich Snippet"></img></a>
-						</ul>
-					</ul>
-					<li>Firefox 3</li>
-					<ul>
-						<li>Native API to parse and process microformats in JavaScript</li>
-						<li>see <span id="firefox-microformats" class="h-ref"></span></li>
-					</ul>
-					<li>Facebook</li>
-					<ul>
-						<li>hCalendar and hCard for events</li>
-						<li>see <span id="facebook-microformats" class="h-ref"></span></li>
-					</ul>
-				</ul>
-			</div>
-			
-			<div class="slide outline"></div>			
-			
-			<section>
-				<header>hREST</header>
-				
-				<div class="slide">
-					<hgroup>
-						<h1>Motivation</h1>
-					</hgroup>
-					<ul>
-						<li>Yet another attempt for service description</li>
-						<ul>
-							<li>automated processing of service description</li>
-							<li>service discovery, generation of libraries</li>
-						</ul>
-						<li>REST service usage</li>
-						<ul>
-							<li>Descriotion in HTML, documentation purposes</li>
-							<li>Developers read documentation and implement integration</li>
-							<li>API vendors provide client libraries</li>
-							<ul>
-								<li>JavaScript, Java, ..., no need to auto-generate code stubs</li>
-							</ul>
-						</ul>
-						<li>Future problem: discovery</li>
-						<ul>
-							<li>If huge amount of services exist, how to find the right one?</li>
-						</ul>
-					</ul>
-				</div>
+    			<div class="slide">
+    				<hgroup>
+    					<h1>Caching</h1>
+    				</hgroup>
+    				<div class="h-drawing" id="1nc-u-R3NUvur4WBAB1yxSqtj3PfmsSWF8iMo0aLT-Nc"
+    					style="height: 200px"></div>
+    				<ul class="x-small">
+    					<li>Your service should cache:</li>
+    					<ul>
+    						<li>anytime there is a static resource</li>
+    						<li>even there is a dynamic resource</li>
+                            <ul>
+    						    <li>with chances it updates often</li>
+    						    <li>you can force clients to always revalidate</li>
+                            </ul>
+    					</ul>
+    					<li>three steps:</li>
+    					<ul>
+    						<li>client GETs the resource representation</li>
+    						<li>server controls how it should cache through <code>Cache-Control</code>
+    						header</li>
+    						<li>client revalidates the content via conditional GET</li>
+    					</ul>
+    				</ul>
+    			</div>
+    
+    			<div class="slide">
+    				<hgroup>
+    					<h1>Cache Headers</h1>
+    				</hgroup>
+    				<ul class="x-small">
+    					<li><code>Cache-Control</code> response header</li>
+    					<ul>
+    						<li>controls over local and proxy caches</li>
+    						<li><code>private</code> &ndash; no proxy should cache, only clients can</li>
+    						<li><code>public</code> &ndash; any intermediary can cache (proxies and clients)</li>
+    						<li><code>no-cache</code> &ndash; the response should not be cached. 
+                            If it is cached, the content should always be revalidated.</li>
+    						<li><code>no-store</code> &ndash; can cache but should not store persistently. When a client restarts, content is lost</li>
+    						<li><code>no-transform</code> &ndash; no transformation of cached data; e.g. compressions</li>
+    						<li><code>max-age</code>, <code>s-maxage</code> a time in seconds how long the cache is valid; 
+                            <code>s-maxage</code> for proxies</li>
+    					</ul>
+                        <li><code>Last-Modified</code> and <code>ETag</code> response headers</li>
+                        <ul>
+                            <li>Content last modified date and a content entity tag</li> 
+                        </ul>
+                        <li><code>If-Modified-Since</code> and <code>If-None-Match</code> request headers</li>
+                        <ul>
+                            <li>Content revalidation (conditional GET)</li> 
+                        </ul>
+    				</ul>
+    			</div>
+    
+    			<div class="slide">
+    				<hgroup>
+    					<h1>Example Date Revalidation</h1>
+    				</hgroup>
+    				<ul class="x-small">
+    					<li>Cache control example:</li>
+                        <ul>
+                            <pre class="brush: plain; gutter: 'false'">
+                            &gt; GET /orders HTTP/1.1
+                            &gt; ...
+                            
+                            &lt; HTTP/1.1 200 OK
+                            &lt; Content-Type: application/xml
+                            &lt; Cache-Control: private, no-store, max-age=200
+                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
+                            &lt;
+                            &lt; ...data...
+                            </pre>
+                            <li>only client can cache, must not be stored on the disk, 
+    						  the cache is valid for 200 seconds.</li>
+    					</ul>
+    					<li>Revalidation (conditional GET) example:</li>
+                        <ul>
+                            <li>A client revalidates the cache after <code>200</code> seconds.</li>
+                            <pre class="brush: plain; gutter: 'false'">
+                            &gt; GET /orders HTTP/1.1
+                            &gt; If-Modified-Since: Sun, 7 Nov 2011, 09:40 CET
+                            
+                            &lt; HTTP/1.1 304 Not Modified
+                            &lt; Cache-Control: private, no-store, max-age=200
+                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
+                            </pre>
+                        </ul>
+                    </ul>
+                </div>
+                
+        		<div class="slide">
+    				<hgroup>
+    					<h1>Entity Tags</h1>
+    				</hgroup>
+    					<ul class="x-small">
+                            <li>Signature of the response body</li>
+                            <ul>
+                                <li>A hash such as MD5</li>
+                                <li>A sequence number that changes with any modification of the content</li>
+                            </ul>
+                            <li>Types of tag</li>
+                            <ul>
+                                <li>Strong ETag: reflects the content bit by bit</li>
+                                <li>Weak ETag: reflects the content "semantically"</li>
+                                <ul>
+                                    <li>The app defines the meaning of its weak tags</li>
+                                </ul>
+                            </ul>
+                            <li>Example content revalidation with <code>ETag</code></li>
+                            <pre class="brush: plain; gutter: 'false'; class-name: 'tight'">
+                            &lt; HTTP/1.1 200 OK
+                            &lt; Cache-Control: private, no-store, max-age=200
+                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
+                            &lt; ETag: "4354a5f6423b43a54d"
+                            
+                            &gt; GET /orders HTTP/1.1
+                            &gt; If-None-Match: "4354a5f6423b43a54d"
+                            
+                            &lt; HTTP/1.1 304 Not Modified
+                            &lt; Cache-Control: private, no-store, max-age=200
+                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
+                            &lt; ETag: "4354a5f6423b43a54d"
+                            </pre>
+    					</ul>
+    				</ul>
+    			</div>
+    
+            	<div class="slide">
+    				<hgroup>
+    					<h1>Design Suggestions</h1>
+    				</hgroup>
+                    <ul class="small">
+                        <li>Composed resources use weak ETags</li>
+                        <ul>
+                            <li>For example <code>/orders</code></li>
+                            <ul>
+                                <li>a composed resource that contains a summary information</li>
+                                <li>changes to an order's items will not change semantics of <code>/orders</code></li>
+                            </ul>
+                            <li>It is usually not possible to perform updates on these resources</li>
+                        </ul>
+                        <li>Non-composed resources use strong ETags</li>
+                        <ul>
+                            <li>For example <code>/orders/{order-id}</code></li>
+                            <li>They can be updated</li>
+                        </ul>
+        				<li>Further notes</li>
+    					<ul class="small">
+    						<li>Server should send both <code>Last-Modified</code> and
+    						<code>ETag</code> headers</li>
+    						<li>If client sends both <code>If-Modified-Since</code> and <code>If-None-Math</code>,<br/>
+    						<code>ETag</code> validation takes preference</li>
+    					</ul>                        
+                    </ul>
+    			</div>
 
-				<div class="slide">
-					<hgroup>
-						<h1>REST Services Review</h1>
-					</hgroup>
-					<ul>
-						<li>Hypermedia graph</li>
-						<center><img src="img/l6/REST-hotel-service.png" style="width: 500px; padding: 20px" 
-							alt="Exmaple REST Hotel Service"></img></center>
-						<ul class="small">
-							<li>Operations are transitions from one state to another state</li>
-							<li>Resources represent application states</li>
-						</ul>	
-					</ul>
-				</div>
+        		<div class="slide">
+    				<hgroup>
+    					<h1>Weak ETag Example</h1>
+    				</hgroup>
+                    <ul class="x-small">
+                        <li>App specific, <code>/orders</code> resource example</li>
+                        <pre class="brush: js; class-name: 'tight'">
+                        { 
+                            "orders" : 
+                                [
+                                    { "id"        : 2245,
+                                      "customer"  : "Tomas",
+                                      "descr"     : "Stuff to build a house.",
+                                      "items"     : [...] },
+                                    { "id"        : 5546,
+                                      "customer"  : "Peter",
+                                      "descr"     : "Things to build a pipeline.",
+                                      "items"     : [...] }
+                                ] 
+                        }
+                        </pre>
+                        <li>Weak ETag compute function example</li>
+                        <ul>
+                            <li>Any modification to an order's items is not significant for <code>/orders</code>:</li>
+                        </ul>
+                        <pre class="brush: js; class-name: 'tight'">
+                            var crypto = require("crypto");
+                        
+                            function computeWeakETag(orders) {
+                                var content = "";
+                                for (var i = 0; i < orders.length; i++)
+                                    content += orders[i].id + orders[i].customer + orders[i].descr;
+                                return crypto.createHash('md5').update(content).digest("hex");
+                            }
+                        </pre>
+                    </ul>
+    			</div>
+    
+    			<div class="slide">
+    				<hgroup>
+    					<h1>Weak ETag Revalidation</h1>
+    				</hgroup>
+                    <ul class="x-small">
+                        <li>Updating <code>/orders</code> resource</li>
+                        <ul>
+                            <li><code>POST /orders/{order-id}</code> inserts a new item to an order</li>
+                            <li>Any changes to orders' items will not change the Weak ETag</li>
+                        </ul>
+                    </ul>
+    				<div class="h-drawing" id="1n1jGatYjOc_kgMhWSuXyReptynOFn1CEDELB75Qj_3A"
+    					style="height: 380px"></div>
+    			</div>
+                                
+            </section>
+            
+            <div class="slide outline"></div>
+            
+            <section>
+                <header>Concurrency Control</header>
+                
+    			<div class="slide">
+    				<hgroup>
+    					<h1>Concurrency</h1>
+    				</hgroup>
+    				<ul class="x-small">
+    				    <li>Two clients may update the same resource</li>
+    					<ul class="no-bullet">
+    						<li>1) a client GETs a resource <code>GET /orders/5545</code></li>
+    						<li>2) the client modifies the resource</li>
+                            <li>3) the client updates the resource via <code>PUT /orders/5545 HTTP/1.1</code></li>
+                            <li class="space-before">What happens if another client updates the 
+                            resource between 1) and 3) ?</li>
+                        </ul>
+                        
+    					<li>Concurrency control</li>
+                        <ul>
+                            <li>Conditional <code>PUT</code></li>
+                            <ul>
+                                <li>Update the resource only if it has not changed since a specified date or 
+                                a specified ETag matches the resource content</li>
+                            </ul>
+                            <li><code>If-Unmodified-Since</code> and <code>If-Match</code> headers</li>
+                            <li>Response to conditional <code>PUT</code>:</li>
+                            <ul>
+                                <li><code>200 OK</code> if the <code>PUT</code> was successful</li>
+                                <li><code>412 Precondition Failed</code> if the resource was updated in the meantime.</li>
+                            </ul>
+                        </ul>                        
+    				</ul>
+    			</div>
 
-				<div class="slide">
-					<hgroup>
-						<h1>hREST</h1>
-					</hgroup>
-					<ul>
-						<li>Simple Web Service Functional Model</li>
-						<center><img src="img/l6/ws-model.png" style="height: 250px; padding: 20px" 
-							alt="Web Service Functional Model"></img></center>
-						<ul class="x-small">
-							<li><code>operation</code> &ndash; functional operation of the service</li>
-							<li><code>address</code> &ndash; endpoint where the operation can be invoked (resource URI)</li>
-							<li><code>method</code> &ndash; HTTP method used to invoke the operation</li>
-							<li><code>input/output</code> &ndash; input data, output format (resource representation)</li>
-						</ul>
-					</ul>
-					
-				</div>
-				
-				<div class="slide">
-					<hgroup>
-						<h1>Description in HTML</h1>
-					</hgroup>	
-					<ul class="small">
-						<li>Operation <code>getHotelDetails</code></li>
-						<pre class="brush: xml; class-name: 'tight'">
-							&lt;html>
-								...
-								&lt;p>The operation &lt;code>getHotelDetails&lt;/code> is invoked 
-								using the method GET at &lt;code>http://example.com/h/{id}&lt;/code>, 
-								with the ID of the particular hotel replacing the parameter 
-								&lt;code>id&lt;/code>. It returns the hotel details in 
-						        an &lt;code>ex:hotelInformation&lt;/code> document.&lt;/p>	
-								...
-							&lt;/html></pre>	
-						<li>hREST annotation</li>	
-						<pre class="brush: xml; class-name: 'tight'; highlight: [5,6,7,8,9,10,11]">
-							&lt;div class="service" id="svc">
-							&lt;p>Description of the
-							&lt;span class="label">ACME Hotels&lt;/span> service:&lt;/p>
-							&lt;div class="operation" id="op1">
-							&lt;p>The operation &lt;code class="label">getHotelDetails&lt;/code> is
-							invoked using the method &lt;span class="method">GET&lt;/span> at 
-							&lt;code class="address">http://example.com/h/{id}&lt;/code>, 
-							with &lt;span class="input">the ID of the particular hotel replacing 
-							the parameter &lt;code>id&lt;/code>&lt;/span>.
-							It returns &lt;span class="output">the hotel details in an
-							&lt;code>ex:hotelInformation&lt;/code> document.&lt;/span>&lt;/p>&lt;/div>&lt;/div></pre>		
-					</ul>	
-				</div>
-				
-				<div class="slide">
-					<hgroup>
-						<h1>hREST Rules</h1>
-					</hgroup>
-					<ul class="xx-small">
-						<li><code>service</code> class</li>
-						<ul>
-							<li>block markup, e.g.,<code>&lt;body></code>, <code>&lt;div></code></li>
-							<li>The element describes a service</li>
-						</ul>	
-						<li><code>operation</code> class</li>
-						<ul>
-							<li>block markup, e.g.,<code>&lt;div></code></li>
-							<li>The element describes an operation of the service</li>
-							<li>Further includes <code>address</code>, <code>method</code>, <code>label</code></li>
-							<li>Can also be used on hyperlinks <code>&lt;a></code> and HTML forms <code>&lt;form></code></li>
-						</ul>	
-						<li><code>address</code> class</li>
-						<ul>
-							<li>specifies a URI of the resource (endpoint of the operation)</li>
-							<li>textual markup (<code>&lt;div></code>, <code>&lt;span></code>) or a link (<code>&lt;a></code>)</li>
-						</ul>	
-						<li><code>method</code> class</li>
-						<ul>
-							<li>specifies a HTTP method used</li>
-							<li>textual markup (<code>&lt;div></code>, <code>&lt;span></code>)</li>
-						</ul>
-						<li><code>label</code> class</li>
-						<ul>
-							<li>human-readable label for service, operation, message</li>
-							<li>textual markup (<code>&lt;div></code>, <code>&lt;span></code>)</li>
-						</ul>
-					</ul>
-					
-				</div>
-			</section>	
-			
-		</section>
-
-		<div class="slide outline"></div>
-		
+    			<div class="slide">
+    				<hgroup>
+    					<h1>Concurrency Control Protocol</h1>
+    				</hgroup>
+    				<div class="h-drawing" id="1D9w_NKq3AqIl14fn0vGFBmVlbNMrAQqeYljjOYLcqCo"
+    					style="height: 380px"></div>
+                    <ul class="x-small">
+                        <li>Conditional PUT and ETags</li>
+                        <ul>
+                            <li>Conditional PUT must always use strong entity tags or date validation</li>
+                        </ul>
+                    </ul>
+    			</div>
+    
+            </section>
+        </section>
+            
+        <div class="slide outline"></div>
+        
 		<section>
-			<header>Microdata</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Microdata</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Part of HTML5 specification</li>
-					<ul>
-						<li>Google is the main driver (rich snippets support)</li>
-						<li>spec includes:<br/>
-						&rarr; Microdata vocabularies<br/>
-						&rarr; Microdata Global Attributes</li>
-						<li>see <span id="microdata" class="reference"></span> W3C working draft</li>
-					</ul>
-					<li>Idea similar to microformats, but</li>
-					<ul>
-						<li>items (collection of properties) have ids (URIs)</li>
-						<li>Microdata vocabulary, a formal description of terms</li>
-						<ul>
-							<li><code>http://schema.org</code> is becoming a standard</li>
-							<li>e.g., Event, Organization, Person, Product, Review</li>
-							<li>Created and supported by Google, Microsoft, Yahoo!</li>
-							<li>have RDF representation too</li>
-						</ul>
-						<li>data formats not directly based on formats such as vCard, vCalendar, they
-							define its own "simple" vocabulary</li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Global Attributes</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Attributes on any HTML element</li>
-					<li><code>Itemscope</code></li>
-					<ul>
-						<li>identifies an element which descendants contain some properties</li>
-						<pre class="brush: xml; class-name: 'tight'">
-							&lt;div itemscope>...&lt;div></pre>
-					</ul>
-					<li><code>Itemtype</code></li>
-					<ul>
-						<li>pointer to a vocabulary that describes the item and its properties<br/>
-						<code>http://www.data-vocabulary.org/Person/</code></li>
-					</ul>
-					<li><code>Itemid</code></li>
-					<ul>
-						<li>global identifier of the item (URI)</li>
-						<li>such as a book's ISBN in urn schema, <code>urn:isbn:0-330-34032-8</code></li>
-					</ul>
-					<li><code>Itemprop</code></li>
-					<ul>
-						<li>a term from the vocabulary which value is in the element's content</li>
-						<pre class="brush: xml; class-name: 'tight'">&lt;span itemprop="nickname">Johny&lt;span></pre>
-					</ul>
-					<li><code>Itemref</code></li>
-					<ul>
-						<li>a reference to other item within the same document</li>
-						<pre class="brush: xml; class-name: 'tight'">&lt;div itemscope itemref="myprofile"/></pre>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Example</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Non-annotated HTML text</li>
-					<pre class="brush: xml; class-name: 'tight'">
-					&lt;section>
-					  My name is Peter Brown and I work as a post-doc at the Innsbruck University.
-					  My friends often call me Pete. My office address is 
-					  Technikestrasse 21a, 6020, Innbruck, and you can also visit my homepage at 
-					  &lt;a href="http://peter-brown.org">http://peter-brown.org&lt;/a>
-					&lt;/section></pre>
-					<li>Annotated HTML text with microdata</li>
-					<pre class="brush: xml; class-name: 'tight'">
-					&lt;section itemscope itemtype="http://schema.org/Person"> 
-					  My name is &lt;span itemprop="name">Peter Brown&lt;/span> and I work as a
-					  &lt;span itemprop="title">post-doc&lt;/span> at the 
-					  &lt;span itemprop="affiliation">Innsbruck University&lt;/span>. 
-					  My friends often call me &lt;span itemprop="nickname">Pete&lt;/span>. 
-					  &lt;section itemprop="address" itemscope itemtype="http://schema.org/Address">
-					    My office address is &lt;span itemprop="street-address">Tchnikestrasse 21a&lt;/span>,
-					    &lt;span itemprop="postal-code">6020&lt;span>, 
-						&lt;span itemprop="locality">Innsbruck&lt;/span>
-					  &lt;section> 
-					  and you can also visit my homepage at 
-					  &lt;a href="http://peter-brown.org" itemprop="url">http://peter-brown.org&lt;/a>
-					&lt;/section>
-					</pre>
-				</ul>
-			</div>
+			<header>Description</header>
+            
+            <section>
+                <header>Documentation</header>
 			
-			<div class="slide">
-				<hgroup>
-					<h1>Microformats vs. Microdata</h1>
-				</hgroup>
-				<ul>
-					<li>Scalability</li>
-					<ul>
-						<li>Microformats specs are complicated because of specific rules tailored for vCard, vResume, etc.</li>
-						<li>Microdata can be easilly extensible, when new property occur they can be added witout breaking
-							conformance of tools</li>
-					</ul>
-					<li>Standards-based</li>
-					<ul>
-						<li>Microdata is a standard part of HTML5 effort</li>
-						<li>Microformats is an "ad-hoc" group of ethusiastic people, though widely supported</li>
-						<ul>
-							<li>Strength is in underyling well-established formats</li>
-						</ul>
-						<li>Microdata have links to Semantic Web efforts and Linked Data (via RDF), microformats not</li> 
-					</ul>						
-				</ul>
-			</div>
+    			<div class="slide">
+    				<hgroup>
+    					<h1>Documentation</h1>
+    				</hgroup>
+    				<ul>
+    					<li>RESTful API Documentation</li>
+    					<ul>
+    						<li>not a standard way, only good practices</li>
+    						<li>only textual, not in a formal language</li>
+                            <ul>
+    						    <li>there are attempts such as WADL, hREST</li>
+    						    <li>it is even possible to use WSDL 2.0</li>
+                            </ul>
+    					</ul>
+    					<li>Client libraries in major languages</li>
+    					<ul>
+    						<li>JavaScript, Java, ...</li>
+    						<li>these could be documented</li> 
+    						<li>they hide protocol details</li>
+    					</ul>
+    					<li>Best practices in RESTful API documentation</li>
+    					<ul>
+    						<li>learn from Google, Twitter, and others</li>
+    					</ul>
+    				</ul>
+    			</div>	
+			
+    			<div class="slide">
+    				<hgroup>
+    					<h1>Best Practices</h1>
+    				</hgroup>
+    				<ul class="small">
+    					<li>Include resource diagram</li>
+    					<ul>
+    						<li>in UML, with links</li>
+    					</ul>
+    					<li>For each resource, describe</li>
+    					<ul>
+    						<li>URI with parameters, such as <code>http://company.com/orders/{order-id}</code></li>
+    						<li>definition of the parameters</li>
+    						<li>list of properties (attributes), with values, link to XML Schema</li>
+    						<li>representations you support (XML, JSON)</li>
+    						<li>sample request</li>
+    						<li>sample response in representations you support</li> 
+    						<li>error codes</li>
+    					</ul>
+    					<li>Make sure</li>
+    					<ul>
+    						<li>people can copy sample code and run it in a browser or by using <code>curl</code></li>
+    					</ul>
+    				</ul>
+    			</div>	
+            </section>
+            
+            <div class="slide outline"></div>
+            
+            <section>
+                <header>Service Description and Characteristics</header>
+                
+        		<div class="slide">
+    				<hgroup>
+    					<h1>Description</h1>
+    				</hgroup>
+    				<div class="h-drawing" id="17u0BbwBkrl8K-n_L_YldCKO2jCD0cHfRJy-SHZKncws"
+    				  style="height: 445px"></div>
+    			</div>					
+
+        		<div class="slide">
+    				<hgroup>
+    					<h1>Service Characteristics and REST</h1>
+    				</hgroup>
+    				<ul class="small">
+                        <li>Loose coupling</li>
+                        <ul>
+                            <li>Standard response codes</li>
+                            <li>Standard Internet Media Types</li>
+                            <li>Links in hypertext; clients follow links while they do not need to construct them</li>                            
+                        </ul>
+                        <li>Reusability</li>
+                        <ul>
+                            <li>Multiple representations of resources (XML, JSON, ...)</li>
+                            <li>Interoperability promoted by uniform interface</li>
+                        </ul>
+                        <li>Contracting</li>
+                        <ul>
+                            <li>XML Schema (structural)</li>
+                            <li>Internet Media Types, vendor specific types<br/>
+                            such as <code>application/vnd.order+xml</code></li>
+                            <li>Uniform interface</li>
+                            <li>Hypermedia (behavioral &ndash; HATEOAS)</li>
+                        </ul>
+                    </ul>
+                </div>
+
+            	<div class="slide">
+    				<hgroup>
+    					<h1>Service Characteristics and REST (Cont.)</h1>
+    				</hgroup>
+    				<ul class="small">
+                        <li>Discoverability and Composability</li>
+                        <ul>
+                            <li>Mostly manual, partial support of directories such as ProgrammableWeb</li>
+                            <li>Compositions realized programmatically in mashups</li>
+                            <li>Research efforts to semi-automate discovery and composition</li>
+                        </ul>
+                        <li>Abstraction</li>
+                        <ul>
+                            <li>Heavily based on HTTP, can be realized in any implementation technologies due to a wide spread of HTTP</li>
+                        </ul>
+                        <li>Encapsulation</li>
+                        <ul>
+                            <li>Design-specific</li>
+                        </ul>
+    				</ul>
+    			</div>	
+            </section>
+
 		</section>
-		
-		<div class="slide outline"></div>		
-		
-		<section>
-			<header>HTML5 Forms</header>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>New Forms Features</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>HTML forms</li>
-					<ul>
-						<li>Providing an user input to invoke a service</li>
-					</ul>
-					<li>HTML5 forms</li>
-					<ul>
-						<li>Provide functionality that could have only be done in a 
-							custom JavaScript code before</li>	
-						<li>patterns for input checking</li>
-						<li>a set of new form elements</li>
-						<ul>
-							<li><code>progress</code>, a status of completion of a task</li>
-							<li><code>meter</code>, a scalar measurement (temperature, etc.)</li>
-							<li><code>datalist</code>, a set of options to be used with new <code>list</code> attribute</li>
-							<li><code>keygen</code>, a control for key-pair generation</li>
-							<li><code>output</code>, display a result of a calculation</li>
-						</ul>
-						<li>a set of new input types</li>
-						<ul>
-							<li><code>tel</code>, <code>search</code>, <code>url</code>, <code>email</code>, 
-								<code>datetime</code>, <code>date</code>, <code>number</code>, ...</li>
-						</ul>
-						<li>New CSS3 pseudo-classes for HTML5 forms</li>
-						<ul>
-							<li><code>:required</code>, <code>:optional</code>, <code>:valid</code>, 
-								<code>:invalid</code>, <code>:in-range</code></li>
-						</ul>	
-					</ul>	
-				</ul>
-			</div>	
-
-			<div class="slide">
-				<hgroup>
-					<h1>FormData Object</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>You can create HTML forms on the fly as key-value pairs</li>
-					<ul>
-						<li>You can send them via XHR send in the same was as with <code>submit()</code></li>
-						<li>Encoding is <code>multipart/form-data</code></li>
-					</ul>
-					<pre class="brush: javascript; class-name: 'tight'">
-						var formData = new FormData();
-						formData.append("part_num", "123ABC"); 
-						formData.append("part_price", 7.95);
-						formData.append("part_image", somefile)
-
-						var xhr = new XMLHttpRequest();
-						xhr.open("POST", "http://some.url/");  
-						xhr.send(formData);</pre>	
-					<li>You can add additional data to existing forms</li>
-					<pre class="brush: javascript; class-name: 'tight'">
-						var formElement = document.getElementById("someFormElement");
-						var formData = new FormData(formElement);
-						formData.append("part_description", "The best part ever!");
-
-						var xhr = new XMLHttpRequest();
-						xhr.open("POST", "http://some.url/");
-						xhr.send(formData);</pre>	
-				</ul>
-			</div>	
-
-			<div class="slide">
-				<hgroup>
-					<h1>Browser-based Validation</h1>
-				</hgroup>
-				<ul class="small">
-					<li><code>required</code> attribute</li>
-					<pre class="brush: xml; class-name: 'tight'">
-						&lt;input type="email" id="email_addr" name="email_addr" required /></pre>
-					<li><code>pattern</code> attribute</li>
-					<ul>
-						<li>custom pattern as regular expression to validate input</li>
-						<pre class="brush: xml; class-name: 'tight'">
-							&lt;input type="text" id="part" name="part" required 
-								pattern="[A-Za-z]{3}[0-9]{4}"
-							    title="Part numbers consist of 3 letters followed by 4 digits."/></pre>
-					</ul>
-					<li>Skipping validation</li>
-					<ul>
-						<li>Sometimes we want to disable the form validation.</li>
-						<pre class="brush: xml; class-name: 'tight'">
-							&lt;input type="text" id="part" name="part" required 
-								pattern="[A-Za-z]{3}[0-9]{4}"
-							    title="Part numbers consist of 3 letters followed by 4 digits."/>
-							&lt;input type="submit" formnovalidate value="Save">
-							&lt;input type="submit" value="Submit"></pre>							
-					</ul>
-				</ul>	
-			</div>	
-			
-			<div class="slide">
-				<hgroup>
-					<h1>Constraint Validation API</h1>
-				</hgroup>
-				<ul class="small">
-					<li>You can use this API to implement custom validation</li>
-					<ul>
-						<li>You can: set custom errors, check if the element is valid, determine a reason why element is invalid</li>
-						<li>Example: display custom error when two emails do not match</li>
-						<pre class="brush: xml; class-name: 'tight'; highlight: 6">
-							&lt;label>Email:&lt;/label>
-							&lt;input type="email" id="email_addr" name="email_addr">
-
-							&lt;label>Repeat Email Address:</label>
-							&lt;input type="email" id="email_addr_repeat" name="email_addr_repeat" 
-								oninput="check(this)"></pre>
-						<li>Javascript code to check the input:</li>
-						<pre class="brush: javascript; class-name: 'tight'">
-								function check(input) {
-								  if (input.value != document.getElementById('email_addr').value) {
-								    input.setCustomValidity('The two email addresses must match.');
-								  } else {
-								    // input is valid -- reset the error message
-								    input.setCustomValidity('');
-								  }
-								}</pre>	
-					</ul>
-				</ul>	
-			</div>	
-			
-			<div class="slide">
-				<hgroup>
-					<h1>HTML5 Forms Demo</h1>
-				</hgroup>	
-				<ul class="x-small">
-					<style>
-						:invalid { 
-						  border-color: #e88;
-						  -webkit-box-shadow: 0 0 5px rgba(255, 0, 0, .8);
-						  -moz-box-shadow: 0 0 5px rbba(255, 0, 0, .8);
-						  -o-box-shadow: 0 0 5px rbba(255, 0, 0, .8);
-						  -ms-box-shadow: 0 0 5px rbba(255, 0, 0, .8);
-						  box-shadow:0 0 5px rgba(255, 0, 0, .8);
-						  background-color: pink;
-						}
-
-						:required {
-						  border-color: #88a;
-						  -webkit-box-shadow: 0 0 5px rgba(0, 0, 255, .5);
-						  -moz-box-shadow: 0 0 5px rgba(0, 0, 255, .5);
-						  -o-box-shadow: 0 0 5px rgba(0, 0, 255, .5);
-						  -ms-box-shadow: 0 0 5px rgba(0, 0, 255, .5);
-						  box-shadow: 0 0 5px rgba(0, 0, 255, .5);
-						}
-
-						form {
-						  font-size: 20px;
-						  width:600px;
-						  margin: 20px auto;
-						}
-
-						input {
-						  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-						  border:1px solid #ccc;
-						  font-size:18px;
-						  width:300px;
-						  min-height:30px;
-						  display:block;
-						  margin-bottom:15px;
-						  margin-top:5px;
-						  outline: none;
-
-						  -webkit-border-radius:5px;
-						  -moz-border-radius:5px;
-						  -o-border-radius:5px;
-						  -ms-border-radius:5px;
-						  border-radius:5px;
-						}
-						
-					input[type=submit] {
-						  background:none;
-						  padding:3px;
-						  margin-top: 10px;
-						}					
-					</style>
-					<form oninput="total.value = (nights.valueAsNumber * 99) + ((guests.valueAsNumber - 1) * 10)">
-
-					  <label>Full name:</label>
-					  <input type="text" id="full_name" name="full_name" placeholder="Petr Novak" required>
-
-					  <label>Email address:</label>
-					  <input type="email" id="email_addr" name="email_addr" required>
-
-					  <label>Repeat email address:</label>
-					  <input type="email" id="email_addr_repeat" name="email_addr_repeat" required 
-					   oninput="check(this)">
-
-					  <label>Number of nights (rooms are $99.00 per night):</label>
-					  <input type="number" id="nights" name="nights" value="1" min="1" max="30" required>
-
-					  <label>Number of guests (each additional guest adds $10.00 per night):</label>
-					  <input type="number" id="guests" name="guests" value="1" min="1" max="4" required>
-
-					  <label>Estimated total:</label>
-					  $<output id="total" name="total">99</output>.00
-					  <input type="submit" value="Request Reservation" /> 
-					</form>
-
-					<script>
-					function check(input) {
-					  if (input.value != document.getElementById('email_addr').value) {
-					    input.setCustomValidity('The two email addresses must match.');
-					  } else {
-					    // input is valid -- reset the error message
-					    input.setCustomValidity('');
-					  }
-					}
-					</script>					
-				</ul>	
-			</div>	
-			
-			<div class="slide outline"></div>		
-			
-			<section>
-				<header>hREST and HTML Forms</header>
-				
-				<div class="slide">
-					<hgroup>
-						<h1>Annotation of a Web Form</h1>
-					</hgroup>	
-					<ul class="x-small">
-						<li>Motivation</li>
-						<ul>
-							<li>You want to provide a "test page" for your service</li>
-							<li>You have a HTML form that can also be used as a service programmatically</li>
-						</ul>	
-						<li>Example</li>
-						<pre class="brush: xml; class-name: 'tight'; highlight: [1,2,4,7,10,14]">
-							&lt;form class="operation" action="http://somedomain/hotel-reservation" 
-								method="POST">
-							  &lt;label>Full name:&lt;/label>
-							  &lt;input class="input" type="text" id="full_name" 
-								name="full_name" placeholder="Petr Novak" required>
-							  &lt;label>Email address:&lt;/label>
-							  &lt;input class="input" type="email" id="email_addr" 
-								name="email_addr" required>
-							  &lt;label>Number of nights (rooms are $99.00 per night):&lt;/label>
-							  &lt;input class="input" type="number" id="nights" 
-								name="nights" value="1" min="1" max="30" required>
-							  &lt;label>Number of guests (each additional 
-								guest adds $10.00 per night):&lt;/label>
-							  &lt;input class="input" type="number" id="guests" 
-								name="guests" value="1" min="1" max="4" required>
-							  &lt;input type="submit" 
-								value="Request Reservation" /> 
-							&lt;/form></pre>
-					</ul>	
-				</div>	
-				
-				
-			</section>	
-			
-			
-			
-				
-				
-			
-		</section>	
-		
-		
-	</body>
-</html>		
+        
+    </body>
+</html>

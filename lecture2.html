@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <!--
 	Web 2.0, CTU course slides
-	(cc) 2010-2012 Tomas Vitvar, tomas@vitvar.com
+	(cc) 2010-2013 Tomas Vitvar, tomas@vitvar.com
 -->
 <html>   
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
         <meta name="course"   content="Web 2.0"/>
 		<meta name="lecture"  content="Lecture 2"/>
-   		<meta name="keywords" content="programmable web, readwrite web, social web, web 2.0 concepts"/>
+   		<meta name="keywords" content="motivation, scope, requirements, labs, resources"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
         <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
         <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
 
         <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>Concepts, Statistics and Technologies</title>
+        <title>Introduction to JavaScript</title>
 	</head>
 	<body> 
     
@@ -49,534 +49,347 @@
 				<a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
 				<div class="oppa"></div>
 			</div>
-		</div>	
-		
-		<div class="slide outline"></div>
+		</div>
 
-		<section>
-			<header>Web 1.0 Timeline</header>
+		<div class="slide">
+			<hgroup>
+				<h1>Web 2.0 Application Architecture</h1>
+			</hgroup>
+			<div id="1MXZwvAJA_NKdUnVm-1DNBtgFdCsoYSNIjkfaP2Q4TlY" class="h-drawing" 
+				style="height: 470px; margin-top: 20px"></div>
+		</div>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Web Basics</h1>
-				</hgroup>
-				<ul class="x-spacing">
-					<li>Tim Berners Lee's vision:</li>
-					<ul>
-						<li><b>Universal linking:</b> making a connection with any content/resource on the Web</li>
-						<li><b>Separation of concerns:</b> layers divided by a standard interface, innovation on any layer 
-						may happen independently</li>
-						<li><b>Web contract: </b> Web content to be independent from software that consumes it; 
-						  standards-based, royalty-free technology accessible and usable by anyone, for free</li>
-					</ul>
-					<li>Core technologies (global hypertext system)</li>
-					<ul>
-						<li>HTTP &ndash; protocol for client-server communication</li>
-						<li>URI &ndash; schema to identify Web's resources</li>
-						<li>HTML &ndash; language to format content on the Web</li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Timeline</h1>
-				</hgroup>
-				<ul class="small">
-					<li><b>1980:</b> the very beginning &ndash; Tim Berners Lee</li>
-					<ul>
-						<li>ENQUIRY, a database of people and a hypertext predecesor</li>
-						<li>TBL sees problems in information presentation</li>
-						<ul>
-							<li>how to share data among physicists with no common tools and presentation software</li>
-						</ul>
-					</ul>
-					<li><b>1990:</b> all tools necessary for a working Web</li>
-					<ul>
-						<li>Hypertext Transfer Protocol (HTTP) 0.9</li>
-						<li>Hypertext Markup Language (HTML)</li>
-						<li>The first Web browser</li>
-						<li>The first Web server (called CERN httpd)</li>
-						<li>The first Web pages that describe the project itself</li>
-						<li>The first Web application: CERN telephone directory</li>
-					</ul>
-					<li><b>August 6, 1991:</b> Web is a publicly available service</li>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Timeline</h1>
-				</hgroup>
-
-				<style>
-					@-webkit-keyframes pulse {
-					 from {
-					   opacity: 0.0;
-					 }
-					 to {
-					   opacity: 1.0;
-					 }
-					}
-
-					span.blink {
-					  -webkit-animation-name: pulse;
-					  -webkit-animation-duration: 1s;
-					  -webkit-animation-iteration-count: infinite;
-					  -webkit-animation-timing-function: ease-in-out;
-					  -webkit-animation-direction: alternate;
-					  color: red;
-					}				
-				</style>
-
+		<div class="slide">
+			<hgroup>
+				<h1>JavaScript</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Lightweight, interpreted, object-oriented language</li>
+				<li>Standard</li>
 				<ul>
-					<li><b>1995&ndash;1999:</b> Browser wars and dot-com buble</li>
-					<ul class="x-small">
-						<li>Competition of browsers, custom tags, flavors of HTML</li>
-						<li>The "blink" and "marquee" era
-						<div style="zoom: 1.6">
-						<pre class="brush: xml; gutter: 'false'">
-						&lt;marquee behavior="scroll" direction="left"&gt;
-						   marquee is a non-standard element, &lt;blink&gt;do not use it!&lt;/blink&gt;
-						&lt;/marquee&gt;</pre></div></li>
-						<div style="width: 600px; border: dashed 1px silver; margin-bottom: 20px; 
-							padding: 10px; border-radius: 10px; font-size: 18px; font-family: Arial; color: gray">
-						  <marquee behavior="scroll" direction="left">&lt;marquee&gt; is a non-standard element, 
-						    <span class="blink">do not use it!</span></marquee>
-						</div>
-
-						<li>Difficult to maintain interoperability across browsers</li>
-						<li>Web sites often sticked to IE only</li>
-						<li>dot-com companies popping up</li>
-						<ul>
-							<li>stock prices go up with "e-" prefix</li>
-							<li>increasing stock prices, confidence in profit</li>
-							<li>available venture capital</li>
-						</ul> 
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Timeline</h1>
-				</hgroup>
+					<li>All major browsers support ECMAScript 5.1</li>
+				</ul>	
+				<li>Major characteristics</li>
 				<ul>
-					<li><b>1997:</b> HTML 3.2</li>
-					<ul class="small">
-						<li>documenting existing authoring practices at that time</li>
-						<li>followed by HTML 4 as a baseline markup language for the Web</li>
-					</ul>
-					<li><b>1997&ndash;1999:</b> Cascading Style Sheets</li>
+					<li>First-class functions</li>
 					<ul>
-						<li>Separation of style rules from Web page content</li>
-						<li>Reduction of new HTML tags for a new visual effect</li>
-						<ul>
-							<li>presentational structures created with<br/>
-							CSS + <code>&lt;span&gt;</code> and <code>&lt;div&gt;</code> tags</li>
-						</ul>
-						<li style="margin-top: 10px">Behavior of constructs in Web pages can be customized via<wbr/>
-						JavaScript and HTML Document Object Model (DOM)</li>
-						<li style="margin-top: 10px">Browser wars comes to the end with HTML 4</li>
-						<li>New highly interactive Web</li>
-
-						<!--<li style="margin-top: 10px">Bad things:<br/>
-						&rarr; behavior in pages outside of HTML 4 based on IE</br>
-						&rarr; a reverse engineering from Netscape browser<br/>
-						&rarr; move away from TBL's Web contract</li>-->
+						<li>functions as first-class citizens</li>
+						<li>language supports: passing functions as arguments to other functions, returning functions 
+							as values from other functions, assigning functions to variables or storing them in data structures.</li>
 					</ul>
+					<li>Anonymous functions</li>
+					<ul>
+						<li>Functions not bound to a varaible</li>
+					</ul>
+					<li>Closures</li>
+			</ul>	
+		</div>
+
+        <div class="slide outline"></div>
+
+        <section>
+            <header>JavaScript Basics</header>        
+
+    		<div class="slide"> 
+				<hgroup> 
+					<h1>Quick JavaScript Intro</h1> 
+				</hgroup>
+				<ul class="xx-small">
+                    <li>Objects and Arrays</li>
+    				<pre class="brush: js; class-name: 'tight'">
+                        // objects - key/value pairs
+                        var obj = { name: "Tomas", main-city : "Innsbruck", value : 3 };
+                        obj.name = "Peter"; // assign the name property another value
+                        obj["main-city"] = "Prague"; // another way to access object's values; it's not an array!
+                        
+                        // arrays
+                        var a = ["Tomas", "Peter", "Alice"];
+                        for (var i = 0; i < a.length; i++)
+                            // do something with a[i]
+                            
+                        // combinations of arrays and objects
+                        var obj_a = [ 
+                            { name: "Tomas", city: "Innsbruck" }, 
+                            { name : "Peter", city : "Prague" }, 
+                            { name : "Alice", cities : ["Prague", "Brno"] } ];
+                            
+                        for (var i = 0; i < obj_a.length; i++)
+                            // do something with obj_a[i].name, ...
+                    </pre>                                                            
+                    <li>Functions</li>
+    				<pre class="brush: js; class-name: 'tight'">
+                        // assign a function to a variable
+                        var minus = function(a, b) {
+                            return a - b;
+                        }
+                        
+                        // call the function; 
+                        // now you can pass 'minus' as a parameter to another function
+                        var r2 = minus(6, 4);                        
+                    </pre>                    
+                    
 				</ul>
 			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Timeline</h1>
+            
+        	<div class="slide"> 
+				<hgroup> 
+					<h1>Quick JavaScript Intro (Cont.)</h1> 
 				</hgroup>
+				<ul class="xx-small">
+                    <li>Function Callbacks</li>
+                    <ul>    
+                        <li>You can use them to handle asynchronous events occurrences</li>                        
+                    </ul>
+    				<pre class="brush: js; class-name: 'tight'">
+                        // function returns the result through a callback, not directly; 
+                        // this is not a non-blocking I/O, just demonstration of the callback
+                        function add(a, b, callback) {
+                            callback(a + b);
+                        }
+                        
+                        // assign the callback to a variable
+                        var print = function(result) {
+                            console.log(result);
+                        };
+                        
+                        // call the function with callback as a parameter
+                        add(7, 8, print);
+                    </pre>  
+                    <li>Functions as values in object</li>
+        			<pre class="brush: js; class-name: 'tight'">
+                        var obj = {
+                            data : [2, 3, "Tomas", "Alice", 4 ],
+                            
+                            getIndexdOf : function(val) {
+                                for (var i = 0; i < this.data.length; i++)
+                                    if (data[i] == val)
+                                        return i;
+                                return -1;
+                            }                            
+                        }
+                        
+                        obj.getIndexOf(3); // will return 2
+                    </pre>  
+				</ul>
+			</div>
+		</section>
+
+
+        <div class="slide outline"></div>
+
+        <section>
+            <header>Server-side JavaScript</header>        
+
+	        <div class="slide">
+	            <hgroup>
+	                <h1>Recall: Application Server</h1>
+	            </hgroup>  
+	            <ul class="small">
+	                <li>Environment that runs an application logic</li>
+	                <ul>
+	                    <li>Client communicates with AS via an application protocol</li>
+	                    <li>Client &ndash; Browser, application protocol &ndash; HTTP</li>
+	                </ul>
+	                <li>Terminology</li>
+	                <ul>
+	                    <li>Application Server &times; Web Server &times; HTTP Server</li>
+	                    <ul>
+	                        <li>AS is a modular environment; provides technology to realize enterprise systems</li>
+	                        <li>AS contains a Web server/HTTP server</li>
+	                    </ul>
+	                    <li>We will deal with Web server only</li>
+	                </ul>
+	                <li>Two major models to realize communication</li>
+	                <ul>
+	                    <li>Blocking I/O (also called synchronous I/O)</li>
+	                    <li>Non-blocking I/O (also called asynchronous I/O)</li>
+	                </ul>
+	                <li>A technology we will look at</li>
+	                <ul>
+	                    <li>Node.js &ndash; runs server-side Javascript</li>
+	                </ul>
+	            </ul>                
+	        </div>
+
+            <div class="slide"> 
+				<hgroup> 
+					<h1>Blocking I/O Model</h1> 
+				</hgroup> 
 				<ul class="small">
-					<li><b>2000-2002:</b> move from Web content to Web apps</li>
-					<ul class="x-small">
-						<li>HTML as a simple markup language evolved to:</li>
-						<ul>
-							<li><b>HTML 4</b> &ndash; tags and attrs documents structures</li>
-							<li><b>CSS</b> &ndash; style rules for document presentation</li> 
-							<li><b>DOM</b> &ndash; API to manipulate HTML in <b>JavaScript</b></li>
-						</ul>
-						<li style="margin-top: 10px">XMLHttpRequest (XHR)</li>
-						<ul>
-							<li>Asynchronous JavaScript and XML (AJAX)</li>
-						</ul>
-						<li style="margin-top: 10px">November 2000: eBay launches its API</li>
-						<ul>
-							<li>beginning of Web applications for third-party app integration</li>
-						</ul>
-					</ul>
-					<li><b>2002:</b> beginning of Web 2.0 era</li>
-					<ul class="x-small">
-						<li>After dot-com bubble burst (Fall 2001)</li>
-						<li>Web 2.0 coined by Web 2.0 conference (Tim O'Reilly)</li>
-						<ul>
-							<li>dot-com bubble burst was a turning point</li>
-						</ul>
-					</ul>
+					<li>The server creates a thread for every connection</li>
+                    <ul>                    
+                        <li>For example, 1K connections = 1K threads, big overhead</li>
+                    </ul>
+                </ul>
+    			<div id="1QP7gZSS1WS3YquzLekSgdZfcmi4BYArm-K9tuWrULQs" class="h-drawing" style="height: 220px"></div>
+                <ul class="small">
+                    <li>Characteristics</li>
+                    <ul>
+    					<li>the thread is reserved for the connection</li>
+					<li>When processing of the request requires other interactions with DB/FS or network 
+						communication is slow</li>
+                    <ul>
+                        <li>scales very bad as the thread's execution is "blocked"</li>
+                    </ul>
 				</ul>
 			</div>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>Web Separation of Concerns</h1>
+
+            <div class="slide"> 
+    			<hgroup> 
+					<h1>Non-Blocking I/O Model</h1> 
+				</hgroup> 
+				<ul class="small">
+					<li>Connections maintained by the OS, not the Web app</li>
+                    <ul>                    
+                        <li>The Web app registers events, OS triggers events when occur</li>
+                    </ul>
+                </ul>
+    			<div id="1kxkFc3Chl4qFXxH_4f2seuNbpBdENMyZWMRUmxd1p28" class="h-drawing" style="height: 220px"></div>
+                <ul class="small">
+					<li>Characteristics</li>
+                    <ul>
+                        <li>Event examples: new connection, read, write, closed</li>
+					    <li>The app may create working threads, but controls the number!</li>
+                        <ul>
+					        <li>much less number of working threads as opposed to blocking I/O</li>
+                        </ul>
+                    </ul>
+				</ul>
+			</div>
+
+			<div class="slide"> 
+				<hgroup> 
+					<h1>Node.js</h1> 
 				</hgroup>
-				<div class="h-drawing" style="height: 300px; margin-top: 20px" 
-					id="1feS8_HA3xcD_4ur1VOnjti-PLHRI7JH4q6UWT11-_m4"></div>
 				<ul class="x-small">
-					<li>Evolution rather than design</li>
+					<li><span id="nodejs" class="h-ref">Node.js</span></li>
 					<ul>
-						<li>Information Sharing</li>
-						<ul>
-							<li>easy to expose/access information, standard models, semantics</li>
-						</ul>
-						<li>Web as a platform</li>
-						<ul>
-							<li>reusable services, mashups, scalability and performance</li>
-						</ul>
-					</ul>
+					    <li>Emerging Web server technology, very efficient and fast!</li>
+                        <li>Event-driven I/O framework, based on JavaScript V8 engine</li>
+                        <li>Only one worker thread</li>
+    					<li>Open sourced, <span id="nodejs-github" class="h-ref">@GitHub</span>, many <span id="nodejs-libs" class="h-ref">libraries</span></li>
+                        <li>Future platform for Web 2.0 apps</li>
+                    </ul>
+					<li>Every I/O as an event</li>
+                    <ul>
+                        <li>reading and writing from/to files</li>
+                        <li>reading and writing from/to sockets</li>
+						<pre class="brush: js; class-name: ''">
+    						// pseudo code; ask for the last edited time of a file
+    						stat( 'somefile', function( result ) {
+    						  // use the result here
+    						} );
+                            </pre>
+                    </ul>
 				</ul>
 			</div>
-		</section>
 
-		<div class="slide outline"></div>
-		
-		<section>
-			<header>Web 2.0 Concepts</header>
-
-			<div class="slide">
+            <div class="slide">
 				<hgroup>
-					<h1>What is Web 2.0</h1>
+					<h1>HTTP Server in Node.js</h1>
 				</hgroup>
-				<p style="margin-top: 20px; padding: 0px 55px 0px 55px; font-size: 22px; font-style: italic; color: #444">
-				  Web 2.0 is the same as Web 1.0, but there was a broken Web 1.5 in between. 
-				  </br><span style="margin-left: 550px">&mdash;Tim O'Reilly</span></p>
-				<center>
-					<table class="prettytable" style="margin-top: 30px; margin-bottom: 0px; padding-bottom: 0px; width: 600px">
-						<caption style="margin: 0px">Examples of Web 1.0 vs. Web 2.0 concepts and services<br/> 
-						  (based on <span id="oreilly-web20" class="reference"></span>)</caption>
-						<thead>
-							<tr><th>Web 1.0</th><th style="width: 80px"></th><th style="width: 220px">Web 2.0</th></tr>
-						</thead>
-						<tbody>
-							<tr><td>Britanica online</td><td>&rarr;</td><td>Wikipedia</td></tr>
-							<tr><td>personal websites</td><td>&rarr;</td><td>blogging</td></tr>
-							<tr><td>screen scraping</td><td>&rarr;</td><td>web services</td></tr>
-							<tr><td>content management systems</td><td>&rarr;</td><td>wikis</td></tr>
-							<tr><td>directories (taxonomy)</td><td>&rarr;</td><td>tagging (folksonomy)</td></tr>
-							<tr><td>domain name spaculation</td><td>&rarr;</td><td>search engine optimization</td></tr>
-							<tr><td>mailing list</td><td>&rarr;</td><td>Facebook/Twitter</td></tr>
-							<!--<tr><td>phones</td><td>&rarr;</td><td>Skype</td></tr>-->
-							<tr><td>desktop software</td><td>&rarr;</td><td>software as a service</td></tr>
-							<tr><td>initial investments</td><td>&rarr;</td><td>pay per use</td></tr>
-						</tbody>
-					</table>
-				</center>
+                <ul class="x-small">
+                    <li>HTTP Server implementation</li>
+                    <ul>
+                        <li>server running at <code>138.232.189.127</code>, port <code>8080</code>.</li>
+                        <pre class="brush: js; class-name: ''">
+                            // http library
+                            var http = require("http");
+                            
+                            http.createServer(function(req, res) {
+                                // check the value of host header
+                                if (req.headers.host == "company.cz") {
+                                    res.writeHead(201, "Content-Type: text/plain");
+                                    res.end("This is the response...");
+                                } else ;
+                                    // handle enterprise.com app logic...
+                            }).listen('0.0.0.0', 8080);
+                        </pre>  
+                        <li>Test it using Telnet</li>
+                        <pre class="brush: bash; class-name: ''">
+                            telnet 138.232.189.127 8080
+                            # ...lines omitted due to brevity
+                            GET /orders HTTP/1.1
+                            Host: company.cz
+                            
+                            HTTP/1.1 201 OK
+                            Content-Type: plain/text
+                            
+                            This is the response...
+                        </pre>  
+                    </ul>
+                </ul>
 			</div>
 
-			<div class="slide outline"></div>
-				
-			<section>
-				<header>Read-write Web</header>
+            <div class="slide"> 
+                <hgroup> 
+                    <h1>Google Apps Script</h1> 
+                </hgroup>
+                <ul class="xx-small">
+                    <li><span id="gas" class="h-ref">Google Apps Script</span></li>
+                    <ul>
+                        <li>JavaScript cloud scripting language</li>
+                        <li>easy ways to automate tasks across Google products and third party services</li>                        
+                    </ul>
+                    <li>You can</li>
+                    <ul>
+                        <li>Automate repetitive processes and workflows</li>                        
+                        <li>Link Google products with third party services</li>
+                        <li>Create custom spreadsheet functions</li>
+                        <li>Build rich graphical user interfaces and menus</li>
+                    </ul>
 
-				<div class="slide">
-					<hgroup>
-						<h1>Read-write Web</h1>
-					</hgroup>
-					<ul class="spacing">
-						<li>Initial idea of TBL</li>
-						<li>Consumers become producers: <b>prosumers</b></li>
-						<ul>
-							<li>participation, contributions by users</li>
-							<li>users add value, and they are often the value</li>
-							<ul>
-								<li>Twitter with 150M users has a value of ~$10B</li>
-							</ul>
-						</ul>
+                    <pre class="brush: js; class-name: ''">
+                            // create spreadsheet menu
+                            function onOpen() {
+                              var ss = SpreadsheetApp.getActiveSpreadsheet();
+                              var menuEntries = [ {name: "Say Hi", functionName: "sayHi"},
+                                                  {name: "Say Hello", functionName: "sayHello"} ];
+                              ss.addMenu("Tutorial", menuEntries);
+                            }
 
-						<li>Best example: <b>Wikipedia</b></li>
-						<ul>
-							<li>and many others: Flickr, del.icio.us, Digg, etc.</li>
-							<li>but also personal blogs</li>
-							<li>as well as Amazon (satisfaction, ranks of books)</li>							
-						</ul>
+                            function sayHi() {
+                              Browser.msgBox("Hi");
+                            }
 
-						<li>Users/their knowledge &ndash; basis for Web intelligence</li>
-						<ul>
-							<li>Collective intelligence</li>
-							<ul>
-								<li>mining and utilization of contributed data</li>
-							</ul>
-						</ul>
-					</ul>
-				</div>
+                            function sayHello() {
+                              Browser.msgBox("Hello");
+                            }
+                        </pre>  
+                </ul>
+            </div>
 
-				<div class="slide">
-					<hgroup>
-						<h1>Linked Data</h1>
-					</hgroup>
-					<img src="http://linkeddata.org/static/images/lod-datasets_2009-07-14_cropped.png" 
-						style="zoom: 1.2; margin-top: 2px" alt="Linked Data"></img>
-				</div>				
-
-				<div class="slide">
-					<hgroup>
-						<h1>Read-write Web Technologies</h1>
-					</hgroup>
-					<ul class="spacing-20">
-						<li>Wiki</li>
-						<ul>
-							<li>Easy, versioned content management</li>
-							<li>simplified markup for non-IT people</li>
-						</ul>
-						<li>Tagging, folksonomies</li>
-						<ul>
-							<li>Easy creation of metadata describing content</li>
-						</ul>
-						<li>Syndication, Atom/RSS, AtomPub, trackback</li>
-						<ul>
-							<li>enabling streams of thought, dialogues</li>
-						</ul>
-						<li>New License Models</li>
-						<ul>
-							<li style="margin-bottom: 10px">Creative Commons</li>
-							<span><img src="http://upload.wikimedia.org/wikipedia/commons/3/3c/Cc-by_new.svg"></span>&nbsp;
-							<span><img src="http://upload.wikimedia.org/wikipedia/commons/d/df/Cc-sa_white.svg"></span>&nbsp;
-							<span><img src="http://upload.wikimedia.org/wikipedia/commons/d/db/Cc-nc.svg"></span>&nbsp;
-							<span><img src="http://upload.wikimedia.org/wikipedia/commons/c/c7/Cc-nd.svg"></span>&nbsp;
-						</ul>
-
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>How Many Producers</h1>
-					</hgroup>
-					<ul class="spacing-20">
-						<li>Wikipedia</li>
-						<ul>
-							<li style="margin-bottom: 0px">~1% of Wikipedia users were responsible 
-								for 50% of Wikipedia edits (2003/2004)</li>
-						</ul>
-						<figure>
-							<img src=
-								"img/l2/2007-05-10k-users-edits.png" 
-								style="height: 340px; margin-top: 0px; margin-bottom: -20px" alt="users with 10k+ edits"></img>
-							<figcaption>Participation of users with 10k+ edits, source 
-							<a href="http://asc-parc.blogspot.com/2007/05/long-tail-and-power-law-graphs-of-user.html">
-								Long Tail of User Participation in Wikipedia, Augmented Social Cognition Research Blog from PARC.
-							</a></figcaption>
-						</figure>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Demography of Wikipedia Editors</h1>
-					</hgroup>
-					<figure style="margin-left: 80px">
-						<img src="img/l2/WMFstratplanSurvey1.png" style="height: 450px; 
-					  	margin-bottom: 0px" alt="users with 10k+ edits"></img>
-						<figcaption>Demography of Wikipedia Editors, source: 
-							<a href="http://strategy.wikimedia.org/wiki/Wikimedia_users#Demographics">
-								Wikimedia Strategic Planning</a>
-							</figcaption>
-					</figure>
-				</div>
-
-			</section>
-
-			<div class="slide outline"></div>
+            <div class="slide"> 
+                <hgroup> 
+                    <h1>Rhino</h1> 
+                </hgroup>
+                <ul class="x-small">
+                    <li><span id="rhino" class="h-ref">Rhino</span></li>
+                    <ul>
+                        <li>open-source implementation of JavaScript written entirely in Java</li>
+                        <li>managed by the Mozilla Foundation</li>
+                        <ul>
+                            <li>also provides another implementation of JavaScript engine written in C named SpiderMonkey</li>
+                        </ul>
+                        <li>typically embedded into Java applications to provide scripting to end users</li>
+                        <li>core language only and doesn't contain objects or methods for manipulating HTML documents</li>
+                        <li>enabling development of webapps with javascript in containers like Jetty, Tomcat, and of course Google AppEngine</li>
+                    </ul>               
+                    <pre class="brush: bash; class-name: ''">
+                            $ cat echo.js
+                            for (i in arguments) {
+                              print(arguments[i])
+                            }
+                            $ java org.mozilla.javascript.tools.shell.Main echo.js foo bar
+                            foo
+                            bar
+                            $
+                        </pre>     
+                </ul>
+            </div>
 			
-			<section>
-				<header>Programmable Web</header>
+        </section>
 
-				<div class="slide">
-					<hgroup>
-						<h1>Programmable Web</h1>
-					</hgroup>
-					<ul class="spacing-10">
-						<li>Web as a platform</li>
-						<li>APIs replace screen scraping</li>
-						<ul>
-							<li>Access to information and <b>functionality</b></li>
-							<li>RESTful web services, HTTP as a basis</li>
-						</ul>
-						<li>Data in structured and standardized form</li>
-						<ul>
-							<li>XML and JSON for data exchange</li>
-							<li>RSS/Atom Feeds</li>
-							<li>Microformats</li>
-							<li>Domain-specific formats, Linked Data</li>
-						</ul>
-						<li>Mashups, Aggregation</li>
-						<ul>
-							<li>Yahoo! pipes, Google AppsScript</li>
-							<li>AJAX (XMLHttpRequest), JSONP</li>
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>How Many Web APIs?</h1>
-					</hgroup>
-					<ul class="small">
-						<li>Web APIs Growth</li>
-						<ul>
-							<li>8 years to get to 1,000 APIs in 2008</li>
-							<li>18 months to get to 2,500 APIs in 2010</li>
-							<li>18 months to get to <b>5,000 APIs in 2012</b>.</li>
-						</ul>
-						<figure>
-							<img src="http://blog.programmableweb.com/wp-content/api-growth-2012-600x339.png" 
-								style="height: 300px; margin-top: 0px; margin-left: 20px" 
-					  			alt="API Growth Over Time"></img>
-								<figcaption>API Growth over Time, source: <a 
-							href="http://blog.programmableweb.com/2012/02/06/5000-apis-facebook-google-and-twitter-are-changing-the-web/">
-							ProgrammableWeb.com</a></figcaption>
-						</figure>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>API Billionaires Club</h1>
-					</hgroup>
-					<ul class="small">
-						<li>Web API Traffic</li>
-						<ul>
-							<li>New highly dependable back-end technologies to serve increasing traffic</li> 
-						</ul>
-						<figure>
-							<img src="img/l2/api-billionaires-club.png" style="height: 340px; margin-top: 0px; margin-left: 20px" 
-					  			alt="API Billionaires Club"></img>
-							<figcaption>API Billionaires Club, source: <a 
-								href="http://blog.programmableweb.com/2011/05/25/who-belongs-to-the-api-billionaires-club/">
-								ProgrammableWeb.com</a></figcaption>
-						</figure>
-					</ul>	
-				</div>
-
-			</section>
-
-			<div class="slide outline"></div>
-			
-			<section>
-				<header>Intelligent Web</header>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Intelligent Web</h1>
-					</hgroup>
-					<ul>
-						<li>Semantic Web</li>
-						<ul>
-							<li>Separation of semantics from syntax</li>
-							<li>Variety of levels for semantic expressivity</li>
-							<li>Reasoning support</li>
-						</ul>
-
-					<!--	<li>Long Tail</li>
-						<ul>
-							<li>Reach out for less popular products</li>
-							<li>Selling less of more</li>
-						</ul> -->
-
-						<li>Collective Intelligence</li>
-						<ul>
-							<li>Utilization of human-knowledge for benefits of users</li>
-							<li>Ranking of products/services, collaborative filtering</li>
-						</ul>
-
-						<li>Human Intelligence</li>
-						<ul>
-							<li>Utilization of crowds to do computation or perform tasks</li>
-							<li>Amazon Mechanical Turk, reCAPTCHA</li>
-						</ul>
-
-					</ul>
-				</div>
-			</section>
-
-			<div class="slide outline"></div>
-			
-			<section>
-				<header>Social Web</header>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Social Web</h1>
-					</hgroup>
-					<ul>
-						<li>Web Science</li>
-						<ul>
-							<li>need to study the Web in a wider context</li>
-							<li>inter-disciplinary themes involving sociology, economics, and computer science 
-							fields</li>
-							<li>Social web in the core of Web science</li>
-						</ul>
-						<li>Data formats</li>
-						<ul>
-							<li>OpenGraph protocol, FOAF, SIOC</li>
-						</ul>
-						<li>Social Network Analysis</li>
-						<ul>
-							<li>Structure</li>
-							<li>Behavior</li>
-							<li>Visualization</li>
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Social Web Stats: Time</h1>
-					</hgroup>
-					<ul>
-						<li>Time spent by people</li>
-						<ul>
-							<li>time spent by people increases by 80% every year</li>
-							<li>700B minutes per month on Facebook</li>
-							<figure>								
-								<img src="img/l2/social-media-time1.png" style="margin-left: 60px; height: 380px" 
-								alt="Time Spent by People on Social Media"></img>
-								<figcaption>Time Spent by People on Social Media</figcaption>
-							</figure>
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Social Web Stats: Data</h1>
-					</hgroup>
-					<ul>
-						<li>Data and User Base Sizes</li>
-						<ul>
-							<li>300M users on Twitter, 800M on Facebook (as of 2011)</li>
-							<li>Twitter: 300M tweets per day, 50GB of tweets alone</li>
-							<li>75% of all Twitter traffic through API!</li>
-							<li>Twitter serves ~800 tweets per second</li>
-							<figure>
-								<img src="img/l2/twitter-by-numbers.png" 
-									style="margin-left: 60px; height: 260px" alt="Twitter By Numbers"></img>
-								<figcaption>Source: <a href="http://www.slideshare.net/raffikrikorian/twitter-by-the-numbers">
-									Twitter By Numbers</a>, Raffi Krikorian’s talk at UC Berkley, September, 2010.</figcaption>
-							</figure>
-						</ul>
-					</ul>
-				</div>
-
-			</section>
-
-
-		</section>
 		
 	</body>
 </html>	

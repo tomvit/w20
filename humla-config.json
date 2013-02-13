@@ -6,7 +6,7 @@
             "scripts"  : [ { "src" : "humla/lib/ext/latex.js" } ],    
             "styles"   : [ { "src" : "humla/lib/ext/latex.css", "media" : "screen, print" } ],
             "params"   : {
-                "mathtex" : "http://www.vitvar.com:7070/cgi-bin/mt/mathtex.cgi?\\dpi{300}\\gammacorrection{0.5}"
+                "mathtex" : "http://lx.vitvar.com/cgi-bin/mt/mathtex.cgi?\\dpi{300}\\gammacorrection{0.5}"
             },
             "enabled" : true 
         },
