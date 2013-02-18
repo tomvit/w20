@@ -166,106 +166,117 @@
 				<div style="height: 440px; margin-top: 20px" 
 				  id="1kI3tlZl6PHZ_J_uwn_SVyT8_F05yE5Hi0B9pOEI37Z8" class="h-drawing"></div>
 			</div>
+		</section>
 			
-	        <div class="slide outline"></div>		
-			
-			<section>
-				<header>Same Origin Policy</header>
-			
-				<div class="slide" id="sameorigin">
-					<hgroup>
-						<h1>Same Origin Policy</h1>
-					</hgroup>
-					<div style="height: 310px" 
-					  id="1xg_D6b_EBQDYol5Kk7b-UdhbuVsbjBHfaKaNTgH_rkY" class="h-drawing"></div>
-					<ul class="xx-small">
-						<li>JavaScript code can only access resources on the same domain</li>
-						<ul>
-							<li>XHR to GET, POST, PUT, UPDATE, DELETE</li>
-							<li>Browsers apply <b>same origin policy</b></li>
-						</ul>	
-						<li>Solutions</li>
-						<ul>
-							<li>JSON and JSONP (GET only)</li>
-							<li>Cross-origin Resource Sharing Protocol (CORS)</li>
-						</ul>
-					</ul>
-				</div>
-			</section>
-				
-	        <div class="slide outline"></div>						
-				
-			<section>
-				<header>Cross-site scripting attacks (XSS)</header>
+        <div class="slide outline"></div>						
 
-				<div class="slide">
-					<hgroup>
-						<h1>Recall: State management in HTTP</h1>
-					</hgroup>
-                    <ul class="small">
-                        <li>Request-response interaction with cookies</li>
-                        <ul>
-                            <li>Session is a logical channel maintained by the server</li>
-                        </ul>
-                        <div class="h-drawing" style="height: 250px" id="1mVCe8EtqVApZVRV_RHYQKtqDNELKdo84qzCqGvAs7iA"></div>
-                        <li>Stateful Server</li>
-                        <ul>
-                            <li>Server remembers the session information in a server memory</li>
-                            <li>Server memory is a non-persistent storage, when server restarts the memory content is lost!</li>
-                        </ul>
-                    </ul>					
-				</div>
-				
-				<div class="slide">	
-					<hgroup>
-						<h1>XSS Attack Illustration</h1>
-					</hgroup>
-					<div id="1pOK4HZPt7d4j-KSllCa8BUx5Amjlq28L6sQh3Wac8kI" class="h-drawing" style="height: 300px"></div>
-					<ul class="small">
-						<li>Cross-site scripting attacks (XSS)</li>
-						<ol>
-							<li>A breach that allows an attacker to inject code to a page</li>
-							<li>A users executes the code in his/her browser's session</li>
-							<li>The code provides information (cookies) to the attacker</li>
-							<li>The attacker uses the cookies to access the user's data</li>
-						</ol>
+		<section>
+			<header>Scripting Attacks</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Recall: State management in HTTP</h1>
+				</hgroup>
+                <ul class="small">
+                    <li>Request-response interaction with cookies</li>
+                    <ul>
+                        <li>Session is a logical channel maintained by the server</li>
+                    </ul>
+                    <div class="h-drawing" style="height: 250px" id="1mVCe8EtqVApZVRV_RHYQKtqDNELKdo84qzCqGvAs7iA"></div>
+                    <li>Stateful Server</li>
+                    <ul>
+                        <li>Server remembers the session information in a server memory</li>
+                        <li>Server memory is a non-persistent storage, when server restarts the memory content is lost!</li>
+                    </ul>
+                </ul>					
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Cross-site request forgery (CSRF)</h1>
+				</hgroup>
+                <ul>
+                	<li>TODO</li>
+                	<li>TODO Prevention: server generates a cookie, client will pass the cookie to the server by HTTP header</li>
+                </ul>					
+			</div>
+
+			<div class="slide">	
+				<hgroup>
+					<h1>Cross-site scripting attack (XSS)</h1>
+				</hgroup>
+				<div id="1pOK4HZPt7d4j-KSllCa8BUx5Amjlq28L6sQh3Wac8kI" class="h-drawing" style="height: 300px"></div>
+				<ul class="small">
+					<li>Cross-site scripting attacks (XSS)</li>
+					<ol>
+						<li>A security breach that allows an attacker to inject code to a page</li>
+						<li>A users executes the code in his/her browser's session</li>
+						<li>The code provides information (cookies) to the attacker</li>
+						<li>The attacker uses the cookies to access the user's data</li>
+					</ol>
+				</ul>	
+			</div>
+			
+			<div class="slide">
+				<hgroup>
+					<h1>XSS Examples</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Twitter in Sep 2010</li>
+					<ul>
+						<li>Injection of JavaScript code to a page using a tweet</li>
+						<li>You posted following tweet to Twitter</li>
+						<pre class="brush: plain">
+							There is a great event happening at 
+							http://someurl.com/@"onmouseover="alert('test xss')"/</pre>
+						<li>Twitter parses the link and wraps it with <code>&lt;a></code> element</li>
+						<pre class="brush: 'xml'">
+							There is a great event happening at 
+							&lt;a href="http://someurl.com/@"onmouseover="alert('test xss')" 
+								target="_blank">http://someurl.com/@"onmouseover=
+								"alert('test xss')"/&lt;/a></pre>
+						<li>See details at <span id="twitter-xss" class="h-ref"></span></li>
+					</ul>
+					<li>Other example: Google Contacts</li>
+				</ul>
+			</div>	
+
+		</section>
+
+        <div class="slide outline"></div>						
+
+		<section>
+			<header>Same Origin Policy</header>
+		
+			<div class="slide" id="sameorigin">
+				<hgroup>
+					<h1>Same Origin Policy</h1>
+				</hgroup>
+				<div style="height: 310px" 
+				  id="1xg_D6b_EBQDYol5Kk7b-UdhbuVsbjBHfaKaNTgH_rkY" class="h-drawing"></div>
+				<ul class="xx-small">
+					<li>JavaScript code can only access resources on the same domain</li>
+					<ul>
+						<li>XHR to GET, POST, PUT, UPDATE, DELETE</li>
+						<li>Browsers apply <b>same origin policy</b></li>
 					</ul>	
-				</div>
-				
-				<div class="slide">
-					<hgroup>
-						<h1>Examples</h1>
-					</hgroup>
-					<ul class="small">
-						<li>Twitter in Sep 2010</li>
-						<ul>
-							<li>Injection of JavaScript code to a page using a tweet</li>
-							<li>You posted following tweet to Twitter</li>
-							<pre class="brush: plain">
-								There is a great event happening at 
-								http://someurl.com/@"onmouseover="alert('test xss')"/</pre>
-							<li>Twitter parses the link and wraps it with <code>&lt;a></code> element</li>
-							<pre class="brush: 'xml'">
-								There is a great event happening at 
-								&lt;a href="http://someurl.com/@"onmouseover="alert('test xss')" 
-									target="_blank">http://someurl.com/@"onmouseover=
-									"alert('test xss')"/&lt;/a></pre>
-							<li>See details at <span id="twitter-xss" class="h-ref"></span></li>
-						</ul>
-						<li>Other example: Google Contacts</li>
+					<li>Solutions</li>
+					<ul>
+						<li>JSON and JSONP (GET only)</li>
+						<li>Cross-origin Resource Sharing Protocol (CORS)</li>
 					</ul>
-				</div>				
+				</ul>
+			</div>
+				
+			<div class="slide">
+				<hgroup>
+					<h1>Why Same Origin Policy</h2>
+				</hgroup>
+				<div style="height: 350px; margin-top: 30px" 
+				  id="1J14eY2C9O1g8oPI9GhkOn0tRCB5z_NodiBzPX2oEabY" class="h-drawing"></div>
+			</div>
 
-				<div class="slide">
-					<hgroup>
-						<h1>Why Same Origin Policy</h2>
-					</hgroup>
-					<div style="height: 350px; margin-top: 30px" 
-					  id="1J14eY2C9O1g8oPI9GhkOn0tRCB5z_NodiBzPX2oEabY" class="h-drawing"></div>
-				</div>
-			</section>	
-
-		    <div class="slide outline"></div>						
+        	<div class="slide outline"></div>						
 
 			<section>
 				<header>Cross-origin Resource Sharing Protocol (CORS)</header>
@@ -399,6 +410,17 @@
 						}</pre>
 				</ul>
 			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>JSON Vulnerability</h1>
+				</hgroup>
+                <ul>
+                	<li>TODO</li>
+                	<li>TODO: prevention &ndash; server generates an invalid JSON data (e.g. with some prefix), client strips
+                		the prefix before parsing the data as JSON.</li>
+                </ul>					
+			</div>			
 
 			<div class="slide">
 				<hgroup>
