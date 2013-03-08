@@ -238,7 +238,7 @@
                                     &gt;
                                     &gt; &lt;order>...&lt;/order>                                    
 
-                                    &lt; HTTP/1.1 204 Created
+                                    &lt; HTTP/1.1 201 Created
                                     &lt; Location: /orders/4456
                                 </pre>
     							<li>It is <b>not safe</b> an it is <b>not idempotent</b><br/>
@@ -346,8 +346,8 @@
                             <ul>
         						<li><code>500 Internal Server Error</code></li>
         						<ul>
-                                    <li>generic client-side error</li>
-                                    <li>usually not expressive, logs a message for sysadmins</li>
+                                    <li>generic server-side error</li>
+                                    <li>usually not expressive, logs a message for system admins</li>
                                 </ul>
     							<li><code>503 Service Not Available</code></li>
                                 <ul>
@@ -621,8 +621,7 @@
                             <li>Note</li>
                             <ul>
                                 <li>client, service communicate through metadata and representations</li>
-                                <li>There is no need for a stateful server, cf. 
-                                <a href="lecture4.html#/public-process">stateful public process example</a></li>
+                                <li>There is no need for a stateful server</li>
                             </ul>
                         </ul>                
                     </div>   
