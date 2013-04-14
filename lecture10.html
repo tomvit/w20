@@ -54,7 +54,7 @@
         <div class="slide outline"></div>		
 
 		<section>
-			<header>Definition of a Mashup</header>
+			<header>Mashups and XHR</header>
 			
 			<div class="slide">
 				<hgroup>
@@ -94,15 +94,8 @@
 				</hgroup>
 				<img style="height: 450px; margin-top: 20px; margin-left: 60px;" 
 					src="img/l10/web-20-mashup-arch.png"></img>
-			<div>			
+			</div>			
 						
-		</section>
-		
-        <div class="slide outline"></div>		
-		
-		<section>
-			<header>XMLHttpRequest</header>
-
 			<div class="slide">
 				<hgroup>
 					<h1>XMLHttpRequest (XHR)</h1>
@@ -171,82 +164,7 @@
         <div class="slide outline"></div>						
 
 		<section>
-			<header>Scripting Attacks</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Recall: State management in HTTP</h1>
-				</hgroup>
-                <ul class="small">
-                    <li>Request-response interaction with cookies</li>
-                    <ul>
-                        <li>Session is a logical channel maintained by the server</li>
-                    </ul>
-                    <div class="h-drawing" style="height: 250px" id="1mVCe8EtqVApZVRV_RHYQKtqDNELKdo84qzCqGvAs7iA"></div>
-                    <li>Stateful Server</li>
-                    <ul>
-                        <li>Server remembers the session information in a server memory</li>
-                        <li>Server memory is a non-persistent storage, when server restarts the memory content is lost!</li>
-                    </ul>
-                </ul>					
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Cross-site request forgery (CSRF)</h1>
-				</hgroup>
-                <ul>
-                	<li>TODO</li>
-                	<li>TODO Prevention: server generates a cookie, client will pass the cookie to the server by HTTP header</li>
-                </ul>					
-			</div>
-
-			<div class="slide">	
-				<hgroup>
-					<h1>Cross-site scripting attack (XSS)</h1>
-				</hgroup>
-				<div id="1pOK4HZPt7d4j-KSllCa8BUx5Amjlq28L6sQh3Wac8kI" class="h-drawing" style="height: 300px"></div>
-				<ul class="small">
-					<li>Cross-site scripting attacks (XSS)</li>
-					<ol>
-						<li>A security breach that allows an attacker to inject code to a page</li>
-						<li>A users executes the code in his/her browser's session</li>
-						<li>The code provides information (cookies) to the attacker</li>
-						<li>The attacker uses the cookies to access the user's data</li>
-					</ol>
-				</ul>	
-			</div>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>XSS Examples</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Twitter in Sep 2010</li>
-					<ul>
-						<li>Injection of JavaScript code to a page using a tweet</li>
-						<li>You posted following tweet to Twitter</li>
-						<pre class="brush: plain">
-							There is a great event happening at 
-							http://someurl.com/@"onmouseover="alert('test xss')"/</pre>
-						<li>Twitter parses the link and wraps it with <code>&lt;a></code> element</li>
-						<pre class="brush: 'xml'">
-							There is a great event happening at 
-							&lt;a href="http://someurl.com/@"onmouseover="alert('test xss')" 
-								target="_blank">http://someurl.com/@"onmouseover=
-								"alert('test xss')"/&lt;/a></pre>
-						<li>See details at <span id="twitter-xss" class="h-ref"></span></li>
-					</ul>
-					<li>Other example: Google Contacts</li>
-				</ul>
-			</div>	
-
-		</section>
-
-        <div class="slide outline"></div>						
-
-		<section>
-			<header>Same Origin Policy</header>
+			<header>Security Mechanisms</header>
 		
 			<div class="slide" id="sameorigin">
 				<hgroup>
@@ -267,11 +185,14 @@
 					</ul>
 				</ul>
 			</div>
-				
+
 			<div class="slide">
 				<hgroup>
-					<h1>Why Same Origin Policy</h2>
+					<h1>Why Same Origin Policy?</h2>
 				</hgroup>
+				<ul>
+					<li>Without the same origin policy, the following POST would be possible</li>
+				</ul>
 				<div style="height: 350px; margin-top: 30px" 
 				  id="1J14eY2C9O1g8oPI9GhkOn0tRCB5z_NodiBzPX2oEabY" class="h-drawing"></div>
 			</div>
@@ -279,9 +200,137 @@
         	<div class="slide outline"></div>						
 
 			<section>
-				<header>Cross-origin Resource Sharing Protocol (CORS)</header>
+				<header>Scripting Attacks</header>
 
 				<div class="slide">
+					<hgroup>
+						<h1>Overview</h1>
+					</hgroup>
+	                <ul class="small">
+	                	<li>Scripting Attacks</li>
+	                	<ul>
+	                		<li>Intruders make users perform action that has side effects on their resources</li>
+	                		<li>Intruders inject malicious code to Web pages</li>
+	                	</ul>
+	                	<li>Roles in Security Scenarios</li>
+	                	<ul>
+		                    <li>Alice, Bob</li>
+		                    <ul>
+		                        <li>Normal users, usually Alices wants to send a message to Bob or Alice accesses a Bob's site.</li>
+		                    </ul>
+		                    <li>Eve</li>
+		                    <ul>
+		                    	<li>A user with bad intentions, usually a passive attacker.</li> 
+		                    </ul>
+		                    <li>Mallory</li>
+		                    <ul>
+		                    	<li>An active attacker, usually sends a link to a page with malicious code. 
+		                    </ul>	
+		                </ul>
+	                </ul>					
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Recall: State management in HTTP</h1>
+					</hgroup>
+	                <ul class="small">
+	                    <li>Request-response interaction with cookies</li>
+	                    <ul>
+	                        <li>Session is a logical channel maintained by the server</li>
+	                    </ul>
+	                    <div class="h-drawing" style="height: 250px" id="1mVCe8EtqVApZVRV_RHYQKtqDNELKdo84qzCqGvAs7iA"></div>
+	                    <li>Stateful Server</li>
+	                    <ul>
+	                        <li>Server remembers the session information in a server memory</li>
+	                        <li>Server memory is a non-persistent storage, when server restarts the memory content is lost!</li>
+	                    </ul>
+	                </ul>					
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Cross-site Request Forgery (CSRF)</h1>
+					</hgroup>
+	                <ul class="x-small">
+	                	<li>Exploits a trust of a website in a user's browser</li>
+	                	<li>Scenario</li>
+	                	<ol>
+	                		<li>Mallory sends a link to Alice (in an email, in a chat, etc.)</li>
+	                		<ul>
+	                			<li>The link points to a page that has HTML code with hrefs to Alice's private resources</li>
+	                			<li>For example, to perform an action on Alice's account, <br/>
+	                				it is possible to use <code>img</code> like this:</li>
+								<pre class="brush: html">
+								&lt;img src="https://bank.com/account?do=transfer_money&amp;amount=50000"/></pre>
+	                		</ul>
+	                		<li>Alice loads the page in her browser</li>
+	                		<ul>
+	                			<li>Alice is authenticated to the bank's website, the browser sends Alice's authentication cookies 
+	                				with the request.</li>
+	                		</ul>
+	                	</ol>
+	                	<li>Issues and Prevention</li>
+	                	<ul class="xx-small">
+	                		<li>The bank site vilotes REST, i.e. overloading of GET for making actions</li>
+	                		<li>The bank should check HTTP <code>referer</code> header</li>
+	                		<li>It is a "blind" attack, Mallory does not see the result</li>
+	                		<li>To perform POST, current browsers today use <a href="#CORS">CORS protocol</a></li> 
+	                	</ul>
+	                </ul>					
+				</div>
+
+				<div class="slide">	
+					<hgroup>
+						<h1>Cross-site Scripting Attack (XSS)</h1>
+					</hgroup>
+					<ul>
+						<li>Exploits a trust of a user in a website</li>
+					</ul>
+					<div id="1pOK4HZPt7d4j-KSllCa8BUx5Amjlq28L6sQh3Wac8kI" class="h-drawing" style="height: 250px"></div>
+					<ul class="small">
+						<li>Example Scenario</li>
+						<ol>
+							<li>An attacker injects a code to a page</li>
+							<li>A users executes the code in his/her browser's session</li>
+							<li>The code provides information (cookies) to the attacker</li>
+							<li>The attacker uses the cookies to access the user's data</li>
+						</ol>
+					</ul>	
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>XSS Examples</h1>
+					</hgroup>
+					<ul class="small">
+						<li>Twitter in Sep 2010</li>
+						<ul>
+							<li>Injection of JavaScript code to a page using a tweet</li>
+							<li>You posted following tweet to Twitter</li>
+							<pre class="brush: plain">
+								There is a great event happening at 
+								http://someurl.com/@"onmouseover="alert('test xss')"/</pre>
+							<li>Twitter parses the link and wraps it with <code>&lt;a></code> element</li>
+							<pre class="brush: 'xml'">
+								There is a great event happening at 
+								&lt;a href="http://someurl.com/@"onmouseover="alert('test xss')" 
+									target="_blank">http://someurl.com/@"onmouseover=
+									"alert('test xss')"/&lt;/a></pre>
+							<li>See details at <span id="twitter-xss" class="h-ref"></span></li>
+						</ul>
+						<li>Other example: Google Contacts</li>
+					</ul>
+				</div>	
+
+			</section>
+				
+        	<div class="slide outline"></div>						
+
+			<section>
+				<header>Cross-origin Resource Sharing Protocol (CORS)</header>
+
+				<div class="slide" id="CORS">
 					<hgroup>
 						<h1>Overview</h1>
 					</hgroup>
@@ -413,27 +462,16 @@
 
 			<div class="slide">
 				<hgroup>
-					<h1>JSON Vulnerability</h1>
-				</hgroup>
-                <ul>
-                	<li>TODO</li>
-                	<li>TODO: prevention &ndash; server generates an invalid JSON data (e.g. with some prefix), client strips
-                		the prefix before parsing the data as JSON.</li>
-                </ul>					
-			</div>			
-
-			<div class="slide">
-				<hgroup>
 					<h1>JSONP</h1>
 				</hgroup>
-				<ul class="small">
+				<ul class="x-small">
 					<li>Service that supports JSONP</li>
 					<ul>
 						<li>allows to specify a query string parameter for a wrapper function
 						to load the data in JavaScript code</li>
 						<li>otherwise the data cannot be used in JavaScript</li>
 						<ul>
-							<li>they're not loaded into the memory</li>
+							<li>they're loaded into the memory but assigned to nothing</li>
 						</ul>
 					</ul>
 					<li>Example</li>
@@ -488,6 +526,42 @@
 					    }
 					}</pre>
 				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>JSON Vulnerability</h1>
+				</hgroup>
+                <ul class="x-small">
+                	<li>What it is</li>
+                	<ul>
+                		<li>JSON array data accessible via GET (normal access is via XHR)</li>
+                		<li>Attacker may load the data in a <code>script</code>, redefine <code>Array</code> object,
+                			and assign the data to a variable.</li>
+                		<li>Attacker's page with a script that you access:</li>
+                		<ul>
+                			<li>your browser uses your cookies to load the resource</li>
+                		</ul>
+                	</ul>
+                	<pre class="brush: html; highlight: [3,4]; class-name: tight">
+                		&lt;script type="text/javascript">
+                		var yourData;
+                		Array = function() {
+                			yourData = this;
+                		}
+                		&lt;/script>
+
+                		&lt;script src="yourdomain.cz/yoursecretdata.json" type="text/javascript">&lt;/script></pre>
+            		<li>Prevention</li>
+            		<ul class="xx-small">
+            			<li>Using prefix in the data &ndash; the prefix makes the JSON data invalid; the client must
+            				strip the prefix before parsing the data as JSON</li>
+            			<pre class="brush: javascript; class-name: tight">
+            				[ "a": "account", 433, 5543 ]</pre>
+            			<li>Use only POST for sensitive data</li>
+            		</ul>
+                </ul>					
+			</div>			
 
 		</section>
 
