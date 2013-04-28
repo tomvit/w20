@@ -115,6 +115,7 @@
 						<li>using <code>transfer-encoding</code> header in HTTP 1.1</li>
 						<li>using End of File in HTTP 1.0<br/>
 							(server omits <code>content-lenght</code> in the response)</li>
+					</ul>
 				</ul>
 			</div>
 
@@ -230,14 +231,14 @@
 					}, false);
 					
 					source.addEventListener('error', function(e) {
-					  if (e.eventPhase == EventSource.CLOSED) {
+					  if (e.readyState == EventSource.CLOSED) {
 						// Connection was closed
 					  }
 					}, false);</pre>
 					<ul class="small">
 						<li>when the conn. is closed, the browser reconnects every ~3 seconds</li>
 						<ul>
-							<li>can be changed using <code>id</code> attribute in the message data</li>
+							<li>can be changed using <code>retry</code> attribute in the message data</li>
 						</ul>
 					</ul>
 				</ul>
@@ -280,8 +281,8 @@
 				<hgroup>
 					<h1>Server-side implementation</h1>
 				</hgroup>
-				<ul class="small">
-					<li>Servlet</li>
+				<ul class="x-small">
+					<li>Java Servlet</li>
 					<ul>
 						<li>method <code>doGet</code></li>
 					</ul>
@@ -293,6 +294,9 @@
 					    resp.setContentType("text/event-stream");
 					    resp.setHeader("cache-control", "no-cache");
 					
+						// current time in milliseconds
+					    long ms = System.currentTimeMillis(); 
+
 					    // push data to the client for 20 seconds
 					    // client should reconnect when the connection is closed
 					    while (System.currentTimeMillis() - ms < 20000) {
@@ -358,15 +362,16 @@
 				</hgroup>
 				<ul class="x-small">
 					<li>Cross-document messaging</li>
-					<ul>
-						<li>client loads a streaming resource in a hidden <code>iframe</code></li>
-						<ul>
-							<li>server pushes a JavaScript code to the <code>iframe</code></li>
-							<li>browser executes the code as it arrives from the server</li>
-							<li>embedded iframe's code posts a message to the upper document</li>
+					<div id="1DRm9FfN_CyiaYCccFkFOrcygsrwF_cpy7gKg6gEscEU" 
+						style="height: 165px" class="h-drawing"></div>
+					<ul style="margin-top: 10px">
+						<li>The use of Cross Document Messaging for streaming</li>
+						<ul class="no-bullet">
+							<li>1. The client loads a streaming resource in a hidden <code>iframe</code></li>	
+							<li>2. The server pushes a JavaScript code to the <code>iframe</code></li>
+							<li>3. The browser executes the code as it arrives from the server</li>
+							<li>4. The embedded iframe's code posts a message to the upper document</li>
 						</ul>
-						<div id="1DRm9FfN_CyiaYCccFkFOrcygsrwF_cpy7gKg6gEscEU" 
-							style="height: 190px" class="h-drawing"></div>
 					</ul>
 					<li>Channel API</li>
 					<ul>
