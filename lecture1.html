@@ -8,14 +8,14 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
         <meta name="course"   content="Web 2.0"/>
 		<meta name="lecture"  content="Lecture 1"/>
-   		<meta name="keywords" content="motivation, scope, requirements, labs, resources"/>
+   		<meta name="keywords" content="JavaScript"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
         <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
         <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
 
         <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>Motivation and Course Overview</title>
+        <title>Introduction to JavaScript</title>
 	</head>
 	<body> 
     
@@ -50,426 +50,375 @@
 				<div class="oppa"></div>
 			</div>
 		</div>
-		
+
 		<div class="slide">
 			<hgroup>
-				<h1>Hellos</h1>
+				<h1>Web 2.0 Application Architecture</h1>
 			</hgroup>
-			<ul class="small spacing">
-				<li>Tomáš Vitvar</li> 
+			<div id="1MXZwvAJA_NKdUnVm-1DNBtgFdCsoYSNIjkfaP2Q4TlY" class="h-drawing" 
+				style="height: 470px; margin-top: 20px"></div>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>JavaScript</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Lightweight, interpreted, object-oriented language</li>
+				<li>Standard</li>
 				<ul>
-					<li>Technical Architect at Oracle</li>
-                    <ul>
-                        <li>SOA and Oracle Integration Architectures</li>
-                    </ul>
-					<li>Researcher, developer, software architect</li>
-                    <ul>
-					    <li>Have worked in Austria, Ireland, Germany, Czech rep.</li> 
-					    <li>Universities and companies, ProgrammableWeb</li>
-					    <li>member of W3C Advisory Committee</li>
-					    <li>EU research and development projects, evaluator</li>
-                    </ul>
-				</ul>
-				<li>Jaroslav Kuchař</li>
+					<li>All major browsers support ECMAScript 5.1</li>
+				</ul>	
+				<li>Major characteristics</li>
 				<ul>
-					<li>CTU FIT research assistant, Ph.D. at CTU FIT</li>
-					<li>Web services, data mining, analytics, Web technologies</li>
-				</ul>
-				<li>Milan Dojchinovski</li>
-				<ul>
-					<li>Ph.D. at CTU FIT, web services</li>
-				</ul>
-			</ul>
+					<li>First-class functions</li>
+					<ul>
+						<li>functions as first-class citizens</li>
+						<li>language supports: passing functions as arguments to other functions, returning functions 
+							as values from other functions, assigning functions to variables or storing them in data structures.</li>
+					</ul>
+					<li>Anonymous functions</li>
+					<ul>
+						<li>declared without any named identifier to refer to it</li>
+					</ul>
+					<li>Closures</li>
+			</ul>	
 		</div>
 
         <div class="slide outline"></div>
-		
-		<section>
-			<header>Motivation</header>
-			
-    		<div class="slide">
-    			<hgroup>
-    				<h1>Bird's View</h1>
-    			</hgroup>
-    			<ul class="small">
-    				<li>Web 2.0 engineering is...</li> 
-    				<ul>
-    					<li>far beyond PHP and HTML!</li>
-    				</ul>
-    			</ul>
-    			<div class="h-drawing" style="height: 390px" alt="Web Engineering Overview" 
-    				id="1oyGz6GdF-K_hln9g_l3Cp1eNK843S4NKE4tO8HMUYGw"></div>
-    		</div>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Motivation in Brief</h1>
+        <section>
+            <header>JavaScript Basics</header>        
+
+    		<div class="slide"> 
+				<hgroup> 
+					<h1>Objects and Arrays</h1> 
 				</hgroup>
-				<ul>
-					<li>The Web is for users</li>
-					<ul>
-						<li>users not only consume but also produce (prosumers)</li>
-						<li>improved user experience</li>
-					</ul>
-					<li>The Web is a huge database</li>
-					<ul>
-						<li>users generate content (explicit and implicit knowledge)</li>
-						<li>large portion of this database is social data</li>					
-					</ul>
-					<li>The Web is programmable</li>
-					<ul>
-						<li>Applications provide GUI, end-users (non-technical)</li>
-						<li>Applications provide API, users are programmers</li>
-						<li>Any company with the Web presence has an API</li>
-						<ul>
-								<li>Google, Amazon, LinkedIn, Facebook, ...</li>
-								<li>Wikipedia - Linked Data</li>  
-						</ul>
-					</ul>
+				<ul class="xx-small">
+                    <li>Objects and Arrays</li>
+    				<pre class="brush: js; class-name: 'tight'">
+                        // objects - key/value pairs
+                        var obj = { name: "Tomas", main-city : "Innsbruck", value : 3 };
+                        obj.name = "Peter"; // assign the name property another value
+                        obj["main-city"] = "Prague"; // another way to access object's values; it's not an array!
+                        
+                        // arrays
+                        var a = ["Tomas", "Peter", "Alice"];
+                        for (var i = 0; i < a.length; i++)
+                            // do something with a[i]
+                            
+                        // combinations of arrays and objects
+                        var obj_a = [ 
+                            { name: "Tomas", city: "Innsbruck" }, 
+                            { name : "Peter", city : "Prague" }, 
+                            { name : "Alice", cities : ["Prague", "Brno"] } ];
+                            
+                        for (var i = 0; i < obj_a.length; i++)
+                            // do something with obj_a[i].name, ...
+                    </pre>                                                            
+                    <li>Functions</li>
+    				<pre class="brush: js; class-name: 'tight'">
+                        // assign a function to a variable
+                        var minus = function(a, b) {
+                            return a - b;
+                        }
+                        
+                        // call the function; 
+                        // now you can pass 'minus' as a parameter to another function
+                        var r2 = minus(6, 4);                        
+                    </pre>                    
+                    
+				</ul>
+			</div>
+            
+        	<div class="slide"> 
+				<hgroup> 
+					<h1>Functions</h1> 
+				</hgroup>
+				<ul class="xx-small">
+                    <li>Function Callbacks</li>
+                    <ul>    
+                        <li>You can use them to handle asynchronous events occurrences</li>                        
+                    </ul>
+    				<pre class="brush: js; class-name: 'tight'">
+                        // function returns the result through a callback, not directly; 
+                        // this is not a non-blocking I/O, just demonstration of the callback
+                        function add(a, b, callback) {
+                            callback(a + b);
+                        }
+                        
+                        // assign the callback to a variable
+                        var print = function(result) {
+                            console.log(result);
+                        };
+                        
+                        // call the function with callback as a parameter
+                        add(7, 8, print);
+                    </pre>  
+                    <li>Functions as values in object</li>
+        			<pre class="brush: js; class-name: 'tight'">
+                        var obj = {
+                            data : [2, 3, "Tomas", "Alice", 4 ],
+                            
+                            getIndexdOf : function(val) {
+                                for (var i = 0; i < this.data.length; i++)
+                                    if (this.data[i] == val)
+                                        return i;
+                                return -1;
+                            }                            
+                        }
+                        
+                        obj.getIndexOf(3); // will return 1
+                    </pre>  
 				</ul>
 			</div>
 
-			<div class="slide">
-				<hgroup>
-					<h1>W20 and MDW Courses</h1>
+        	<div class="slide"> 
+				<hgroup> 
+					<h1>Closures</h1> 
 				</hgroup>
-				<ul class="x-small">
-					<li><b>W20 builds on MDW!</b></li>
-					<li>Application Architecture</li>
-					<ul>
-						<li>Multi-tier client-server architecture</li>
-						<li>More focus on the client side of the architecture, JavaScript, AJAX</li>
-						<ul>
-							<li>Assume a robust infrastructure is in place, will not talk about it</li>
-							<li>Usually empowered by public cloud environments (Google AppEngine, Amazon EC2, etc.)
-						</ul>
-					</ul>
-					<li>Technology, Platform</li>
-					<ul>
-						<li>JEE was a platform in enterprise environments</li>
-						<li>JavaScript</li>
-						<ul>
-							<li>client-side + related technologies</li>
-							<li>server-side &ndash; asynchronous I/O, node.js</li>
-						</ul>
-						<li>It does not mean you cannot combine technologies</li>
-						<ul>
-							<li>Node.js as a Web server, Oracle Service Bus for middleware to build interfaces with back-end systems,
-								all running in a cloud environment (auto scaling, load balancers, message queues, etc.)</li>
-						</ul>
-					</ul>
+				<ul class="xx-small">
+                    <li>Closures</li>
+                    <ul>    
+                        <li>A function value that references variables from outside its body</li>                        
+                    </ul>
+    				<pre class="brush: js; class-name: 'tight'">
+						function adder() {
+						        sum = 0;
+						        return function(x) {
+						                sum += x;
+						                return sum;
+						        }
+						}
 
+						var pos = adder();
+
+						console.log(pos(3)); // returns 3 
+						console.log(pos(4)); // returns 7
+						console.log(pos(5)); // returns 12    					
+                    </pre>  
 				</ul>
 			</div>
-	
+
+
 		</section>
-		
-        <div class="slide outline"></div>		
 
-		<section>
-			<header>Scope, Requirements, Learnings</header>
-		
-			<div class="slide" id="scope">
-				<hgroup>
-					<h1>Scope</h1>
-				</hgroup>
+
+        <div class="slide outline"></div>
+
+        <section>
+            <header>Server-side JavaScript</header>        
+
+	        <div class="slide">
+	            <hgroup>
+	                <h1>Recall: Application Server</h1>
+	            </hgroup>  
+	            <ul class="small">
+	                <li>Environment that runs an application logic</li>
+	                <ul>
+	                    <li>Client communicates with AS via an application protocol</li>
+	                    <li>Client &ndash; Browser, application protocol &ndash; HTTP</li>
+	                </ul>
+	                <li>Terminology</li>
+	                <ul>
+	                    <li>Application Server &times; Web Server &times; HTTP Server</li>
+	                    <ul>
+	                        <li>AS is a modular environment; provides technology to realize enterprise systems</li>
+	                        <li>AS contains a Web server/HTTP server</li>
+	                    </ul>
+	                    <li>We will deal with Web server only</li>
+	                </ul>
+	                <li>Two major models to realize communication</li>
+	                <ul>
+	                    <li>Blocking I/O (also called synchronous I/O)</li>
+	                    <li>Non-blocking I/O (also called asynchronous I/O)</li>
+	                </ul>
+	                <li>A technology we will look at</li>
+	                <ul>
+	                    <li>Node.js &ndash; runs server-side Javascript</li>
+	                </ul>
+	            </ul>                
+	        </div>
+
+            <div class="slide"> 
+				<hgroup> 
+					<h1>Blocking I/O Model</h1> 
+				</hgroup> 
 				<ul class="small">
-					<li>Web 2.0 principles</li>
-					<ul>
-						<li>Read/Write Web, Programmable Web, Social Web, ...</li>
-					</ul>
-
-					<li>REST Architecture</li>
-					<ul>
-						<li>Principles, Architecture</li>
-						<li>HTTP protocol in very detail</li>
-					</ul>
-					
-					<li>Data on the Web</li>
-					<ul>
-						<li>metadata, microformats, microdata</li>
-					</ul>
-	
-					<li>AJAX applications</li>
-					<ul>
-						<li>JavaScript</li>
-						<li>accessing the data, protocols</li>
-					</ul>
-					
-				</ul>
-			</div>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>What You Will Learn in Lectures</h1>
-				</hgroup>
-	
-				<ul class="x-spacing">
-					<li>Concepts and theory ~ 10%</li> 
-					<ul>
-						<li>principles that drive Web 2.0 technological development</li>
-					</ul>
-	
-					<li>Technology ~ 70%</li>
-					<ul>
-						<li>state of the art Web 2.0 technology</li>
-						<li>data, protocols, frameworks</li>
-					</ul>
-					
-					<li>Examples ~ 20%</li> 
-					<ul>
-						<li>toy examples to demonstrate concepts, theory and technologies</li>
-					</ul>
-				</ul>
-			</div>
-			
-        	<div class="slide" id="plan">
-    			<hgroup>
-    				<h1>Organization of Lectures</h1>
-    			</hgroup>
-    			<ul class="small">
-    				<li>13 Lectures</li>
-                    <ul>
-                        <li>Czech: Mo 7:15-8:45, T9:155</li>
-                        <li>English: TBA</li>
+					<li>The server creates a thread for every connection</li>
+                    <ul>                    
+                        <li>For example, 1K connections = 1K threads, big overhead</li>
                     </ul>
-    				
-    				<li>Plan</li>
-    				<ol class="xx-small">
-                        <li>11.02.2012 &#150; Motivation and Course Overview (<a href="lecture1.html">html</a>)</li>
-                        <li>11.02.2012 &#150; Introduction to JavaScript (<a href="lecture2.html">html</a>)</li>
-                        <li>18.02.2012 &#150; Concepts, Statistics and Technologies (<a href="lecture3.html">html</a>)</li>
-                        <li>25.02.2012 &#150; Representational State Transfer (<a href="lecture4.html">html</a>)</li>
-                        <li>04.03.2012 &#150; Uniform Interface (<a href="lecture5.html">html</a>)</li>
-                        <li>11.03.2012 &#150; HATEOAS, Scalability, Description (<a href="lecture6.html">html</a>)</li>
-                        <li>18.03.2012 &#150; Atom and AtomPub (<a href="lecture7.html">html</a>)</li>
-                        <li>25.03.2012 &#150; Microformats, Microdata, Web Forms (<a href="lecture8.html">html</a>)</li>
-                        <li>08.04.2012 &#150; Resource Description Framework (<a href="lecture9.html">html</a>)</li>
-                        <li>15.03.2012 &#150; Accessing and Utilizing Services (<a href="lecture10.html">html</a>)</li>
-                        <li>22.04.2012 &#150; OAuth and OpenID (<a href="lecture11.html">html</a>)</li>
-                        <li>29.04.2012 &#150; Protocols for the Realtime Web (<a href="lecture12.html">html</a>)</li>
-                        <li>06.05.2012 &#150; Reserve</li>
-    				</ol> 				
-    			</ul>
-    		</div>			
-	
-			<div class="slide">
-				<hgroup>
-					<h1>Organization of Practicals</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Work alone, you can collaborate</li>
-					<li>Practicals every second week</li>
-					<li>Number of sessions: 6-7, 5 major tasks</li>
-					<ol>
-						<li>Introduction, Apps Script (JavaScript)</li>
-						<li>Pipes, Mashup</li>
-						<li>A RESTful service - development, consumption</li>
-						<li>Atom, HATEOAS, Scalability</li>
-						<li>Microformats, Microdata, RDFa</li>
-						<li>OAuth, Realtime Web</li>
-					</ol>		
-					<li>Plus a number of tasks to complete off-line (at home)</li>
-					<li>All textual/design diagrams results in the wiki<br/>
-					&rarr; <a href="https://edux.fit.cvut.cz/courses/MI-W20/">https://edux.fit.cvut.cz/courses/MI-W20/</a></li>
-					<li>All (nicely commented!) code results in the svn<br/>
-					&rarr; <a href="http://project.fit.cvut.cz">http://project.fit.cvut.cz</a></li>
-				</ul>
-			</div>
-			
-		</section>
-
-		<div class="slide outline">
-		</div>
-
-		<section>
-			<header>Assessment, Resources, Communication</header>
-		
-    		<div class="slide" id="assessment">
-    			<hgroup>
-    				<h1>Assessment</h1>
-    			</hgroup>
-    			<ul class="small">
-    				<li>Labs</li>
-    				<ul>
-						<li>Presence is mandatory</li>
-						<ul>
-                            <li>You can miss up to 1 lab without sending regrets</li>
-                        </ul>
-						<li>Every task gives you a max. of <span class="h-latex">6</span> points</li>
-						<li><span class="h-latex">6 \cdot 5=30</span> points</li>
-						<li>Activity in labs gives you a max. of <span class="h-latex">10</span> points</li>
-						<li>Total maximal points: <span class="h-latex lower">p_p=40</span>, <b>to pass</b>: 
-						<span class="h-latex lower">p_p \geq 20</li>
-                    </ul>
-					<li>Final exam</li>
-					<ul class="x-small">
-						<li>Mandatory written test: 3 parts, ~1 hour</li>
-                        <ul>
-						    <li>each gives you a max. of <span class="h-latex">20</span> points, the total 
-                            <span class="h-latex lower">p_t = 60</span> points</li>
-							<li>you must have at least 50% of points from each theme covered by a test part and 50% 
-							of points in total</li>
-                        </ul>
-						<li>Final score:</li>
-                        <ul>
-                            <li><span class="h-latex x-lower">p_p + p_t = 100</span> maximum points</li>
-						    <li>discussion may adjust your points freely</li>
-                        </ul>
-					</ul>
                 </ul>
-    		</div>
-	
-			<div class="slide">
-				<hgroup>
-					<h1>Assessment &ndash; Final Marks</h1>
-				</hgroup>
-					<center>
-						<table class="prettytable" style="margin-top: 30px; margin-bottom: 30px; width: 450px">
-							<caption>Source: http://www.cvut.cz/pracoviste/pravni-odbor/dokumenty/studijni-predpisy/studijnirad.pdf</caption>
-							<thead>
-								<tr><th>Mark</th><th>Points</th><th>In words</th></tr>
-							</thead>
-							<tbody>
-								<tr><td>A</td><td>100&ndash;90</td><td>výborně</td></tr>
-								<tr><td>B</td><td>89&ndash;80</td><td>velmi dobře</td></tr>
-								<tr><td>C</td><td>79&ndash;70</td><td>dobře</td></tr>
-								<tr><td>D</td><td>69&ndash;60</td><td>uspokojivě</td></tr>
-								<tr><td>E</td><td>59&ndash;50</td><td>dostatečně</td></tr>
-								<tr><td>F</td><td>49&ndash;0</td><td>nedostatečně</td></tr>
-							</tbody>
-						</table>
-					</center>
-					<ul>
-						<li>Everything good and bad will count</li>
-						<ul>
-							<li>practicals, coding, (pro-)activity, passiveness, <br/>
-							hacking, lectures, exam, cheating, ...</li>
-						</ul>
-					</ul>
-			</div>
-		
-			<div class="slide" id="resources">
-				<hgroup>
-					<h1>Resources</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Online sources</li>
-					<ul class="x-small">
-						<li><a href="https://edux.fit.cvut.cz/courses/MI-W20/">https://edux.fit.cvut.cz/courses/MI-W20/</a> &ndash; EDUX</li>
-						<li><a href="https://project.fit.cvut.cz">https://project.fit.cvut.cz/</a> &ndash; Your project (svn)</li>
-						<li>slides<br/>
-						<code>http://humla.vitvar.com/slides/w20/lecture{X}.(html|pdf)</code>,<br/>
-						where <code>X</code> is the lecture number<br/>
-					</ul>
-					<li>Books</li>
-					<ul class="xx-small">
-						<li>G. Vossen, S. Hagermann: <i>Unleashing Web 2.0: from concepts to creativity</i>, 
-						  Elsevier/Morgan Kaufmann, 2007, ISBN&nbsp;9780123740342. (&rarr;&nbsp;Web 2.0 Concepts)</li>
-						<li>L. Richardson, S. Ruby: <i>RESTful Web Services: Web services for the real world</i>,
-						  O'Reilly Media, May 2007, ISBN&nbsp;9780596529260.</li>
-					</ul>
-					<li>Other</li>
-					<ul>
-						<li>Many sources on the Web, to be listed throughout the course</li>
-						<li>A lot of W3C sources, Web architecture, HTTP</li>
-					</ul>
+    			<div id="1QP7gZSS1WS3YquzLekSgdZfcmi4BYArm-K9tuWrULQs" class="h-drawing" style="height: 220px"></div>
+                <ul class="small">
+                    <li>Characteristics</li>
+                    <ul>
+    					<li>the thread is reserved for the connection</li>
+					<li>When processing of the request requires other interactions with DB/FS or network 
+						communication is slow</li>
+                    <ul>
+                        <li>scales very bad as the thread's execution is "blocked"</li>
+                    </ul>
 				</ul>
 			</div>
-	
-    		<div class="slide" id="humla">
-    			<hgroup>
-    				<h1>About Slides</h1>
-    			</hgroup>
-    			<ul class="x-small">
-    				<li>Humla &#150; Open Source HTML5 Presentation Environment</li>
-    				<ul>
-                        <li>every slide has a unique URL</li>
-                        <li>all figures linked with Google drawings</li>
-                        <li>possible to format and print in PDF</li>
-                        <li>running local, with back-end NodeJS support, and offline</li>
-                        <li>Fork it at <a href="https://github.com/tomvit/humla">Humla github repo</a></li>
-    				</ul>
-                    <li>Keys</li>
-                    <ul class="no-bullet spacing xx-small">
-                        <li><span class="key">1</span>&#160;&#160;default browsing mode</li>
-                        <li><span class="key">2</span>&#160;&#160;slideshow mode (automatically scales to full screen)</li>
-                        <li><span class="key">3</span>&#160;&#160;grid (overview) mode</li>
-                        <li><span class="key">4</span>&#160;&#160;print mode, 2 slides per page</li>
-                        <li><span class="key">&#8592;</span>&#160;&#160;slide left</li>
-                        <li><span class="key">&#8594;</span>&#160;&#160;slide right</li>
-                        <li><span class="key">d</span>&#160;&#160;debug mode</li>
-                        <li><span class="key">e</span>&#160;&#160;toggle last error messages on/off</li>
-                    </ul>
-    			</ul>
-    		</div>
 
-        	<div class="slide">
-    			<hgroup>
-    				<h1>Code Examples</h1>
-    			</hgroup>
-    			<ul class="small spacing">
-                    <li>Example code in various languages</li>
-                    <ul>
-                        <li>Java, JavaScript (server-side), XML, command line (bash) and plain text (e.g., BNF-like syntax, regular expressions, etc.)</li>
-                    </ul>
-                    <li>Code colors</li>
-                    <ul>
-                        <li>different colors of the listings' gutters based on the language</li> 
-                    </ul>
-                    <pre class="brush: java">
-                        public String test() {
-                            // this is a Java code
-                        }
-                    </pre>
-                    <pre class="brush: js">
-                        function test() {
-                            // this is a JavaScript code
-                        }
-                    </pre>
-                    <pre class="brush: xml">
-                        &lt;test>&lt;!-- this is a XML code -->&lt;/test>
-                    </pre>
-                    <pre class="brush: bash">
-                        echo "this is a bash test"
-                    </pre>   
-    			</ul>
-    		</div>
-	
-			<div class="slide" id="communication">
-				<hgroup>
-					<h1>Communication</h1>
-				</hgroup>
+            <div class="slide"> 
+    			<hgroup> 
+					<h1>Non-Blocking I/O Model</h1> 
+				</hgroup> 
 				<ul class="small">
-					<li>Language</li>
-					<ul>
-						<li>Text: English (slides, tweets, posts, instructions, etc.)</li>
-						<li>Voice: Czech</li>
-					</ul>
-					<li>Channels</li>
-					<ul>	
-						<li>limit emails in general</li>
-						<li>Twitter: <a href="http://twitter.com/Web2e">@Web2e</a></li>
-						<ul>
-							<li>technology news related to web engineering courses</li>
-							<li>it's a reading for you, make sure you follow this</li>
-						</ul>						
-						<li>Hashtags: <b>#w2e_w20ann</b></li>
-						<ul>
-							<li>(W20-)related organizational announcements</li>
-						</ul>
-					</ul>
-					<li>Direct</li>
-					<ul>
-						<li>ask me anything directly, if not of interest to public</li>
-						<li>email me at tomas@vitvar.com, follow me on Twitter 
-						<a href="http://twitter.com/TomasVitvar">@TomasVitvar</a></li>
-					</ul>					
+					<li>Connections maintained by the OS, not the Web app</li>
+                    <ul>                    
+                        <li>The Web app registers events, OS triggers events when occur</li>
+                    </ul>
+                </ul>
+    			<div id="1kxkFc3Chl4qFXxH_4f2seuNbpBdENMyZWMRUmxd1p28" class="h-drawing" style="height: 220px"></div>
+                <ul class="small">
+					<li>Characteristics</li>
+                    <ul>
+                        <li>Event examples: new connection, read, write, closed</li>
+					    <li>The app may create working threads, but controls the number!</li>
+                        <ul>
+					        <li>much less number of working threads as opposed to blocking I/O</li>
+                        </ul>
+                    </ul>
 				</ul>
 			</div>
+
+			<div class="slide"> 
+				<hgroup> 
+					<h1>Node.js</h1> 
+				</hgroup>
+				<ul class="x-small">
+					<li><span id="nodejs" class="h-ref">Node.js</span></li>
+					<ul>
+					    <li>Emerging Web server technology, very efficient and fast!</li>
+                        <li>Event-driven I/O framework, based on JavaScript V8 engine</li>
+                        <li>Only one worker thread</li>
+    					<li>Open sourced, <span id="nodejs-github" class="h-ref">@GitHub</span>, many <span id="nodejs-libs" class="h-ref">libraries</span></li>
+                        <li>Future platform for Web 2.0 apps</li>
+                    </ul>
+					<li>Every I/O as an event</li>
+                    <ul>
+                        <li>reading and writing from/to files</li>
+                        <li>reading and writing from/to sockets</li>
+						<pre class="brush: js; class-name: ''">
+    						// pseudo code; ask for the last edited time of a file
+    						stat( 'somefile', function( result ) {
+    						  // use the result here
+    						} );
+                            </pre>
+                    </ul>
+				</ul>
+			</div>
+
+            <div class="slide">
+				<hgroup>
+					<h1>HTTP Server in Node.js</h1>
+				</hgroup>
+                <ul class="x-small">
+                    <li>HTTP Server implementation</li>
+                    <ul>
+                        <li>server running at <code>138.232.189.127</code>, port <code>8080</code>.</li>
+                        <pre class="brush: js; class-name: ''">
+                            // http library
+                            var http = require("http");
+                            
+                            http.createServer(function(req, res) {
+                                // check the value of host header
+                                if (req.headers.host == "company.cz") {
+                                    res.writeHead(201, "Content-Type: text/plain");
+                                    res.end("This is the response...");
+                                } else ;
+                                    // handle enterprise.com app logic...
+                            }).listen('0.0.0.0', 8080);
+                        </pre>  
+                        <li>Test it using Telnet</li>
+                        <pre class="brush: bash; class-name: ''">
+                            telnet 138.232.189.127 8080
+                            # ...lines omitted due to brevity
+                            GET /orders HTTP/1.1
+                            Host: company.cz
+                            
+                            HTTP/1.1 201 OK
+                            Content-Type: plain/text
+                            
+                            This is the response...
+                        </pre>  
+                    </ul>
+                </ul>
+			</div>
+
+            <div class="slide"> 
+                <hgroup> 
+                    <h1>Google Apps Script</h1> 
+                </hgroup>
+                <ul class="xx-small">
+                    <li><span id="gas" class="h-ref">Google Apps Script</span></li>
+                    <ul>
+                        <li>JavaScript cloud scripting language</li>
+                        <li>easy ways to automate tasks across Google products and third party services</li>                        
+                    </ul>
+                    <li>You can</li>
+                    <ul>
+                        <li>Automate repetitive processes and workflows</li>                        
+                        <li>Link Google products with third party services</li>
+                        <li>Create custom spreadsheet functions</li>
+                        <li>Build rich graphical user interfaces and menus</li>
+                    </ul>
+
+                    <pre class="brush: js; class-name: ''">
+                            // create spreadsheet menu
+                            function onOpen() {
+                              var ss = SpreadsheetApp.getActiveSpreadsheet();
+                              var menuEntries = [ {name: "Say Hi", functionName: "sayHi"},
+                                                  {name: "Say Hello", functionName: "sayHello"} ];
+                              ss.addMenu("Tutorial", menuEntries);
+                            }
+
+                            function sayHi() {
+                              Browser.msgBox("Hi");
+                            }
+
+                            function sayHello() {
+                              Browser.msgBox("Hello");
+                            }
+                        </pre>  
+                </ul>
+            </div>
+
+            <div class="slide"> 
+                <hgroup> 
+                    <h1>Rhino</h1> 
+                </hgroup>
+                <ul class="x-small">
+                    <li><span id="rhino" class="h-ref">Rhino</span></li>
+                    <ul>
+                        <li>open-source implementation of JavaScript written entirely in Java</li>
+                        <li>managed by the Mozilla Foundation</li>
+                        <ul>
+                            <li>also provides another implementation of JavaScript engine written in C named SpiderMonkey</li>
+                        </ul>
+                        <li>typically embedded into Java applications to provide scripting to end users</li>
+                        <li>core language only and doesn't contain objects or methods for manipulating HTML documents</li>
+                        <li>enabling development of webapps with JavaScript in containers like Jetty, Tomcat, and Google AppEngine</li>
+                    </ul>               
+                    <pre class="brush: bash; class-name: ''">
+                            $ cat echo.js
+                            for (i in arguments) {
+                              print(arguments[i])
+                            }
+                            $ java org.mozilla.javascript.tools.shell.Main echo.js foo bar
+                            foo
+                            bar
+                            $
+                        </pre>     
+                </ul>
+            </div>
 			
-		</section>
-		
+        </section>
+
 		
 	</body>
 </html>	

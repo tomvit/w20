@@ -1,782 +1,664 @@
 <!DOCTYPE html>
 <!--
-    Middleware and Web Services, CTU course slides
-    (cc) 2010-2013 Tomas Vitvar, http://vitvar.com
-    written for Humla, an open source HTML5 presentation environment
+	Web 2.0, CTU course slides
+	(cc) 2010-2013 Tomas Vitvar, tomas@vitvar.com
 -->
-<html>  
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-        <meta name="course"   content="Middleware and Web Services"/>
-        <meta name="lecture"  content="Lecture 6"/>
-        <meta name="keywords" content="REST, caching, concurrency, content negotiation"/>
+<html>   
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+        <meta name="course"   content="Web 2.0"/>
+		<meta name="lecture"  content="Lecture 6"/>
+   		<meta name="keywords" content="JSON, JSONP, JavaScript, AJAX, CORS"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
         <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
         <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
 
         <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>HATEOAS, Scalability and Description</title>
-    </head>
+        <title>Accessing and Utilizing Services</title>
+	</head>
+	<body> 
     
-    <body>
-        <footer>
-            <p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester"/>,&nbsp;
-            <span class="meta_twitter"/></p>
-            <p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
-        </footer>
+		<footer>
+			<p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester"/>,&nbsp;
+			<span class="meta_twitter"/></p>
+			<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
+		</footer>
 
-        <div class="slide intro">
-            <hgroup>
-                <h1><span class="meta_course"/></h1>
-                <h2>#META_LECTURE#: #TITLE#</h2>
-            </hgroup>
-            <div class="author">
-                <p class="meta_author"/>
-                <p><span class="meta_email"/> &bull; <span class="meta_twitter"/> &bull; 
-                <span class="meta_web"/></p>
-            </div>
-            <center><div class="meta_logo"></div></center>
-            <div class="org">
-                <p class="meta_org"/>
-                <p><span class="meta_orgfac"/> &bull; <span class="meta_field"/> 
-                &bull; <span class="meta_orgweb"/></p>
-            </div>
-            <div class="etc">
-                <div class="text-info">
-                    Modified: #LAST_MODIFIED#<br/>
-                    Humla v#HUMLA_VERSION#
-                </div>
-                <a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
-                <div class="oppa"></div>
-            </div>
-        </div>
-
-        <div class="slide">
-            <hgroup>
-				<h1>REST Core Principles</h1>
+    	<div class="slide intro">
+			<hgroup>
+				<h1><span class="meta_course"/></h1>
+ 				<h2>#META_LECTURE#: #TITLE#</h2>
 			</hgroup>
-            <ul class="small">
-                <li>REST architectural style defines constraints</li>
-                <ul>
-                    <li>if you follow them, they help you to achieve a good design, 
-                    interoperability and scalability.</li>
-                </ul>
-                <li>Constraints</li>
-                <ul>
-                    <li>Client/Server</li>
-                    <li><b>Statelessness</b></li>
-                    <li><b>Cacheability</b></li>
-                    <li><b>Layered system</b></li>
-                    <li>Uniform interface</li>
-                </ul>
-                <li>Guiding principles</li>                        
-                <ul>    
-                    <li>Identification of resources</li>
-                    <li>Representations of resources and self-descriptive messages</li>
-                    <li><b>Hypermedia as the engine of application state (HATEOAS)</b></li> 
-                </ul>
-            </ul>
+			<div class="author">
+				<p class="meta_author"/>
+				<p><span class="meta_email"/> &bull; <span class="meta_twitter"/> &bull; 
+				<span class="meta_web"/></p>
+			</div>
+			<center><div class="meta_logo"></div></center>
+			<div class="org">
+				<p class="meta_org"/>
+				<p><span class="meta_orgfac"/> &bull; <span class="meta_field"/> 
+				&bull; <span class="meta_orgweb"/></p>
+			</div>
+			<div class="etc">
+        		<div class="text-info">
+    				Modified: #LAST_MODIFIED#<br/>
+					Humla v#HUMLA_VERSION#
+				</div>
+				<a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
+				<div class="oppa"></div>
+			</div>
 		</div>
-      
-        <div class="slide outline"></div>
+		
+        <div class="slide outline"></div>		
 
-        <section>
-            <header>HATEOAS</header>
-            
-            <div class="slide">
-                <hgroup>
-                    <h1>HATEOAS</h1>
-                </hgroup>
-                <ul>
-                    <li>HATEOAS = Hypertext as the Engine for Application State</li>
-                    <ul>
-                        <li>The REST core principle</li> 
-                        <li><b>Hypertext</b></li>
-                        <ul>
-                            <li>Hypertext is a representation of a resource with <b>links</b></li>
-                            <li>A link is an URI of a resource</li>
-                            <li>Applying an access to a resource via its link = state transition</li>
-                        </ul>
-                    </ul>
-                    <li>Statelessness</li>
-                    <ul>
-                        <li>A service does not use a memory to remember a state</li>
-                        <li>HATEOAS enables stateless implementation of services</li>
-                    </ul>
-                </ul>
-            </div>
-
-            <div class="slide outline"></div>
-            
-            <section>
-                <header>Stateful vs. Stateless</header>
-            
-                <div class="slide">
-                    <hgroup>
-                        <h1>Stateful server</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Sessions to store the application state</li>
-                        <ul>
-                            <li>Recall HTTP state management in MDW</li>
-                            <li>The app uses a server memory to remember the app's state</li>
-                            <li>when server restarts, the app state is lost</li>
-                        </ul>
-                    </ul>
-                    <div class="h-drawing" style="height: 350px" 
-                        id="1CcGvRSm-RMa00XbHLlk2YhU8Wqz9Bl7nuWrynaFG3Sk"></div>                    
-                </div>
-    
-                <div class="slide">
-                    <hgroup>
-                        <h1>Stateless server</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>HTTP and hypermedia to transfer the app state</li>
-                        <ul>
-                            <li>Does not use a server memory to remember the app state</li>
-                            <li>State transferred between a client and a service via HTTP metadata and resources' representations</li>
-                        </ul>
-                    </ul>
-                    <div class="h-drawing" style="height: 350px" 
-                        id="1ZZsczsf7O-4HLuf_Flk0Ruttv5buKRmM7afQvgGWK8w"></div>                    
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Persistent Storage and Session Memory</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>Persistent Storage</li>
-                        <ul>
-                            <li>Contains app data</li>
-                            <li>Data is serialized into resource representation formats</li>
-                            <li>All sessions may access the data via resource IDs</li>
-                            <li>Note</li>
-                            <ul>
-                                <li>Our simple examples implement a storage in a server memory!</li>
-                            </ul>
-                        </ul>
-                        <li>Session Memory</li>
-                        <ul>
-                            <li>Server memory that contains a state of the app</li>
-                            <li>A session may only access its session memory</li>
-                            <li>Access through cookies</li>
-                            <li>Note</li>
-                            <ul>
-                                <li>A session memory may be implemented via a persistent storage (such as in Google AppEngine)</li>
-                            </ul>
-                        </ul>
-                    </ul>
-                </div>
-            </section>
-            
-            <div class="slide outline"></div>
-            
-            <section> 
-                <header>Links and Preconditions</header>
-                
-    			<div class="slide">
-					<hgroup>
-						<h1>Link</h1>
-					</hgroup>
-					<ul class="small">
-						<li>Service operation</li>
-                        <ul>
-                            <li>Applying an access to a link (GET, PUT, POST, DELETE)</li>
-                            <li>Link: HTTP method + resource URI + optional link semantics</li>
-                        </ul>
-                        <li>Example: <code>getOrder</code>, <code>addOrder</code>, and <code>updateItem</code></li>
-					</ul>
-					<div class="h-drawing" id="16vcb0AGdT3N5Jd4FFw9YADqYoF_QQlP46UsYngjfTKs"
-						style="height: 320px"></div>
-				</div>			
-
-				<div class="slide">
-					<hgroup>
-						<h1>Atom Links</h1>
-					</hgroup>
-					<ul class="small">
-						<li>Atom Syndication Format</li>
-						<ul>
-							<li>XML-based document format; Atom feeds</li>
-							<li>Atom links becoming popular for RESTful applications</li>
-							<pre class="brush: xml; highlight : [2,3,4,5]">
-							&lt;order a:xmlns="http://www.w3.org/2005/Atom" xmlns="..."&gt;
-							    &lt;a:link 
-                                    rel="next" 
-								    href="http://company.com/orders/5543" 
-								    type="application/xml"/>
-							    &lt;customer&gt;Tomas&lt;/customer>
-    						    &lt;items&gt;...&lt;/items>
-							&lt;/order>
-                            </pre>
-                            <li>Link structure</li>
-                            <ul class="no-bullet">
-    							<li><code>rel</code> &ndash; name of the link<br/> 
-                                ~ semantics of an operation behind the link</li>
-    							<li><code>href</code> &ndash; URI to the resource described by the link</li>
-    							<li><code>type</code> &ndash; media type of the resource the link points to</li>
-                            </ul>
-						</ul>
-                    </ul>
-				</div>			
-
-    			<div class="slide">
-					<hgroup>
-						<h1>Link Semantics</h1>
-					</hgroup>
-                    <ul class="small">
-                        <li>Standard <code>rel</code> values</li>
-                        <ul>
-                            <li>Navigation: <code>next</code>, <code>previous</code>, <code>self</code></li>
-                            <li>Does not reflect a HTTP method you can use</li>
-                        </ul>
-                        <li>Extension <code>rel</code> values</li>
-                        <ul>
-                            <li>You can use <code>rel</code> to indicate a semantics of an operation</li>
-                            <li>Example: add item, delete order, update order, etc.</li>
-                            <li>A client associates this semantics with an operation it may apply at a particular state</li>
-                            <li>The semantics should be defined by using an URI</li>
-    						<pre class="brush: xml;">
-							&lt;order a:xmlns="http://www.w3.org/2005/Atom" xmlns="..."&gt;
-                                &lt;id>2324&lt;/id>
-							    &lt;a:link rel="http://company.com/op/addItem" 
-                                    href="http://company.com/orders/2324"/>
-    						    &lt;a:link rel="http://company.com/op/deleteOrder" 
-                                    href="http://company.com/orders/2324"/>
-							&lt;/order>
-                            </pre>                            
-                        </ul>
-                    </ul>
-				</div>			
-
-        		<div class="slide">
-					<hgroup>
-						<h1>Pagination</h1>
-					</hgroup>
-                    <ul class="small">
-                        <li>Dividing a resource into a number of pages</li>
-                        <ul>
-                            <li>A client retrieves a resource in pages to optimize interactions</li>
-    						<li>Example: <code>/orders?page={startPage}&size={numberReturned}</code></li>
-							<li>A client needs to ask for (or have default values for) a 
-							  start page and a number of orders to return (must have a pre-defined knowledge)</li>
-                        </ul>
-						<li>Example <code>/orders</code> resource:</li>
-    					<pre class="brush: xml;">
-						&lt;orders a:xmlns="http://www.w3.org/2005/Atom" xmlns="..."&gt;
-                            &lt;order>...&lt;/order>
-						    &lt;a:link rel="next" href="http://company.com/orders?page=2&amp;size=10"/>
-    					    &lt;a:link rel="last" href="http://company.com/orders?page=10&amp;size=10"/>
-						&lt;/order>
-                        </pre>
-                        <ul>
-						    <li>client does not need to remember which page of orders it is viewing</li>
-                        </ul>
-                    </ul>
-				</div>			
-
-    			<div class="slide">
-					<hgroup>
-						<h1>Link Headers</h1>
-					</hgroup>
-					<ul class="small">
-						<li>An alternative to Atom links in resource representations</li>
-						<ul>
-							<li>links defined in HTTP Link header, <span class="h-ref" id="rfc-5988">Web Linking IETF spec</a></li>
-							<li>They have the same semantics as Atom Links</li>
-                            <li>Example:</li>
-                            <pre class="brush: plain; gutter: 'false'">
-                                &gt; HEAD /orders HTTP/1.1
-                                
-                                &lt; Content-Type: application/xml
-                                &lt; Link: &lt;http://company.com/orders/?page=2&amp;size=10&gt;; rel="next"
-                                &lt; Link: &lt;http://company.com/orders/?page=10&amp;size=10&gt;; rel="last"
-                            </pre>
-                        </ul>
-                        <li>Advantages</li>
-                        <ul>
-							<li>no need to get the entire document</li>
-                            <li>no need to parse the document to retrieve links</li>
-                            <li>use HTTP HEAD only</li>
-						</ul>						
-					</ul>
-				</div>			
-            </section>
-            
-            <div class="slide">
-                <hgroup>
-                    <h1>Preconditions and HATEOAS</li>
-                </hgroup>
-                <ul class="x-small">
-                    <li>Precondition</li>
-                    <ul>
-                        <li>Recall Preconditions and effects in MDW</li>
-                        <ul>
-                            <li>A conditions that must hold in a state before an operation can be executed.</li>
-                        </ul>
-                    </ul>
-                    <li>Preconditions in HATEOAS</li>
-                    <ul>
-                        <li>Service in a current state generates only valid transitions 
-                        that it includes in the representation of the resource.</li>
-                        <li>Transition logic is realized at the server-side</li>
-                    </ul>
-                </ul>
-                <div class="h-drawing" style="height: 230px" 
-                    id="1H_GfN8C1DZObNC_9HcRLa6Nk-EuJUEr0h6-65HhHs0U"></div>
-            </div>                
-
+		<section>
+			<header>Mashups and XHR</header>
+			
 			<div class="slide">
 				<hgroup>
-					<h1>Advantages</h1>
+					<h1>Mashups</h1>
 				</hgroup>
-				<ul >
-					<li>Location transparency</li>
+				<ul class="x-small">
+					<li>Web application hybrid or Web 2.0 application</li>
 					<ul>
-						<li>only "entry-level" links published to the World</li>
-						<li>other links within documents can change without changing client's logic</li>
-                        <li>HATEOAS may reflect current user's rights in the app</li>                        
-					</ul>
-					<li>Loose coupling</li>
+						<li>Uses APIs of two or more applications to provide new value-added functionality</li>
+					</ul>	
+					<li>Types</li>
 					<ul>
-						<li>no need for a logic to construct the links</li>
-                        <li>Clients know to which states they can move via links</li>
+						<li>Data mashup &ndash; integration/aggregation of data (read only)</li>
+						<li>Service mashup &ndash; more sophisticated workflows (read, write)</li>
+						<li>Visualization &ndash; involves UI, e.g., third-party data displayed on the Google map</li>
 					</ul>
+					<li>Client-Server View</li>
+					<ul>
+						<li>client-side mashups (mainly in a browser)</li>
+						<ul>
+							<li>JavaScript, Dynamic HTML, AJAX, JSON/JSONP</li>
+						</ul>
+						<li>server-side mashup</li>
+						<ul>
+							<li>server-side integration of services and data</li>
+							<li>third-party programming languages, very typical, nothing new</li>
+							<li>specialized environments: Google AppsScript, Yahoo Pipes</li>
+						</ul>
+					</ul>
+					<li>Web Apps developments will all be about mashups!</li>
 				</ul>
-			</div>			
-
-        </section>
-        
-        <div class="slide outline"></div>
-        
-        <section>
-            <header>Scalability</header>
-            
+			</div>
+			
 			<div class="slide">
 				<hgroup>
-					<h1>Scalability</h1>
+					<h1>Example Architecture</h1>
+				</hgroup>
+				<img style="height: 450px; margin-top: 20px; margin-left: 60px;" 
+					src="img/l10/web-20-mashup-arch.png"></img>
+			</div>			
+						
+			<div class="slide">
+				<hgroup>
+					<h1>XMLHttpRequest (XHR)</h1>
 				</hgroup>
 				<ul>
-					<li>Need for scalability</li>
+					<li>Interface to utilize HTTP protocol in JavaScript</li>
 					<ul>
-						<li>Huge amount of requests on the Web every day</li>
-						<li>Huge amount of data downloaded</li>
+						<li>standardized by <span id="webapps-wg" class="h-ref"></span> at W3C</li>
+						<li>basis for AJAX</li>
+						<ul>
+							<li>Asynchronous JavaScript and XML</li>
+						</ul>
 					</ul>
-					<li>Some examples</li>
+					<li>Typical usage</li>
+					<ol>
+						<li>Browser loads a page that includes a script</li>
+						<li>User clicks on a HTML element</li>
+						<ul>
+							<li>it triggers a JavaScript function</li>
+						</ul>
+						<li>The function invokes a service through XHR</li>
+						<ul>
+							<li>same origin policy, cross-origin resource sharing</li>
+						</ul>
+						<li>The function receives data and modifies HTML in the page</li>
+					</ol>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>XHR Interface &ndash; Key Methods and Properties</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Method and properties of XHR object</li>
 					<ul>
-						<li>Google, Facebook: 5 billion API calls/day</li>
-						<li>Twitter: 3 billions of API calls/day (75% of all the traffic)<br/>
-						  &rarr; 50 million tweets a day</li>
-						<li>eBay: 8 billion API calls/month</li>
-						<li>Bing: 3 billion API calls/month</li>
-						<li>Amazon WS: over 100 billion objects stored in S3</li>
-					</ul>
-					<li>Scalability in REST</li>
+						<li><code>open</code>, opens the request, parameters:<br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;<code>method</code> &ndash; method to be used (e.g. GET, PUT, POST),<br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;<code>url</code> &ndash; url of the resource,<br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;<code>asynch</code> &ndash; true to make asynchronous call,<br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;<code>user</code>, <code>pass</code> &ndash; credentials for authentication.</li>
+						<li><code>onReadyStateChange</code> &ndash; JavaScript function object, it is called when 
+						  <code>readyState</code> changes (uninitialized, loading, loaded, interactive, completed).</li>
+						<li><code>send</code>, <code>abort</code> &ndash; sends or aborts the request 
+							(for asynchronous calls)</li>
+						<li><code>status</code>, <code>statusText</code> &ndash; HTTP status code and a 
+							corresponding text.</li>
+						<li><code>responseText</code>, <code>responseXML</code> &ndash; response as text or 
+							as a DOM document (if possible).</li>
+						<li><code>onload</code> &ndash; event listener to support server push.</li>
+					</ul>					
+					<li>See <span id="xhr-w3c" class="h-ref"></span>, or 
+						<span id="xhr-moz" class="h-ref"></span> for a complete reference.</li>
+				</ul>
+			</div>
+			
+			<div class="slide">
+				<hgroup>
+					<h1>How XHR works</h1>
+				</hgroup>
+				<div style="height: 440px; margin-top: 20px" 
+				  id="1kI3tlZl6PHZ_J_uwn_SVyT8_F05yE5Hi0B9pOEI37Z8" class="h-drawing"></div>
+			</div>
+		</section>
+			
+        <div class="slide outline"></div>						
+
+		<section>
+			<header>Security Mechanisms</header>
+		
+			<div class="slide" id="sameorigin">
+				<hgroup>
+					<h1>Same Origin Policy</h1>
+				</hgroup>
+				<div style="height: 310px" 
+				  id="1xg_D6b_EBQDYol5Kk7b-UdhbuVsbjBHfaKaNTgH_rkY" class="h-drawing"></div>
+				<ul class="xx-small">
+					<li>JavaScript code can only access resources on the same domain</li>
 					<ul>
-						<li>Caching and revalidation</li>
-						<li>Concurrency control</li>
+						<li>XHR to GET, POST, PUT, UPDATE, DELETE</li>
+						<li>Browsers apply <b>same origin policy</b></li>
+					</ul>	
+					<li>Solutions</li>
+					<ul>
+						<li>JSON and JSONP (GET only)</li>
+						<li>Cross-origin Resource Sharing Protocol (CORS)</li>
 					</ul>
 				</ul>
 			</div>
-            
-            <div class="slide outline"></div>            
-            
-            <section>
-                <header>Caching and Revalidation</header>
 
-    			<div class="slide">
-    				<hgroup>
-    					<h1>Caching</h1>
-    				</hgroup>
-    				<div class="h-drawing" id="1nc-u-R3NUvur4WBAB1yxSqtj3PfmsSWF8iMo0aLT-Nc"
-    					style="height: 200px"></div>
-    				<ul class="x-small">
-    					<li>Your service should cache:</li>
-    					<ul>
-    						<li>anytime there is a static resource</li>
-    						<li>even there is a dynamic resource</li>
-                            <ul>
-    						    <li>with chances it updates often</li>
-    						    <li>you can force clients to always revalidate</li>
-                            </ul>
-    					</ul>
-    					<li>three steps:</li>
-    					<ul>
-    						<li>client GETs the resource representation</li>
-    						<li>server controls how it should cache through <code>Cache-Control</code>
-    						header</li>
-    						<li>client revalidates the content via conditional GET</li>
-    					</ul>
-    				</ul>
-    			</div>
-    
-    			<div class="slide">
-    				<hgroup>
-    					<h1>Cache Headers</h1>
-    				</hgroup>
-    				<ul class="x-small">
-    					<li><code>Cache-Control</code> response header</li>
-    					<ul>
-    						<li>controls over local and proxy caches</li>
-    						<li><code>private</code> &ndash; no proxy should cache, only clients can</li>
-    						<li><code>public</code> &ndash; any intermediary can cache (proxies and clients)</li>
-    						<li><code>no-cache</code> &ndash; the response should not be cached. 
-                            If it is cached, the content should always be revalidated.</li>
-    						<li><code>no-store</code> &ndash; can cache but should not store persistently. When a client restarts, content is lost</li>
-    						<li><code>no-transform</code> &ndash; no transformation of cached data; e.g. compressions</li>
-    						<li><code>max-age</code>, <code>s-maxage</code> a time in seconds how long the cache is valid; 
-                            <code>s-maxage</code> for proxies</li>
-    					</ul>
-                        <li><code>Last-Modified</code> and <code>ETag</code> response headers</li>
-                        <ul>
-                            <li>Content last modified date and a content entity tag</li> 
-                        </ul>
-                        <li><code>If-Modified-Since</code> and <code>If-None-Match</code> request headers</li>
-                        <ul>
-                            <li>Content revalidation (conditional GET)</li> 
-                        </ul>
-    				</ul>
-    			</div>
-    
-    			<div class="slide">
-    				<hgroup>
-    					<h1>Example Date Revalidation</h1>
-    				</hgroup>
-    				<ul class="x-small">
-    					<li>Cache control example:</li>
-                        <ul>
-                            <pre class="brush: plain; gutter: 'false'">
-                            &gt; GET /orders HTTP/1.1
-                            &gt; ...
-                            
-                            &lt; HTTP/1.1 200 OK
-                            &lt; Content-Type: application/xml
-                            &lt; Cache-Control: private, no-store, max-age=200
-                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
-                            &lt;
-                            &lt; ...data...
-                            </pre>
-                            <li>only client can cache, must not be stored on the disk, 
-    						  the cache is valid for 200 seconds.</li>
-    					</ul>
-    					<li>Revalidation (conditional GET) example:</li>
-                        <ul>
-                            <li>A client revalidates the cache after <code>200</code> seconds.</li>
-                            <pre class="brush: plain; gutter: 'false'">
-                            &gt; GET /orders HTTP/1.1
-                            &gt; If-Modified-Since: Sun, 7 Nov 2011, 09:40 CET
-                            
-                            &lt; HTTP/1.1 304 Not Modified
-                            &lt; Cache-Control: private, no-store, max-age=200
-                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
-                            </pre>
-                        </ul>
-                    </ul>
-                </div>
-                
-        		<div class="slide">
-    				<hgroup>
-    					<h1>Entity Tags</h1>
-    				</hgroup>
-    					<ul class="x-small">
-                            <li>Signature of the response body</li>
-                            <ul>
-                                <li>A hash such as MD5</li>
-                                <li>A sequence number that changes with any modification of the content</li>
-                            </ul>
-                            <li>Types of tag</li>
-                            <ul>
-                                <li>Strong ETag: reflects the content bit by bit</li>
-                                <li>Weak ETag: reflects the content "semantically"</li>
-                                <ul>
-                                    <li>The app defines the meaning of its weak tags</li>
-                                </ul>
-                            </ul>
-                            <li>Example content revalidation with <code>ETag</code></li>
-                            <pre class="brush: plain; gutter: 'false'; class-name: 'tight'">
-                            &lt; HTTP/1.1 200 OK
-                            &lt; Cache-Control: private, no-store, max-age=200
-                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
-                            &lt; ETag: "4354a5f6423b43a54d"
-                            
-                            &gt; GET /orders HTTP/1.1
-                            &gt; If-None-Match: "4354a5f6423b43a54d"
-                            
-                            &lt; HTTP/1.1 304 Not Modified
-                            &lt; Cache-Control: private, no-store, max-age=200
-                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
-                            &lt; ETag: "4354a5f6423b43a54d"
-                            </pre>
-    					</ul>
-    				</ul>
-    			</div>
-    
-            	<div class="slide">
-    				<hgroup>
-    					<h1>Design Suggestions</h1>
-    				</hgroup>
-                    <ul class="small">
-                        <li>Composed resources use weak ETags</li>
-                        <ul>
-                            <li>For example <code>/orders</code></li>
-                            <ul>
-                                <li>a composed resource that contains a summary information</li>
-                                <li>changes to an order's items will not change semantics of <code>/orders</code></li>
-                            </ul>
-                            <li>It is usually not possible to perform updates on these resources</li>
-                        </ul>
-                        <li>Non-composed resources use strong ETags</li>
-                        <ul>
-                            <li>For example <code>/orders/{order-id}</code></li>
-                            <li>They can be updated</li>
-                        </ul>
-        				<li>Further notes</li>
-    					<ul class="small">
-    						<li>Server should send both <code>Last-Modified</code> and
-    						<code>ETag</code> headers</li>
-    						<li>If client sends both <code>If-Modified-Since</code> and <code>If-None-Math</code>,<br/>
-    						<code>ETag</code> validation takes preference</li>
-    					</ul>                        
-                    </ul>
-    			</div>
+			<div class="slide">
+				<hgroup>
+					<h1>Why Same Origin Policy?</h2>
+				</hgroup>
+				<ul>
+					<li>Without the same origin policy, the following POST would be possible</li>
+				</ul>
+				<div style="height: 350px; margin-top: 30px" 
+				  id="1J14eY2C9O1g8oPI9GhkOn0tRCB5z_NodiBzPX2oEabY" class="h-drawing"></div>
+			</div>
 
-        		<div class="slide">
-    				<hgroup>
-    					<h1>Weak ETag Example</h1>
-    				</hgroup>
-                    <ul class="x-small">
-                        <li>App specific, <code>/orders</code> resource example</li>
-                        <pre class="brush: js; class-name: 'tight'">
-                        { 
-                            "orders" : 
-                                [
-                                    { "id"        : 2245,
-                                      "customer"  : "Tomas",
-                                      "descr"     : "Stuff to build a house.",
-                                      "items"     : [...] },
-                                    { "id"        : 5546,
-                                      "customer"  : "Peter",
-                                      "descr"     : "Things to build a pipeline.",
-                                      "items"     : [...] }
-                                ] 
-                        }
-                        </pre>
-                        <li>Weak ETag compute function example</li>
-                        <ul>
-                            <li>Any modification to an order's items is not significant for <code>/orders</code>:</li>
-                        </ul>
-                        <pre class="brush: js; class-name: 'tight'">
-                            var crypto = require("crypto");
-                        
-                            function computeWeakETag(orders) {
-                                var content = "";
-                                for (var i = 0; i < orders.length; i++)
-                                    content += orders[i].id + orders[i].customer + orders[i].descr;
-                                return crypto.createHash('md5').update(content).digest("hex");
-                            }
-                        </pre>
-                    </ul>
-    			</div>
-    
-    			<div class="slide">
-    				<hgroup>
-    					<h1>Weak ETag Revalidation</h1>
-    				</hgroup>
-                    <ul class="x-small">
-                        <li>Updating <code>/orders</code> resource</li>
-                        <ul>
-                            <li><code>POST /orders/{order-id}</code> inserts a new item to an order</li>
-                            <li>Any changes to orders' items will not change the Weak ETag</li>
-                        </ul>
-                    </ul>
-    				<div class="h-drawing" id="1n1jGatYjOc_kgMhWSuXyReptynOFn1CEDELB75Qj_3A"
-    					style="height: 380px"></div>
-    			</div>
-                                
-            </section>
-            
-            <div class="slide outline"></div>
-            
-            <section>
-                <header>Concurrency Control</header>
-                
-    			<div class="slide">
-    				<hgroup>
-    					<h1>Concurrency</h1>
-    				</hgroup>
-    				<ul class="x-small">
-    				    <li>Two clients may update the same resource</li>
-    					<ul class="no-bullet">
-    						<li>1) a client GETs a resource <code>GET /orders/5545</code></li>
-    						<li>2) the client modifies the resource</li>
-                            <li>3) the client updates the resource via <code>PUT /orders/5545 HTTP/1.1</code></li>
-                            <li class="space-before">What happens if another client updates the 
-                            resource between 1) and 3) ?</li>
-                        </ul>
-                        
-    					<li>Concurrency control</li>
-                        <ul>
-                            <li>Conditional <code>PUT</code></li>
-                            <ul>
-                                <li>Update the resource only if it has not changed since a specified date or 
-                                a specified ETag matches the resource content</li>
-                            </ul>
-                            <li><code>If-Unmodified-Since</code> and <code>If-Match</code> headers</li>
-                            <li>Response to conditional <code>PUT</code>:</li>
-                            <ul>
-                                <li><code>200 OK</code> if the <code>PUT</code> was successful</li>
-                                <li><code>412 Precondition Failed</code> if the resource was updated in the meantime.</li>
-                            </ul>
-                        </ul>                        
-    				</ul>
-    			</div>
+        	<div class="slide outline"></div>						
 
-    			<div class="slide">
-    				<hgroup>
-    					<h1>Concurrency Control Protocol</h1>
-    				</hgroup>
-    				<div class="h-drawing" id="1D9w_NKq3AqIl14fn0vGFBmVlbNMrAQqeYljjOYLcqCo"
-    					style="height: 380px"></div>
-                    <ul class="x-small">
-                        <li>Conditional PUT and ETags</li>
-                        <ul>
-                            <li>Conditional PUT must always use strong entity tags or date validation</li>
-                        </ul>
-                    </ul>
-    			</div>
-    
-            </section>
-        </section>
-            
-        <div class="slide outline"></div>
-        
+			<section>
+				<header>Scripting Attacks</header>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Overview</h1>
+					</hgroup>
+	                <ul class="small">
+	                	<li>Scripting Attacks</li>
+	                	<ul>
+	                		<li>Intruders make users perform action that has side effects on their resources</li>
+	                		<li>Intruders inject malicious code to Web pages</li>
+	                	</ul>
+	                	<li>Roles in Security Scenarios</li>
+	                	<ul>
+		                    <li>Alice, Bob</li>
+		                    <ul>
+		                        <li>Normal users, usually Alices wants to send a message to Bob or Alice accesses a Bob's site.</li>
+		                    </ul>
+		                    <li>Eve</li>
+		                    <ul>
+		                    	<li>A user with bad intentions, usually a passive attacker.</li> 
+		                    </ul>
+		                    <li>Mallory</li>
+		                    <ul>
+		                    	<li>An active attacker, usually sends a link to a page with malicious code. 
+		                    </ul>	
+		                </ul>
+	                </ul>					
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Recall: State management in HTTP</h1>
+					</hgroup>
+	                <ul class="small">
+	                    <li>Request-response interaction with cookies</li>
+	                    <ul>
+	                        <li>Session is a logical channel maintained by the server</li>
+	                    </ul>
+	                    <div class="h-drawing" style="height: 250px" id="1mVCe8EtqVApZVRV_RHYQKtqDNELKdo84qzCqGvAs7iA"></div>
+	                    <li>Stateful Server</li>
+	                    <ul>
+	                        <li>Server remembers the session information in a server memory</li>
+	                        <li>Server memory is a non-persistent storage, when server restarts the memory content is lost!</li>
+	                    </ul>
+	                </ul>					
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Cross-site Request Forgery (CSRF)</h1>
+					</hgroup>
+	                <ul class="x-small">
+	                	<li>Exploits a trust of a website in a user's browser</li>
+	                	<li>Scenario</li>
+	                	<ol>
+	                		<li>Mallory sends a link to Alice (in an email, in a chat, etc.)</li>
+	                		<ul>
+	                			<li>The link points to a page that has HTML code with hrefs to Alice's private resources</li>
+	                			<li>For example, to perform an action on Alice's account, <br/>
+	                				it is possible to use <code>img</code> like this:</li>
+								<pre class="brush: html">
+								&lt;img src="https://bank.com/account?do=transfer_money&amp;amount=50000"/></pre>
+	                		</ul>
+	                		<li>Alice loads the page in her browser</li>
+	                		<ul>
+	                			<li>Alice is authenticated to the bank's website, the browser sends Alice's authentication cookies 
+	                				with the request.</li>
+	                		</ul>
+	                	</ol>
+	                	<li>Issues and Prevention</li>
+	                	<ul class="xx-small">
+	                		<li>The bank site vilotes REST, i.e. overloading of GET for making actions</li>
+	                		<li>The bank should check HTTP <code>referer</code> header</li>
+	                		<li>It is a "blind" attack, Mallory does not see the result</li>
+	                		<li>To perform POST, current browsers today use <a href="#CORS">CORS protocol</a></li> 
+	                	</ul>
+	                </ul>					
+				</div>
+
+				<div class="slide">	
+					<hgroup>
+						<h1>Cross-site Scripting Attack (XSS)</h1>
+					</hgroup>
+					<ul>
+						<li>Exploits a trust of a user in a website</li>
+					</ul>
+					<div id="1pOK4HZPt7d4j-KSllCa8BUx5Amjlq28L6sQh3Wac8kI" class="h-drawing" style="height: 250px"></div>
+					<ul class="small">
+						<li>Example Scenario</li>
+						<ol>
+							<li>An attacker injects a code to a page</li>
+							<li>A users executes the code in his/her browser's session</li>
+							<li>The code provides information (cookies) to the attacker</li>
+							<li>The attacker uses the cookies to access the user's data</li>
+						</ol>
+					</ul>	
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>XSS Examples</h1>
+					</hgroup>
+					<ul class="small">
+						<li>Twitter in Sep 2010</li>
+						<ul>
+							<li>Injection of JavaScript code to a page using a tweet</li>
+							<li>You posted following tweet to Twitter</li>
+							<pre class="brush: plain">
+								There is a great event happening at 
+								http://someurl.com/@"onmouseover="alert('test xss')"/</pre>
+							<li>Twitter parses the link and wraps it with <code>&lt;a></code> element</li>
+							<pre class="brush: 'xml'">
+								There is a great event happening at 
+								&lt;a href="http://someurl.com/@"onmouseover="alert('test xss')" 
+									target="_blank">http://someurl.com/@"onmouseover=
+									"alert('test xss')"/&lt;/a></pre>
+							<li>See details at <span id="twitter-xss" class="h-ref"></span></li>
+						</ul>
+						<li>Other example: Google Contacts</li>
+					</ul>
+				</div>	
+
+			</section>
+				
+        	<div class="slide outline"></div>						
+
+			<section>
+				<header>Cross-origin Resource Sharing Protocol (CORS)</header>
+
+				<div class="slide" id="CORS">
+					<hgroup>
+						<h1>Overview</h1>
+					</hgroup>
+					<ul>
+						<li>Increasing number of mashup applications</li>
+						<ul>
+							<li>client-side mashups involving multiple sites</li>
+							<li>mechanism to control an access to sites from within JavaScript</li>
+						</ul>
+						<li>Allow for <b>cross-site HTTP requests</b></li>
+						<ul>
+							<li>HTTP requests for resources from a different domain than the domain of the resource making the request.</li>
+						</ul>
+						<li>W3C specification, working draft</li>
+						<ul>
+							<li>see <span class="h-ref" id="cors-w3c"></span></li>
+							<li>already browsers support it</li>
+							<ul>
+								<li>see <span class="h-ref" id="cors-moz"></span> at Mozilla</li>
+							</ul>
+						</ul>
+					</ul>
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>CORS Protocol &ndash; GET</h1>
+					</hgroup>
+					<div style="height: 280px" id="1cAgbH75PndD38nY1IJo4QfN5Yp7siHQXfNF5oD6x9SM" class="h-drawing"></div>
+					<ul class="x-small">
+						<li>Read-only resource access via HTTP GET</li>
+						<li>Headers:</li>
+						<ul>
+							<li><code>Origin</code> &ndash; identifies the origin of the request</li>
+							<li><code>Access-Control-Allow-Origin</code> &ndash; defines who can access the resource</li>
+							<li>either the full domain name or the wildcard (*) is allowed.</li>							
+						</ul>
+					</ul>
+				</div>			
+				
+				<div class="slide">
+					<hgroup>
+						<h1>CORS Protocol &ndash; other methods and "preflight"</h1>
+					</hgroup>
+					<div style="height: 320px" id="1-dVhDx5pka4BElYu0WzFkqkLQWsb8aphcy16l-bET80" 
+						class="h-drawing"></div>
+					<ul class="xx-small">
+						<li>Preflight request queries the resource using <code>OPTIONS</code> method</li>
+						<ul>
+							<li>requests other than GET (except POST w/o payload) or with custom headers</li>
+							<li>A browser should run preflight automatically for any XHR request meeting preflight conditions</li>
+							<li>The browser caches responses according to <code>Access-Control-Max-Age</code></li>
+						</ul>
+					</ul>
+				</div>				
+
+			</section>
+		</section>
+
+	    <div class="slide outline"></div>		
+				
 		<section>
-			<header>Description</header>
-            
-            <section>
-                <header>Documentation</header>
-			
-    			<div class="slide">
-    				<hgroup>
-    					<h1>Documentation</h1>
-    				</hgroup>
-    				<ul>
-    					<li>RESTful API Documentation</li>
-    					<ul>
-    						<li>not a standard way, only good practices</li>
-    						<li>only textual, not in a formal language</li>
-                            <ul>
-    						    <li>there are attempts such as WADL, hREST</li>
-    						    <li>it is even possible to use WSDL 2.0</li>
-                            </ul>
-    					</ul>
-    					<li>Client libraries in major languages</li>
-    					<ul>
-    						<li>JavaScript, Java, ...</li>
-    						<li>these could be documented</li> 
-    						<li>they hide protocol details</li>
-    					</ul>
-    					<li>Best practices in RESTful API documentation</li>
-    					<ul>
-    						<li>learn from Google, Twitter, and others</li>
-    					</ul>
-    				</ul>
-    			</div>	
-			
-    			<div class="slide">
-    				<hgroup>
-    					<h1>Best Practices</h1>
-    				</hgroup>
-    				<ul class="small">
-    					<li>Include resource diagram</li>
-    					<ul>
-    						<li>in UML, with links</li>
-    					</ul>
-    					<li>For each resource, describe</li>
-    					<ul>
-    						<li>URI with parameters, such as <code>http://company.com/orders/{order-id}</code></li>
-    						<li>definition of the parameters</li>
-    						<li>list of properties (attributes), with values, link to XML Schema</li>
-    						<li>representations you support (XML, JSON)</li>
-    						<li>sample request</li>
-    						<li>sample response in representations you support</li> 
-    						<li>error codes</li>
-    					</ul>
-    					<li>Make sure</li>
-    					<ul>
-    						<li>people can copy sample code and run it in a browser or by using <code>curl</code></li>
-    					</ul>
-    				</ul>
-    			</div>	
-            </section>
-            
-            <div class="slide outline"></div>
-            
-            <section>
-                <header>Service Description and Characteristics</header>
-                
-        		<div class="slide">
-    				<hgroup>
-    					<h1>Description</h1>
-    				</hgroup>
-    				<div class="h-drawing" id="17u0BbwBkrl8K-n_L_YldCKO2jCD0cHfRJy-SHZKncws"
-    				  style="height: 445px"></div>
-    			</div>					
+			<header>JSON and JSONP</header>
 
-        		<div class="slide">
-    				<hgroup>
-    					<h1>Service Characteristics and REST</h1>
-    				</hgroup>
-    				<ul class="small">
-                        <li>Loose coupling</li>
-                        <ul>
-                            <li>Standard response codes</li>
-                            <li>Standard Internet Media Types</li>
-                            <li>Links in hypertext; clients follow links while they do not need to construct them</li>                            
-                        </ul>
-                        <li>Reusability</li>
-                        <ul>
-                            <li>Multiple representations of resources (XML, JSON, ...)</li>
-                            <li>Interoperability promoted by uniform interface</li>
-                        </ul>
-                        <li>Contracting</li>
-                        <ul>
-                            <li>XML Schema (structural)</li>
-                            <li>Internet Media Types, vendor specific types<br/>
-                            such as <code>application/vnd.order+xml</code></li>
-                            <li>Uniform interface</li>
-                            <li>Hypermedia (behavioral &ndash; HATEOAS)</li>
-                        </ul>
-                    </ul>
-                </div>
+			<div class="slide">
+				<hgroup>
+					<h1>Recall: JSON</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>JSON = JavaScript Object Notation</li>
+					<ul>
+						<li>Serialization format for data representation</li>
+						<li>Very easy to use in JavaScript</li>
+						<ul>
+							<li>no need to use a parser explicitly</li>
+						</ul>
+						<li>Also great support in many programming environments</li>
+					</ul>
+					<li>Key constructs</li>
+					<ul class="xx-small">
+						<li><b>object</b> is a collection of comma-separated key/value pairs:<br/>
+						<code>{"name" : "tomas", "age" : 18, "student" : false, &nbsp;"car" : null}</code></li>
+						<li style="margin-top: 5px"><b>array</b> is an order list of values:<br/>
+						<code>[ "prague", "innsbruck", 45 ]</code></li>
+						<li style="margin-top: 5px">can be nested: objects as values in an <b>array</b>:<br/>
+						<code>[ { "name" : "tomas", "age" : 18 }, <br/>&nbsp;&nbsp;{ "name" : "peter", "age" : 19 } ]</code></li>
+						<li style="margin-top: 5px">and the other way around: array as values in an <b>object</b>:<br/>
+						<code>{ "cities" : ["prague", "innsbruck"],<br/>&nbsp;&nbsp;"states" : ["CZ", "AT"] }</code></li>
+						<li style="margin-top: 5px">A complete grammar see <span id="json" class="h-ref"></span></li>												
+					</ul>
+					
+				</ul>
+			</div>
 
-            	<div class="slide">
-    				<hgroup>
-    					<h1>Service Characteristics and REST (Cont.)</h1>
-    				</hgroup>
-    				<ul class="small">
-                        <li>Discoverability and Composability</li>
-                        <ul>
-                            <li>Mostly manual, partial support of directories such as ProgrammableWeb</li>
-                            <li>Compositions realized programmatically in mashups</li>
-                            <li>Research efforts to semi-automate discovery and composition</li>
-                        </ul>
-                        <li>Abstraction</li>
-                        <ul>
-                            <li>Heavily based on HTTP, can be realized in any implementation technologies due to a wide spread of HTTP</li>
-                        </ul>
-                        <li>Encapsulation</li>
-                        <ul>
-                            <li>Design-specific</li>
-                        </ul>
-    				</ul>
-    			</div>	
-            </section>
+			<div class="slide">
+				<hgroup>
+					<h1>JSON in JavaScript</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Native data format</li>
+					<pre class="brush: javascript; class-name: 'tight'">
+					// data needs to be assigned
+					var data = { "people" : ["tomas", "peter", "alice", "jana"] };
+					
+					// go through the list of people
+					for (i = 0; i < data.people.length; i++) {
+					    man = data.people[i];
+					    // ... do something with this man
+					}</pre>
+					<li>Responses of service calls in JSON</li>
+					<ul>
+						<li>Many support JSON, how can we load that data?</li>
+					</ul>
+					<li>Example Request-Response</li>
+					<pre class="brush: javascript; class-name: 'tight'">
+						GET http://pipes.yahoo.com/pipes/pipe.run?_id=638c670c40c97b62&_render=json
+						
+					 	{"count":1,"value":  
+						   {"title":"Web 2.0 announcements",
+						    "description":"Pipes Output",
+						    "link":"http:\/\/pipes.yahoo.com\/pipes\/pipe.info...",
+						    "pubDate":"Mon, 07 Mar 2011 18:27:20 +0000",
+						    "generator":"..."
+						    ...
+						   }
+						}</pre>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>JSONP</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Service that supports JSONP</li>
+					<ul>
+						<li>allows to specify a query string parameter for a wrapper function
+						to load the data in JavaScript code</li>
+						<li>otherwise the data cannot be used in JavaScript</li>
+						<ul>
+							<li>they're loaded into the memory but assigned to nothing</li>
+						</ul>
+					</ul>
+					<li>Example</li>
+					<ul>
+						<li>if a resource at <code style="zoom: 0.9">http://someurl.org/json_data</code> returns
+						<pre class="brush: javascript; gutter: false">
+							 { "people" : ["tomas", "peter", "alice", "jana"] }</pre>
+						then the resource at<br/>
+						<code style="zoom: 0.9">http://someurl.org/json_data?_callback=loadData</code> returns
+						<pre class="brush: javascript; gutter: false">
+							 loadData({ "people" : ["tomas", "peter", "alice", "jana"] });</pre></li>
+					</ul>
+					<li>A kind of workaround for the same origin policy</li>
+					<ul>
+						<li>only <code>GET</code>, nothing else works obviously</li>
+						<li>no XHR, need to load the data through the dynamic <code>&lt;script></code> element</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>JSONP in JavaScript</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>JSONP example</li>
+					<ul>
+						<li>loads JSON data using JSONP by dynamically inserting <code>&lt;script></code>
+							into the current document. This will download JSON data and triggers the script.</li>
+					</ul>
+					<pre class="brush: javascript">
+					var TWITTER_URL = "http://api.twitter.com/1/statuses/user_timeline.json?" + 
+					  "&screen_name=web2e&count=100&callback=loadData";
+				
+					// this needs to be loaded in window.onload
+					// after all document has finished loading...
+					function insertData() {
+					    var se = document.createElement('script');
+					    se.setAttribute("type","text/javascript");
+					    se.setAttribute("src", TWITTER_URL);	
+					    document.getElementsByTagName("head")[0].appendChild(se);	
+					    // And data will be loaded when loadDta callback fires...
+					}
+				
+					// loads the data when they arrive 
+					function loadData(data) {
+					    // we need to know the the structure of JSON data that is returned 
+					    // and code it here accordingly
+					    for (i = 0; i < data.length; i++) {
+					        data[i].created_at // contains date the tweet was created
+					        data[i].text // contains the tweet
+					    }
+					}</pre>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>JSON Vulnerability</h1>
+				</hgroup>
+                <ul class="x-small">
+                	<li>What it is</li>
+                	<ul>
+                		<li>JSON array data accessible via GET (normal access is via XHR)</li>
+                		<li>Attacker may load the data in a <code>script</code>, redefine <code>Array</code> object,
+                			and assign the data to a variable.</li>
+                		<li>Attacker's page with a script that you access:</li>
+                		<ul>
+                			<li>your browser uses your cookies to load the resource</li>
+                		</ul>
+                	</ul>
+                	<pre class="brush: html; highlight: [3,4]; class-name: tight">
+                		&lt;script type="text/javascript">
+                		var yourData;
+                		Array = function() {
+                			yourData = this;
+                		}
+                		&lt;/script>
+
+                		&lt;script src="yourdomain.cz/yoursecretdata.json" type="text/javascript">&lt;/script></pre>
+            		<li>Prevention</li>
+            		<ul class="xx-small">
+            			<li>Using prefix in the data &ndash; the prefix makes the JSON data invalid; the client must
+            				strip the prefix before parsing the data as JSON</li>
+            			<pre class="brush: javascript; class-name: tight">
+            				[ "a": "account", 433, 5543 ]</pre>
+            			<li>Use only POST for sensitive data</li>
+            		</ul>
+                </ul>					
+			</div>			
 
 		</section>
-        
-    </body>
-</html>
+
+		<div class="slide outline"></div>		
+	    		
+		<section>
+			<header>Application State</header>
+			
+			<div class="slide">
+				<hgroup>
+					<h1>Application State</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Application state in Web 1.0 apps</li>
+					<div style="height: 260px; margin-left: -30px" 
+						id="1ikPrTDmdmCzwR3OcGESteSMUnHQ-B9VRhuaOeQGki9A" class="h-drawing"></div>
+					<li>Application state in Web 2.0 apps</li>
+					<ul>
+						<li>JavaScript code changes the state</li>
+						<ul>
+							<li>the URL should contain the state information</li>
+						</ul>
+						<li>JavaScript cannot modify the whole URL but only the hash (<code>#</code>) part</li>
+						<li><code>http://seller.com/products</code> becomes <code>http://seller.com/#products</code></li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Application State and Web Crawling</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Obviously we want our pages to be crawlable</li>
+					<ul>
+						<li>JavaScript generated content on clients does not exist on the server</li>
+					</ul>
+					<div style="height: 250px; margin-left: -30px" id="1u-6vCrF9f6rojKEY2Dxtgrss06MckN4SV1f0YuF1ptU" 
+					  class="h-drawing"></div>
+					<li>Solutions</li>
+					<ul>
+						<li>Crawler runs headless Browser &ndash; not feasible</li>
+						<ul>
+							<li>high requirements for computing resources</li>
+						</ul>
+						<li>Server generates content according to specific rules</li>
+						<ul>
+							<li>Google AJAX Crawling</li>
+						</ul>
+					</ul>
+				</ul>				
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Google AJAX Crawling</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Steps</li>
+					<ol>
+						<li>Web app provider exposes AJAX content with pretty URLs<br/>
+						<code>http://seller.com/#!products</code></li>
+						<li>Web crawler finds those URLs</li>
+						<li>Web crawler transforms the pretty URL to ugly URL<br/>
+						<code>http://seller.com/?_escapped_fragment_=products</code></li>
+						<li>Web crawler access the content of the page at ugly URL and indexes it</li>
+					</ol>
+					<li>Prerequisites</li>
+					<ul>
+						<li>Web app provider must expose AJAX generated content at ugly URLs</li>
+						<li>Options:</li>
+						<ul>
+							<li>uses a headless browser to generate the content at the server</li>
+							<li>rewrites the JavaScript code in a server-side language</li>
+						</ul>
+					</ul>
+					<li>Reference</li>
+					<ul>
+						<li>See <span id="ajax-crawling" class="h-ref"></span> for details</li>
+					</ul>
+				</ul>				
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Google AJAX Crawling Works</h1>
+				</hgroup>
+				<img style="height: 420px; margin: 20px 0px 0px 20px" src="img/l10/vitvar-pub.png"></img>
+			</div>
+
+
+			
+			
+		</section>	
+		
+		
+		
+		
+	</body>
+</html>	

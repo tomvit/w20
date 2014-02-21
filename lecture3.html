@@ -1,581 +1,1016 @@
 <!DOCTYPE html>
 <!--
-	Web 2.0, CTU course slides
-	(cc) 2010-2013 Tomas Vitvar, tomas@vitvar.com
+    Middleware and Web Services, CTU course slides
+    (cc) 2010-2013 Tomas Vitvar, http://vitvar.com
+    written for Humla, an open source HTML5 presentation environment
 -->
-<html>   
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-        <meta name="course"   content="Web 2.0"/>
-		<meta name="lecture"  content="Lecture 3"/>
-   		<meta name="keywords" content="programmable web, readwrite web, social web, web 2.0 concepts"/>
+<html>  
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+        <meta name="course"   content="Middleware and Web Services"/>
+        <meta name="lecture"  content="Lecture 3"/>
+        <meta name="keywords" content="REST, uniform interface, asynchronous REST, content negotiation, error codes"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
         <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
         <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
 
         <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>Concepts, Statistics and Technologies</title>
-	</head>
-	<body> 
+        <title>Uniform Interface</title>
+    </head>
     
-		<footer>
-			<p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester"/>,&nbsp;
-			<span class="meta_twitter"/></p>
-			<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
-		</footer>
+    <body>
+        <footer>
+            <p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester"/>,&nbsp;
+            <span class="meta_twitter"/></p>
+            <p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
+        </footer>
 
-    	<div class="slide intro">
-			<hgroup>
-				<h1><span class="meta_course"/></h1>
- 				<h2>#META_LECTURE#: #TITLE#</h2>
+        <div class="slide intro">
+            <hgroup>
+                <h1><span class="meta_course"/></h1>
+                <h2>#META_LECTURE#: #TITLE#</h2>
+            </hgroup>
+            <div class="author">
+                <p class="meta_author"/>
+                <p><span class="meta_email"/> &bull; <span class="meta_twitter"/> &bull; 
+                <span class="meta_web"/></p>
+            </div>
+            <center><div class="meta_logo"></div></center>
+            <div class="org">
+                <p class="meta_org"/>
+                <p><span class="meta_orgfac"/> &bull; <span class="meta_field"/> 
+                &bull; <span class="meta_orgweb"/></p>
+            </div>
+            <div class="etc">
+                <div class="text-info">
+                    Modified: #LAST_MODIFIED#<br/>
+                    Humla v#HUMLA_VERSION#
+                </div>
+                <a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
+                <div class="oppa"></div>
+            </div>
+        </div>
+      
+        <div class="slide">
+        	<hgroup>
+				<h1>REST Core Principles</h1>
 			</hgroup>
-			<div class="author">
-				<p class="meta_author"/>
-				<p><span class="meta_email"/> &bull; <span class="meta_twitter"/> &bull; 
-				<span class="meta_web"/></p>
-			</div>
-			<center><div class="meta_logo"></div></center>
-			<div class="org">
-				<p class="meta_org"/>
-				<p><span class="meta_orgfac"/> &bull; <span class="meta_field"/> 
-				&bull; <span class="meta_orgweb"/></p>
-			</div>
-			<div class="etc">
-        		<div class="text-info">
-    				Modified: #LAST_MODIFIED#<br/>
-					Humla v#HUMLA_VERSION#
-				</div>
-				<a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
-				<div class="oppa"></div>
-			</div>
-		</div>	
-		
-		<div class="slide outline"></div>
+            <ul class="small">
+                <li>REST architectural style defines constraints</li>
+                <ul>
+                    <li>if you follow them, they help you to achieve a good design, 
+                    interoperability and scalability.</li>
+                </ul>
+                <li>Constraints</li>
+                <ul>
+                    <li>Client/Server</li>
+                    <li>Statelessness</li>
+                    <li>Cacheability</li>
+                    <li>Layered system</li>
+                    <li><b>Uniform interface</b></li>
+                </ul>
+                <li>Guiding principles</li>                        
+                <ul>    
+                    <li>Identification of resources</li>
+                    <li>Representations of resources and self-descriptive messages</li>
+                    <li>Hypermedia as the engine of application state (HATEOAS)</li> 
+                </ul>
+            </ul>
+		</div>
+      
+        <div class="slide outline"></div>
+      
+        <section>
+            <header>Uniform Interface</header>
 
-		<section>
-			<header>Web 1.0 Timeline</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Web Basics</h1>
-				</hgroup>
-				<ul class="x-spacing">
-					<li>Tim Berners Lee's vision:</li>
-					<ul>
-						<li><b>Universal linking:</b> making a connection with any content/resource on the Web</li>
-						<li><b>Separation of concerns:</b> layers divided by a standard interface, innovation on any layer 
-						may happen independently</li>
-						<li><b>Web contract: </b> Web content to be independent from software that consumes it; 
-						  standards-based, royalty-free technology accessible and usable by anyone, for free</li>
-					</ul>
-					<li>Core technologies (global hypertext system)</li>
-					<ul>
-						<li>HTTP &ndash; protocol for client-server communication</li>
-						<li>URI &ndash; schema to identify Web's resources</li>
-						<li>HTML &ndash; language to format content on the Web</li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Timeline</h1>
-				</hgroup>
-				<ul class="small">
-					<li><b>1980:</b> the very beginning &ndash; Tim Berners Lee</li>
-					<ul>
-						<li>ENQUIRY, a database of people and a hypertext predecessor</li>
-						<li>TBL sees problems in information presentation</li>
-						<ul>
-							<li>how to share data among physicists with no common tools and presentation software</li>
-						</ul>
-					</ul>
-					<li><b>1990:</b> all tools necessary for a working Web</li>
-					<ul>
-						<li>Hypertext Transfer Protocol (HTTP) 0.9</li>
-						<li>Hypertext Markup Language (HTML)</li>
-						<li>The first Web browser</li>
-						<li>The first Web server (called CERN httpd)</li>
-						<li>The first Web pages that describe the project itself</li>
-						<li>The first Web application: CERN telephone directory</li>
-					</ul>
-					<li><b>August 6, 1991:</b> Web is a publicly available service</li>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Timeline</h1>
-				</hgroup>
-
-				<style>
-					@-webkit-keyframes pulse {
-					 from {
-					   opacity: 0.0;
-					 }
-					 to {
-					   opacity: 1.0;
-					 }
-					}
-
-					span.blink {
-					  -webkit-animation-name: pulse;
-					  -webkit-animation-duration: 1s;
-					  -webkit-animation-iteration-count: infinite;
-					  -webkit-animation-timing-function: ease-in-out;
-					  -webkit-animation-direction: alternate;
-					  color: red;
-					}				
-				</style>
-
-				<ul>
-					<li><b>1995&ndash;1999:</b> Browser wars and dot-com bubble</li>
-					<ul class="x-small">
-						<li>Competition of browsers, custom tags, flavors of HTML</li>
-						<li>The "blink" and "marquee" era
-						<div style="zoom: 1.6">
-						<pre class="brush: xml; gutter: 'false'">
-						&lt;marquee behavior="scroll" direction="left"&gt;
-						   marquee is a non-standard element, &lt;blink&gt;do not use it!&lt;/blink&gt;
-						&lt;/marquee&gt;</pre></div></li>
-						<div style="width: 600px; border: dashed 1px silver; margin-bottom: 20px; 
-							padding: 10px; border-radius: 10px; font-size: 18px; font-family: Arial; color: gray">
-						  <marquee behavior="scroll" direction="left">&lt;marquee&gt; is a non-standard element, 
-						    <span class="blink">do not use it!</span></marquee>
-						</div>
-
-						<li>Difficult to maintain interoperability across browsers</li>
-						<li>Web sites often sticked to IE only</li>
-						<li>dot-com companies popping up</li>
-						<ul>
-							<li>stock prices go up with "e-" prefix</li>
-							<li>increasing stock prices, confidence in profit</li>
-							<li>available venture capital</li>
-						</ul> 
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Timeline</h1>
-				</hgroup>
-				<ul>
-					<li><b>1997:</b> HTML 3.2</li>
+    			<div class="slide">
+					<hgroup>
+						<h1>Uniform Interface</h1>
+					</hgroup>
 					<ul class="small">
-						<li>documenting existing authoring practices at that time</li>
-						<li>followed by HTML 4 as a baseline markup language for the Web</li>
+						<li>Uniform interface = finite set of operations</li>
+						<ul>
+                            <li>Resource manipulation</li>
+                            <ul>
+                                <li>CRUD &ndash; Create (POST/PUT), Read (GET), Update (PUT), Delete (DELETE)</li>
+                            </ul>
+                            <li>operations are not domain-specific</li>
+                            <ul>
+                                <li>For example, <code>GET /orders</code> and not <code>getOrders()</code></li>
+                                <li>This reduces complexity when solving interoperability</li>
+                            </ul>
+						</ul>
+                        <li>Integration issues examples</li>
 					</ul>
-					<li><b>1997&ndash;1999:</b> Cascading Style Sheets</li>
+                    <div class="h-drawing" style="height: 190px" 
+                        id="1hLogh6s5Az0vXhCW6e05l2MRMLPDtnYbxlPEctjJTAk"></div>
+				</div>                                 
+
+                <div class="slide">
+            		<hgroup>
+    					<h1>Safe and Unsafe Operations</h1>
+    				</hgroup>
+    				<ul class="small">
+    					<li>Safe operations</li>
+    					<ul>
+    						<li>Do not change the resource state</li>
+    						<li>Usually "read-only" or "lookup" operation</li>
+                            <li>Clients can cache the results and refresh the cache freely</li>
+    					</ul>
+    					<li>Unsafe operations</li>
+    					<ul>
+    						<li>May change the state of the resource</li>
+    						<li>Transactions such as buy a ticket, post a message</li>
+    						<li>Unsafe does not mean dangerous!</li>
+    					</ul>
+    					<li>Unsafe interactions and transaction results</li>
+    					<ul>
+    						<li><code>POST</code> response may include transaction results</li>
+                            <ul>
+        						<li>you buy a ticket and submit a purchase data</li>
+    						    <li>you get transaction results</li> 
+    						    <li>and you cannot bookmark this..., why?</li>
+                            </ul>
+    						<li>Should be referable with a persistent URI</li>
+    					</ul>
+    				</ul>
+    			</div>
+                
+                <div class="slide">
+                    <hgroup>
+                        <h1>Idempotence</h1>
+                    </hgroup>
+                    <ul>
+                        <li>Idempotent operation</li>
+                        <ul>
+                            <li>Invoking a method on the same resource always has the same effect</li>
+                            <li>Operations <code>GET</code>, <code>PUT</code>, <code>DELETE</code></li> 
+                        </ul>
+                        <li>Non-idempotent operation</li>
+                        <ul>
+                            <li>Invoking a method on the same resource may have different effects</li>
+                            <li>Operation <code>POST</code></li> 
+                        </ul>
+                        <li>Effect = a state change</li>
+                        <ul>
+                            <li>recall the effect definition in MDW</li>
+                        </ul>
+                    </ul>
+                </div>
+                
+                
+                <div class="slide outline"></div>                
+                
+                <section>
+                    <header>Basic operations</header>
+
+        			<div class="slide">
+    					<hgroup>
+    						<h1>GET</h1>
+    					</hgroup>
+    					<ul class="small">
+    						<li>Reading</li>
+    						<ul>
+    							<li><code>GET</code> retrieves a representation of a state of a resource</li>
+                                <pre class="brush: plain; gutter: 'false'"> 
+                                    &gt; GET /orders HTTP/1.1
+                                    &gt; Accept: application/xml
+                                    
+                                    &lt; HTTP/1.1 200 OK
+                                    &lt; Content-Type: application/xml
+                                    &lt;
+                                    &lt; ...resource representation in xml...
+                                </pre>
+    							<li>It is read-only operation</li>
+                                <li>It is <b>safe</b></li>
+                                <li>It is <b>idempotent</b></li>
+                                <li class="space-before"><code>GET</code> retrieves different states over time but 
+                                the effect is always the same, cf. 
+                                <a href="lecture4.html#/resource-state">resource state</a> hence it is idempotent.</li>   
+                                <li>Invocation of <code>GET</code> involves content negotiation</li>
+                            </ul>
+    					</ul>
+    				</div> 
+
+            		<div class="slide" id="PUT">
+    					<hgroup>
+    						<h1>PUT</h1>
+    					</hgroup>
+    					<ul class="small">
+    						<li>Updating or Inserting</li>
+    						<ul>
+    							<li><code>PUT</code> updates a representation of a state of a resource or inserts a new resource</li>
+                                <pre class="brush: xml; gutter: 'false'">
+                                    &gt; PUT /orders/4456 HTTP/1.1
+                                    &gt; Content-Type: application/xml
+                                    &gt;
+                                    &gt; &lt;order>...&lt;/order>                                    
+
+                                    &lt; HTTP/1.1 CODE                                    
+                                </pre>
+                                <li>where CODE is:</li>
+                                <ul>
+                                    <li><code>200 OK</code> or <code>204 No Content</code> for updating: 
+                                    A resource with id <code>4456</code> <b>exists</b>, the client 
+                                        sends an updated resource</li>
+                                    <li><code>201 Created</code> for inserting: A resource <b>does not exist</b>, the client 
+                                        generates the id <code>4456</code> and sends a representation of it.</li>
+                                </ul>
+                                <li>It is <b>not safe</b> and it is <b>idempotent</b></li>
+                            </ul>
+    					</ul>
+    				</div> 
+
+        			<div class="slide">
+    					<hgroup>
+    						<h1>POST</h1>
+    					</hgroup>
+    					<ul class="small">
+    						<li>Inserting</li>
+    						<ul>
+    							<li><code>POST</code> inserts a new resource</li>
+                                <li>A server generates a new resource ID, client only supplies a content and a resource URI where the new
+                                resource will be inserted.</li>
+                                <pre class="brush: xml; gutter: 'false'">
+                                    &gt; POST /orders HTTP/1.1
+                                    &gt; Content-Type: application/xml
+                                    &gt;
+                                    &gt; &lt;order>...&lt;/order>                                    
+
+                                    &lt; HTTP/1.1 201 Created
+                                    &lt; Location: /orders/4456
+                                </pre>
+    							<li>It is <b>not safe</b> an it is <b>not idempotent</b><br/>
+                                <li class="space-before">A client may "suggest" a resource's id using the <code>Slug</code> header</li>
+                                <ul>
+                                    <li>Defined in <span class="h-ref" id="rfc-5023">AtomPub protocol</li></li>
+                                </ul>
+    						</ul>
+    					</ul>
+    				</div> 
+
+        			<div class="slide">
+    					<hgroup>
+    						<h1>DELETE</h1>
+    					</hgroup>
+    					<ul class="small">
+    						<li>Deleting</li>
+    						<ul>
+    							<li><code>DELETE</code> deletes a resource with specified URI</li>
+                                <pre class="brush: plain; gutter: 'false'">
+                                &gt; DELETE /orders/4456 HTTP/1.1
+                                
+                                &lt; HTTP/1.1 CODE
+                                </pre>
+                                <li>where CODE is:</li>
+                                <ul>
+                                    <li><code>200 OK</code>: the response body contains an entity describing a result of the operation.</li>
+                                    <li><code>204 No Content</code>: there is no response body.</li>
+                                </ul>
+                                <li class="space-before">It is <b>not safe</b> and it is <b>idempotent</b></li>
+                                <ul>
+                                    <li>Multiple invocation of <code>DELETE /orders/4456</code> has always the same effect &ndash; the resource 
+                                    <code>/orders/4456</code> does not exist.</li>
+                                </ul>
+    						</ul>
+    					</ul>
+    				</div> 
+
+    				<div class="slide">
+    					<hgroup>
+    						<h1>Other</h1>
+    					</hgroup>
+    					<ul class="small">
+    						<li>HEAD</li>
+    						<ul>
+    							<li>same as <code>GET</code> but only retrieves HTTP headers</li>
+                                <li>It is <b>safe</b> and <b>idempotent</b></li>
+    						</ul>
+        					<li>OPTIONS</li>
+    						<ul>
+    							<li>queries the resource for resource configuration</li>
+                                <li>It is <b>safe</b> and <b>idempotent</b></li>                                
+    						</ul>
+    					</ul>
+    				</div> 
+                </section>
+
+                <div class="slide outline"></div>
+                
+                <section>
+                    <header>Handling Errors</header>
+                    
+                    <div class="slide">
+                        <hgroup>
+                            <h1>Types of Errors</h1>
+                        </hgroup>
+                        <ul class="x-small">
+                            <li>Client-side &ndash; status code <code>4xx</code></li>
+                            <ul>
+    							<li><code>400 Bad Request</code></li>
+                                <ul>
+        							<li>generic client-side error</li>
+    							    <li>invalid format, such as syntax or validation error</li>
+                                </ul>
+        						<li><code>404 Not Found</code></li>
+                                <ul>
+        							<li>server can't map URI to a resource</li>
+                                </ul>
+    							<li><code>401 Unauthorized</code></li>
+                                <ul>
+        							<li>wrong credentials (such as user/pass, or API key)</li>
+        							<li>the response contains <code>WWW-Authenticate</code> indicating what kind of authentication
+        							the service accepts</li>
+                                </ul>
+    							<li><code>405 Method Not Allowed</code></li>
+                                <ul>
+    							    <li>the resource does not support the HTTP method the client used</li>
+    							    <li>the response contains <code>Allow</code> header to indicate methods it supports</li>
+                                </ul>
+    							<li><code>406 Not Acceptable</code></li>
+                                <ul>
+    							    <li>so many restrictions on acceptable content types (using <code>Accept-*</code>)</li>
+    							    <li>server cannot serialize the resource to requested content types</li>
+                                </ul>                                
+                            </ul>
+                        </ul>
+                    </div>
+
+                    <div class="slide">
+                        <hgroup>
+                            <h1>Types of Errors (Cont.)</h1>
+                        </hgroup>
+                        <ul class="x-small">
+                            <li>Server-side &ndash; status code <code>5xx</code></li>
+                            <ul>
+        						<li><code>500 Internal Server Error</code></li>
+        						<ul>
+                                    <li>generic server-side error</li>
+                                    <li>usually not expressive, logs a message for system admins</li>
+                                </ul>
+    							<li><code>503 Service Not Available</code></li>
+                                <ul>
+    							    <li>server is overloaded or is under maintenance</li>
+    							    <li>the response contains <code>Retry-After</code> header</li>
+                                </ul>
+                            </ul>
+                        </ul>
+                    </div>
+                    
+                    <div class="slide">
+    					<hgroup>
+    						<h1>Use of Status Codes</h1>
+    					</hgroup>
+    					<ul class="small">
+    						<li>Service should respect semantics of status codes!</li>
+    						<ul>
+                                <pre class="brush: js; gutter: 'false''">
+        							&gt; GET /orders HTTP/1.1
+        							&gt; Accept: application/json
+                                    
+                                    &lt; HTTP/1.1 200 OK
+                                    &lt; Content-Type: application/json
+                                    &lt;
+                                    &lt; { "error" : 
+                                    &lt;    { "error_text" : 
+                                    &lt;        "you do not have rights to access this resource " } 
+                                    &lt; }
+                                </pre>
+                                <li>Client must understand the semantics of the response.</li>
+                                <li>This breaks loose coupling and reusability service principles</li>
+                                <li>The response should be:</li>
+                                <pre class="brush: plain; gutter: 'false'">
+                                    &lt; HTTP/1.1 401 Unauthorized
+                                    &lt; ...
+                                    
+                                    &lt; ...optional text describing the error...
+                                </pre>
+    						</ul>
+    					</ul>
+                    </div>
+
+                </section>
+            </section>
+
+            <div class="slide outline"></div>
+            
+            <section>
+                <header>Asynchronous Communication</header>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Asynchronous Communication</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>Recall asynchronous communication from MDW</a></li>
+                        <li>Asynchronous communication in HTTP</li>
+                        <ul>
+                            <li>Server cannot establish a connection, always clients need to</li>
+                            <ul>
+                                <li>clients are browsers behind firewalls</li>
+                            </ul>
+                        </ul>
+                    </ul>
+                    <div class="h-drawing" style="height: 300px" id="1cy6MqkN_U_1oRNDJhR8pT_snON_nTU7jga2qbvB4oYU"></div>
+                </div>
+                
+                <div class="slide">
+                    <hgroup>
+                        <h1>Asynchronous and Polling/Pushing</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>Submit request for processing</li>
+                        <ul>
+                            <li>Always through HTTP request and <code>202 Accepted</code> response and <code>Location</code> header
+                            with a monitor resource</li>
+                            <li>Methods: <code>PUT</code>, <code>POST</code>, <code>DELETE</code></li>
+                        </ul>
+                        <li>Getting the status from the monitor resource</li>
+                        <ul>
+                            <li><b>polling</b> &ndash; a client periodically checks for changes via <code>GET</code></li>
+                            <ul>
+                                <li>Most natural solution, not a real-time solution</li>
+                            </ul>
+                            <li><b>pushing</b> &ndash; a server pushes changes back to the client</li>
+                            <ul>
+                                <li>Part of real-time Web efforts</li> 
+                            </ul>
+                            <li>More details in <a href="lecture12.html">Lecture 12: Protocols for the Realtime Web</a></li>
+                        </ul>
+                </div>
+                
+                
+            </section>
+
+            <div class="slide outline"></div>
+            
+            <section>
+                <header>Implementing a RESTful Service</header>
+
+                <div class="slide">
+    				<hgroup>
+						<h1>Service Description</h1>
+					</hgroup>
+                    <ul class="x-small">
+                        <li>Example service description: Oder processing</li>
+                        <pre class="brush: plain; gutter: true; class-name: 'tight'">
+                            * the service provides three operations: 'open', 'add', 'close'
+                            * operation 'open' opens the order
+                                - input: none
+                                - output: text informing that the order was opened
+                                
+                            * operation 'add' adds an item to the order
+                                - input: an item name, the syntax is [0-9A-Za-z\-]+
+                                - output: text informing that the item was added to the order
+                                
+                            * operation 'close' closes the order and returns all items in the order
+                                - input: none
+                                - output: list of all items previously added to the order
+                            
+                            * the public process is: S0--open--S1, S1--add--S1, S1--close--S0, where
+                              S0, S1 are states such that S0 = order is closed, and S1 = order is opened.               
+                              
+                            * protocol is HTTP, RESTful service 
+                              running at ec2.vitvar.com, tcp/9900
+                        </pre> 
+                        <li>Basic steps to define a RESTful service</li>
+                        <ol>
+                            <li>identify resources and URIs</li>
+                            <li>specify resources' representations</li>
+                            <li><b>define service operations</b> (methods and status codes)</li>                                
+                        </ol>
+                    </ul>
+                </div>
+                                
+                <div class="slide outline"></div>
+                
+                <section>
+                    <header>Basic Implementation</header>
+
+                    <div class="slide">
+            			<hgroup>
+    						<h1>Resources, URIs and Representations</h1>
+    					</hgroup>
+                        <ul class="x-small">
+                            <li>There are three resources</li>
+                            <ul>
+                                <li>Resource <code>/orders</code> is a container of all orders</li>
+                                <li>Resource <code>/orders/{order-id}</code> is an order with resource id <code>order-id</code>.</li>
+                                <li>Resource <code>/orders/{order-id}/{item-id}</code> is an item that belongs to the order <code>order-id</code> 
+                                and that has a resource id <code>item-id</code>.</li>
+                            </ul>
+                            <li>Structure</li>
+                            <ul>
+                                <li><code>/orders</code></li>
+                                <ul>
+                                    <li>list of all orders</li>
+                                </ul>
+                                <li><code>/orders/{order-id}</code></li>
+                                <ul>
+                                    <li>status, order id, list of all items in the order</li>
+                                </ul>
+                                <li><code>/orders/{order-id}/{item-id}</code></li>
+                                <ul>
+                                    <li>item id, name, price</li>
+                                </ul>
+                            </ul>
+                            <li>Resource representations</li>
+                            <ul>
+                                <li>We define representations in JSON</li>
+                            </ul>
+                        </ul>
+                    </div>
+                
+                    <div class="slide">
+                		<hgroup>
+    						<h1>Open Order</h1>
+    					</hgroup>
+                        <ul class="x-small">
+                            <li>To open an order</li>
+                            <ul>
+                                <li>Insert a new order to <code>/orders</code> using <code>POST</code></li>
+                                <li>Set the new order's status to "open"</li>
+                                <div class="h-github" cid="258157c" name="restful-service/order-service.js" lines="45-59"></div>
+                                <ul>                                
+                                    <li><code>storage.getOrderSeqId()</code> returns the order ID</li>
+                                    <li><code>storage.orders</code> (line 37) is an array of all orders in a storage</li>
+                                </ul>
+                            </ul>
+                        </ul>                
+                    </div>
+                                
+                    <div class="slide">
+                    	<hgroup>
+    						<h1>Add Item to Order</h1>
+    					</hgroup>
+                        <ul class="x-small">
+                            <li>To add an item to the order</li>
+                            <ul>
+                                <li>Insert a new item to the order <code>/orders/{order-id}</code> using <code>POST</code></li>
+                            </ul>
+                            <div class="h-github" cid="258157c" name="restful-service/order-service.js" lines="74-94"></div>
+                        </ul>                
+                    </div>
+
+                    <div class="slide">
+                        <hgroup>
+    						<h1>Close Order</h1>
+    					</hgroup>
+                        <ul class="x-small">
+                            <li>To close an order</li>
+                            <ul>
+                                <li>Update the status of the order <code>/orders/{order-id}</code> using <code>PUT</code></li>
+                            </ul>
+                            <div class="h-github" cid="258157c" name="restful-service/order-service.js" lines="97-116"></div>
+                        </ul>                
+                    </div>
+
+                    <div class="slide">
+                        <hgroup>
+        					<h1>Other Operations</h1>
+    					</hgroup>
+                        <ul class="x-small">
+                            <li>To get, delete an order and get, delete and update an item</li>
+                            <ul>
+                                <li>Delete an order <code>/orders/{order-id}</code> using <code>DELETE</code></li>                            
+                                <li>Get an order's item <code>/orders/{order-id}/{item-id}</code> using <code>GET</code></li>                            
+                                <li>Update an order's item <code>/orders/{order-id}/{item-id}</code> using <code>PUT</code></li>                            
+                                <li>Delete an order's item <code>/orders/{order-id}/{item-id}</code> using <code>DELETE</code></li>                            
+                            </ul>
+                            <li>Other methods are not allowed</li>
+                            <ul>
+                                <li>Send <code>405 Not Allowed</code> status with <code>Allow</code> header to indicate which methods
+                                are allowed on a resource</li>
+                            </ul>
+                            <pre class="brush: js">
+                                if (method != "GET" && method != "PUT" && method != "POST" && method != "DELETE")
+                                    return { 
+                                        status: "405", // method not allowed 
+                                        headers : { "Allow" : "GET, PUT, POST, DELETE" } 
+                                    };                                
+                            </pre>
+                            <li class="task">Task</li>
+                            <ul>
+                                <li>Implement the remaining methods listed above</li>
+                            </ul>                        
+                        </ul>                
+                    </div>
+
+                    <div class="slide">
+                        <hgroup>
+            				<h1>Testing</h1>
+    					</hgroup>
+                        <ul class="xx-small">
+                            <li>Test the service using a bash script <code>test.sh</code></li>
+                            <div class="h-github" name="restful-service/test.sh" config="highlight: [7,16,17,18,21,24]" 
+                                brush="bash" cid="fef7e41" lines="3-24"></div>
+                            <li class="task">Task</li>
+                            <ul>
+                                <li>Run service and test it using the <code>test.sh</code> script.</li>
+                            </ul>                        
+                        </ul>                
+                    </div>
+
+                    <div class="slide">
+                        <hgroup>
+            				<h1>RESTful Public Process</h1>
+    					</hgroup>
+                        <div class="h-drawing" style="height: 350px" id="1ZZsczsf7O-4HLuf_Flk0Ruttv5buKRmM7afQvgGWK8w"></div>
+                        <ul class="x-small">
+                            <li>Note</li>
+                            <ul>
+                                <li>client, service communicate through metadata and representations</li>
+                                <li>There is no need for a stateful server</li>
+                            </ul>
+                        </ul>                
+                    </div>   
+                    
+                </section>
+                
+                <div class="slide outline"></div>                
+                
+                <section>
+                    <header>Advanced Design Issues</header>
+
+                    <div class="slide">
+                        <hgroup>
+    						<h1>Respect HTTP Semantics</h1>
+    					</hgroup>
+                        <ul class="small">
+                            <li>Do not overload semantics of HTTP methods</li>
+                            <ul>
+                                <li>For example, <code>GET</code> is read-only method and idempotent</li>
+                                <li>REST Anti-pattern:</li>
+                                <li class="no-bullet">&nbsp;&nbsp;&nbsp;<code>GET /orders/?add=new_order</code></li>
+                                <ul>
+                                    <li>This is not REST!</li>
+                                    <li>This breaks both safe and idempotent principles</li>                                
+                                </ul>
+                            </ul>
+                            <li>Consequences</li>
+                            <ul>
+                                <li>Result of <code>GET</code> can be cached by proxy servers</li>
+                                <li>They can revalidate their caches freely</li>
+                                <li>You can end up with new entries in your storage without you knowing!</li>
+                            </ul>      
+                            <li>The same is true for other methods</li>
+                        </ul>                
+                    </div>
+
+    				<div class="slide">
+    					<hgroup>
+    						<h1>Change Order Status</h1>
+    					</hgroup>
+    					<ul class="small">
+                            <li><code>status</code> property of <code>/orders/{order-id}</code> resource</li>
+                            <ul>
+                                <li>reflects a state of the process</li>
+                                <li>No need to use a stateful service, state is communicated through the order representation</li>
+                            </ul>
+    						<li>How do you implement a canceling an order?</li>
+    						<ul>
+    							<li>You can delete it using <code>DELETE</code></li>
+                                <li>But you may want to cancel it in order to:</li>
+                                <ul>
+    							    <li>maintain a list of canceled orders</li>
+                                    <li>have a possibility to "roll-back" canceled orders</li>
+                                </ul>
+    						</ul>
+    					</ul>
+    				</div> 
+    
+    				<div class="slide">
+    					<hgroup>
+    						<h1>DELETE to cancel</h1>
+    					</hgroup>
+    					<ul class="small">
+    						<li>A bad solution to cancel the order</li>
+    						<ul>
+    							<li>to cancel with DELETE<br/>
+    							<code>DELETE /orders/3454/?cancel=true</code>
+    							<li>you overload the meaning of DELETE</li>
+        						<li>you violate the uniform interface principle</li>
+    						</ul>
+    						<li>Always ask a question:</li>
+    						<ul>
+    							<li><b>Is the operation a state of the resource?</b></li>
+    							<li>if yes, the operation should be:</li>
+                                <ul>
+    							    <li>modeled within the data format</li>
+    							    <li>or as a separated resource (sub-resource)</li>
+                                </ul>
+    						</ul>
+        					<li>No verbs in <code>path</code> and <code>query</code> components!</li>
+                            <ul>
+                                <li><code>/cancelOrder</code>, <code>/orders/{order-id}/?action=delete</code>, etc.</li>
+                                <li>Verbs in URIs indicate that a resource is actually an operation!</li> 
+                            </ul>
+    					</ul>
+    				</div> 
+    
+    				<div class="slide">
+    					<hgroup>
+    						<h1>PUT to cancel</h1>
+    					</hgroup>
+    					<ul class="small">
+    						<li>A RESTful solution to cancel an order</li>
+    						<ol>
+    							<li>first, have an order's status</li>
+                                <ul>
+    							    <li>as part of the Order representation format</li>
+                                    <li>we extend "open" and "close" with "cancel"</li>
+                                </ul>
+    							<li>Use PUT to cancel an order</li>
+                                <pre class="brush: js">
+                                &gt; PUT /orders/{order-id}
+                                &gt; Content-Type: application/json
+                                &gt; 
+                                &gt; { "status" : "cancel" }
+                                 
+                                &lt; HTTP/1.1 204 No Content
+                                </pre>
+    						</ol>
+    						<li>Clean-up all cancelled orders</li>
+    						<ul>
+    							<li>you can have a resource "all valid orders": <code>/orders/valid</code><br/>
+                                (~ all orders that are not canceled)</li>
+                                <ul>
+        						    <li><code>GET /orders/valid</code> will return all non-canceled orders</li>
+    							    <li><code>POST /orders/valid</code> will purge all cancelled orders</li>
+                                </ul>
+    						</ul>
+    					</ul>
+    				</div> 
+                    
+                    <div class="slide" id="evaluation">
+                        <hgroup>
+            				<h1>Evaluation</h1>
+        				</hgroup>
+                        <ul class="x-small">
+                            <li>How "good" is our Order Book service?</li>
+                            <ul>
+                                <li>Analysis of the service by service characteristics (see MDW for details) and HTTP principles.</li> 
+                            </ul>
+                            
+                            <style>
+                                .fr:last-child td,
+                                .fr > td:first-child {
+                                    background-color: white;                            
+                                    border-bottom: 1px solid whitesmoke;
+                                }
+                                .fr > td:first-child {
+                                    border-right: 1px solid LightSteelBlue;
+                                    background-color: LightSteelBlue;
+                                    color: white;
+                                    font-weight: bold;
+                                }
+                                .fr:last-child td {                            
+                                    border-bottom: 1px solid LightSteelBlue;
+                                }                            
+                            </style>
+                            
+                            <table style="width: 890px" class="first-col-header">
+                                <thead>
+                                    <th style="width: 160px">Principle</th><th style="width: 30px">&plus;/&minus;</th><th>Comment</th>
+                                </thead>
+                                <tbody>
+                                    <tr class="fr">
+                                        <td rowspan="5">Loose Coupling</td>
+                                        <td>&nbsp;&plus;</td><td>Uses standard response codes.</td></tr>
+                                    <tr><td>&nbsp;&plus;</td><td>Uses representation of resources and HTTP Location header to implement the public process.</td></tr>
+                                    <tr><td>&nbsp;&minus;</td><td>Does not use hypermedia; client needs to construct links for some resources.</td></tr>
+                                    <tr><td>&nbsp;&plus;</td><td>Properly models resource URIs and resource IDs; they have hierarchical nature; does not use verbs.</td></tr>
+                                    <tr><td>&nbsp;&plus;</td><td>Respects semantics of HTTP methods and extensively uses them.</td></tr>
+                                            
+                                    <tr class="fr">
+                                        <td rowspan="2">Reusability</td>
+                                        <td>&nbsp;&plus;</td><td>Unforeseen clients will likely use the service as the application state is communicated through HTTP.</td></tr>
+                                    <tr><td>&nbsp;&minus;</td><td>Only offers one representation format (JSON).</td></tr>
+    
+    
+                                    <tr class="fr">
+                                        <td rowspan="1">Contracting and Discoverability</td>
+                                        <td>&nbsp;&minus;</td><td>Does not describe content type nor public process such as by using Internet Media Types.</td></tr>
+    
+                                    <tr class="fr">
+                                        <td rowspan="1">Composability</td>
+                                        <td>&nbsp;&plus;</td><td>Does not obstruct composition.</td></tr>
+    
+                                    <tr class="fr">
+                                        <td rowspan="1">Abstraction</td>
+                                        <td>&nbsp;&plus;</td><td>Service description can be implemented by various implementation technologies.</td></tr>
+    
+                                    <tr class="fr">
+                                        <td rowspan="1">Encapsulation</td>
+                                        <td>&nbsp;&plus;</td><td>Distinguishes interface from implementation, processing logic is not exposed 
+                                            to clients through the interface.</td></tr>
+                                </tbody>
+                            </table>                        
+                        </ul>
+        			</div>                 
+                    
+                </section>
+            </section>
+            
+            <div class="slide outline"></div>
+            
+    		<section>
+				<header>Content Negotiation</header>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Content Negotiation</h1>
+					</hgroup>
 					<ul>
-						<li>Separation of style rules from Web page content</li>
-						<li>Reduction of new HTML tags for a new visual effect</li>
+						<li>Advantages</li>
 						<ul>
-							<li>presentational structures created with<br/>
-							CSS + <code>&lt;span&gt;</code> and <code>&lt;div&gt;</code> tags</li>
+							<li>Different clients may want to use different formats</li>
+							<ul>
+                                <li>Web browser: JSON</li>
+                                <li>Java client: XML</li>
+							    <li>Ruby client: YAML</li>
+                            </ul>
+							<li>Clients want internationalized data<br/>
+							&rarr; translated information in various languages</li>
+							<li>applications evolve<br/>
+							&rarr; need for version support</li>
 						</ul>
-						<li style="margin-top: 10px">Behavior of constructs in Web pages can be customized via<wbr/>
-						JavaScript and HTML Document Object Model (DOM)</li>
-						<li style="margin-top: 10px">Browser wars comes to the end with HTML 4</li>
-						<li>New highly interactive Web</li>
-
-						<!--<li style="margin-top: 10px">Bad things:<br/>
-						&rarr; behavior in pages outside of HTML 4 based on IE</br>
-						&rarr; a reverse engineering from Netscape browser<br/>
-						&rarr; move away from TBL's Web contract</li>-->
+						<li>HTTP Content Negotiation</li>
+						<ul>
+							<li>a protocol, also called conneg</li>
+							<li>format, encoding, language</li>
+						</ul>
 					</ul>
-				</ul>
-			</div>
+				</div> 
 
-			<div class="slide">
-				<hgroup>
-					<h1>Timeline</h1>
-				</hgroup>
-				<ul class="small">
-					<li><b>2000-2002:</b> move from Web content to Web apps</li>
+				<div class="slide">
+					<hgroup>
+						<h1>Representation Negotiation</h1>
+					</hgroup>
 					<ul class="x-small">
-						<li>HTML as a simple markup language evolved to:</li>
+						<li>Client requests specific media types it supports</li>
 						<ul>
-							<li><b>HTML 4</b> &ndash; tags and attrs documents structures</li>
-							<li><b>CSS</b> &ndash; style rules for document presentation</li> 
-							<li><b>DOM</b> &ndash; API to manipulate HTML in <b>JavaScript</b></li>
+							<li>client sets <code>Accept</code> header in the request</li>
+                            <ul>
+    						    <li>the value is a comma delimited set of content types</li>
+                            </ul>
 						</ul>
-						<li style="margin-top: 10px">XMLHttpRequest (XHR)</li>
+						<li>Specific requests</li>
 						<ul>
-							<li>Asynchronous JavaScript and XML (AJAX)</li>
+							<li>to ask for xml or json representations:</li>
+                            <pre class="brush: plain; gutter: 'false'">
+							&gt; GET /orders HTTP/1.1
+							&gt; Accept: application/xml, application/json
+                            </pre>
+							<li>server choses one of the types (by applying preference ordering) and serializes the resource in that type</li>
+							<li>when the server cannot find any type, it sends <code>406 Not Acceptable</code> response code</li>
 						</ul>
-						<li style="margin-top: 10px">November 2000: eBay launches its API</li>
+						<li>Generic requests</li>
 						<ul>
-							<li>beginning of Web applications for third-party app integration</li>
+							<li>client may specify wildcards to ask for any type or subtype</li>
+                            <pre class="brush: plain; gutter: 'false'">
+    						&gt; GET /orders HTTP/1.1
+							&gt; Accept: text/*, text/html; level=1
+                            </pre>
 						</ul>
 					</ul>
-					<li><b>2002:</b> beginning of Web 2.0 era</li>
+				</div> 
+
+				<div class="slide">
+					<hgroup>
+						<h1>Preference Ordering &ndash; Implicit Rule</h1>
+					</hgroup>
+					<ul class="small">
+						<li>Implicit rule</li>
+						<ul>
+							<li>More specific media type takes preference over less specific ones. Example:</li>
+                            <pre class="brush: plain; gutter: 'false'">
+        					&gt; GET /orders HTTP/1.1
+							&gt; Accept: text/*, text/html;level=1, */*, application/xml
+                            </pre>
+							<li class="space-before">server interprets the client preference as:<br/>
+							1. <code>text/html;level=1</code> &ndash; most specific<br/>
+							2. <code>application/xml</code> &ndash; no parameters<br/>
+							3. <code>text/*</code> &ndash; more concrete than match-all<br/>
+							4. <code>*/*</code> &ndash; less specific<br/>
+						</ul>
+					</ul>
+				</div> 
+
+				<div class="slide">
+					<hgroup>
+						<h1>Preference Ordering &ndash; Explicit Rules</h1>
+					</hgroup>
+					<ul class="small">
+						<li>Explicit rules</li>
+						<ul>
+							<li>using <code>q</code> parameter (qualifier), numeric value from 0.0 to 1.0
+							(1.0 indicates the most preferred type)</li>
+                            <pre class="brush: plain; gutter: 'false'">
+            				&gt; GET /orders HTTP/1.1
+							&gt; Accept: text/*;q=0.9, */*;q=0.1, application/json, application/xml;q=0.5
+                            </pre>
+							<li class="space-before">server interprets the client preference as:<br/>
+							1. <code>application/json</code> &ndash; implicit qualifier 1.0, most specific<br/>
+							2. <code>text/*</code> &ndash; the second next highest qualifier 0.9<br/>
+							3. <code>application/xml</code> &ndash; more specific but lower pref. value 0.5<br/>
+							4. <code>*/*</code> &ndash; anything otherwise<br/>
+						</ul>
+					</ul>
+				</div> 
+
+				<div class="slide">
+					<hgroup>
+						<h1>Language and Encoding Negotiation</h1>
+					</hgroup>
 					<ul class="x-small">
-						<li>After dot-com bubble burst (Fall 2001)</li>
-						<li>Web 2.0 coined by Web 2.0 conference (Tim O'Reilly)</li>
+						<li>Language negotiation</li>
 						<ul>
-							<li>dot-com bubble burst was a turning point</li>
+							<li>Client uses <code>Accept-Language</code> header; the value is a comma 
+                            separated list of language (ISO 639) and country codes (ISO 3166)</li>
+                            <pre class="brush: plain; gutter: 'false'; class-name: 'tight'">
+                			&gt; GET /orders HTTP/1.1
+							&gt; Accept-Language: en-us, cs, fr
+                            
+                            &lt; Content-Language: en-us
+                            </pre>
+							<li>Supports preference qualifiers too</li>
+						</ul>
+						<li>Encoding negotiation</li>
+						<ul>
+							<li>Client uses <code>Accept-Encoding</code> for message compression<br/>
+							the value is a comma separated list of acceptable compressions</li>
+                            <pre class="brush: plain; gutter: 'false'; class-name: 'tight'">
+                    		&gt; GET /orders HTTP/1.1
+							&gt; Accept-Encoding: gzip, deflate
+                            
+                            &lt; Content-Encoding: gzip
+                            </pre>
+							<li>Supports preference qualifiers too</li>
+							<li>When a client or a server compress a message body the 
+							  <code>Content-Encoding</code> must always be specified!</li> 
 						</ul>
 					</ul>
-				</ul>
-			</div>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>Web Separation of Concerns</h1>
-				</hgroup>
-				<div class="h-drawing" style="height: 300px; margin-top: 20px" 
-					id="1feS8_HA3xcD_4ur1VOnjti-PLHRI7JH4q6UWT11-_m4"></div>
-				<ul class="x-small">
-					<li>Evolution rather than design</li>
-					<ul>
-						<li>Information Sharing</li>
-						<ul>
-							<li>easy to expose/access information, standard models, semantics</li>
-						</ul>
-						<li>Web as a platform</li>
-						<ul>
-							<li>reusable services, mashups, scalability and performance</li>
-						</ul>
-					</ul>
-				</ul>
-			</div>
-		</section>
-
-		<div class="slide outline"></div>
-		
-		<section>
-			<header>Web 2.0 Concepts</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>What is Web 2.0</h1>
-				</hgroup>
-				<p style="margin-top: 20px; padding: 0px 55px 0px 55px; font-size: 22px; font-style: italic; color: #444">
-				  Web 2.0 is the same as Web 1.0, but there was a broken Web 1.5 in between. 
-				  </br><span style="margin-left: 550px">&mdash;Tim O'Reilly</span></p>
-				<center>
-					<table class="prettytable" style="margin-top: 30px; margin-bottom: 0px; padding-bottom: 0px; width: 600px">
-						<caption style="margin: 0px">Examples of Web 1.0 vs. Web 2.0 concepts and services<br/> 
-						  (based on <span id="oreilly-web20" class="reference"></span>)</caption>
-						<thead>
-							<tr><th>Web 1.0</th><th style="width: 80px"></th><th style="width: 220px">Web 2.0</th></tr>
-						</thead>
-						<tbody>
-							<tr><td>Britannica online</td><td>&rarr;</td><td>Wikipedia</td></tr>
-							<tr><td>personal websites</td><td>&rarr;</td><td>blogging</td></tr>
-							<tr><td>screen scraping</td><td>&rarr;</td><td>web services</td></tr>
-							<tr><td>content management systems</td><td>&rarr;</td><td>wikis</td></tr>
-							<tr><td>directories (taxonomy)</td><td>&rarr;</td><td>tagging (folksonomy)</td></tr>
-							<tr><td>domain name speculation</td><td>&rarr;</td><td>search engine optimization</td></tr>
-							<tr><td>mailing list</td><td>&rarr;</td><td>Facebook/Twitter</td></tr>
-							<!--<tr><td>phones</td><td>&rarr;</td><td>Skype</td></tr>-->
-							<tr><td>desktop software</td><td>&rarr;</td><td>software as a service</td></tr>
-							<tr><td>initial investments</td><td>&rarr;</td><td>pay per use</td></tr>
-						</tbody>
-					</table>
-				</center>
-			</div>
-
-			<div class="slide outline"></div>
+				</div> 
 				
-			<section>
-				<header>Read-write Web</header>
-
-				<div class="slide">
+				<div class="slide" id="resource-versions">
 					<hgroup>
-						<h1>Read-write Web</h1>
-					</hgroup>
-					<ul class="spacing">
-						<li>Initial idea of TBL</li>
-						<li>Consumers become producers: <b>prosumers</b></li>
-						<ul>
-							<li>participation, contributions by users</li>
-							<li>users add value, and they are often the value</li>
-							<ul>
-								<li>Twitter with 150M users has a value of ~$10B</li>
-							</ul>
-						</ul>
-
-						<li>Best example: <b>Wikipedia</b></li>
-						<ul>
-							<li>and many others: Flickr, del.icio.us, Digg, etc.</li>
-							<li>but also personal blogs</li>
-							<li>as well as Amazon (satisfaction, ranks of books)</li>							
-						</ul>
-
-						<li>Users' knowledge &ndash; basis for Web intelligence</li>
-						<ul>
-							<li>Collective intelligence</li>
-							<ul>
-								<li>mining and utilization of contributed data</li>
-							</ul>
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Linked Data</h1>
-					</hgroup>
-					<img src="http://linkeddata.org/static/images/lod-datasets_2009-07-14_cropped.png" 
-						style="zoom: 1.2; margin-top: 2px" alt="Linked Data"></img>
-				</div>				
-
-				<div class="slide">
-					<hgroup>
-						<h1>Read-write Web Technologies</h1>
-					</hgroup>
-					<ul class="spacing-20">
-						<li>Wiki</li>
-						<ul>
-							<li>Easy, versioned content management</li>
-							<li>simplified markup for non-IT people</li>
-						</ul>
-						<li>Tagging, folksonomies</li>
-						<ul>
-							<li>Easy creation of metadata describing content</li>
-						</ul>
-						<li>Syndication, Atom/RSS, AtomPub, trackback</li>
-						<ul>
-							<li>enabling streams of thought, dialogues</li>
-						</ul>
-						<li>New License Models</li>
-						<ul>
-							<li style="margin-bottom: 10px">Creative Commons</li>
-							<span><img src="http://upload.wikimedia.org/wikipedia/commons/3/3c/Cc-by_new.svg"></span>&nbsp;
-							<span><img src="http://upload.wikimedia.org/wikipedia/commons/d/df/Cc-sa_white.svg"></span>&nbsp;
-							<span><img src="http://upload.wikimedia.org/wikipedia/commons/d/db/Cc-nc.svg"></span>&nbsp;
-							<span><img src="http://upload.wikimedia.org/wikipedia/commons/c/c7/Cc-nd.svg"></span>&nbsp;
-						</ul>
-
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>How Many Producers</h1>
-					</hgroup>
-					<ul class="spacing-20">
-						<li>Wikipedia</li>
-						<ul>
-							<li style="margin-bottom: 0px">~1% of Wikipedia users were responsible 
-								for 50% of Wikipedia edits (2003/2004)</li>
-						</ul>
-						<figure>
-							<img src=
-								"img/l3/2007-05-10k-users-edits.png" 
-								style="height: 340px; margin-top: 0px; margin-bottom: -20px" alt="users with 10k+ edits"></img>
-							<figcaption>Participation of users with 10k+ edits, source 
-							<a href="http://asc-parc.blogspot.com/2007/05/long-tail-and-power-law-graphs-of-user.html">
-								Long Tail of User Participation in Wikipedia, Augmented Social Cognition Research Blog from PARC.
-							</a></figcaption>
-						</figure>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Demography of Wikipedia Editors</h1>
-					</hgroup>
-					<figure style="margin-left: 80px">
-						<img src="img/l3/WMFstratplanSurvey1.png" style="height: 450px; 
-					  	margin-bottom: 0px" alt="users with 10k+ edits"></img>
-						<figcaption>Demography of Wikipedia Editors, source: 
-							<a href="http://strategy.wikimedia.org/wiki/Wikimedia_users#Demographics">
-								Wikimedia Strategic Planning</a>
-							</figcaption>
-					</figure>
-				</div>
-
-			</section>
-
-			<div class="slide outline"></div>
-			
-			<section>
-				<header>Programmable Web</header>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Programmable Web</h1>
-					</hgroup>
-					<ul class="spacing-10">
-						<li>Web as a platform</li>
-						<li>APIs replace screen scraping</li>
-						<ul>
-							<li>Access to information and <b>functionality</b></li>
-							<li>RESTful web services, HTTP as a basis</li>
-						</ul>
-						<li>Data in structured and standardized form</li>
-						<ul>
-							<li>XML and JSON for data exchange</li>
-							<li>RSS/Atom Feeds</li>
-							<li>Microformats</li>
-							<li>Domain-specific formats, Linked Data</li>
-						</ul>
-						<li>Mashups, Aggregation</li>
-						<ul>
-							<li>Yahoo! pipes, Google AppsScript</li>
-							<li>AJAX (XMLHttpRequest), JSONP</li>
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>How Many Web APIs?</h1>
+						<h1>Resource Version Negotiation</h1>
 					</hgroup>
 					<ul class="small">
-						<li>Web APIs Growth</li>
+						<li>Applications and their resources evolve</li>
 						<ul>
-							<li>8 years to get to 1,000 APIs in November 2008</li>
-							<li>18 months to get to 2,500 APIs in December 2010</li>
-							<li>only 3 months to register 1,000 APIs in August 2012</li>
+							<li>A service need to support old clients</li>
+							<li>The service's URI and methods do not need to change &ndash; the content it provides may be in different versions</li>
+                            <li>cf. <a href="lecture4.html#/resource-versions">resource versions in Lecture 4</a>.
 						</ul>
-						<figure>
-					  		<img src="img/l3/pw-stats.png" style="height: 300px; margin-top: 10px; margin-left: 20px" 
-					  			alt="API Billionaires Club"></img>
-								<center><figcaption>API Growth Over Time, source: <a 
-							href="http://blog.programmableweb.com/2012/11/26/8000-apis-rise-of-the-enterprise//">
-							ProgrammableWeb.com</a></figcaption></center>
-						</figure>
+						<li>Encode the version information</li>
+                            <pre class="brush: plain; gutter: 'false'">
+                			&gt; GET /orders HTTP/1.1
+							&gt; Accept: application/xml; version=2.0
+                            
+                            &lt; HTTP/1.1 200 OK
+                            &lt; Content-Type: application/xml; version=2.0
+                            </pre>
+						</ul>
+						
 					</ul>
 				</div>
-
+				
 				<div class="slide">
 					<hgroup>
-						<h1>API Billionaires Club</h1>
+						<h1>Respecting Standards?</h1>
 					</hgroup>
-					<ul class="small">
-						<li>Web API Traffic</li>
+					<ul class="x-small spacing">
+						<li>HTTP specification is very powerful</li>
 						<ul>
-							<li>New highly dependable back-end technologies to serve increasing traffic</li> 
+							<li>but some clients ignore HTTP features</li>
+                            <ul>
+							    <li>such as Firefox hardcodes <code>Accept</code> header as<br/>
+							    <code>text/html,application/xhtml+xml,application/xml,*/*</code></li>
+							    <li>hence it is impossible to to negotiate e.g. a JSON format</li>
+                            </ul>
+							<li>Or if you want to test something quickly</li>
+                            <ul>
+							    <li>using <code>curl</code> is not as quick as entering URL to a browser</li>
+                            </ul>
 						</ul>
-						<figure>
-							<img src="img/l3/api-billionaires-club.png" style="height: 340px; margin-top: 0px; margin-left: 20px" 
-					  			alt="API Billionaires Club"></img>
-							<figcaption>API Billionaires Club, source: <a 
-								href="http://blog.programmableweb.com/2011/05/25/who-belongs-to-the-api-billionaires-club/">
-								ProgrammableWeb.com</a></figcaption>
-						</figure>
-					</ul>	
-				</div>
-
+						<li>Negotiation by URI patterns</li>
+						<ul>
+							<li>quite common, for example:<br/>
+							<code>http://company.com/orders/?alt=json</code> (Google APIs)</li>
+							<li>or in the URI path component:<br/>
+							<code>http://company.com/orders.xml</code><br/>
+							<code>http://company.com/orders.xml.en-us</code><br/>
+							<code>http://company.com/orders.json</code></li>
+							<li>But be aware of the <a href="lecture4.html#/uri-opacity">URI Opacity</a>!</li>
+						</ul>
+					</ul>
+				</div> 
 			</section>
+            
+            
 
-			<div class="slide outline"></div>
-			
-			<section>
-				<header>Intelligent Web</header>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Intelligent Web</h1>
-					</hgroup>
-					<ul>
-						<li>Semantic Web</li>
-						<ul>
-							<li>Separation of semantics from syntax</li>
-							<li>Variety of levels for semantic expressivity</li>
-							<li>Reasoning support</li>
-						</ul>
-
-					<!--	<li>Long Tail</li>
-						<ul>
-							<li>Reach out for less popular products</li>
-							<li>Selling less of more</li>
-						</ul> -->
-
-						<li>Collective Intelligence</li>
-						<ul>
-							<li>Utilization of human-knowledge for benefits of users</li>
-							<li>Ranking of products/services, collaborative filtering</li>
-						</ul>
-
-						<li>Human Intelligence</li>
-						<ul>
-							<li>Utilization of crowds to do computation or perform tasks</li>
-							<li>Amazon Mechanical Turk, reCAPTCHA</li>
-						</ul>
-
-					</ul>
-				</div>
-			</section>
-
-			<div class="slide outline"></div>
-			
-			<section>
-				<header>Social Web</header>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Social Web</h1>
-					</hgroup>
-					<ul>
-						<li>Web Science</li>
-						<ul>
-							<li>need to study the Web in a wider context</li>
-							<li>inter-disciplinary themes involving sociology, economics, and computer science 
-							fields</li>
-							<li>Social web in the core of Web science</li>
-						</ul>
-						<li>Data formats</li>
-						<ul>
-							<li>OpenGraph protocol, FOAF, SIOC</li>
-						</ul>
-						<li>Social Network Analysis</li>
-						<ul>
-							<li>Structure</li>
-							<li>Behavior</li>
-							<li>Visualization</li>
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Social Web Stats: Time</h1>
-					</hgroup>
-					<ul>
-						<li>Time spent by people</li>
-						<ul>
-							<li>time spent by people increases by 80% every year</li>
-							<li>700B minutes per month on Facebook</li>
-							<figure>								
-								<img src="img/l3/social-media-time1.png" style="margin-left: 60px; height: 380px" 
-								alt="Time Spent by People on Social Media"></img>
-								<figcaption>Time Spent by People on Social Media</figcaption>
-							</figure>
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Social Web Stats: Data</h1>
-					</hgroup>
-					<ul>
-						<li>Data and User Base Sizes</li>
-						<ul>
-							<li>300M users on Twitter, 800M on Facebook (as of 2011)</li>
-							<li>Twitter: 300M tweets per day, 50GB of tweets alone</li>
-							<li>75% of all Twitter traffic through API!</li>
-							<li>Twitter serves ~800 tweets per second</li>
-							<figure>
-								<img src="img/l3/twitter-by-numbers.png" 
-									style="margin-left: 60px; height: 260px" alt="Twitter By Numbers"></img>
-								<figcaption>Source: <a href="http://www.slideshare.net/raffikrikorian/twitter-by-the-numbers">
-									Twitter By Numbers</a>, Raffi Krikorian’s talk at UC Berkley, September, 2010.</figcaption>
-							</figure>
-						</ul>
-					</ul>
-				</div>
-
-			</section>
-
-
-		</section>
-		
-	</body>
-</html>	
+    </body>
+</html>

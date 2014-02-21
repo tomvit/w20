@@ -8,17 +8,17 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
         <meta name="course"   content="Web 2.0"/>
 		<meta name="lecture"  content="Lecture 10"/>
-   		<meta name="keywords" content="JSON, JSONP, JavaScript, AJAX, CORS"/>
+   		<meta name="keywords" content="microformats, vCard, hCard, hREST, microdata, schema.org, HTML5 Web Forms"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
         <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
         <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
 
         <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>Accessing and Utilizing Services</title>
+        <title>Microformats, Microdata, Web Forms</title>
 	</head>
 	<body> 
-    
+		
 		<footer>
 			<p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester"/>,&nbsp;
 			<span class="meta_twitter"/></p>
@@ -49,616 +49,818 @@
 				<a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
 				<div class="oppa"></div>
 			</div>
+		</div>		
+		
+		<div class="slide">
+			<hgroup>
+				<h1>Recall: Data Syntax, Structure and Semantics</h1>
+			</hgroup>
+			<div class="h-drawing" style="height: 430px" id="1sm2ZB4YcB2FHzj5uD0xBLeIDZjmz14NzjyGeSgmBl0U"></div>
 		</div>
-		
-        <div class="slide outline"></div>		
 
-		<section>
-			<header>Mashups and XHR</header>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>Mashups</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Web application hybrid or Web 2.0 application</li>
-					<ul>
-						<li>Uses APIs of two or more applications to provide new value-added functionality</li>
-					</ul>	
-					<li>Types</li>
-					<ul>
-						<li>Data mashup &ndash; integration/aggregation of data (read only)</li>
-						<li>Service mashup &ndash; more sophisticated workflows (read, write)</li>
-						<li>Visualization &ndash; involves UI, e.g., third-party data displayed on the Google map</li>
-					</ul>
-					<li>Client-Server View</li>
-					<ul>
-						<li>client-side mashups (mainly in a browser)</li>
-						<ul>
-							<li>JavaScript, Dynamic HTML, AJAX, JSON/JSONP</li>
-						</ul>
-						<li>server-side mashup</li>
-						<ul>
-							<li>server-side integration of services and data</li>
-							<li>third-party programming languages, very typical, nothing new</li>
-							<li>specialized environments: Google AppsScript, Yahoo Pipes</li>
-						</ul>
-					</ul>
-					<li>Web Apps developments will all be about mashups!</li>
-				</ul>
-			</div>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>Example Architecture</h1>
-				</hgroup>
-				<img style="height: 450px; margin-top: 20px; margin-left: 60px;" 
-					src="img/l10/web-20-mashup-arch.png"></img>
-			</div>			
+		<div class="slide outline"></div>
 						
+		<section>
+			<header>Microformats</header>
+
 			<div class="slide">
 				<hgroup>
-					<h1>XMLHttpRequest (XHR)</h1>
+					<h1>Microformats</h1>
 				</hgroup>
-				<ul>
-					<li>Interface to utilize HTTP protocol in JavaScript</li>
-					<ul>
-						<li>standardized by <span id="webapps-wg" class="h-ref"></span> at W3C</li>
-						<li>basis for AJAX</li>
+				<ul classs="small">
+					<li>What is a microformat</li>
+					<ul class="x-small">
+						<li>How to embed data in HTML, XHTML, Atom, and XML</li>
 						<ul>
-							<li>Asynchronous JavaScript and XML</li>
+							<li>data: vCard, vResume, vRecipe</li>
+							<li>micorformat: hCard, hResume, hRecipe</li>
+						</ul>
+						<li>Browsers display HTML, machines process data</li>
+						<li>Microformat vs. POSH format</li>
+						<ul>
+							<li>POSH is same as microformat but data is not a standard format</li>
 						</ul>
 					</ul>
-					<li>Typical usage</li>
-					<ol>
-						<li>Browser loads a page that includes a script</li>
-						<li>User clicks on a HTML element</li>
+					<li>Difference to Atom feeds</li>
+					<ul class="x-small">
+						<li>Microformats require only a <b>single HTML document</b></li>
 						<ul>
-							<li>it triggers a JavaScript function</li>
+							<li>clients run GET to retrieve all data (human 
+								readable and machine readable)</li>
 						</ul>
-						<li>The function invokes a service through XHR</li>
+						<li><b>No significant increase of the size of document</b></li>
+						<li><b>No requirements on data representation</b></li>
 						<ul>
-							<li>same origin policy, cross-origin resource sharing</li>
+							<li>can be in any representation</li>
+							<li>should be defined in a well-established format spec</li>
+							<li>a microformat spec needs to be defined for every data</li>
 						</ul>
-						<li>The function receives data and modifies HTML in the page</li>
-					</ol>
+					<ul>
 				</ul>
 			</div>
 
 			<div class="slide">
 				<hgroup>
-					<h1>XHR Interface &ndash; Key Methods and Properties</h1>
+					<h1>Microformats Usage</h1>
+				</hgroup>
+				<div class="h-drawing" style="height: 480px" id="1AQptmKZV_DzKQa2JhhxgIMzd01DfabBwrufPz3_vliI"></div>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Principles</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Design Patterns</li>
+					<ul>
+						<li>How to embed data in HTML elements or elements' attributes</li>
+						<li>Applied for a particular microformat specification</li>
+					</ul>
+					<li>Follow semantics of (X)HTML elements</li>
+					<ul>
+						<li>Use the most appropriate <span id="semantic-html" class="h-ref">semantic HTML element</span></li>
+						<ul>
+							<li>if not available, use <code>&lt;span></code> or <code>&lt;div></code></li>
+						</ul>
+					</ul>
+					<li>XHTML Metadata Profiles (XMDP)</li>
+					<ul class="small">
+						<li>Definition of metadata of a microformat in (X)HTML page</li>
+						<li>Machine and human readable, not a Web standard</li>
+						<li>Uses <code>profile</code> attribute on <code>&lt;head></code> element</li>
+						<li>Is deprecated in HTML5</li>
+						<li>Is an analogy to a namespace but not really a namespace!</li>
+						<li>See <span id="xmdp" class="h-ref"></span> specification</li>
+					</ul>
+				</ul>
+			</div>
+			
+			<div class="slide">
+				<hgroup>
+					<h1>vCard Example</h1>
+				</hgroup>	
+				<ul class="x-small">
+					<li>Describes contact information</li>
+					<pre class="brush: plain; class-name: 'tight'">
+						PROPERTY:value1;value2;...;valueN
+						PROPERTY:SUBPROPERTY1="value";...SUBPROPERTY2="value";...
+					</pre>
+					<pre class="brush: plain; class-name: 'tight'">
+						BEGIN:VCARD
+						VERSION:4.0
+						N:Vitvar;Tomas;Ing.;Doc.;PhD
+						FN: Doc. Ing. Tomas Vitvar, Ph.D.
+						ORG:Czech Technical University in Prague
+						TITLE:Associate Professor
+						PHOTO:http://vitvar.com/img/tomvit-portrait.jpg
+						TEL;TYPE="work,voice";VALUE=uri:tel:+420-2-334-334
+						TEL;TYPE="home,voice";VALUE=uri:tel:+420-2-443-554
+						ADR;TYPE=work;LABEL="Thákurova 6, Praha 6, Czech Republic"
+						 :;;Thákurova 6;Praha 6;Czech Republic
+						EMAIL:tomas.vitvar@fit.cvut.cz
+						END:VCARD					
+					</pre>
+					<ul class="xx-small">
+						<li><code>N</code> &ndash; a structured representation of the name (person/organization)</li>
+						<li><code>FN</code> &ndash; formatted name string</li>
+						<li><code>ORG</code> &ndash; name of the organization and associated units</li>
+						<li><code>TITLE</code> &ndash; job title, functional position</li>
+						<li><code>LABEL</code> &ndash; Addressing label</li>
+						
+					</ul>		
+				</ul>
+			</div>	
+
+			<div class="slide">
+				<hgroup>
+					<h1>Design Patterns Rules</h1>
+				</hgroup>
+					<ul class="x-small">
+						<li><code>class-design-pattern</code></li>
+						<ul>
+							<li>semantic meaning indicated on HTML content by <code>class</code> attribute</li>
+							<pre class="brush: 'xml'; class-name: 'tight'">
+							&lt;div class="vcard">
+							    &lt;a class="url fn" href="http://www.vitvar.com">
+							       Tomas Vitvar&lt;/a>,
+							    &lt;span class="org">UIBK&lt;/span>
+							&lt;/div></pre>
+						</ul>
+						<li><code>value-class-pattern</code></li>
+						<ul>
+							<li>embedding data structure when a property has subproperties<br/>
+								(vCard fragment is <code>TEL;TYPE=WORK:+43 554 554 556</code>)</li>
+							<pre class="brush: 'xml'; class-name: 'tight'">
+							&lt;span class="tel">
+							    &lt;span class="type">Work&lt;/span>:
+							    &lt;span class="value">+43 554 554 556&lt;/span>
+							&lt;/span></pre>
+							<li>sometimes value needs to be split into multiple pieces as follows<br/>
+								(note that dialing <code>+43<b>0</b>554554556</code> is not valid)</li>
+							<pre class="brush: 'xml'; class-name: 'tight'">
+							&lt;span class="tel">
+							    &lt;span class="type">Work&lt;/span>:
+							    &lt;span class="value">+43&lt;/span>(0)
+							    &lt;span class="value">554 554 556&lt;/span>
+							&lt;/span></pre>
+						</ul>
+					</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Design Patterns Rules (cont.)</h1>
 				</hgroup>
 				<ul class="x-small">
-					<li>Method and properties of XHR object</li>
+					<li><code>include-pattern</code></li>
 					<ul>
-						<li><code>open</code>, opens the request, parameters:<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;<code>method</code> &ndash; method to be used (e.g. GET, PUT, POST),<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;<code>url</code> &ndash; url of the resource,<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;<code>asynch</code> &ndash; true to make asynchronous call,<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;<code>user</code>, <code>pass</code> &ndash; credentials for authentication.</li>
-						<li><code>onReadyStateChange</code> &ndash; JavaScript function object, it is called when 
-						  <code>readyState</code> changes (uninitialized, loading, loaded, interactive, completed).</li>
-						<li><code>send</code>, <code>abort</code> &ndash; sends or aborts the request 
-							(for asynchronous calls)</li>
-						<li><code>status</code>, <code>statusText</code> &ndash; HTTP status code and a 
-							corresponding text.</li>
-						<li><code>responseText</code>, <code>responseXML</code> &ndash; response as text or 
-							as a DOM document (if possible).</li>
-						<li><code>onload</code> &ndash; event listener to support server push.</li>
-					</ul>					
-					<li>See <span id="xhr-w3c" class="h-ref"></span>, or 
-						<span id="xhr-moz" class="h-ref"></span> for a complete reference.</li>
-				</ul>
-			</div>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>How XHR works</h1>
-				</hgroup>
-				<div style="height: 440px; margin-top: 20px" 
-				  id="1kI3tlZl6PHZ_J_uwn_SVyT8_F05yE5Hi0B9pOEI37Z8" class="h-drawing"></div>
-			</div>
-		</section>
-			
-        <div class="slide outline"></div>						
-
-		<section>
-			<header>Security Mechanisms</header>
-		
-			<div class="slide" id="sameorigin">
-				<hgroup>
-					<h1>Same Origin Policy</h1>
-				</hgroup>
-				<div style="height: 310px" 
-				  id="1xg_D6b_EBQDYol5Kk7b-UdhbuVsbjBHfaKaNTgH_rkY" class="h-drawing"></div>
-				<ul class="xx-small">
-					<li>JavaScript code can only access resources on the same domain</li>
-					<ul>
-						<li>XHR to GET, POST, PUT, UPDATE, DELETE</li>
-						<li>Browsers apply <b>same origin policy</b></li>
-					</ul>	
-					<li>Solutions</li>
-					<ul>
-						<li>JSON and JSONP (GET only)</li>
-						<li>Cross-origin Resource Sharing Protocol (CORS)</li>
+						<li>to include a subset of data from one area of a page to the other area of the 
+					same page (same data to be reused by multiple microformats)</li>
+						<li><b>cannot be used to include content from other URLs!</b></li>
+						<li>Example, a verbose hCard on a page:</li>
+						<pre class="brush: 'xml'; class-name: 'tight'">						
+						&lt;div class="vcard" id="uibk-card">
+						    &lt;div class="fn org">University of Innsbruck&lt;/div>
+						        &lt;div class="adr">
+						            &lt;span class="street-address">Technikestrasse 21a&lt;/span>,
+						            &lt;span class="locality">Tirol&lt;/span>
+						            &lt;span class="postal-code">6020&lt;/span>
+						        &lt;/div>
+						     &lt;/div>
+						&lt;/div></pre>
+						<li>Reviews on the same page:<br/>
+							(parser replaces the whole <code>&lt;a></code> element including its content)</li>
+						<pre class="brush: 'xml'; class-name: 'tight'">						
+						&lt;div class="hreview">
+						    &lt;h1 class="summary">A place to study computer science!&lt;/h1>
+						    &lt;div class="item">&lt;a class="include" href="#uibk-card">Innsbruck Uni&lt;/a>&lt;/div>
+						    &lt;p class="description">Courses in English, fields of computer science.&lt;/p>
+						&lt;/div></pre>
 					</ul>
 				</ul>
 			</div>
 
 			<div class="slide">
 				<hgroup>
-					<h1>Why Same Origin Policy?</h2>
+					<h1>hCard Microformat Example</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>hCard profile, options:</li>
+					<pre class="brush: xml; class-name: 'tight'">						
+						&lt;link rel="profile" href="http://microformats.org/profile/hcard"></pre>
+					<pre class="brush: xml; class-name: 'tight'">	
+						&lt;...>This content uses &lt;a rel="profile" 
+							href="http://microformats.org/profile/hcard">hCard</a>.&lt;/...></pre>
+					<pre class="brush: xml; class-name: 'tight'">
+						&lt;head profile="http://microformats.org/profile/hcard">..&lt;/head> </pre>
+					<li>Example specific rules</li>
+					<ul class="xx-small">
+						<li>vCard properties that do not make sense for hCard</li>
+						<ul>
+							<li>e.g., NAME, PROFILE, SOURCE, PRODID, VERSION</li>
+							<li>publishers should not use them, parses should ignore them</li>
+						</ul>
+						<li>if <code>fn == org</code> (i.e, <code>class="fn org"</code>)</li>
+						<ul>
+							<li>hCard is a contact for a company, organization or a place</li>
+							<li><code>N</code> (person's name) property should not be used or be the empty string</li>
+						</ul>
+						<li>if <code>fn != org</code> AND <code>fn</code> contains two words</li>
+						<ul>
+							<li><code>fn</code> is split into <code>given-name</code> and <code>last-name</code></li> 
+							<li>sub-properties of <code>N</code> peoperty (by a whitespace or a comma)</li>
+						</ul> 
+						<li>see a complete specification in <span id="hcard" class="h-ref"></span></li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Known Issues</h1>
 				</hgroup>
 				<ul>
-					<li>Without the same origin policy, the following POST would be possible</li>
+					<li>Name conflicts and scalability</li>
+					<ul>
+						<li>More microformats on a page may cause naming conflicts</li>
+						<ul>
+							<li>no namespace support, <b>microformats do not scale</b></li>
+							<li>functionality of tools may break when data formats change</li>
+						</ul>
+					</ul>
+					<li>No formal semantics, no reasoning support</li>
+					<ul>
+						<li>How important is it?</li>
+						<li>Semantics defined in XMDP profiles</li>
+						<ul>
+							<li>no formal basis though machine processable</li>
+							<li>lack of compatibility with RDF/RDFa</li>
+							<li>See <span id="microformat-rdf-compatibility" class="h-ref"></span> for details.</li>
+						</ul>
+					</ul>
 				</ul>
-				<div style="height: 350px; margin-top: 30px" 
-				  id="1J14eY2C9O1g8oPI9GhkOn0tRCB5z_NodiBzPX2oEabY" class="h-drawing"></div>
 			</div>
 
-        	<div class="slide outline"></div>						
-
-			<section>
-				<header>Scripting Attacks</header>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Overview</h1>
-					</hgroup>
-	                <ul class="small">
-	                	<li>Scripting Attacks</li>
-	                	<ul>
-	                		<li>Intruders make users perform action that has side effects on their resources</li>
-	                		<li>Intruders inject malicious code to Web pages</li>
-	                	</ul>
-	                	<li>Roles in Security Scenarios</li>
-	                	<ul>
-		                    <li>Alice, Bob</li>
-		                    <ul>
-		                        <li>Normal users, usually Alices wants to send a message to Bob or Alice accesses a Bob's site.</li>
-		                    </ul>
-		                    <li>Eve</li>
-		                    <ul>
-		                    	<li>A user with bad intentions, usually a passive attacker.</li> 
-		                    </ul>
-		                    <li>Mallory</li>
-		                    <ul>
-		                    	<li>An active attacker, usually sends a link to a page with malicious code. 
-		                    </ul>	
-		                </ul>
-	                </ul>					
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Recall: State management in HTTP</h1>
-					</hgroup>
-	                <ul class="small">
-	                    <li>Request-response interaction with cookies</li>
-	                    <ul>
-	                        <li>Session is a logical channel maintained by the server</li>
-	                    </ul>
-	                    <div class="h-drawing" style="height: 250px" id="1mVCe8EtqVApZVRV_RHYQKtqDNELKdo84qzCqGvAs7iA"></div>
-	                    <li>Stateful Server</li>
-	                    <ul>
-	                        <li>Server remembers the session information in a server memory</li>
-	                        <li>Server memory is a non-persistent storage, when server restarts the memory content is lost!</li>
-	                    </ul>
-	                </ul>					
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Cross-site Request Forgery (CSRF)</h1>
-					</hgroup>
-	                <ul class="x-small">
-	                	<li>Exploits a trust of a website in a user's browser</li>
-	                	<li>Scenario</li>
-	                	<ol>
-	                		<li>Mallory sends a link to Alice (in an email, in a chat, etc.)</li>
-	                		<ul>
-	                			<li>The link points to a page that has HTML code with hrefs to Alice's private resources</li>
-	                			<li>For example, to perform an action on Alice's account, <br/>
-	                				it is possible to use <code>img</code> like this:</li>
-								<pre class="brush: html">
-								&lt;img src="https://bank.com/account?do=transfer_money&amp;amount=50000"/></pre>
-	                		</ul>
-	                		<li>Alice loads the page in her browser</li>
-	                		<ul>
-	                			<li>Alice is authenticated to the bank's website, the browser sends Alice's authentication cookies 
-	                				with the request.</li>
-	                		</ul>
-	                	</ol>
-	                	<li>Issues and Prevention</li>
-	                	<ul class="xx-small">
-	                		<li>The bank site vilotes REST, i.e. overloading of GET for making actions</li>
-	                		<li>The bank should check HTTP <code>referer</code> header</li>
-	                		<li>It is a "blind" attack, Mallory does not see the result</li>
-	                		<li>To perform POST, current browsers today use <a href="#CORS">CORS protocol</a></li> 
-	                	</ul>
-	                </ul>					
-				</div>
-
-				<div class="slide">	
-					<hgroup>
-						<h1>Cross-site Scripting Attack (XSS)</h1>
-					</hgroup>
+			<div class="slide">
+				<hgroup>
+					<h1>Uptake and some statistics</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Two billion pages annotated with hCard</li> 
+					<li>Google Rich Snippets</li>
 					<ul>
-						<li>Exploits a trust of a user in a website</li>
-					</ul>
-					<div id="1pOK4HZPt7d4j-KSllCa8BUx5Amjlq28L6sQh3Wac8kI" class="h-drawing" style="height: 250px"></div>
-					<ul class="small">
-						<li>Example Scenario</li>
-						<ol>
-							<li>An attacker injects a code to a page</li>
-							<li>A users executes the code in his/her browser's session</li>
-							<li>The code provides information (cookies) to the attacker</li>
-							<li>The attacker uses the cookies to access the user's data</li>
-						</ol>
-					</ul>	
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>XSS Examples</h1>
-					</hgroup>
-					<ul class="small">
-						<li>Twitter in Sep 2010</li>
+						<li>Content indexing with microformats, microdata, RDFa</li>
 						<ul>
-							<li>Injection of JavaScript code to a page using a tweet</li>
-							<li>You posted following tweet to Twitter</li>
-							<pre class="brush: plain">
-								There is a great event happening at 
-								http://someurl.com/@"onmouseover="alert('test xss')"/</pre>
-							<li>Twitter parses the link and wraps it with <code>&lt;a></code> element</li>
-							<pre class="brush: 'xml'">
-								There is a great event happening at 
-								&lt;a href="http://someurl.com/@"onmouseover="alert('test xss')" 
-									target="_blank">http://someurl.com/@"onmouseover=
-									"alert('test xss')"/&lt;/a></pre>
-							<li>See details at <span id="twitter-xss" class="h-ref"></span></li>
+							<li>see <span id="rich-snippets" class="h-ref"></span></li>
+							<li>94% of the rich snippets data uses microformats</li>
+							<a href="http://www.google.com/search?q=pizza+recipe">
+								<img src="img/l8/rs-review.png" style="height: 90px; margin-bottom: -20px" 
+								alt="Review Rich Snippet"></img></a>
 						</ul>
-						<li>Other example: Google Contacts</li>
 					</ul>
-				</div>	
-
-			</section>
+					<li>Firefox 3</li>
+					<ul>
+						<li>Native API to parse and process microformats in JavaScript</li>
+						<li>see <span id="firefox-microformats" class="h-ref"></span></li>
+					</ul>
+					<li>Facebook</li>
+					<ul>
+						<li>hCalendar and hCard for events</li>
+						<li>see <span id="facebook-microformats" class="h-ref"></span></li>
+					</ul>
+				</ul>
+			</div>
+			
+			<div class="slide outline"></div>			
+			
+			<section>
+				<header>hREST</header>
 				
-        	<div class="slide outline"></div>						
-
-			<section>
-				<header>Cross-origin Resource Sharing Protocol (CORS)</header>
-
-				<div class="slide" id="CORS">
+				<div class="slide">
 					<hgroup>
-						<h1>Overview</h1>
+						<h1>Motivation</h1>
 					</hgroup>
 					<ul>
-						<li>Increasing number of mashup applications</li>
+						<li>Yet another attempt for service description</li>
 						<ul>
-							<li>client-side mashups involving multiple sites</li>
-							<li>mechanism to control an access to sites from within JavaScript</li>
+							<li>automated processing of service description</li>
+							<li>service discovery, generation of libraries</li>
 						</ul>
-						<li>Allow for <b>cross-site HTTP requests</b></li>
+						<li>REST service usage</li>
 						<ul>
-							<li>HTTP requests for resources from a different domain than the domain of the resource making the request.</li>
-						</ul>
-						<li>W3C specification, working draft</li>
-						<ul>
-							<li>see <span class="h-ref" id="cors-w3c"></span></li>
-							<li>already browsers support it</li>
+							<li>Descriotion in HTML, documentation purposes</li>
+							<li>Developers read documentation and implement integration</li>
+							<li>API vendors provide client libraries</li>
 							<ul>
-								<li>see <span class="h-ref" id="cors-moz"></span> at Mozilla</li>
+								<li>JavaScript, Java, ..., no need to auto-generate code stubs</li>
 							</ul>
 						</ul>
+						<li>Future problem: discovery</li>
+						<ul>
+							<li>If huge amount of services exist, how to find the right one?</li>
+						</ul>
 					</ul>
 				</div>
 
 				<div class="slide">
 					<hgroup>
-						<h1>CORS Protocol &ndash; GET</h1>
+						<h1>REST Services Review</h1>
 					</hgroup>
-					<div style="height: 280px" id="1cAgbH75PndD38nY1IJo4QfN5Yp7siHQXfNF5oD6x9SM" class="h-drawing"></div>
-					<ul class="x-small">
-						<li>Read-only resource access via HTTP GET</li>
-						<li>Headers:</li>
-						<ul>
-							<li><code>Origin</code> &ndash; identifies the origin of the request</li>
-							<li><code>Access-Control-Allow-Origin</code> &ndash; defines who can access the resource</li>
-							<li>either the full domain name or the wildcard (*) is allowed.</li>							
+					<ul>
+						<li>Hypermedia graph</li>
+						<center><img src="img/l8/REST-hotel-service.png" style="width: 500px; padding: 20px" 
+							alt="Exmaple REST Hotel Service"></img></center>
+						<ul class="small">
+							<li>Operations are transitions from one state to another state</li>
+							<li>Resources represent application states</li>
+						</ul>	
+					</ul>
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>hREST</h1>
+					</hgroup>
+					<ul>
+						<li>Simple Web Service Functional Model</li>
+						<center><img src="img/l8/ws-model.png" style="height: 250px; padding: 20px" 
+							alt="Web Service Functional Model"></img></center>
+						<ul class="x-small">
+							<li><code>operation</code> &ndash; functional operation of the service</li>
+							<li><code>address</code> &ndash; endpoint where the operation can be invoked (resource URI)</li>
+							<li><code>method</code> &ndash; HTTP method used to invoke the operation</li>
+							<li><code>input/output</code> &ndash; input data, output format (resource representation)</li>
 						</ul>
 					</ul>
-				</div>			
+					
+				</div>
 				
 				<div class="slide">
 					<hgroup>
-						<h1>CORS Protocol &ndash; other methods and "preflight"</h1>
+						<h1>Description in HTML</h1>
+					</hgroup>	
+					<ul class="small">
+						<li>Operation <code>getHotelDetails</code></li>
+						<pre class="brush: xml; class-name: 'tight'">
+							&lt;html>
+								...
+								&lt;p>The operation &lt;code>getHotelDetails&lt;/code> is invoked 
+								using the method GET at &lt;code>http://example.com/h/{id}&lt;/code>, 
+								with the ID of the particular hotel replacing the parameter 
+								&lt;code>id&lt;/code>. It returns the hotel details in 
+						        an &lt;code>ex:hotelInformation&lt;/code> document.&lt;/p>	
+								...
+							&lt;/html></pre>	
+						<li>hREST annotation</li>	
+						<pre class="brush: xml; class-name: 'tight'; highlight: [5,6,7,8,9,10,11]">
+							&lt;div class="service" id="svc">
+							&lt;p>Description of the
+							&lt;span class="label">ACME Hotels&lt;/span> service:&lt;/p>
+							&lt;div class="operation" id="op1">
+							&lt;p>The operation &lt;code class="label">getHotelDetails&lt;/code> is
+							invoked using the method &lt;span class="method">GET&lt;/span> at 
+							&lt;code class="address">http://example.com/h/{id}&lt;/code>, 
+							with &lt;span class="input">the ID of the particular hotel replacing 
+							the parameter &lt;code>id&lt;/code>&lt;/span>.
+							It returns &lt;span class="output">the hotel details in an
+							&lt;code>ex:hotelInformation&lt;/code> document.&lt;/span>&lt;/p>&lt;/div>&lt;/div></pre>		
+					</ul>	
+				</div>
+				
+				<div class="slide">
+					<hgroup>
+						<h1>hREST Rules</h1>
 					</hgroup>
-					<div style="height: 320px" id="1-dVhDx5pka4BElYu0WzFkqkLQWsb8aphcy16l-bET80" 
-						class="h-drawing"></div>
 					<ul class="xx-small">
-						<li>Preflight request queries the resource using <code>OPTIONS</code> method</li>
+						<li><code>service</code> class</li>
 						<ul>
-							<li>requests other than GET (except POST w/o payload) or with custom headers</li>
-							<li>A browser should run preflight automatically for any XHR request meeting preflight conditions</li>
-							<li>The browser caches responses according to <code>Access-Control-Max-Age</code></li>
+							<li>block markup, e.g.,<code>&lt;body></code>, <code>&lt;div></code></li>
+							<li>The element describes a service</li>
+						</ul>	
+						<li><code>operation</code> class</li>
+						<ul>
+							<li>block markup, e.g.,<code>&lt;div></code></li>
+							<li>The element describes an operation of the service</li>
+							<li>Further includes <code>address</code>, <code>method</code>, <code>label</code></li>
+							<li>Can also be used on hyperlinks <code>&lt;a></code> and HTML forms <code>&lt;form></code></li>
+						</ul>	
+						<li><code>address</code> class</li>
+						<ul>
+							<li>specifies a URI of the resource (endpoint of the operation)</li>
+							<li>textual markup (<code>&lt;div></code>, <code>&lt;span></code>) or a link (<code>&lt;a></code>)</li>
+						</ul>	
+						<li><code>method</code> class</li>
+						<ul>
+							<li>specifies a HTTP method used</li>
+							<li>textual markup (<code>&lt;div></code>, <code>&lt;span></code>)</li>
+						</ul>
+						<li><code>label</code> class</li>
+						<ul>
+							<li>human-readable label for service, operation, message</li>
+							<li>textual markup (<code>&lt;div></code>, <code>&lt;span></code>)</li>
 						</ul>
 					</ul>
-				</div>				
-
-			</section>
+					
+				</div>
+			</section>	
+			
 		</section>
 
-	    <div class="slide outline"></div>		
-				
+		<div class="slide outline"></div>
+		
 		<section>
-			<header>JSON and JSONP</header>
+			<header>Microdata</header>
 
 			<div class="slide">
 				<hgroup>
-					<h1>Recall: JSON</h1>
+					<h1>Microdata</h1>
 				</hgroup>
 				<ul class="x-small">
-					<li>JSON = JavaScript Object Notation</li>
+					<li>Part of HTML5 specification</li>
 					<ul>
-						<li>Serialization format for data representation</li>
-						<li>Very easy to use in JavaScript</li>
+						<li>Google is the main driver (rich snippets support)</li>
+						<li>spec includes:<br/>
+						&rarr; Microdata vocabularies<br/>
+						&rarr; Microdata Global Attributes</li>
+						<li>see <span id="microdata" class="reference"></span> W3C working draft</li>
+					</ul>
+					<li>Idea similar to microformats, but</li>
+					<ul>
+						<li>items (collection of properties) have ids (URIs)</li>
+						<li>Microdata vocabulary, a formal description of terms</li>
 						<ul>
-							<li>no need to use a parser explicitly</li>
+							<li><code>http://schema.org</code> is becoming a standard</li>
+							<li>e.g., Event, Organization, Person, Product, Review</li>
+							<li>Created and supported by Google, Microsoft, Yahoo!</li>
+							<li>have RDF representation too</li>
 						</ul>
-						<li>Also great support in many programming environments</li>
-					</ul>
-					<li>Key constructs</li>
-					<ul class="xx-small">
-						<li><b>object</b> is a collection of comma-separated key/value pairs:<br/>
-						<code>{"name" : "tomas", "age" : 18, "student" : false, &nbsp;"car" : null}</code></li>
-						<li style="margin-top: 5px"><b>array</b> is an order list of values:<br/>
-						<code>[ "prague", "innsbruck", 45 ]</code></li>
-						<li style="margin-top: 5px">can be nested: objects as values in an <b>array</b>:<br/>
-						<code>[ { "name" : "tomas", "age" : 18 }, <br/>&nbsp;&nbsp;{ "name" : "peter", "age" : 19 } ]</code></li>
-						<li style="margin-top: 5px">and the other way around: array as values in an <b>object</b>:<br/>
-						<code>{ "cities" : ["prague", "innsbruck"],<br/>&nbsp;&nbsp;"states" : ["CZ", "AT"] }</code></li>
-						<li style="margin-top: 5px">A complete grammar see <span id="json" class="h-ref"></span></li>												
-					</ul>
-					
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>JSON in JavaScript</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Native data format</li>
-					<pre class="brush: javascript; class-name: 'tight'">
-					// data needs to be assigned
-					var data = { "people" : ["tomas", "peter", "alice", "jana"] };
-					
-					// go through the list of people
-					for (i = 0; i < data.people.length; i++) {
-					    man = data.people[i];
-					    // ... do something with this man
-					}</pre>
-					<li>Responses of service calls in JSON</li>
-					<ul>
-						<li>Many support JSON, how can we load that data?</li>
-					</ul>
-					<li>Example Request-Response</li>
-					<pre class="brush: javascript; class-name: 'tight'">
-						GET http://pipes.yahoo.com/pipes/pipe.run?_id=638c670c40c97b62&_render=json
-						
-					 	{"count":1,"value":  
-						   {"title":"Web 2.0 announcements",
-						    "description":"Pipes Output",
-						    "link":"http:\/\/pipes.yahoo.com\/pipes\/pipe.info...",
-						    "pubDate":"Mon, 07 Mar 2011 18:27:20 +0000",
-						    "generator":"..."
-						    ...
-						   }
-						}</pre>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>JSONP</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Service that supports JSONP</li>
-					<ul>
-						<li>allows to specify a query string parameter for a wrapper function
-						to load the data in JavaScript code</li>
-						<li>otherwise the data cannot be used in JavaScript</li>
-						<ul>
-							<li>they're loaded into the memory but assigned to nothing</li>
-						</ul>
-					</ul>
-					<li>Example</li>
-					<ul>
-						<li>if a resource at <code style="zoom: 0.9">http://someurl.org/json_data</code> returns
-						<pre class="brush: javascript; gutter: false">
-							 { "people" : ["tomas", "peter", "alice", "jana"] }</pre>
-						then the resource at<br/>
-						<code style="zoom: 0.9">http://someurl.org/json_data?_callback=loadData</code> returns
-						<pre class="brush: javascript; gutter: false">
-							 loadData({ "people" : ["tomas", "peter", "alice", "jana"] });</pre></li>
-					</ul>
-					<li>A kind of workaround for the same origin policy</li>
-					<ul>
-						<li>only <code>GET</code>, nothing else works obviously</li>
-						<li>no XHR, need to load the data through the dynamic <code>&lt;script></code> element</li>
+						<li>data formats not directly based on formats such as vCard, vCalendar, they
+							define its own "simple" vocabulary</li>
 					</ul>
 				</ul>
 			</div>
 
 			<div class="slide">
 				<hgroup>
-					<h1>JSONP in JavaScript</h1>
+					<h1>Global Attributes</h1>
 				</hgroup>
 				<ul class="xx-small">
-					<li>JSONP example</li>
+					<li>Attributes on any HTML element</li>
+					<li><code>Itemscope</code></li>
 					<ul>
-						<li>loads JSON data using JSONP by dynamically inserting <code>&lt;script></code>
-							into the current document. This will download JSON data and triggers the script.</li>
+						<li>identifies an element which descendants contain some properties</li>
+						<pre class="brush: xml; class-name: 'tight'">
+							&lt;div itemscope>...&lt;div></pre>
 					</ul>
-					<pre class="brush: javascript">
-					var TWITTER_URL = "http://api.twitter.com/1/statuses/user_timeline.json?" + 
-					  "&screen_name=web2e&count=100&callback=loadData";
-				
-					// this needs to be loaded in window.onload
-					// after all document has finished loading...
-					function insertData() {
-					    var se = document.createElement('script');
-					    se.setAttribute("type","text/javascript");
-					    se.setAttribute("src", TWITTER_URL);	
-					    document.getElementsByTagName("head")[0].appendChild(se);	
-					    // And data will be loaded when loadDta callback fires...
-					}
-				
-					// loads the data when they arrive 
-					function loadData(data) {
-					    // we need to know the the structure of JSON data that is returned 
-					    // and code it here accordingly
-					    for (i = 0; i < data.length; i++) {
-					        data[i].created_at // contains date the tweet was created
-					        data[i].text // contains the tweet
-					    }
-					}</pre>
+					<li><code>Itemtype</code></li>
+					<ul>
+						<li>pointer to a vocabulary that describes the item and its properties<br/>
+						<code>http://www.data-vocabulary.org/Person/</code></li>
+					</ul>
+					<li><code>Itemid</code></li>
+					<ul>
+						<li>global identifier of the item (URI)</li>
+						<li>such as a book's ISBN in urn schema, <code>urn:isbn:0-330-34032-8</code></li>
+					</ul>
+					<li><code>Itemprop</code></li>
+					<ul>
+						<li>a term from the vocabulary which value is in the element's content</li>
+						<pre class="brush: xml; class-name: 'tight'">&lt;span itemprop="nickname">Johny&lt;span></pre>
+					</ul>
+					<li><code>Itemref</code></li>
+					<ul>
+						<li>a reference to other item within the same document</li>
+						<pre class="brush: xml; class-name: 'tight'">&lt;div itemscope itemref="myprofile"/></pre>
+					</ul>
 				</ul>
 			</div>
 
 			<div class="slide">
 				<hgroup>
-					<h1>JSON Vulnerability</h1>
+					<h1>Example</h1>
 				</hgroup>
-                <ul class="x-small">
-                	<li>What it is</li>
-                	<ul>
-                		<li>JSON array data accessible via GET (normal access is via XHR)</li>
-                		<li>Attacker may load the data in a <code>script</code>, redefine <code>Array</code> object,
-                			and assign the data to a variable.</li>
-                		<li>Attacker's page with a script that you access:</li>
-                		<ul>
-                			<li>your browser uses your cookies to load the resource</li>
-                		</ul>
-                	</ul>
-                	<pre class="brush: html; highlight: [3,4]; class-name: tight">
-                		&lt;script type="text/javascript">
-                		var yourData;
-                		Array = function() {
-                			yourData = this;
-                		}
-                		&lt;/script>
-
-                		&lt;script src="yourdomain.cz/yoursecretdata.json" type="text/javascript">&lt;/script></pre>
-            		<li>Prevention</li>
-            		<ul class="xx-small">
-            			<li>Using prefix in the data &ndash; the prefix makes the JSON data invalid; the client must
-            				strip the prefix before parsing the data as JSON</li>
-            			<pre class="brush: javascript; class-name: tight">
-            				[ "a": "account", 433, 5543 ]</pre>
-            			<li>Use only POST for sensitive data</li>
-            		</ul>
-                </ul>					
-			</div>			
-
+				<ul class="x-small">
+					<li>Non-annotated HTML text</li>
+					<pre class="brush: xml; class-name: 'tight'">
+					&lt;section>
+					  My name is Peter Brown and I work as a post-doc at the Innsbruck University.
+					  My friends often call me Pete. My office address is 
+					  Technikestrasse 21a, 6020, Innbruck, and you can also visit my homepage at 
+					  &lt;a href="http://peter-brown.org">http://peter-brown.org&lt;/a>
+					&lt;/section></pre>
+					<li>Annotated HTML text with microdata</li>
+					<pre class="brush: xml; class-name: 'tight'">
+					&lt;section itemscope itemtype="http://schema.org/Person"> 
+					  My name is &lt;span itemprop="name">Peter Brown&lt;/span> and I work as a
+					  &lt;span itemprop="title">post-doc&lt;/span> at the 
+					  &lt;span itemprop="affiliation">Innsbruck University&lt;/span>. 
+					  My friends often call me &lt;span itemprop="nickname">Pete&lt;/span>. 
+					  &lt;section itemprop="address" itemscope itemtype="http://schema.org/Address">
+					    My office address is &lt;span itemprop="street-address">Tchnikestrasse 21a&lt;/span>,
+					    &lt;span itemprop="postal-code">6020&lt;span>, 
+						&lt;span itemprop="locality">Innsbruck&lt;/span>
+					  &lt;section> 
+					  and you can also visit my homepage at 
+					  &lt;a href="http://peter-brown.org" itemprop="url">http://peter-brown.org&lt;/a>
+					&lt;/section>
+					</pre>
+				</ul>
+			</div>
+			
+			<div class="slide">
+				<hgroup>
+					<h1>Microformats vs. Microdata</h1>
+				</hgroup>
+				<ul>
+					<li>Scalability</li>
+					<ul>
+						<li>Microformats specs are complicated because of specific rules tailored for vCard, vResume, etc.</li>
+						<li>Microdata can be easilly extensible, when new property occur they can be added witout breaking
+							conformance of tools</li>
+					</ul>
+					<li>Standards-based</li>
+					<ul>
+						<li>Microdata is a standard part of HTML5 effort</li>
+						<li>Microformats is an "ad-hoc" group of ethusiastic people, though widely supported</li>
+						<ul>
+							<li>Strength is in underyling well-established formats</li>
+						</ul>
+						<li>Microdata have links to Semantic Web efforts and Linked Data (via RDF), microformats not</li> 
+					</ul>						
+				</ul>
+			</div>
 		</section>
-
+		
 		<div class="slide outline"></div>		
-	    		
+		
 		<section>
-			<header>Application State</header>
+			<header>HTML5 Forms</header>
 			
 			<div class="slide">
 				<hgroup>
-					<h1>Application State</h1>
+					<h1>New Forms Features</h1>
 				</hgroup>
 				<ul class="x-small">
-					<li>Application state in Web 1.0 apps</li>
-					<div style="height: 260px; margin-left: -30px" 
-						id="1ikPrTDmdmCzwR3OcGESteSMUnHQ-B9VRhuaOeQGki9A" class="h-drawing"></div>
-					<li>Application state in Web 2.0 apps</li>
+					<li>HTML forms</li>
 					<ul>
-						<li>JavaScript code changes the state</li>
-						<ul>
-							<li>the URL should contain the state information</li>
-						</ul>
-						<li>JavaScript cannot modify the whole URL but only the hash (<code>#</code>) part</li>
-						<li><code>http://seller.com/products</code> becomes <code>http://seller.com/#products</code></li>
+						<li>Providing an user input to invoke a service</li>
 					</ul>
+					<li>HTML5 forms</li>
+					<ul>
+						<li>Provide functionality that could have only be done in a 
+							custom JavaScript code before</li>	
+						<li>patterns for input checking</li>
+						<li>a set of new form elements</li>
+						<ul>
+							<li><code>progress</code>, a status of completion of a task</li>
+							<li><code>meter</code>, a scalar measurement (temperature, etc.)</li>
+							<li><code>datalist</code>, a set of options to be used with new <code>list</code> attribute</li>
+							<li><code>keygen</code>, a control for key-pair generation</li>
+							<li><code>output</code>, display a result of a calculation</li>
+						</ul>
+						<li>a set of new input types</li>
+						<ul>
+							<li><code>tel</code>, <code>search</code>, <code>url</code>, <code>email</code>, 
+								<code>datetime</code>, <code>date</code>, <code>number</code>, ...</li>
+						</ul>
+						<li>New CSS3 pseudo-classes for HTML5 forms</li>
+						<ul>
+							<li><code>:required</code>, <code>:optional</code>, <code>:valid</code>, 
+								<code>:invalid</code>, <code>:in-range</code></li>
+						</ul>	
+					</ul>	
 				</ul>
-			</div>
+			</div>	
 
 			<div class="slide">
 				<hgroup>
-					<h1>Application State and Web Crawling</h1>
+					<h1>FormData Object</h1>
 				</hgroup>
 				<ul class="x-small">
-					<li>Obviously we want our pages to be crawlable</li>
+					<li>You can create HTML forms on the fly as key-value pairs</li>
 					<ul>
-						<li>JavaScript generated content on clients does not exist on the server</li>
+						<li>You can send them via XHR send in the same was as with <code>submit()</code></li>
+						<li>Encoding is <code>multipart/form-data</code></li>
 					</ul>
-					<div style="height: 250px; margin-left: -30px" id="1u-6vCrF9f6rojKEY2Dxtgrss06MckN4SV1f0YuF1ptU" 
-					  class="h-drawing"></div>
-					<li>Solutions</li>
-					<ul>
-						<li>Crawler runs headless Browser &ndash; not feasible</li>
-						<ul>
-							<li>high requirements for computing resources</li>
-						</ul>
-						<li>Server generates content according to specific rules</li>
-						<ul>
-							<li>Google AJAX Crawling</li>
-						</ul>
-					</ul>
-				</ul>				
-			</div>
+					<pre class="brush: javascript; class-name: 'tight'">
+						var formData = new FormData();
+						formData.append("part_num", "123ABC"); 
+						formData.append("part_price", 7.95);
+						formData.append("part_image", somefile)
+
+						var xhr = new XMLHttpRequest();
+						xhr.open("POST", "http://some.url/");  
+						xhr.send(formData);</pre>	
+					<li>You can add additional data to existing forms</li>
+					<pre class="brush: javascript; class-name: 'tight'">
+						var formElement = document.getElementById("someFormElement");
+						var formData = new FormData(formElement);
+						formData.append("part_description", "The best part ever!");
+
+						var xhr = new XMLHttpRequest();
+						xhr.open("POST", "http://some.url/");
+						xhr.send(formData);</pre>	
+				</ul>
+			</div>	
 
 			<div class="slide">
 				<hgroup>
-					<h1>Google AJAX Crawling</h1>
+					<h1>Browser-based Validation</h1>
 				</hgroup>
-				<ul class="x-small">
-					<li>Steps</li>
-					<ol>
-						<li>Web app provider exposes AJAX content with pretty URLs<br/>
-						<code>http://seller.com/#!products</code></li>
-						<li>Web crawler finds those URLs</li>
-						<li>Web crawler transforms the pretty URL to ugly URL<br/>
-						<code>http://seller.com/?_escapped_fragment_=products</code></li>
-						<li>Web crawler access the content of the page at ugly URL and indexes it</li>
-					</ol>
-					<li>Prerequisites</li>
+				<ul class="small">
+					<li><code>required</code> attribute</li>
+					<pre class="brush: xml; class-name: 'tight'">
+						&lt;input type="email" id="email_addr" name="email_addr" required /></pre>
+					<li><code>pattern</code> attribute</li>
 					<ul>
-						<li>Web app provider must expose AJAX generated content at ugly URLs</li>
-						<li>Options:</li>
-						<ul>
-							<li>uses a headless browser to generate the content at the server</li>
-							<li>rewrites the JavaScript code in a server-side language</li>
-						</ul>
+						<li>custom pattern as regular expression to validate input</li>
+						<pre class="brush: xml; class-name: 'tight'">
+							&lt;input type="text" id="part" name="part" required 
+								pattern="[A-Za-z]{3}[0-9]{4}"
+							    title="Part numbers consist of 3 letters followed by 4 digits."/></pre>
 					</ul>
-					<li>Reference</li>
+					<li>Skipping validation</li>
 					<ul>
-						<li>See <span id="ajax-crawling" class="h-ref"></span> for details</li>
+						<li>Sometimes we want to disable the form validation.</li>
+						<pre class="brush: xml; class-name: 'tight'">
+							&lt;input type="text" id="part" name="part" required 
+								pattern="[A-Za-z]{3}[0-9]{4}"
+							    title="Part numbers consist of 3 letters followed by 4 digits."/>
+							&lt;input type="submit" formnovalidate value="Save">
+							&lt;input type="submit" value="Submit"></pre>							
 					</ul>
-				</ul>				
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Google AJAX Crawling Works</h1>
-				</hgroup>
-				<img style="height: 420px; margin: 20px 0px 0px 20px" src="img/l10/vitvar-pub.png"></img>
-			</div>
-
-
+				</ul>	
+			</div>	
 			
+			<div class="slide">
+				<hgroup>
+					<h1>Constraint Validation API</h1>
+				</hgroup>
+				<ul class="small">
+					<li>You can use this API to implement custom validation</li>
+					<ul>
+						<li>You can: set custom errors, check if the element is valid, determine a reason why element is invalid</li>
+						<li>Example: display custom error when two emails do not match</li>
+						<pre class="brush: xml; class-name: 'tight'; highlight: 6">
+							&lt;label>Email:&lt;/label>
+							&lt;input type="email" id="email_addr" name="email_addr">
+
+							&lt;label>Repeat Email Address:</label>
+							&lt;input type="email" id="email_addr_repeat" name="email_addr_repeat" 
+								oninput="check(this)"></pre>
+						<li>Javascript code to check the input:</li>
+						<pre class="brush: javascript; class-name: 'tight'">
+								function check(input) {
+								  if (input.value != document.getElementById('email_addr').value) {
+								    input.setCustomValidity('The two email addresses must match.');
+								  } else {
+								    // input is valid -- reset the error message
+								    input.setCustomValidity('');
+								  }
+								}</pre>	
+					</ul>
+				</ul>	
+			</div>	
+			
+			<div class="slide">
+				<hgroup>
+					<h1>HTML5 Forms Demo</h1>
+				</hgroup>	
+				<ul class="x-small">
+					<style>
+						:invalid { 
+						  border-color: #e88;
+						  -webkit-box-shadow: 0 0 5px rgba(255, 0, 0, .8);
+						  -moz-box-shadow: 0 0 5px rbba(255, 0, 0, .8);
+						  -o-box-shadow: 0 0 5px rbba(255, 0, 0, .8);
+						  -ms-box-shadow: 0 0 5px rbba(255, 0, 0, .8);
+						  box-shadow:0 0 5px rgba(255, 0, 0, .8);
+						  background-color: pink;
+						}
+
+						:required {
+						  border-color: #88a;
+						  -webkit-box-shadow: 0 0 5px rgba(0, 0, 255, .5);
+						  -moz-box-shadow: 0 0 5px rgba(0, 0, 255, .5);
+						  -o-box-shadow: 0 0 5px rgba(0, 0, 255, .5);
+						  -ms-box-shadow: 0 0 5px rgba(0, 0, 255, .5);
+						  box-shadow: 0 0 5px rgba(0, 0, 255, .5);
+						}
+
+						form {
+						  font-size: 20px;
+						  width:600px;
+						  margin: 20px auto;
+						}
+
+						input {
+						  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+						  border:1px solid #ccc;
+						  font-size:18px;
+						  width:300px;
+						  min-height:30px;
+						  display:block;
+						  margin-bottom:15px;
+						  margin-top:5px;
+						  outline: none;
+
+						  -webkit-border-radius:5px;
+						  -moz-border-radius:5px;
+						  -o-border-radius:5px;
+						  -ms-border-radius:5px;
+						  border-radius:5px;
+						}
+						
+					input[type=submit] {
+						  background:none;
+						  padding:3px;
+						  margin-top: 10px;
+						}					
+					</style>
+					<form oninput="total.value = (nights.valueAsNumber * 99) + ((guests.valueAsNumber - 1) * 10)">
+
+					  <label>Full name:</label>
+					  <input type="text" id="full_name" name="full_name" placeholder="Petr Novak" required>
+
+					  <label>Email address:</label>
+					  <input type="email" id="email_addr" name="email_addr" required>
+
+					  <label>Repeat email address:</label>
+					  <input type="email" id="email_addr_repeat" name="email_addr_repeat" required 
+					   oninput="check(this)">
+
+					  <label>Number of nights (rooms are $99.00 per night):</label>
+					  <input type="number" id="nights" name="nights" value="1" min="1" max="30" required>
+
+					  <label>Number of guests (each additional guest adds $10.00 per night):</label>
+					  <input type="number" id="guests" name="guests" value="1" min="1" max="4" required>
+
+					  <label>Estimated total:</label>
+					  $<output id="total" name="total">99</output>.00
+					  <input type="submit" value="Request Reservation" /> 
+					</form>
+
+					<script>
+					function check(input) {
+					  if (input.value != document.getElementById('email_addr').value) {
+					    input.setCustomValidity('The two email addresses must match.');
+					  } else {
+					    // input is valid -- reset the error message
+					    input.setCustomValidity('');
+					  }
+					}
+					</script>					
+				</ul>	
+			</div>	
+			
+			<div class="slide outline"></div>		
+			
+			<section>
+				<header>hREST and HTML Forms</header>
+				
+				<div class="slide">
+					<hgroup>
+						<h1>Annotation of a Web Form</h1>
+					</hgroup>	
+					<ul class="x-small">
+						<li>Motivation</li>
+						<ul>
+							<li>You want to provide a "test page" for your service</li>
+							<li>You have a HTML form that can also be used as a service programmatically</li>
+						</ul>	
+						<li>Example</li>
+						<pre class="brush: xml; class-name: 'tight'; highlight: [1,2,4,7,10,14]">
+							&lt;form class="operation" action="http://somedomain/hotel-reservation" 
+								method="POST">
+							  &lt;label>Full name:&lt;/label>
+							  &lt;input class="input" type="text" id="full_name" 
+								name="full_name" placeholder="Petr Novak" required>
+							  &lt;label>Email address:&lt;/label>
+							  &lt;input class="input" type="email" id="email_addr" 
+								name="email_addr" required>
+							  &lt;label>Number of nights (rooms are $99.00 per night):&lt;/label>
+							  &lt;input class="input" type="number" id="nights" 
+								name="nights" value="1" min="1" max="30" required>
+							  &lt;label>Number of guests (each additional 
+								guest adds $10.00 per night):&lt;/label>
+							  &lt;input class="input" type="number" id="guests" 
+								name="guests" value="1" min="1" max="4" required>
+							  &lt;input type="submit" 
+								value="Request Reservation" /> 
+							&lt;/form></pre>
+					</ul>	
+				</div>	
+				
+				
+			</section>	
+			
+			
+			
+				
+				
 			
 		</section>	
 		
 		
-		
-		
 	</body>
-</html>	
+</html>		
