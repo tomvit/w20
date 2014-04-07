@@ -15,7 +15,7 @@
         <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
 
         <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>OAuth and OpenID</title>
+        <title>Security in REST</title>
 	</head>
 	<body> 
     
@@ -50,19 +50,248 @@
 				<div class="oppa"></div>
 			</div>
 		</div>
-		
-		<div class="slide">
-			<hgroup>
-				<h1>Scope</h1>
-			</hgroup>
-			<div class="h-drawing" id="161LY9K1fWd-G3iNpulEEEXq1yoxvjsQxombdyV4Yyfc"
-			  style="height: 450px; margin-top: 20px"></div>
-		</div>
-		
+				
         <div class="slide outline"></div>		
 
+        <section>
+            <header>Security Concepts</header>
+            
+    		<div class="slide">
+				<hgroup>
+					<h1>Web Service Security Concepts</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Securing the client-server communcation</li>
+					<ul>
+						<li>Message-level security</li>
+						<li>Transport-level security</li>
+					</ul>
+					<li>Ensure</li>
+					<ul>
+						<li>Authentication &ndash; verify a client's identity</li>
+                        <li>Authorizaton &ndash; rights to access resources</li>
+						<li>Message Confidentiality &ndash; keep message content secret</li>
+						<li>Message Integrity &ndash; message content does not change during transmission</li>
+						<li>Non-repudiation &ndash; proof of integrity and origin of data</li>
+					</ul>
+                    <div class="h-drawing" style="height: 190px; margin-top: 30px" id="1JhEX5OGpHhQY49mxA4-r7taripW6bkWwLCu94BU9QFI"></div>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Data on the Web</h1>
+				</hgroup>
+				<div class="h-drawing" style="height: 450px" 
+					id="161LY9K1fWd-G3iNpulEEEXq1yoxvjsQxombdyV4Yyfc"></div>
+			</div>
+
+        </section>
+        
+        <div class="slide outline"></div>
+        
+        <section>
+            <header>Authentication and Authorization</header>
+            
+    		<div class="slide">
+				<hgroup>
+					<h1>Authentication and Authorization</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Authentication</li>
+					<ul>
+						<li>verification of user's identity</li>
+					</ul>
+					<li>Authorization</li>
+					<ul>
+						<li>verification that a user has rights to access a resource</li>
+					</ul>
+					<li>Standard: HTTP authentication</li>
+					<ul>
+						<li>HTTP defines two options</li>
+						<ul>
+							<li>Basic Access Authentication</li>
+							<li>Digest Access Authentication</li>
+						</ul>
+						<li>They are defined in</li>
+						<ul>
+							<li><span class="h-ref" id="rfc-2616">RFC 2616: Hypertext 
+							Transfer Protocol &ndash; HTTP/1.1</span></li>
+							<li><span class="h-ref" id="rfc-2617">RFC 2617: 
+							HTTP Authentication: Basic and Digest Access Authentication</span></li> 
+						</ul>
+					</ul>
+					<li>Custom/proprietary: use of cookies</li>
+				</ul>
+			</div>                                    
+
+    		<div class="slide">
+				<hgroup>
+					<h1>Basic Access Authentication</h1>
+				</hgroup>
+				<div class="h-drawing" style="height: 280px" id="1OYyQduAQYodoiQ48uYTCB1iVn6UHcCcdDocjLOA9b9Y"></div>
+				<ul class="x-small">
+					<li>Realm</li>
+					<ul>
+						<li>an identifier of the space on the server (~ a collection of resources and their sub-resources)</li>
+						<li>A client may associate a valid credentials with realms such that it copies authorization information 
+							in requests for which server requires authentication (by <code>WWW-Authenticate</code> header)</li>
+				</ul>
+			</div>                                    
+
+    		<div class="slide">
+				<hgroup>
+					<h1>Basic Access Authentication &ndash; Credentials</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Credentials</li>
+					<ul>
+						<li>credentials are base64 encoded</li>
+						<li>the format is: <code>username:password</code></li>
+					</ul>
+					<pre class="brush: bash">
+						# to encode in linux
+						echo "novak:heslo" | base64
+						> bm92YWs6aGVzbG8K
+							
+						# and to decode
+						echo "bm92YWs6aGVzbG8K" | base64 -d # use capital "D" in OS X
+						> novak:heslo</pre>
+							
+					<li>Comments</li>
+					<ul class="x-small">
+						<li>When SSL is not used, the password can be read</li>
+						<li>An attacker can repeat interactions</li> 
+					</ul>
+				</ul>
+				
+			</div>                                    
+
+    		<div class="slide">
+				<hgroup>
+					<h1>Digest Access Authentication</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>RFC 2617 &ndash; Basic and Digest Access Authentication</li>
+					<ul>
+						<li>No password between a client and a server but a hash value</li>
+						<li>Simple and advanced mechanisms (only server-generated nonce value &ndash; replay-attacks or 
+							with client-generated nonce value)</li>
+					</ul>							
+					<li>Basic Steps</li>
+					<ol>
+						<li>Client accesses a protected area</li>
+						<pre class="brush:bash; class-name: 'tight'">
+							> GET / HTTP/1.1</pre>
+						<li>Server requests authentication with <code>WWW-Authenticate</code></li>
+							<pre class="brush:bash; class-name: 'tight'">
+								&lt; HTTP/1.1 401 Unauthorized
+								&lt; WWW-Authenticate: Digest realm="ProtectedArea", 
+								  nonce="BbdQof3DBAA=a293ff3d724989371610f03015f2d23f3cd2c045", 
+								  algorithm=MD5, domain="/", qop="auth"</pre>
+						<li>Client calculates a response hash by using the realm, his/her username, the password, and the 
+							quality of protection (QoP) and requests the resource with <code>authorization</code> header</li>
+							<pre class="brush:bash; class-name: 'tight'">
+								> GET / HTTP/1.1
+								> Authorization: Digest username="novak", realm="ProtectedArea",
+								  nonce="BbdQof3DBAA=a293ff3d724989371610f03015f2d23f3cd2c045", uri="/", 
+								  algorithm=MD5, response="c4ea2293aeb318826d1e533f363efd90", qop=auth, 
+								  nc=00000001, cnonce="531ee8ba7f2a8fd1"</pre>								
+					</ol>
+				</ul>
+			</div>                                    
+
+    		<div class="slide">
+				<hgroup>
+					<h1>Nonce and QoP</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Nonce</li>
+					<ul>
+						<li>A value to identify an interaction that should occur only once</li>
+						<li><code>nonce</code> &ndash; generated by the server</li>
+						<ul>
+							<li>may have a time period for which the nonce is valid</li>
+							<li>may be computed using client IP, ETag of the resource, etc.</li>
+							<li>this limits chances for the replay attack.</li>
+						</ul>
+						<li><code>cnonce</code> &ndash; generated by the client</li>
+					</ul>
+					<li>QoP &ndash; quality of protection</li>
+					<ul>
+						<li>Further improvements to prevent replay attacks and enables non-repudiation</li>
+					</ul>
+				</ul>
+			</div>  
+
+    		<div class="slide">
+				<hgroup>
+					<h1>Algorithms</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Algorithm for <code>response</code> value of <code>authorization</code> header</li>
+					<ul>
+						<li>No quality of protection (<code>qop</code> is missing or <code>qop=none</code>)</li>
+						<ul>
+							<li>limits chances of replay-attacks</li>
+						</ul>
+						<pre class="brush: bash; class-name: 'tight'">
+							HA1 = MD5(username:realm:password)
+							HA2 = MD5(method:digestURI)
+							response = MD5(HA1:nonce:HA2)</pre>
+						<li>with quality of protection (<code>qop=auth</code>)</li>
+						<pre class="brush: bash; class-name: 'tight'">
+							HA1 = MD5(username:realm:password)
+							HA2 = MD5(method:digestURI)
+							response = MD5(HA1:nonce:nonceCount:cnonce:qop:HA2)</pre>				
+							<li>with quality of protection for message integrity (<code>qop=auth-int</code>)</li>
+							<ul>
+								<li>enables non-repudiation (i.e., proof of integrity and origin of data)</li>
+							</ul>
+							<pre class="brush: bash; class-name: 'tight'">
+								HA1 = MD5(username:realm:password)
+								HA2 = MD5(method:digestURI:MD5(payload))
+								response = MD5(HA1:nonce:nonceCount:cnonce:qop:HA2)</pre>											
+					</ul>
+					
+				</ul>
+			</div>  
+
+    		<div class="slide">
+				<hgroup>
+					<h1>Replay Attack</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Replay Attack Scenario (quality of protection is <code>none</code>)</li>
+					<ul>
+						<li>The communication is not encrypted (i.e., no use of HTTPS)</li>
+						<li>Eve listens to the Alice's communication (e.g. on a proxy server)</li>
+						<li>Eve resends requests with headers from Alice's requests</li>
+					</ul>
+				</ul>
+				<div class="h-drawing" id="1gQvg53vE3p9o_YRI3zYx3uBEfiT6YjiuznHN0A8O2QA" style="height: 380px"></div>
+			</div>                                  
+
+    		<div class="slide">
+				<hgroup>
+					<h1>Replay Attack (Cont.)</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Replay Attack Scenario (quality of protection is <code>auth</code> or <code>auth-int</code>)</li>
+					<ul>
+						<li><code>nonceCount</code> should be incremented in every request to a response of the nonce 
+							value from the server</li>
+					</ul>
+				</ul>
+				<div class="h-drawing" id="1Jto8zZvp-q7IANoQ0lckKsPHP1e5LetG7nJs8jI3Xyg" style="height: 380px"></div>
+			</div>                                  
+            
+        </section>        
+
+        <div class="slide outline"></div>
+
 		<section>
-			<header>OAuth 2.0 Protocol</header>
+			<header>OAuth 2.0</header>
 			
 			<div class="slide">
 				<hgroup>
@@ -194,6 +423,117 @@
 
 				<div class="slide">
 					<hgroup>
+						<h1>Demo &ndash; List of Contacts</li>
+					</hgroup>
+					<ul class="small">
+						<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js" type="text/javascript"></script>
+						<li>Display your Google contacts</li>
+						<ul>
+							<li>this demo requests authorization from you to access your Google contacts using client-side OAuth 2.0 protocol
+							and then displays the contacts below. In order to transfer <code>access_token</code> from authorization window,
+							it stores the <code>access_token</code> in a cookie.</li>
+							<li><code>access_token</code> <input style="font-size: 18px" id="ati" type="text" value="" size="60"></input></li>
+							<li><a href="javascript:showContacts()">Show contacts</a> or <a target="revokew" 
+								href="https://www.google.com/accounts/IssuedAuthSubTokens">revoke access</a></li>
+						</ul>
+						
+						<div id="contacts_out" style="height: 200px; overflow: hidden"></div>
+						
+						<style>
+							#contacts_out {
+								margin: 10px 0px 0px 8px;
+							}
+							
+							#contacts_out p {
+								margin: 0px 0px 3px 0px;
+								font-size: 13px;
+							}
+						</style>
+						
+						<script type="text/javascript">
+							// gets the cookie based on its name
+							function getCookie(c_name) {
+        						var i,x,y,ARRcookies=document.cookie.split(";");
+        						for (i=0;i<ARRcookies.length;i++) {
+                					x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+                					y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+                					x=x.replace(/^\s+|\s+$/g,"");
+                					if (x==c_name) {
+                        				return unescape(y);
+                					}
+        						}
+							}
+							
+							// shows a dialog to ask the user for authorization
+							function requestAuth() {
+							    document.getElementById("ati").value = "";
+								url = "https://accounts.google.com/o/oauth2/auth?scope=https://www.google.com/m8/feeds&" + 								  		
+								"client_id=621535099260.apps.googleusercontent.com&redirect_uri=" + 
+								"http://humla.vitvar.com/slides/w20/examples/oauth/callback.html&response_type=token";
+							 	var newWindow = window.open(url, 'name', 'height=600,width=450');
+							  	if (window.focus) {
+									newWindow.focus();
+							  	}
+							  	return;
+							}
+							
+							// displays contacts; if not authorized asks for authorization first
+							function showContacts() {
+								document.getElementById("contacts_out").innerHTML = "";
+								var ati = document.getElementById("ati");
+								var at = getCookie("w20-token");
+								
+								if (ati.value != "")
+									at = ati.value;
+								
+								if (at == null) {
+									// access token not found, request authorization
+									requestAuth();
+								} else {
+									ati.value = at;
+									var url = "https://www.google.com/m8/feeds/contacts/default/full?oauth_token=" + 
+										at + "&alt=json";
+									try {
+										// send XHR, synchronously 
+										xhr = new XMLHttpRequest();
+										xhr.open("GET", url, false);
+										xhr.send();
+										
+										// get the JSON data
+										data = eval("(" + xhr.responseText + ')');
+										
+										// format and display output
+										var l = "";
+										for (i = 0; i < data.feed.entry.length; i++)
+											if (data.feed.entry[i].title.$t != "")
+												l+= "<p>" + data.feed.entry[i].title.$t + "</p>";
+										document.getElementById("contacts_out").innerHTML = l;
+										
+									} catch (e) {
+									    // error, 101 is a network error such as invalid token
+										if (e.code == 101)
+											requestAuth();
+										else
+											// throw the error otherwise
+											throw e;
+									}
+								}
+							}
+						</script>
+						
+					</ul>
+				</div>
+
+				<!--<div class="slide">
+					<hgroup>
+						<h1>Demo Details</li>
+					</hgroup>
+					<div id="1t5Oe1WzstsrOomFF0SHszjYztMgwHnv0thAjecUlA0Y" 
+						style="height: 470px; margin-top: 20px" class="h-drawing"></div>
+				</div>-->				
+
+				<div class="slide">
+					<hgroup>
 						<h1>Client-side Web Apps Protocol</li>
 					</hgroup>
 					<div id="1Qik6Z_dLbSkcQmS7ubWtcUpyvhF12zqqLgcY634Y7TA" 
@@ -310,117 +650,6 @@
 					<img src="img/l11/GoogleAPIConsole.png" style="height: 450px; margin-top: 20px" alt="Google API Console"></img>
 					</center>
 				</div>	
-
-				<div class="slide">
-					<hgroup>
-						<h1>Demo &ndash; List of Contacts</li>
-					</hgroup>
-					<ul class="small">
-						<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js" type="text/javascript"></script>
-						<li>Display your Google contacts</li>
-						<ul>
-							<li>this demo requests authorization from you to access your Google contacts using client-side OAuth 2.0 protocol
-							and then displays the contacts below. In order to transfer <code>access_token</code> from authorization window,
-							it stores the <code>access_token</code> in a cookie.</li>
-							<li><code>access_token</code> <input style="font-size: 18px" id="ati" type="text" value="" size="60"></input></li>
-							<li><a href="javascript:showContacts()">Show contacts</a> or <a target="revokew" 
-								href="https://www.google.com/accounts/IssuedAuthSubTokens">revoke access</a></li>
-						</ul>
-						
-						<div id="contacts_out" style="height: 200px; overflow: hidden"></div>
-						
-						<style>
-							#contacts_out {
-								margin: 10px 0px 0px 8px;
-							}
-							
-							#contacts_out p {
-								margin: 0px 0px 3px 0px;
-								font-size: 13px;
-							}
-						</style>
-						
-						<script type="text/javascript">
-							// gets the cookie based on its name
-							function getCookie(c_name) {
-        						var i,x,y,ARRcookies=document.cookie.split(";");
-        						for (i=0;i<ARRcookies.length;i++) {
-                					x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
-                					y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
-                					x=x.replace(/^\s+|\s+$/g,"");
-                					if (x==c_name) {
-                        				return unescape(y);
-                					}
-        						}
-							}
-							
-							// shows a dialog to ask the user for authorization
-							function requestAuth() {
-							    document.getElementById("ati").value = "";
-								url = "https://accounts.google.com/o/oauth2/auth?scope=https://www.google.com/m8/feeds&" + 								  		
-								"client_id=621535099260.apps.googleusercontent.com&redirect_uri=" + 
-								"http://humla.vitvar.com/slides/w20/examples/oauth/callback.html&response_type=token";
-							 	var newWindow = window.open(url, 'name', 'height=600,width=450');
-							  	if (window.focus) {
-									newWindow.focus();
-							  	}
-							  	return;
-							}
-							
-							// displays contacts; if not authorized asks for authorization first
-							function showContacts() {
-								document.getElementById("contacts_out").innerHTML = "";
-								var ati = document.getElementById("ati");
-								var at = getCookie("w20-token");
-								
-								if (ati.value != "")
-									at = ati.value;
-								
-								if (at == null) {
-									// access token not found, request authorization
-									requestAuth();
-								} else {
-									ati.value = at;
-									var url = "https://www.google.com/m8/feeds/contacts/default/full?oauth_token=" + 
-										at + "&alt=json";
-									try {
-										// send XHR, synchronously 
-										xhr = new XMLHttpRequest();
-										xhr.open("GET", url, false);
-										xhr.send();
-										
-										// get the JSON data
-										data = eval("(" + xhr.responseText + ')');
-										
-										// format and display output
-										var l = "";
-										for (i = 0; i < data.feed.entry.length; i++)
-											if (data.feed.entry[i].title.$t != "")
-												l+= "<p>" + data.feed.entry[i].title.$t + "</p>";
-										document.getElementById("contacts_out").innerHTML = l;
-										
-									} catch (e) {
-									    // error, 101 is a network error such as invalid token
-										if (e.code == 101)
-											requestAuth();
-										else
-											// throw the error otherwise
-											throw e;
-									}
-								}
-							}
-						</script>
-						
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Demo Details</li>
-					</hgroup>
-					<div id="1t5Oe1WzstsrOomFF0SHszjYztMgwHnv0thAjecUlA0Y" 
-						style="height: 470px; margin-top: 20px" class="h-drawing"></div>
-				</div>
 				
 			</section>
 
