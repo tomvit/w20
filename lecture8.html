@@ -94,7 +94,7 @@
 					</ul>
 					<li>Issues:</li>
 					<ul>
-						<li>maximum time of the request processing at the server (e.g. GAE)</li>
+						<li>maximum time of the request processing at the server</li>
 						<li>concurrent requests processing at the server</li>
 					</ul>
 				</ul>
@@ -160,7 +160,7 @@
 					<li>Chunks vs. Events</li>
 					<ul>
 						<li>chunks cannot be considered as app messages (events)</li>
-						<li>intermediaries maight "re-chunk" the message stream<br/>
+						<li>intermediaries might "re-chunk" the message stream<br/>
 						&rarr; e.g., combining different chunks into a longer one</li>
 					</ul>
 					<li>Client Buffering</li>
@@ -469,8 +469,7 @@
 						<li><code>Sec-WebSocket-Protocol</code> &ndash; a sub-protocol that the server selected 
 							from the list of protocols in the request</li>
 						<li><code>Sec-WebSocket-Accept</code> &ndash; a key to prove it has received a client 
-							WebSocket handshake request (to prevent an attacker from tricking the server by sending 
-							it carefully-crafted packets using XHR)</li>
+							WebSocket handshake request</li>
 						</ul>
 						<li>Formula to compute <code>Sec-WebSocket-Accept</code></li>
 						<pre class="brush: plain">
