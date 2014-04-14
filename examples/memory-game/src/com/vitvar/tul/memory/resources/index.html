@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="/memory.css"></link>   
+		<script type="text/javascript" src="/memory.js"></script>
+        
+		<title>Memory Game</title>
+	</head>	
+	
+	<body>
+		<center>
+			<h1>Memory Game</h1>
+			<div id="input" method="">
+				<table>
+					<tr>
+						<td>Number of Cells</td><td><input type="number" required id="numcards"></td>
+					</tr>				
+					<tr>
+						<td colspan="2"><center><input class="btn" name="submit" type="submit" 
+							value="Start" onclick="initGame()"></center></td>
+					</tr>				
+				</table>
+			</div>		
+			
+			<div id="players"></div>
+			<div id="board"></div>
+		</center>
+	</body>	
+</html>

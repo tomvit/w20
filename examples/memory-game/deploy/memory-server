@@ -1,0 +1,1 @@
+java -cp memory-server.jar:memory-interface.jar:servlet-api-2.5.jar:jetty-all-7.0.2.v20100331.jar com.vitvar.tul.memory.MemoryServer $1

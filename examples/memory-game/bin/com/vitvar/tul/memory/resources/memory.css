@@ -1,0 +1,103 @@
+
+body {
+}
+
+h1 {
+	border-bottom: 1px solid silver;
+	padding-bottom: 10px;
+	color: black;
+	width: 80%;
+}
+
+#input table {
+	
+}
+
+#input table tr td {
+	font-size: 20px;
+	width: 170px;
+	color: grey;
+	padding: 3px;
+}
+
+#input table tr td input {
+	font-size: 20px;
+	width: 200px;
+	color: grey;
+	border: 1px solid silver;
+	width: 150px;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+    
+}
+
+#input table tr td input.btn {
+	margin-top: 10px;
+	background-color: whitesmoke;
+	width: 120px;
+}
+
+# players {
+	padding: 10px 0px 10px 0px;	
+}
+
+#players span.active {
+	font-weight: bold;
+}
+
+#board {
+	width: 80%;
+}
+
+#board div {	
+	height: 90px;
+	width: 120px;
+	border: 1px solid silver;
+	margin: 10px;
+	float: left;
+	
+	
+    -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0 2px 5px; 
+    -moz-box-shadow: rgba(0, 0, 0, 0.1) 0 2px 5px;	
+    -o-box-shadow: rgba(0, 0, 0, 0.1) 0 2px 5px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 2px 5px; 
+
+	font-size: 46px;
+	padding-top: 30px;
+	
+	cursor: hand;
+	
+	opacity: 1;
+	
+   -webkit-transition-property: opacity;
+   -webkit-transition-duration: 0.3s;
+   -webkit-transition-timing-function: ease-in-out;   		
+
+	background-color:wheat;	
+	color: orange;	
+	
+}
+
+#board div.back {
+	background-color:whitesmoke;
+	color: darkgrey;
+}
+
+#board div.front {
+	background-color:wheat;	
+	color: orange;	
+		
+}
+
+#board div.away {
+	opacity: 0;
+}
+
+#board div.pending {
+	opacity: 0.3;
+}
+
+
+
