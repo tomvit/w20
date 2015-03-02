@@ -33,7 +33,7 @@
                             displayMessage("Order was closed!");
                         }
                     }
-                    xhr.send("{ \"status\" : \"close\" }");            
+                    xhr.send(JSON.stringify({status : "close"}));             
                 } else
                     displayMessage("The order has not been opened, open it first!");
             }
@@ -50,8 +50,8 @@
                                 displayMessage("Cannot add item to the order, it was closed!");
                             
                     }
-                    xhr.send("{ \"name\" : \"" + document.getElementById("input_name").value + "\", " + 
-                               "\"price\" : \"" + document.getElementById("input_price").value + "\"  }");            
+		    xhr.send(JSON.stringify({ name : document.getElementById("input_name").value, 
+			price : document.getElementById("input_price").value}));
                 } else
                     displayMessage("The order has not been opened, open it first!");
             }
