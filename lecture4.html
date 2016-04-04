@@ -666,12 +666,13 @@
     				<ul>
     					<li>RESTful API Documentation</li>
     					<ul>
-    						<li>not a standard way, only good practices</li>
-    						<li>only textual, not in a formal language</li>
+    						<li>Until recently, not a standard way, only good practices</li>
+    						<li>and only textual, not in a formal language</li>
                             <ul>
-    						    <li>there are attempts such as WADL, hREST</li>
+    						    <li>there were attempts such as WADL, hREST</li>
     						    <li>it is even possible to use WSDL 2.0</li>
                             </ul>
+                            <li>Today, Swagger and Open API Specification</li>
     					</ul>
     					<li>Client libraries in major languages</li>
     					<ul>
@@ -711,69 +712,109 @@
     					</ul>
     				</ul>
     			</div>	
-            </section>
-            
-            <div class="slide outline"></div>
-            
-            <section>
-                <header>Service Description and Characteristics</header>
-                
-        		<div class="slide">
-    				<hgroup>
-    					<h1>Description</h1>
-    				</hgroup>
-    				<div class="h-drawing" id="17u0BbwBkrl8K-n_L_YldCKO2jCD0cHfRJy-SHZKncws"
-    				  style="height: 445px"></div>
-    			</div>					
 
-        		<div class="slide">
-    				<hgroup>
-    					<h1>Service Characteristics and REST</h1>
-    				</hgroup>
-    				<ul class="small">
-                        <li>Loose coupling</li>
+                <div class="slide">
+                    <hgroup>
+                        <h1>Swagger Overview</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>Emerging standard</li>
                         <ul>
-                            <li>Standard response codes</li>
-                            <li>Standard Internet Media Types</li>
-                            <li>Links in hypertext; clients follow links while they do not need to construct them</li>                            
-                        </ul>
-                        <li>Reusability</li>
-                        <ul>
-                            <li>Multiple representations of resources (XML, JSON, ...)</li>
-                            <li>Interoperability promoted by uniform interface</li>
-                        </ul>
-                        <li>Contracting</li>
-                        <ul>
-                            <li>XML Schema (structural)</li>
-                            <li>Internet Media Types, vendor specific types<br/>
-                            such as <code>application/vnd.order+xml</code></li>
-                            <li>Uniform interface</li>
-                            <li>Hypermedia (behavioral &ndash; HATEOAS)</li>
+                            <li>Started as a private company effort (SmartBear)</li>
+                            <li>Recently became so popular and evolved to a community effort</li>
+                            <ul>
+                                <li>Open API Specification under Apache Foundation</li>
+                                <li>Google, IBM, 3Scale, ...</li>
+                            </ul>
                         </ul>
                     </ul>
-                </div>
+                    <ul class="small">
+                        <li>Guiding Principles</li>
+                        <ul>
+                            <li>A minimal effort to describe an API</li>
+                            <ul>
+                                <li>API description should be generated, e.g. via code annotations</li>
+                                <li>It can always be written manually too</li>
+                            </ul>
+                            <li>A minimal effort to write clients</li>
+                            <li>Sanbox comes out-of-the-box</li> 
+                        </ul>
+                    </ul>
+                </div>  
 
-            	<div class="slide">
-    				<hgroup>
-    					<h1>Service Characteristics and REST (Cont.)</h1>
-    				</hgroup>
-    				<ul class="small">
-                        <li>Discoverability and Composability</li>
+                <div class="slide">
+                    <hgroup>
+                        <h1>Swagger API Description</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>Server</li>
                         <ul>
-                            <li>Mostly manual, partial support of directories such as ProgrammableWeb</li>
-                            <li>Compositions realized programmatically in mashups</li>
-                            <li>Research efforts to semi-automate discovery and composition</li>
+                            <li>Server provides a <b>Resource Listing</b> at <code>/api-docs</code></li>
+                            <li>For each resource, there is an <b>API Declaration</b></li>
                         </ul>
-                        <li>Abstraction</li>
+                    </ul>
+                    <ul class="x-small">
+                        <li>Resouce Listing</li>
                         <ul>
-                            <li>Heavily based on HTTP, can be realized in any implementation technologies due to a wide spread of HTTP</li>
+                            <li>JSON Representation</li>
+                            <pre class="brush: javascript">
+                                {
+                                  "swaggerVersion": "1.2",
+                                  "apis": [
+                                    {
+                                      "path": "http://localhost:8000/listings/greetings",
+                                      "description": "Generating greetings in our application."
+                                    }
+                                  ]
+                                }                                
+                            </pre>
                         </ul>
-                        <li>Encapsulation</li>
+                    </ul>
+                </div>  
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Swagger API Description</h1>
+                    </hgroup>
+                    <ul class="xx-small">
+                        <li>API Declaration</li>
                         <ul>
-                            <li>Design-specific</li>
+                            <li>JSON Representation</li>
+                            <pre class="brush: javascript">
+                                {
+                                  "swaggerVersion": "1.2",
+                                  "basePath": "http://localhost:8000/greetings",
+                                  "apis": [
+                                    {
+                                      "path": "/hello/{subject}",
+                                      "operations": [
+                                        {
+                                          "method": "GET",
+                                          "summary": "Greet our subject with hello!",
+                                          "type": "string",
+                                          "nickname": "helloSubject",
+                                          "parameters": [
+                                            {
+                                              "name": "subject",
+                                              "description": "The subject to be greeted.",
+                                              "required": true,
+                                              "type": "string",
+                                              "paramType": "path"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "models": {}
+                                }                            
+                            </pre>
                         </ul>
-    				</ul>
-    			</div>	
+                    </ul>
+                </div>  
+
+
+
             </section>
 
 		</section>
