@@ -19,7 +19,7 @@
 	</head>
 	<body> 
     
-		<footer>
+		<footer style="visibility: hidden">
 			<p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester"/>,&nbsp;
 			<span class="meta_twitter"/></p>
 			<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
@@ -158,7 +158,7 @@
 					<ul>
 						<li>Consumers only pay for resources when they use them</li>
 					</ul>
-				</li>
+				</ul>
 			</div>
 
     		<div class="slide">
@@ -193,589 +193,660 @@
 
 		</section>
 
-        <div class="slide outline"></div>
+		<div class="slide outline"></div>
 
         <section>
             
-            <header>Cloud Architecture</header>
+			<header>Cloud Architecture</header>
     
-            <section>
-                
-                <header>Service Models</header>
-                
-                <div class="slide">
-                    <hgroup>
-                        <h1>Web 2.0 Web Architecture</h1>
-                    </hgroup>
-                    <div class="h-drawing" style="height: 380px; margin-left: 10px; margin-top: 40px" alt="Web 2.0 web architecture" id="14TRFdRqtGtLWtzQ_ZCb24ZHpLr4f1n859zQoB3thwjQ"></div>
-                </div>
-                                
-                <div class="slide">
-                    <hgroup>
-                        <h1>IaaS: Infrastructure as a Service</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Provides basic computing resources and services for application providers</li>
-                        <ul>
-                        	<li>Services for application providers</li>
-                            <li>A consumer is able to deploy and run arbitrary software</li>
-                        </ul>
-                        <li>Infrastructure implications</li>
-                        <ul>
-                            <li>Exposing of infrastructure resources through <i>abstraction</i></li>
-                            <li>Support for infrastructure resources &ndash; compute (hardware/OS/VM), storage, network, etc.</li>
-                            <li>Supports isolation for multitenant environments</li>
-                        </ul>                        
-                    </ul>
-                </div>
+			<section>
 
-                <div class="slide">
-                    <hgroup>
-                        <h1>IaaS: Infrastructure as a Service</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Usage</li>
-                        <ul>
-                            <li>Predefined machine instances (micro, small, large, extra-large)</li>
-                            <ul>
-                            	<li>Linux OS, 613 MB of memory, 30 GB of Storage, Load Balancer, etc.</li>
-                            </ul>
-                            <li>Pay-per-use &ndash; pay for resources you use (time or amount); no up-front costs</li>
-                        </ul>
-                        <li>IaaS Services Examples</li>
-                        <ul>
-                            <li>Elastic Storage</li>
-                            <li>Monitoring resources</li>
-                            <ul>
-                            	<li>Amazon CloudWatch)</li>
-                            </ul>
-                            <li>Auto Scalling of running instances</li>
-                            <li>Load Balancing &ndash; distributing incoming traffic<br/> across multiple instances</li>
-                        </ul>
-                        <li>IaaS providers</li>
-                        <ul>
-                            <li>Amazon EC2, GoGrid, Rackspace,</br>OpenNebula, ...</li>
-                        </ul>
-                        
-                    </ul>
-                    <div class="h-drawing" style="height: 270px; padding-left: 220px; margin-top: -250px;" alt="Web 2.0 web architecture" id="1GnYOqlP5qCv8LMyd3yuLNdfsymoDKVRhYrSvorh4suw"></div>
-                </div>
-                
-                <div class="slide">
-                    <hgroup>
-                        <h1>PaaS: Platform as a Service</h1>
-                    </hgroup>
-                    
-                    <ul class="x-small">
-                        <li>Provides scalable platform for applications</li>
-                        <ul>
-                            <li>Services for application providers</li>
-                            <li>No costs of buying and managing underlying infrastructure</li>
-                            <ul>
-                            	<li>hardware and software</li>
-                            </ul>
-                        </ul>
-                        <li>Infrastructure implications</li>
-                        <ul>
-                            <li>Scalable platform, deploy on-demand</li>
-                            <li>Self service interface to deploy applications and services</li>
-                            <li>Support for monitoring and measuring platform usage
-                            <li>Model supporting isolation in multi-tenant environments
-                        </ul>
-                    </ul>
-                </div>
-                
-                <div class="slide">
-                    <hgroup>
-                        <h1>PaaS: Platform as a Service</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Usage</li>
-                        <ul>
-                            <li>Choose software platform, e.g., JEE, .NET, Python, etc.</li>                           
-                            <li>Pay-per-use &ndash; pay for the resources you use; no up-front costs</li>
-                        </ul>
-                        <li>PaaS features</li>
-                        <ul>
-                            <li>Auto Scalling and Load Balancing of applications</li>
-                            <li>Persistent Storage - usually NoSQL database</li>
-                            <li>Local development environment</li>
-                            <li>Backends &ndash; for app instances with higher CPU</br>and memory demands</li>
-                            <li>Administration APIs for its services</li>
-                        </ul>
-                        <li>PaaS providers</li>
-                        <ul>
-                            <li>Google App Engine, Heroku,</br>Windows Azure, etc.</li>
-                        </ul>
-                        <li>Limitations</li>
-                        <ul>
-                            <li>HTTP request limit (30 - 60 sec)</li>
-                            <li>No writes to file system, no thread support</li>
-                        </ul>
-                    </ul>
-                    <div class="h-drawing" style="height: 270px; padding-left: 220px; margin-top: -320px;" alt="Platfor as a Service example" id="1WPWgHjgD4Ew-bljCiWeyTvbNuFWs_dXnjhI333vtVbs"></div>
-                </div>
-                
-                <div class="slide">
-                    <hgroup>
-                        <h1>SaaS: Software as a Service</h1>
-                    </hgroup>
-                    
-                    <ul class="x-small">
-                        <li>Software delivery model for applications hosted in the cloud</li>
-                        <ul>
-                            <li>typically software for end-users</li>
-                            <li>services accessed using a web browser</li>
-                            <li>provides API for programmatic access</li>
-                        </ul>
-                        <li>SaaS characteristics</li>
-                        <ul>
-                            <li>Typically build on top of IaaS or PaaS</li>
-                            <li>Configurable and customizable modern Web applications</li>
-                            <li>Usually basic version for free, need to pay for pro version</li>
-                            <li>Global availability - any computer, any device</li>
-                            <li>Easy management - automatic and fast updates</li>
-                            <li>Pay-per-use &ndash; pay for the time you use</li>
-                        </ul>
-                        <li>SaaS providers</li>
-                        <ul>
-                            <li>Google Apps, Salesforce, iCloud, Flickr, Picasa, ...</li>
-                        </ul>
-                    </ul>
-                </div>
-
-            </section>
-
-            <div class="slide outline"></div>
-            
-            <section>                
-                <header>Performance</header>
+				<header>Service Models</header>
 
 				<div class="slide">
 					<hgroup>
-						<h1>Good Performance</h1>
+						<h1>Web 2.0 Web Architecture</h1>
 					</hgroup>
-					<ul class="small">
-						<li>Scalability</li>
-						<ul>
-							<li>server scalability</li>
-	                        <ul>
-							    <li>ability of a server to react on changes in loads</li>
-							    <li>a user should not feel the change in loads</li>
-							    <li>horizontal and vertical scaling</li>
-	                        </ul>
-							<li>network traffic</li>
-	                        <ul>
-							    <li>not all about network bandwidth capacity</li>
-							    <li>service needs to limit the network traffic through caching</li>
-	                        </ul>
-						</ul>
-						<li>CPU Time</li>
-						<ul>
-							<li>CPU intensive apps</li>
-							<li>Optimal implementations, algorithms to reduce CPU time</li>
-						</ul>
-						<li>Availability</li>
-						<ul>
-							<li>probability that a service is operational at a particular time</li>
-							<ul>
-	                            <li>e.g., 99.9987% availability &ndash; downtime ~44 seconds/year</li>
-	                        </ul>
-						</ul>
-					</ul>
+					<div class="h-drawing" style="height: 380px; margin-left: 10px; margin-top: 40px" alt="Web 2.0 web architecture" id="14TRFdRqtGtLWtzQ_ZCb24ZHpLr4f1n859zQoB3thwjQ"></div>
 				</div>
 
-                <div class="slide">
-                    <hgroup>
-                        <h1>Scalability</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Scaling Up</li>
-                        <ul>
-                            <li>Number of users increases, need for more resources</li>
-                            <li>Replication of app instances</li>
-                        </ul>
-                    </ul>
-                    <div class="h-drawing" id="1hzFB_41gJmkKQHpcSODvengGnHW98UYv1x1xZHt4XMA"
-                        style="height: 320px"></div>
-                </div>
-                
-                <div class="slide">
-                    <hgroup>
-                        <h1>Scalability</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Scaling Down</li>
-                        <ul>
-                            <li>Number of users decreases, no need for many resources</li>
-                            <li>Deleting app instances</li>
-                        </ul>
-                    </ul>
-                    <div class="h-drawing" id="1E9aA0HP279klNZ3JSUjkVAgdr9Am9DoAMTojjDoyxeY"
-                        style="height: 320px;"></div>                   
-                </div>
-                
-                <div class="slide">
-                    <hgroup>
-                        <h1>Scaling Down Issues</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Session in a persistent storage</li>
-                        <ul>
-                            <li>Stateful server</li>
-                            <li>No sticky sessions &ndash; auto scaling</li>
-                        </ul>
-                        <li>GAE implementation</li>
-                        <ul>
-                            <li>New or updated session data<br/>
-                                &rarr; written to BigTable and the memcache</li>
-                            <li>Reading the data</li>
-                            <ul>
-                                <li>only from the cache, is fast</li>
-                            </ul>
-                        </ul>
-                        <li>Limitations on data writing</li>
-                        <ul>
-                            <li>GAE allows to update a single entity 5 times/sec.</li>
-                            <li>When QPS > 5 (GAE scales up to 500 QPS)</li>
-                            <ul>
-                                <li>the latency grows</li>
-                            </ul>
-                        </ul>
-                    </ul>
-                </div>
-                
-                <div class="slide">
-                    <hgroup>
-                        <h1>Example Application Scalability</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Response times &times; QPS for reading (R) and writing (W)</li>
-                        <ul>    
-                            <li>Writing scales well up to 5 QPS</li>
-                            <li>Reading scales well for all QPS</li>
-                        </ul>
-                    </ul>
-                    <img src="img/GAE-scaling-example.png" style="height: 350px"></img>
-                </div>
-
 				<div class="slide">
 					<hgroup>
-						<h1>CPU Time</h1>
-					</hgroup>
-					<ul class="small">
-						<li>The time a CPU spends on executing a service</li>
-						<li>CPU Time influences</li>
-						<ul>
-							<li>latency of your service</li>
-							<li>your bills you pay for running the service</li>
-						</ul>
-						<li>Reference CPU</li>
-						<ul>
-							<li>system's infrastructures are complex, times may vary</li>
-							<li>all times calculated wrt this CPU</li>
-							<li>billing on a reference CPU in the cloud</li>
-							<li>Example in GAE:<br/>
-	                        1.2GHz CPU, 3600 MIPS (3 instructions per cycle)</li> 
-						</ul>
-						<li>How to determine CPU time</li>
-						<ul>
-							<li>profiling (depends on programming environment)</li>
-							<li>analysis of service's computational complexity</li>
-						</ul>
-					</ul>
-				</div>						
-
-				<!-- /SLIDE -->					
-				<div class="slide">
-					<hgroup>
-						<h1>Profiling in GAE</h1>
+						<h1>IaaS: Infrastructure as a Service</h1>
 					</hgroup>
 					<ul class="x-small">
-						<li>Example profiling code</li>
-	                    <pre class="brush: java; class-name: 'tight'">
-						// QuotaService gives us an access to CPU cycles 
-						QuotaService qs = QuotaServiceFactory.getQuotaService();
-
-						// initialization
-						// 10000 numbers; worst-case scenario - in reverse order
-						int[] A = new int[10000];
-						for (int i = 0; i < A.length; i++)
-							A[i] = A.length - i;
-
-						// current number of cycles 
-						long start = qs.getCpuTimeInMegaCycles();
-
-						// insertion sort
-						insertionSort(A);
-		
-						// current number of cycles
-						long end = qs.getCpuTimeInMegaCycles();
-						</pre>							
-						<li>Analysis</li>
+						<li>Provides basic computing resources and services for application providers</li>
 						<ul>
-							<li>Number of CPU mega cycles <span class="h-latex">c=\mathit{end}-\mathit{start} \approx 400</span>
-							<li><span class="h-latex">c</span> is in mega cycles, 1200 mega cycles is 1 CPU second</li>
-							<li>Total CPU seconds for the insertion sort
-							<span class="h-latex xx-lower">T'_\mathit{cpu}=c/1200=0.35</span></li>
-							<!--<li>Instructions per operation: 
-							<span class="h-latex xx-lower">k_1=(400 \cdot 10^6 \cdot 3) / (10^8) = 12</span><br/>
-							(<span class="h-latex">3</span> instructions per cycle)-->
+							<li>Services for application providers</li>
+							<li>A consumer is able to deploy and run arbitrary software</li>
+						</ul>
+						<li>Infrastructure implications</li>
+						<ul>
+							<li>Exposing of infrastructure resources through <i>abstraction</i></li>
+							<li>Support for infrastructure resources &ndash; compute (hardware/OS/VM), storage, network, etc.</li>
+							<li>Supports isolation for multitenant environments</li>
 						</ul>
 					</ul>
 				</div>
 
-				<!-- /SLIDE -->					
 				<div class="slide">
 					<hgroup>
-						<h1>Service Analysis</h1>
-					</hgroup>
-					<ul>
-						<li>Running time</li>
-						<ul>
-							<div class="h-latex" style="zoom: 0.8">
-								T(n) = k_1 \cdot g(n) + k_2 
-							</div>
-							<li><span class="h-latex lower">k_1, k_2</span> 
-								are constant factors (independent on <span class="h-latex" style="zoom:0.8">n</span>)</li>
-							<li>for functions with <span class="h-latex x-lower">O(g(n))</span> complexity, 
-								<span class="h-latex x-lower">T(n)</span> describes worst-case running time</li>
-							<li>CPU-intensive functions: large <span class="h-latex">n</span></li> 
-						</ul>
-						<li>Constant factors</li>
-						<ul>
-							<li>overhead costs when running the function:<br/>
-							(a) <span class="h-latex lower">k_1</span> denotes efficiency of 
-								function's algorithm implementation,<br/>
-							(b) <span class="h-latex lower">k_2</span> denotes one-time costs such as
-							reading, writing, serializing data, simple calculations</li>
-						</ul>
-					</ul>
-				</div>
-
-				<!-- /SLIDE -->					
-				<div class="slide">
-					<hgroup>
-						<h1>CPU Seconds</h1>
+						<h1>IaaS: Infrastructure as a Service</h1>
 					</hgroup>
 					<ul class="x-small">
-						<li>Running time in CPU seconds</li>
+						<li>Usage</li>
 						<ul>
-							<div class="h-latex" style="zoom: 0.8">
-								\begin{math}
-									T_\mathit{cpu}(n) = \frac{k_1 \cdot g(n) + k_2}{\mathit{c}_m}}
-								\end{math}
-							</div>
+							<li>Predefined machine instances (micro, small, large, extra-large)</li>
 							<ul>
-								<li class="no-bullet">where <span class="h-latex">c_m</span> is a CPU's Million Instructions 
-									per Second (MIPS)</li>
+								<li>Linux OS, 613 MB of memory, 30 GB of Storage, Load Balancer, etc.</li>
+							</ul>
+							<li>Pay-per-use &ndash; pay for resources you use (time or amount); no up-front costs</li>
+						</ul>
+						<li>IaaS Services Examples</li>
+						<ul>
+							<li>Elastic Storage</li>
+							<li>Monitoring resources</li>
+							<ul>
+								<li>Amazon CloudWatch)</li>
+							</ul>
+							<li>Auto Scalling of running instances</li>
+							<li>Load Balancing &ndash; distributing incoming traffic<br/> across multiple instances</li>
+						</ul>
+						<li>IaaS providers</li>
+						<ul>
+							<li>Amazon EC2, GoGrid, Rackspace,</br>OpenNebula, ...</li>
+						</ul>
+
+					</ul>
+					<div class="h-drawing" style="height: 270px; padding-left: 220px; margin-top: -250px;" alt="Web 2.0 web architecture" id="1GnYOqlP5qCv8LMyd3yuLNdfsymoDKVRhYrSvorh4suw"></div>
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>PaaS: Platform as a Service</h1>
+					</hgroup>
+
+					<ul class="x-small">
+						<li>Provides scalable platform for applications</li>
+						<ul>
+							<li>Services for application providers</li>
+							<li>No costs of buying and managing underlying infrastructure</li>
+							<ul>
+								<li>hardware and software</li>
 							</ul>
 						</ul>
-						<li>Example (function analysis)</li>
+						<li>Infrastructure implications</li>
 						<ul>
-							<li>sort 10,000 items using insertion sort on a 1.2 GHz x86 CPU
-							with 3 instructions per clock cycle (~ 3600 MIPS)</li>
-							<li>insertion sort complexity is <span class="h-latex x-lower">O(n^2)</span></li>
-							<li><span class="h-latex lower">k_1=12</span> (~12 instructions per operation in avarage),
-							<br/><span class="h-latex lower">k_2=0</span> (no additional costs)
-							<br/><span class="h-latex lower">c_m=1200 \cdot 3 = 3600</span></li>
-							<li class="space-before">CPU Time in seconds:</li>
-							<div class="h-latex" style="zoom: 0.7;margin-top: 0px; margin-left: 50px">
-								\begin{math}
-									T_\mathit{cpu}(10^4) = \frac{12 \cdot (10^4)^2}{3600 \cdot 10^{6}} 
-									\approx 0.33
-								\end{math}
-							</div>
-						</ul>							
+							<li>Scalable platform, deploy on-demand</li>
+							<li>Self service interface to deploy applications and services</li>
+							<li>Support for monitoring and measuring platform usage
+							<li>Model supporting isolation in multi-tenant environments
+						</ul>
 					</ul>
 				</div>
 
-	        </section>
+				<div class="slide">
+					<hgroup>
+						<h1>PaaS: Platform as a Service</h1>
+					</hgroup>
+					<ul class="x-small">
+						<li>Usage</li>
+						<ul>
+							<li>Choose software platform, e.g., JEE, .NET, Python, etc.</li>
+							<li>Pay-per-use &ndash; pay for the resources you use; no up-front costs</li>
+						</ul>
+						<li>PaaS features</li>
+						<ul>
+							<li>Auto Scalling and Load Balancing of applications</li>
+							<li>Persistent Storage - usually NoSQL database</li>
+							<li>Local development environment</li>
+							<li>Backends &ndash; for app instances with higher CPU</br>and memory demands</li>
+							<li>Administration APIs for its services</li>
+						</ul>
+						<li>PaaS providers</li>
+						<ul>
+							<li>Google App Engine, Heroku,</br>Windows Azure, etc.</li>
+						</ul>
+						<li>Limitations</li>
+						<ul>
+							<li>HTTP request limit (30 - 60 sec)</li>
+							<li>No writes to file system, no thread support</li>
+						</ul>
+					</ul>
+					<div class="h-drawing" style="height: 270px; padding-left: 220px; margin-top: -320px;" alt="Platfor as a Service example" id="1WPWgHjgD4Ew-bljCiWeyTvbNuFWs_dXnjhI333vtVbs"></div>
+				</div>
 
-            <div class="slide outline"></div>
+				<div class="slide">
+					<hgroup>
+						<h1>SaaS: Software as a Service</h1>
+					</hgroup>
+
+					<ul class="x-small">
+						<li>Software delivery model for applications hosted in the cloud</li>
+						<ul>
+							<li>typically software for end-users</li>
+							<li>services accessed using a web browser</li>
+							<li>provides API for programmatic access</li>
+						</ul>
+						<li>SaaS characteristics</li>
+						<ul>
+							<li>Typically build on top of IaaS or PaaS</li>
+							<li>Configurable and customizable modern Web applications</li>
+							<li>Usually basic version for free, need to pay for pro version</li>
+							<li>Global availability - any computer, any device</li>
+							<li>Easy management - automatic and fast updates</li>
+							<li>Pay-per-use &ndash; pay for the time you use</li>
+						</ul>
+						<li>SaaS providers</li>
+						<ul>
+							<li>Google Apps, Salesforce, iCloud, Flickr, Picasa, ...</li>
+						</ul>
+					</ul>
+				</div>
+
+			</section>
+
+			<div class="slide outline"></div>
             
-            <section>                
-                <header>Multitenancy</header>
-                
-	            <div class="slide">
+			<section>
+				<header>Multitenancy</header>
+
+				<div class="slide">
 					<hgroup>
 						<h1>Multitenancy</h1>
 					</hgroup>
 					<ul class="x-small">
 						<li>Architectural approach where resources are shared between multiple tenants or consumers</li>
-	                    <li>Implications</li>
-	                    <ul>
-	                        <li>Centralization of infrastructure in locations with lower costs</li>
-	                        <li>Peak-load capacity increases</li>
-	                        <li>Utilisation and efficiency improvements for systems that are not well utilised</li>
-	                    </ul>
-	                    <li>Sharing options</li>
-	                    <ul>
-	                        <li>Shared Everything</li>
-	                        <li>Shared Infrastructure</li>
-	                            <ul>
-	                                <li>Virtual Machines</li>
-	                                <li>O/S virtualization</li>
-	                            </ul>
-	                    </ul>
+						<li>Implications</li>
+						<ul>
+							<li>Centralization of infrastructure in locations with lower costs</li>
+							<li>Peak-load capacity increases</li>
+							<li>Utilisation and efficiency improvements for systems that are not well utilised</li>
+						</ul>
+						<li>Sharing options</li>
+						<ul>
+							<li>Shared Everything</li>
+							<li>Shared Infrastructure</li>
+								<ul>
+									<li>Virtual Machines</li>
+									<li>O/S virtualization</li>
+								</ul>
+						</ul>
 					</ul>
 				</div>
-	            
-	            <div class="slide">
+
+				<div class="slide">
 					<hgroup>
 						<h1>Shared Everything</h1>
 					</hgroup>
 					<ul class="x-small">
 						<li>Resources are shared between all tenants or consumers</li>
-	                    <ul>
-	                        <li>tenant: a service consumer</li>
-	                    </ul>
-	                    <li>Common for the SaaS model</li>
-	                    <li>The application should provide tenant isolation</li>
-	                    <li>Data for multiple tenants is stored in the same database tables</li>
+						<ul>
+							<li>tenant: a service consumer</li>
+						</ul>
+						<li>Common for the SaaS model</li>
+						<li>The application should provide tenant isolation</li>
+						<li>Data for multiple tenants is stored in the same database tables</li>
 					</ul>
-	                <div class="h-drawing" style="height: 220px; margin-left: 0px; margin-top: 20px" alt="Web 2.0 web architecture" id="17wNMQNs3vf2yyE0VzFhGbnNTjJBKKONbeS9jijYHbN4"></div>
+					<div class="h-drawing" style="height: 220px; margin-left: 0px; margin-top: 20px" alt="Web 2.0 web architecture" id="17wNMQNs3vf2yyE0VzFhGbnNTjJBKKONbeS9jijYHbN4"></div>
 				</div>
-	            
-	            <div class="slide">
+
+				<div class="slide">
 					<hgroup>
 						<h1>Shared Infrastructure: Virtual Machines</h1>
 					</hgroup>
 					<ul class="x-small">
 						<li>Infrastructure shared via virtual machines</li>
-	                    <ul>
-	                        <li>each tenant has its own virtual environment</li>
-	                        <li>Isolation provided by hypervisor</li>
-	                        <ul>
-	                            <li>hypervisor: virtual machine manager, runs virtual machines</li>
-	                        </ul>
-	                        <li>Resource contention depends on VM capability and configuration</li>
-	                        <li>Adds an additional layer and processes to run and manage</li>
-	                    </ul>
+						<ul>
+							<li>each tenant has its own virtual environment</li>
+							<li>Isolation provided by hypervisor</li>
+							<ul>
+								<li>hypervisor: virtual machine manager, runs virtual machines</li>
+							</ul>
+							<li>Resource contention depends on VM capability and configuration</li>
+							<li>Adds an additional layer and processes to run and manage</li>
+						</ul>
 					</ul>
-	                <div class="h-drawing" style="height: 280px; margin-left: 0px; margin-top: 10px" alt="Web 2.0 web architecture" id="1y5TMPeDujUG9aBUZ8Tf8a5vwrqT3LpjmYjb_HS5Ux1E"></div>
+					<div class="h-drawing" style="height: 280px; margin-left: 0px; margin-top: 10px" alt="Web 2.0 web architecture" id="1y5TMPeDujUG9aBUZ8Tf8a5vwrqT3LpjmYjb_HS5Ux1E"></div>
 				</div>
-	            
-	            <div class="slide">
+
+				<div class="slide">
 					<hgroup>
 						<h1>Shared Infrastructure: OS Virtualization</h1>
 					</hgroup>
 					<ul class="x-small">
 						<li>Infrastructure shared via OS Virtualization</li>
-	                    <ul>
-	                        <li>Each tenant has its own processing zone</li>
-	                        <li>Isolation provided by the operating system</li>
-	                        <li>Resource contention depends on zone configuration</li>
-	                        <li>No VMs to run and manage, no abstraction layer between app & OS</li>
-	                    </ul>
+						<ul>
+							<li>Each tenant has its own processing zone</li>
+							<li>Isolation provided by the operating system</li>
+							<li>Resource contention depends on zone configuration</li>
+							<li>No VMs to run and manage, no abstraction layer between app & OS</li>
+						</ul>
 					</ul>
-	                <div class="h-drawing" style="height: 280px; margin-left: 0px; margin-top: 10px" alt="Web 2.0 web architecture" id="1OIg4KQRqj_G3YUsoCFQS1E4JOpxx3Yg63PGeRMhkupE"></div>
+					<div class="h-drawing" style="height: 280px; margin-left: 0px; margin-top: 10px" alt="Web 2.0 web architecture" id="1OIg4KQRqj_G3YUsoCFQS1E4JOpxx3Yg63PGeRMhkupE"></div>
 				</div>
 
-	<!--            <div class="slide">
-					<hgroup>
-						<h1>Minimal Sharing</h1>
-					</hgroup>
-					<ul class="x-small">
-						<li>Maximized isolation between tenants' resources</li>
-	                    <li>Isolation provided by dedicated resource pools</li>
-	                    <li>Greatest degree of isolation, least economical</li>
-	                </ul>
-	                            
-	                <div class="h-drawing" style="height: 320px; margin-left: 0px; margin-top: 30px" alt="Web 2.0 web architecture" id="1pUWZWn29YJNHS6_JvKa0q1QPJ_xzI8ifmMgE1A-lC4Y"></div>
-				</div> -->
 			</section>
 		</section>
 
-        <div class="slide outline"></div>
-        
-        <section>
-            <header>Deployment Models</header>
-            
-            <div class="slide">
-                <hgroup>
-                    <h1>Public Cloud</h1>
-                </hgroup>
-                
-                <ul class="x-small">
-                    <li>
-                        Publicly accessible and self-service model
-                    </li>
-                    <ul>
-                        <li>Access via Web services (SOAP, REST)
-                        <li>Access via management console</li>
-                    </ul>
-                    <li>Infrastructure should ensure:</li>
-                    <ul>
-                        <li><code><b>Security</b></code> - it is a major concern!</li>
-                        <li>Network Access</li>
-                        <li>Contracts and SLA Management</li>
-                        <li>Subscription Management</li>
-                        <li>Multi-tenancy</li>
-                        <li>Subscription Management</li>
-                        <li>Metering, Billing, and Revenue Management</li>
-                    </ul>
-                    <li>Its free or pay-per-use!</li>
-                    <li>Applications, storage, and other resources available to the general public by a service provider</li>
-                    <ul>
-                        <li>Google, Amazon, Microsoft, etc.
-                    </ul>
-                </ul>
-                
-            </div>
-            <div class="slide">
-                <hgroup>
-                    <h1>Private Cloud</h1>
-                </hgroup>
-                
-                <ul class="x-small">
-                    <li>Cloud infrastructure which operates for a single organization and is hosted internally</li>
-                    <ul>
-                        <li>Emulated public cloud on internal resources</li>
-                    </ul>
-                    <li>Implications</li>
-                    <ul>
-                        <li>Internal cost allocation and chargeback</li>
-                        <li>Self-managed scalability</li>
-                        <li>Separation of Cloud resources from traditional IT resources</li>
-                    </ul>
-                    <li>Benefits</li>
-                    <ul>
-                        <li>Elasticity</li>
-                        <li>Dynamic provisioning</li>
-                        <li>Security?!</li>
-                    </ul>
-                </ul>
-                
-            </div>
-            <div class="slide">
-                <hgroup>
-                    <h1>Hybrid Cloud</h1>
-                </hgroup>
-                
-                <ul class="x-small">
-                    <li>Composition of two or more public or private clouds</li>
-                    <ul>
-                        <li>utilise the benefits of multiple deployment models</li>
-                        <li>outsourcing non-critical functions and information
-                    </ul>
-                    <li>Infrastructure should ensure:</li>
-                    <ul>
-                        <li>Inter-Cloud interaction</li>
-                        <li>Synchronization Support between Clouds</li>
-                        <li>Network Architecture: LB, Firewalls, VPN etc.</li>
-                    </ul>
-                    <li>"Cloudbursting" - application runs in a private cloud and "bursts" into a public cloud when the demand for computing capacity is increased</li>
-                    <ul>
-                        <li>For application with non-sensitive information</li>
-                        <li>Cloudbursting applications in peak period, e.g. holiday shopping season</li>
-                    </ul>
-                </ul>
-                
-            </div>
-            
-        </section>    		                                
-                   		
-		
+		<div class="slide outline"></div>
+
+		<section>
+
+			<header>Docker Containers</header>
+
+			<section>
+				<header>Overview</header>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Overview</h1>
+					</hgroup>
+
+					<ul class="small">
+						<li>Linux Containers</li>
+						<ul>
+							<li>Introduced in 2008</li>
+							<li>Allow to run a single process in a isolated system-level files and network "virtualization"</li>
+							<li>Use much less resources and disk space than traditional virtualization</li>
+						</ul>
+						<li>Implementations</li>
+						<ul>
+							<li>LXC &ndash; default implementation in Linux</li>
+							<li><b>Docker Containers</b></li>
+							<ul>
+								<li>Builds on new Kernel features: control groups (cgroups), kernel namespaces,
+									union-capable file system (OverlayFS, AUFS, etc.)</li>
+								<li>A way to build, commit and share images</li>
+								<li>Build images using a description file called Dockerfile</li>
+								<li>Large number of available base and re-usable images</li>
+							</ul>
+						</ul>
+					</ul>
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>VM vs. Docker Containers</h1>
+					</hgroup>
+					<img class="center" style="margin-top: 50px; height: 350px" src="./img/docker-vm.png"/>
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Docker Basic Terms</h1>
+					</hgroup>
+					<ul class="xx-small">
+						<li>Image</li>
+						<ul>
+							<li>Bssis for containers.</li>
+							<li>An image contains a union of layered filesystems stacked on top of each other.</li>
+							<li>An image does not have state and it never changes.</li>
+						</ul>
+						<li>Container</li>
+						<ul>
+							<li>A runtime instance of a Docker image, a standard to "ship software".</li>
+						</ul>
+						<li>Docker Engine</li>
+						<ul>
+							<li>The core process providing the Docker capabilities on a host.</li>
+						</ul>
+						<li>Docker Client</li>
+						<ul>
+							<li>Interface that integrates with docker engine.</li>
+						</ul>
+						<li>Registry</li>
+						<ul>
+							<li>A hosted service containing repository of images.</li>
+							<li>A registry provides a registry API to search, pull and push images.</li>
+							<li>Docker Hub is the default Docker registry.</li>
+						</ul>
+						<li>Swarm</li>
+						<ul>
+							<li>A cluster of one or more docker engines.</li>
+						</ul>
+					</ul>
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Docker Images</h1>
+					</hgroup>
+					<img style="margin-left: 50px; margin-top: 15px; margin-bottom: 10px; height: 280px"
+						 src="./img/docker-container-stack.png"/>
+					<ul class="x-small" style="margin-left: -10px"><ul>
+						<li>Containers are made up of R/O layers via a storage driver<br/>(OverlayFS, AUFS, etc.)</li>
+						<li>Containers are designed to support a single application</li>
+						<li>Instances are ephemeral, persistent data is stored in bind
+							mounts or data volume containers.</li>
+					</ul></ul>
+				</div>
+			</section>
+
+			<div class="slide outline"></div>
+
+			<section>
+
+				<header>Image Layering</header>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Image Layering with OverlayFS</h1>
+					</hgroup>
+					<ul class="x-small">
+						<li>OverlayFS</li>
+						<ul>
+							<li>A filesystem service implementing a <b>union mount</b> for other file systems.</li>
+							<li>Docker uses <code>overlay</code> and <code>overlay2</code> storage drivers
+								to build and manage on-disk structures of images and containers.</li>
+						</ul>
+						<li>Image Layering</li>
+						<ul>
+							<li>OverlayFS takes two directories on a single Linux host, layers one on top of the other, and provides
+								a single unified view.</li>
+							<li>Only works for two layers, in multi-layered images hard links are used to
+								reference data shared with lower layers.</li>
+						</ul>
+						<img src="img/overlay_constructs.jpg" style="width: 700px; margin-top: 10px"/>
+					</ul>
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Image Layers Example</h1>
+					</hgroup>
+					<ul class="xx-small" style="margin-top:20px; zoom:0.9">
+						<li>Pulling out the image from the registry</li>
+						<pre class="brush: plain; gutter: 'false'">
+							$ sudo docker pull ubuntu
+
+							Using default tag: latest
+							latest: Pulling from library/ubuntu
+
+							5ba4f30e5bea: Pull complete
+							9d7d19c9dc56: Pull complete
+							ac6ad7efd0f9: Pull complete
+							e7491a747824: Pull complete
+							a3ed95caeb02: Pull complete
+							Digest: sha256:46fb5d001b88ad904c5c732b086b596b92cfb4a4840a3abd0e35dbb6870585e4
+							Status: Downloaded newer image for ubuntu:latest
+						</pre>
+						<ul>
+							<li>Each image layer has its own directory under <code>/var/lib/docker/overlay/</code>.</li>
+							<li>This is where the contents of each image layer are stored.</li>
+						</ul>
+						<li>Directories on the file system</li>
+						<pre class="brush: plain; gutter: 'false'">
+							$ ls -l /var/lib/docker/overlay/
+
+							total 20
+							drwx------ 3 root root 4096 Jun 20 16:11 38f3ed2eac129654acef11c32670b534670c3a06e483fce313d72e3e0a15baa8
+							drwx------ 3 root root 4096 Jun 20 16:11 55f1e14c361b90570df46371b20ce6d480c434981cbda5fd68c6ff61aa0a5358
+							drwx------ 3 root root 4096 Jun 20 16:11 824c8a961a4f5e8fe4f4243dab57c5be798e7fd195f6d88ab06aea92ba931654
+							drwx------ 3 root root 4096 Jun 20 16:11 ad0fe55125ebf599da124da175174a4b8c1878afe6907bf7c78570341f308461
+							drwx------ 3 root root 4096 Jun 20 16:11 edab9b5e5bf73f2997524eebeac1de4cf9c8b904fa8ad3ec43b3504196aa3801
+						</pre>
+						<ul>
+							<li>The organization of files allows for efficient use of disk space.</li>
+							<li>There are <b>files unique to every layer</b> and <b>hard links to the data</b> that is shared with lower layers</li>
+							</ul>
+						</ul>
+					</ul>
+				</div>
+
+			</section>
+
+			<div class="slide outline"></div>
+
+			<section>
+
+				<header>Working with Docker</header>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Docker Container Lifecycle State Diagram</h1>
+					</hgroup>
+
+					<div class="h-drawing" style="height: 430px" id="1JGxpdEWDh9lBbLg3JFVr53LBg1BM520LYXyYkdi-2ws"></div>
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Commands (1)</h1>
+					</hgroup>
+					<ul class="xx-small no-bullet" style="zoom:0.95">
+						<li><code>docker version</code></li>
+						<ul>
+							<li>list current version of docker engine and client</li>
+						</ul>
+						<li><code>docker search &lt;image&gt;</code></li>
+						<ul>
+							<li>search for an image in the registry</li>
+						</ul>
+						<li><code>docker pull &lt;image[:version]&gt;</code></li>
+						<ul>
+							<li>download an image of a specific from the registry</li>
+							<li>if the version is not provided, the latest version will be downloaded</li>
+						</ul>
+						<li><code>docker images</code></li>
+						<ul>
+							<li>list all local images</li>
+						</ul>
+						<li><code>docker run -it &lt;image[:version]&gt; &lt;command&gt;</code></li>
+						<ul>
+							<li>start the image and run the command inside the image</li>
+							<li>if the image is not found locally, it will be downloaded from the registry</li>
+							<li>option <code>-i</code> starts the container in interactive mode</li>
+							<li>option <code>-t</code> allocates a pseudo TTY</li>
+						</ul>
+						<li><code>docker ps [-as]</code></li>
+						<ul>
+							<li>list all running containers</li>
+							<li>option <code>-a</code> will list all containers including the stopped ones.</li>
+							<li>option <code>-s</code> will list the container's size.</li>
+						</ul>
+					</ul>
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Commands (2)</h1>
+					</hgroup>
+					<ul class="xx-small no-bullet" style="zoom:0.95">
+						<li><code>docker rm &lt;container&gt;</code></li>
+						<ul>
+							<li>remove the container</li>
+						</ul>
+						<li><code>docker rmi &lt;image&gt;</code></li>
+						<ul>
+							<li>remove the image</li>
+						</ul>
+						<li><code>docker commit &lt;container&gt; &lt;name[:version]&gt;</code></li>
+						<ul>
+							<li>create an image from the container with the name and the version</li>
+						</ul>
+						<li><code>docker history &lt;image&gt;</code></li>
+						<ul>
+							<li>display the image history</li>
+						</ul>
+					</ul>
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Networking and Linking</h1>
+					</hgroup>
+					<ul class="xx-small">
+						<li>There are 3 docker networks by default</li>
+						<ul>
+							<li><b>bridge</b> &ndash; container can access host's network (default)</li>
+							<ul>
+								<li>Docker creates subnet <code>172.17.0.0/16</code> and gateway to the network</li>
+								<li>When a container is started, it is automatically added to this network</li>
+								<li>All containers in this network can communicate each other</li>
+							</ul>
+							<li><b>host</b> &ndash; all host's network interfaces will be available in the container.</li>
+							<li><b>none</b> &ndash; container will be placed on its own network and no network interfaces will be configured.</li>
+						</ul>
+						<li>Custom Network configuration</li>
+						<ul>
+							<li>You can create a new network and add containers to it</li>
+							<li>Containers in the new network can communicate with each other but the network will be isolated
+								from the host network</li>
+						</ul>
+						<li>Linking containers (legacy)</li>
+						<ul>
+							<pre class="brush: plain; gutter: 'false'">
+								$ docker run -d --name redmine-db postgres
+								$ docker run -it --link redmine-db:db postgres /bin/bash
+								root@c4b12143ebe8:/# psql -h db -U postgres
+								psql (9.6.1)
+								Type "help" for help.
+								postgres=# SELECT inet_server_addr();
+								postgres=# SELECT * FROM pg_stat_activity \x\g\x
+							</pre>
+							<li>The container sees the provided name as a DNS address</li>
+						</ul>
+					</ul>
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Networking Commands</h1>
+					</hgroup>
+					<ul class="xx-small no-bullet" style="zoom:0.95">
+						<li><code>docker network ls</code></li>
+						<ul>
+							<li>lists all available networks</li>
+						</ul>
+						<li><code>docker network inspect &lt;network-id&gt;</code></li>
+						<ul>
+							<li>Returns the details of specific network</li>
+						</ul>
+						<li><code>docker network create --driver bridge isolated_nw</code></li>
+						<ul>
+							<li>creates a new isolated network</li>
+						</ul>
+						<li><code>docker run -it --network=isolated_nw ubuntu bin/bash</code></li>
+						<ul>
+							<li>starts the container ubuntu and attaches it to the isolated network</li>
+						</ul>
+					</ul>
+				</div>
+
+
+				<div class="slide">
+					<hgroup>
+						<h1>Data Volumes</h1>
+					</hgroup>
+					<ul class="xx-small" style="zoom:0.95">
+						<li>Data Volume</li>
+						<ul>
+							<li>A directory that bypass the union file system</li>
+							<li>Data volumes can be shared and reused among containers</li>
+							<li>Data volume persists even if the container is deleted</li>
+							<li>It is possible to mount a shared sotrage volume as a data volue by using
+							a volume plugin to mount e.g. NFS</li>
+						</ul>
+
+						<li>Adding a data volume</li>
+						<ul>
+							<li class="no-bullet">
+								<code>docker run -d -v /webapp training/webapp python app.py</code>
+							</li>
+							<li class="no-bullet">will create a new value with name <code>webapp</code>,</li>
+							<li class="no-bullet">the location of the volume can be determined by using <code>docker inspect</code>.</li>
+
+						</ul>
+						<li>Mount a host directory as a data volume</li>
+						<ul>
+							<li class="no-bullet">
+								<code>docker run -d -v /src/webapp:/webapp training/webapp python app.py</code>
+							</li>
+							<li class="no-bullet">if the path exists in the container, it will be overlayed (not removed),</li>
+							<li class="no-bullet">if the host directory does not exist, the docker engine creates it.</li>
+
+						</ul>
+						<li>Data volume container</li>
+						<ul>
+							<li>Persistent data to be shared among two or more containers</li>
+							<li class="no-bullet">
+								<code>docker create -v /dbdata --name dbstore training/postgres /bin/true</code>
+							</li>
+							<li class="no-bullet">
+								<code>docker run -d --volumes-from dbstore --name db1 training/postgres</code>
+							</li>
+							<li class="no-bullet">
+								<code>docker run -d --volumes-from dbstore --name db2 training/postgres</code>
+							</li>
+						</ul>
+					</ul>
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Dockerfile</h1>
+					</hgroup>
+					<ul class="xx-small" style="zoom: 0.95">
+						<li>Dockerfile is a script that creates a new image</li>
+						<pre class="brush: plain; gutter: 'false'">
+						# This is a comment
+						FROM oraclelinux:7
+						MAINTAINER Tomas Vitvar &lt;tomas@vitvar.com>
+						RUN yum install -q -y httpd
+						EXPOSE 80
+						CMD httpd -X
+						</pre>
+
+						<li>A line in the Dockerfile will create an intermediary layer</li>
+
+						<pre class="brush: plain; gutter: 'false'">
+						$ docker build -t tomvit/httpd:v1 .
+						Sending build context to Docker daemon 2.048 kB
+						Step 1 : FROM oraclelinux:7
+						 ---> 4c357c6e421e
+						Step 2 : MAINTAINER Tomas Vitvar &lt;tomas@vitvar.com>
+						 ---> Running in 35feebb2ffab
+						 ---> 95b35d5d793e
+						Removing intermediate container 35feebb2ffab
+						Step 3 : RUN yum install -q -y httpd
+						 ---> Running in 3b9aee3c3ef1
+						 ---> 888c49141af9
+						Removing intermediate container 3b9aee3c3ef1
+						Step 4 : EXPOSE 80
+						 ---> Running in 03e1ef9bf875
+						 ---> c28545e3580c
+						Removing intermediate container 03e1ef9bf875
+						Step 5 : CMD httpd -X
+						 ---> Running in 3c1c0273a1ef
+						</pre>
+
+						<ul>
+							<li>If the processing fails at some point, all preceding points will be loaded from the cache on the next run.</li>
+						</ul>
+
+
+					</ul>
+				</div>
+
+
+			</section>
+
+			<div class="slide outline"></div>
+
+			<section>
+				<header>Swarm</header>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Swarm</h1>
+					</hgroup>
+					<img src="img/swarm-diagram.png" style="width: 750px; margin-left: 25px; margin-top: 20px"/>
+				</div>
+			</section>
+
+
+		</section>
+
 	</body>
 </html>	

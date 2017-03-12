@@ -67,7 +67,7 @@
 				<li>Lightweight, interpreted, object-oriented language</li>
 				<li>Standard</li>
 				<ul>
-					<li>All major browsers support ECMAScript 5.1</li>
+					<li>All major browsers support ECMAScript 6 and 7</li>
 				</ul>	
 				<li>Major characteristics</li>
 				<ul>
@@ -240,7 +240,7 @@
 	            </ul>                
 	        </div>
 
-            <div class="slide"> 
+           <!-- <div class="slide">
 				<hgroup> 
 					<h1>Blocking I/O Model</h1> 
 				</hgroup> 
@@ -261,7 +261,7 @@
                         <li>scales very bad as the thread's execution is "blocked"</li>
                     </ul>
 				</ul>
-			</div>
+			</div> -->
 
             <div class="slide"> 
     			<hgroup> 
@@ -293,9 +293,16 @@
 				<ul class="x-small">
 					<li><span id="nodejs" class="h-ref">Node.js</span></li>
 					<ul>
-					    <li>Emerging Web server technology, very efficient and fast!</li>
+					    <li>Web server technology, very efficient and fast!</li>
                         <li>Event-driven I/O framework, based on JavaScript V8 engine</li>
-                        <li>Only one worker thread</li>
+                        <ul>
+                            <li>Any I/O is non-blocking (it is asynchronous)</li>
+                        </ul>
+                        <li>One worker thread to process requests</li>
+                        <ul>
+                            <li>You do not need to deal with concurrency issues</li>
+                        </ul>
+                        <li>More threads to realize I/O</li>
     					<li>Open sourced, <span id="nodejs-github" class="h-ref">@GitHub</span>, many <span id="nodejs-libs" class="h-ref">libraries</span></li>
                         <li>Future platform for Web 2.0 apps</li>
                     </ul>
