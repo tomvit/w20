@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<!--<html> 
+<body> 
+    <script type="text/javascript"> 
+        Object.prototype.__defineSetter__('Id', function(obj){
+        	alert(obj);
+       	});
+    </script> 
+    <script src="data.json"></script> 
+</body> 
+</html>-->
+
+<html>
+<head>
+<script>
+			var newData;
+
+			Array = function() {
+				alert(this);
+			}
+
+			var a = [1,2,3,4]
+</script>
+</head>
+<body>
+
+<p>Click the button to trigger a function.</p>
+
+<button onclick="insertData()">Click me</button>
+<button onclick="getData()">Get data</button>
+
+<p id="demo"></p>
+
+</body>
+</html>
+
+
+<!--<html>
+	<body>
+		<script type="text/javascript">
+			var newData;
+
+			Array = function() {
+				newData = this;
+			}
+
+			function getData() {
+				var s = "";
+				for (var i = 0; i < newData.length; i++)
+					s += newData[i];
+
+				alert(s);
+			}
+
+			function insertData() {
+			    var se = document.createElement('script');
+			    se.setAttribute("type","text/javascript");
+			    se.setAttribute("src", "data.json");    
+			    document.getElementsByTagName("head")[0].appendChild(se);   
+			    // And data will be loaded when loadDta callback fires...
+			}
+
+		</script>
+
+		<input type="button" onlick="alert('ahoj')" value="Click Me!"></input>
+		<input type="button" onlick="getData()" value="Get Data!"></input>
+
+	</body>
+</html>-->
