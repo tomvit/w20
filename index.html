@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="screen, print"></link>
+
+    <title>W20 Course</title>
+    
+  </head>
+  <body>
+    <script>
+	var lecdata = {};
+
+        function drawTable() {
+                var html = "";
+                html += "<table class=\"\">" +
+                                "<tbody>";
+                                
+                var formatTitle = function(s) {
+                        return "<a class='toc' target=\"w20win\" href='" + s["slide-url"] + "'>" + s.title + "</a>";            
+                }               
+                                
+                for (var i = 0; i < lecdata.lectures.length; i++) {
+                        html += "<tr>";
+
+                        html += "<td style='vertical-align: top'><b>" + (i + 1) + ".</b></td><td><b>" + lecdata.lectures[i].title + 
+                        "</b>&nbsp;<span style='font-size: 11px;'>[" +
+                        "<a target=\"w20win\" href=\"" + lecdata.lectures[i]["slide-url"] + "\">HTML</a><!--,&nbsp;<a target=\"w20win\" href=\"" +          
+                                lecdata.lectures[i]["slide-url"].replace(/.html$/, "-2p.pdf") + "\">PDF-2</a>,&nbsp;<a target=\"w20win\" href=\"" +          
+                                lecdata.lectures[i]["slide-url"].replace(/.html$/, "-1p.pdf") + "\">PDF-1</a>-->]<br/><span class='toc'>";
+
+                        var sections1 = lecdata.lectures[i].sections; 
+                        for (var j = 0; j < sections1.length; j++) {
+                                html += formatTitle(sections1[j]) + (sections1[j].sections.length > 0 ? "" : (j == sections1.length - 1 ? "" : ", "));
+                                
+                                var sections2 = sections1[j].sections;
+                                
+                                if (sections2.length > 0) {
+                                        html += " (";
+                                        for (var k = 0; k < sections2.length; k++) {
+                                                html += formatTitle(sections2[k]) + (k == sections2.length - 1 ? "" : ", ");
+                                        }
+                                        html += ")" + (j == sections1.length - 1 ? "" : ", ");
+                                }
+                        }
+                        
+                        html += "</span></td>";
+                        html += "</tr>";
+                }
+                
+                html += "</tbody>";
+                html += "</table>"
+                
+                var e = document.getElementById("course-toc");
+                e.innerHTML = html;
+
+	}
+
+        var handler = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                        lecdata = JSON.parse(this.responseText);
+                        drawTable(lecdata);
+                }
+        };
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = handler; 
+        xhr.open("GET", "toc.json");
+        xhr.send();
+    </script>
+
+    <style>
+	.center {
+    		margin: auto;
+    		width: 800px;
+    		padding: 10px;
+	}
+	
+    </style>
+
+    <div class="container center">
+      <h1 id="web-20-course-slides">Web 2.0 Course Content</h1>
+    
+      <div id="course-toc"></div>
+    </div>
+  </body>
+</html>
