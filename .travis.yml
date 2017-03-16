@@ -4,4 +4,4 @@ node_js:
 env:
   - COURSE_HOME=$(pwd)
 script:
-  - echo $COURSE_HOME
+  - $COURSE_HOME/humla/bin/create-toc.sh
