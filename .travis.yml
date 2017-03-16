@@ -5,3 +5,4 @@ env:
   - COURSE_HOME=$(pwd)
 script:
   - $COURSE_HOME/humla/bin/create-toc.sh
+  - $COURSE_HOME/humla/bin/generate-pdfs.sh
