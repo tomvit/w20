@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - "6"
+env:
+  - COURSE_HOME=$(pwd)
+script:
+  - echo $COURSE_HOME
