@@ -27,8 +27,8 @@
                         html += "<td style='vertical-align: top'><b>" + (i + 1) + ".</b></td><td><b>" + lecdata.lectures[i].title + 
                         "</b>&nbsp;<span style='font-size: 11px;'>[" +
                         "<a target=\"w20win\" href=\"" + lecdata.lectures[i]["slide-url"] + "\">HTML</a>,&nbsp;<a target=\"w20win\" href=\"" +          
-                                lecdata.lectures[i]["slide-url"].replace(/.html$/, "-2p.pdf") + "\">PDF-2</a>,&nbsp;<a target=\"w20win\" href=\"" +          
-                                lecdata.lectures[i]["slide-url"].replace(/.html$/, "-1p.pdf") + "\">PDF-1</a>]<br/><span class='toc'>";
+                                lecdata.lectures[i]["slide-url"].replace(/.html.*$/, "-2p.pdf") + "\">PDF-2</a>,&nbsp;<a target=\"w20win\" href=\"" +          
+                                lecdata.lectures[i]["slide-url"].replace(/.html.*$/, "-1p.pdf") + "\">PDF-1</a>]<br/><span class='toc'>";
 
                         var sections1 = lecdata.lectures[i].sections; 
                         for (var j = 0; j < sections1.length; j++) {
