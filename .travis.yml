@@ -8,17 +8,15 @@ script:
   - $COURSE_HOME/humla/bin/create-toc.sh
   - $COURSE_HOME/humla/bin/generate-pdfs.sh
 after_success: 
-  if [ -n "$GITHUB_TOKEN" ]; then
-    cd "$TRAVIS_BUILD_DIR"
-    make out
-    cd out
-    git init
-    git checkout -b gh-pages
-    git add .
-    git -c user.name='travis' -c user.email='travis' commit -m init
-    git push -f -q https://tomvit:$GITHUB_TOKEN@github.com/tomvit/w20 gh-pages &2>/dev/null
-    cd "$TRAVIS_BUILD_DIR"
-  fi
+  - cd "$TRAVIS_BUILD_DIR"
+  - make out
+  - cd out
+  - git init
+  - git checkout -b gh-pages
+  - git add .
+  - git -c user.name='travis' -c user.email='travis' commit -m init
+  - git push -f -q https://tomvit:$GITHUB_TOKEN@github.com/tomvit/w20 gh-pages &2>/dev/null
+  - cd "$TRAVIS_BUILD_DIR"
 
 #deploy:
 #  provider: pages
