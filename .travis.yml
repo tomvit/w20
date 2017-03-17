@@ -4,12 +4,12 @@ node_js:
 env:
   - COURSE_HOME=$(pwd)
 script:
+  - echo $COURSE_HOME
   - $COURSE_HOME/humla/bin/create-toc.sh
   - $COURSE_HOME/humla/bin/generate-pdfs.sh
 deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN 
-  target_branch: master
   on:
     branch: master
