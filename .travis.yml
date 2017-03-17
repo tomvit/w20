@@ -4,22 +4,17 @@ node_js:
 env:
   - COURSE_HOME=$(pwd)
 script:
+  - git checkout gh-pages
+  - git merge -m "merged with master on gh-pages build"
   - echo $COURSE_HOME
   - $COURSE_HOME/humla/bin/create-toc.sh
   - $COURSE_HOME/humla/bin/generate-pdfs.sh
-#after_success: 
-#  - cd "$TRAVIS_BUILD_DIR"
-#  - git init
-#  - git checkout -b gh-pages
-#  - git add pdf
-#  - git add tos.json
-#  - git -c user.name='travis' -c user.email='travis' commit -m init
-#  - git push -f -q https://tomvit:$GITHUB_TOKEN@github.com/tomvit/w20 gh-pages
-#  - cd "$TRAVIS_BUILD_DIR"
+after_success: 
+  - cd "$TRAVIS_BUILD_DIR"
+  - git branch
+  - git add pdf
+  - git add cache
+  - git add toc.json
+  - git -c user.name='travis' -c user.email='travis' commit -am "pdf and toc on new build"
+  - git push -f -q https://tomvit:$GITHUB_TOKEN@github.com/tomvit/w20
 
-#deploy:
-#  provider: pages
-#  skip_cleanup: true
-#  github_token: $GITHUB_TOKEN 
-#  on:
-#    branch: master
