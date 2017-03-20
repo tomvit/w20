@@ -7,8 +7,10 @@ script:
   - rm -rf $BUILD_DIR
   - git clone https://$GITHUB_TOKEN@github.com/tomvit/w20.git $BUILD_DIR
   - cd $BUILD_DIR
+  - git submodule update --init --recursive 
   - git checkout gh-pages
-  - git merge -m "merged with master on gh-pages build"
+  - git pull origin/master --no-commit
+  - git commit -m "merged with master on gh-pages build"
   - export COURSE_HOME=$(pwd)
   - echo $COURSE_HOME
   - $COURSE_HOME/humla/bin/create-toc.sh
