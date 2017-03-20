@@ -11,7 +11,8 @@ script:
   - git config --global user.email "travis"
   - git config --global user.name "travis"
   - git checkout gh-pages
-  - git pull --no-commit origin/master
+  - git fetch 
+  - git merge origin/master --no-commit
   - git commit -m "merged with master on gh-pages build"
   - export COURSE_HOME=$(pwd)
   - echo $COURSE_HOME
