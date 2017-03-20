@@ -2,24 +2,22 @@ language: node_js
 node_js:
   - "6"
 env:
-  - COURSE_HOME=$(pwd)
+  - BUILD_DIR="../w20-ghp"
 script:
+  - rm -rf $BUILD_DIR
+  - git clone https://$GITHUB_TOKEN@github.com/tomvit/w20.git $BUILD_DIR
+  - cd $BUILD_DIR
+  - git submodule update --init --recursive 
+  - git config --global user.email "travis"
+  - git config --global user.name "travis"
+  - git checkout gh-pages
+  - git fetch 
+  - git merge origin/master --no-commit
+  - git commit -m "merged with master on gh-pages build"
+  - export COURSE_HOME=$(pwd)
   - echo $COURSE_HOME
   - $COURSE_HOME/humla/bin/create-toc.sh
   - $COURSE_HOME/humla/bin/generate-pdfs.sh
-after_success: 
-  - cd "$TRAVIS_BUILD_DIR"
-  - git init
-  - git checkout -b gh-pages
-  - git add pdf
-  - git add tos.json
-  - git -c user.name='travis' -c user.email='travis' commit -m init
-  - git push -f -q https://tomvit:$GITHUB_TOKEN@github.com/tomvit/w20 gh-pages
-  - cd "$TRAVIS_BUILD_DIR"
-
-#deploy:
-#  provider: pages
-#  skip_cleanup: true
-#  github_token: $GITHUB_TOKEN 
-#  on:
-#    branch: master
+  - git add -A .
+  - git commit -a -m "Travis build $TRAVIS_BUILD_NUMBER"
+  - git push --quiet origin gh-pages > /dev/null 2>&1
