@@ -4,6 +4,8 @@ node_js:
 env:
   - BUILD_DIR="../w20-ghp"
 script:
+  - apt-get install ttf-mscorefonts-installer
+  - fc-cache
   - rm -rf $BUILD_DIR
   - git clone https://$GITHUB_TOKEN@github.com/tomvit/w20.git $BUILD_DIR
   - cd $BUILD_DIR
