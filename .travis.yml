@@ -16,5 +16,5 @@ script:
   - $COURSE_HOME/humla/bin/create-toc.sh
   - $COURSE_HOME/humla/bin/generate-pdfs.sh
   - git add -A .
-  - git commit -a -m "Travis #$TRAVIS_BUILD_NUMBER"
+  - git commit -a -m "Travis build $TRAVIS_BUILD_NUMBER"
   - git push --quiet origin gh-pages > /dev/null 2>&1
