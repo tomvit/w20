@@ -8,8 +8,10 @@ script:
   - git clone https://$GITHUB_TOKEN@github.com/tomvit/w20.git $BUILD_DIR
   - cd $BUILD_DIR
   - git submodule update --init --recursive 
+  - git config --global user.email "travis"
+  - git config --global user.name "travis"
   - git checkout gh-pages
-  - git pull origin/master --no-commit
+  - git pull --no-commit origin/master
   - git commit -m "merged with master on gh-pages build"
   - export COURSE_HOME=$(pwd)
   - echo $COURSE_HOME
