@@ -2,7 +2,9 @@ language: node_js
 node_js:
   - "6"
 env:
-  - BUILD_DIR="../w20-ghp"
+  global:
+    - BUILD_DIR="../w20-ghp"
+    - USECACHE=1
 install:
   - mkdir travis-phantomjs
   - wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O $PWD/travis-phantomjs/phantomjs.tar.bz2
@@ -23,8 +25,8 @@ script:
   - git fetch 
   - git merge origin/master --no-commit || true
   - export COURSE_HOME=$(pwd)
-  - $COURSE_HOME/humla/bin/create-toc.sh
-  - $COURSE_HOME/humla/bin/generate-pdfs.sh
+  - $COURSE_HOME/humla/bin/create-toc.sh $USECACHE
+  - $COURSE_HOME/humla/bin/generate-pdfs.sh $USECACHE
   - git add -A .
   - git commit -a -m "Travis build $TRAVIS_BUILD_NUMBER" || true
   - git push --quiet origin gh-pages > /dev/null 2>&1
