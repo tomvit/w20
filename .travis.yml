@@ -3,9 +3,16 @@ node_js:
   - "6"
 env:
   - BUILD_DIR="../w20-ghp"
-script:
+install:
+  - mkdir travis-phantomjs
+  - wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O $PWD/travis-phantomjs/phantomjs.tar.bz2
+  - tar -xvf $PWD/travis-phantomjs/phantomjs.tar.bz2 -C $PWD/travis-phantomjs --strip-components=1
+  - export PATH=$PWD/travis-phantomjs/bin:$PATH
   - sudo apt-get install ttf-mscorefonts-installer
-  - sudo fc-cache
+  - sudo fc-cache  
+script:
+  - phantomjs --version
+  - node --version
   - rm -rf $BUILD_DIR
   - git clone https://$GITHUB_TOKEN@github.com/tomvit/w20.git $BUILD_DIR
   - cd $BUILD_DIR
