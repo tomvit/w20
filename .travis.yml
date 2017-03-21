@@ -9,7 +9,7 @@ install:
   - tar -xvf $PWD/travis-phantomjs/phantomjs.tar.bz2 -C $PWD/travis-phantomjs --strip-components=1
   - export PATH=$PWD/travis-phantomjs/bin:$PATH
   - sudo apt-get install ttf-mscorefonts-installer
-  - sudo fc-cache  
+  - sudo fc-cache -f -v  
 script:
   - phantomjs --version
   - node --version
@@ -21,10 +21,8 @@ script:
   - git config --global user.name "travis"
   - git checkout gh-pages
   - git fetch 
-  - git merge origin/master --no-commit
-  - git commit -m "merged with master on gh-pages build"
+  - git merge origin/master --no-commit || :
   - export COURSE_HOME=$(pwd)
-  - echo $COURSE_HOME
   - $COURSE_HOME/humla/bin/create-toc.sh
   - $COURSE_HOME/humla/bin/generate-pdfs.sh
   - git add -A .
