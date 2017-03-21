@@ -8,14 +8,11 @@ install:
   - wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 -O $PWD/travis-phantomjs/phantomjs.tar.bz2
   - tar -xvf $PWD/travis-phantomjs/phantomjs.tar.bz2 -C $PWD/travis-phantomjs --strip-components=1
   - export PATH=$PWD/travis-phantomjs/bin:$PATH
-  - wget "https://drive.google.com/uc?export=download&id=0B4ooUkEfVrhlZTFrelFZVFBQd2c" -O fonts.tar.gz
-  - tar xvzf fonts.tar.gz
-  - sudo mv fonts /usr/share/fonts/
-  #- sudo apt-get install ttf-mscorefonts-installer
+  - wget "https://drive.google.com/uc?export=download&id=0B4ooUkEfVrhlbHJ5aGZTcVV5bUU" -O fonts-humla.tar.gz
+  - tar xvzf fonts-humla.tar.gz
+  - sudo mv fonts-humla /usr/share/fonts/
   - sudo fc-cache -f -v  
 script:
-  - phantomjs --version
-  - node --version
   - rm -rf $BUILD_DIR
   - git clone https://$GITHUB_TOKEN@github.com/tomvit/w20.git $BUILD_DIR
   - cd $BUILD_DIR
@@ -29,5 +26,5 @@ script:
   - $COURSE_HOME/humla/bin/create-toc.sh
   - $COURSE_HOME/humla/bin/generate-pdfs.sh
   - git add -A .
-  - git commit -a -m "Travis build $TRAVIS_BUILD_NUMBER"
+  - git commit -a -m "Travis build $TRAVIS_BUILD_NUMBER" || true
   - git push --quiet origin gh-pages > /dev/null 2>&1
