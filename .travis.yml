@@ -21,7 +21,7 @@ script:
   - git config --global user.name "travis"
   - git checkout gh-pages
   - git fetch 
-  - git merge origin/master --no-commit || :
+  - git merge origin/master --no-commit || true
   - export COURSE_HOME=$(pwd)
   - $COURSE_HOME/humla/bin/create-toc.sh
   - $COURSE_HOME/humla/bin/generate-pdfs.sh
