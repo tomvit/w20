@@ -881,20 +881,20 @@
     					<h1>Resource State Example</h1>
     				</hgroup>
                     <ul class="x-small">
-                        <li>Time <span class="h-latex lower">t_1</span>: client A retrieves a resource <code>/orders</code> (GET)</li>
+                        <li>Time <code>t1</code>: client A retrieves a resource <code>/orders</code> (GET)</li>
                         <pre class="brush: xml; class-name: 'tight'">
                             &lt;orders>
                                 &lt;order id="54467"/>
                                 &lt;order id="65432"/>
                             &lt;/orders>                                                
                         </pre>
-                        <li>Time <span class="h-latex lower">t_2</span>: client B adds a new order (POST)</li>
+                        <li>Time <code>t2</code>: client B adds a new order (POST)</li>
                         <pre class="brush: xml; class-name: 'tight'">
                             &lt;order>
                                 ...
                             &lt;/order>                                                
                         </pre>
-                        <li>Time <span class="h-latex lower">t_3</span>: client A retrieves a resource <code>/orders</code> (GET)</li>
+                        <li>Time <code>t3</code>: client A retrieves a resource <code>/orders</code> (GET)</li>
                         <pre class="brush: xml; class-name: 'tight'">
                             &lt;orders>
                                 &lt;order id="54467"/>
@@ -902,8 +902,8 @@
                                 &lt;order id="74567"/>
                             &lt;/orders>                                                
                         </pre>
-                        <li>The resource <code>/orders</code> has different states in <span class="h-latex lower">t_1</span>
-                        and <span class="h-latex lower">t_3</span>.
+                        <li>The resource <code>/orders</code> has different states in <code>t1</code>
+                        and <code>t3</code>.
                     </ul>
     			</div>           
                 
