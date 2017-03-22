@@ -25,7 +25,7 @@ script:
   - git fetch 
   - git merge origin/master --no-commit || true
   - export COURSE_HOME=$(pwd)
-  - $COURSE_HOME/humla/bin/create-toc.sh $USECACHE
+  - $COURSE_HOME/humla/bin/generate-toc.sh $USECACHE
   - $COURSE_HOME/humla/bin/generate-pdfs.sh $USECACHE
   - git add -A .
   - git commit -a -m "Travis build $TRAVIS_BUILD_NUMBER" || true
