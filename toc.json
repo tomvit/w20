@@ -1,5 +1,5 @@
 { "lectures" : [
-{"title":"Motivation and Course Overview","slide-url":"lecture0.html#/1","sections":[{"title":"Motivation","slide-url":"lecture0.html#/2","sections":[]},{"title":"Scope, Requirements, Learnings","slide-url":"lecture0.html#/5","sections":[]},{"title":"Assessment, Resources, Communication","slide-url":"lecture0.html#/9","sections":[]}],"lastModified":"Tue Mar 14 2017, 17:44:41"}
+{"title":"Motivation and Course Overview","slide-url":"lecture0.html#/1","sections":[{"title":"Motivation","slide-url":"lecture0.html#/2","sections":[]},{"title":"Scope, Requirements, Learnings","slide-url":"lecture0.html#/5","sections":[]},{"title":"Assessment, Resources, Communication","slide-url":"lecture0.html#/9","sections":[]}],"lastModified":"Thu Mar 23 2017, 10:36:56"}
 ,
 {"title":"Introduction to JavaScript","slide-url":"lecture1.html#/1","sections":[{"title":"JavaScript Basics","slide-url":"lecture1.html#/4","sections":[]},{"title":"Server-side JavaScript","slide-url":"lecture1.html#/8","sections":[]}],"lastModified":"Sun Mar 12 2017, 08:20:27"}
 ,
