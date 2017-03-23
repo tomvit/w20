@@ -17,7 +17,7 @@
             "styles"  : [ { "src" : "humla/lib/ext/github.css", "media" : "screen, print" } ],
             "params"  : {
                 "url"  : "http://proxy.vitvar.com/raw.github",
-                "user-repo" : "tomvit/mdw-examples"
+                "user-repo" : "tomvit/w20"
             },
             "enabled" : true 
         },
