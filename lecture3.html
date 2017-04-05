@@ -84,739 +84,735 @@
         <section>
             <header>Uniform Interface</header>
 
-    			<div class="slide">
-					<hgroup>
-						<h1>Uniform Interface</h1>
-					</hgroup>
-					<ul class="small">
-						<li>Uniform interface = finite set of operations</li>
-						<ul>
-                            <li>Resource manipulation</li>
-                            <ul>
-                                <li>CRUD &ndash; Create (POST/PUT), Read (GET), Update (PUT/PATCH), Delete (DELETE)</li>
-                            </ul>
-                            <li>operations are not domain-specific</li>
-                            <ul>
-                                <li>For example, <code>GET /orders</code> and not <code>getOrders()</code></li>
-                                <li>This reduces complexity when solving interoperability</li>
-                            </ul>
-						</ul>
-                        <li>Integration issues examples</li>
-					</ul>
-                    <div class="h-drawing" style="height: 190px" 
-                        id="1hLogh6s5Az0vXhCW6e05l2MRMLPDtnYbxlPEctjJTAk"></div>
-				</div>                                 
-
-                <div class="slide">
-            		<hgroup>
-    					<h1>Safe and Unsafe Operations</h1>
-    				</hgroup>
-    				<ul class="small">
-    					<li>Safe operations</li>
-    					<ul>
-    						<li>Do not change the resource state</li>
-    						<li>Usually "read-only" or "lookup" operation</li>
-                            <li>Clients can cache the results and refresh the cache freely</li>
-    					</ul>
-    					<li>Unsafe operations</li>
-    					<ul>
-    						<li>May change the state of the resource</li>
-    						<li>Transactions such as buy a ticket, post a message</li>
-    						<li>Unsafe does not mean dangerous!</li>
-    					</ul>
-    					<li>Unsafe interactions and transaction results</li>
-    					<ul>
-    						<li><code>POST</code> response may include transaction results</li>
-                            <ul>
-        						<li>you buy a ticket and submit a purchase data</li>
-    						    <li>you get transaction results</li> 
-    						    <li>and you cannot bookmark this..., why?</li>
-                            </ul>
-    						<li>Should be referable with a persistent URI</li>
-    					</ul>
-    				</ul>
-    			</div>
-                
-                <div class="slide">
-                    <hgroup>
-                        <h1>Idempotence</h1>
-                    </hgroup>
+            <div class="slide">
+                <hgroup>
+                    <h1>Uniform Interface</h1>
+                </hgroup>
+                <ul class="small">
+                    <li>Uniform interface = finite set of operations</li>
                     <ul>
-                        <li>Idempotent operation</li>
+                        <li>Resource manipulation</li>
                         <ul>
-                            <li>Invoking a method on the same resource always has the same effect</li>
-                            <li>Operations <code>GET</code>, <code>PUT</code>, <code>DELETE</code></li> 
+                            <li>CRUD &ndash; Create (POST/PUT), Read (GET), Update (PUT/PATCH), Delete (DELETE)</li>
                         </ul>
-                        <li>Non-idempotent operation</li>
+                        <li>operations are not domain-specific</li>
                         <ul>
-                            <li>Invoking a method on the same resource may have different effects</li>
-                            <li>Operation <code>POST</code></li> 
-                        </ul>
-                        <li>Effect = a state change</li>
-                        <ul>
-                            <li>recall the effect definition in MDW</li>
+                            <li>For example, <code>GET /orders</code> and not <code>getOrders()</code></li>
+                            <li>This reduces complexity when solving interoperability</li>
                         </ul>
                     </ul>
-                </div>
-                
-                
-                <div class="slide outline"></div>                
-                
-                <section>
-                    <header>Basic operations</header>
+                    <li>Integration issues examples</li>
+                </ul>
+                <div class="h-drawing" style="height: 190px"
+                    id="1hLogh6s5Az0vXhCW6e05l2MRMLPDtnYbxlPEctjJTAk"></div>
+            </div>
 
-        			<div class="slide">
-    					<hgroup>
-    						<h1>GET</h1>
-    					</hgroup>
-    					<ul class="small">
-    						<li>Reading</li>
-    						<ul>
-    							<li><code>GET</code> retrieves a representation of a state of a resource</li>
-                                <pre class="brush: plain; gutter: 'false'"> 
-                                    &gt; GET /orders HTTP/1.1
-                                    &gt; Accept: application/xml
-                                    
-                                    &lt; HTTP/1.1 200 OK
-                                    &lt; Content-Type: application/xml
-                                    &lt;
-                                    &lt; ...resource representation in xml...
-                                </pre>
-    							<li>It is read-only operation</li>
-                                <li>It is <b>safe</b></li>
-                                <li>It is <b>idempotent</b></li>
-                                <li class="space-before"><code>GET</code> retrieves different states over time but 
-                                the effect is always the same, cf. 
-                                <a href="lecture2.html#/resource-state">resource state</a> hence it is idempotent.</li>   
-                                <li>Invocation of <code>GET</code> involves content negotiation</li>
-                            </ul>
-    					</ul>
-    				</div> 
-
-            		<div class="slide" id="PUT">
-    					<hgroup>
-    						<h1>PUT</h1>
-    					</hgroup>
-    					<ul class="small">
-    						<li>Updating or Inserting</li>
-    						<ul>
-    							<li><code>PUT</code> updates a representation of a state of a resource or inserts a new resource</li>
-                                <pre class="brush: xml; gutter: 'false'">
-                                    &gt; PUT /orders/4456 HTTP/1.1
-                                    &gt; Content-Type: application/xml
-                                    &gt;
-                                    &gt; &lt;order>...&lt;/order>                                    
-
-                                    &lt; HTTP/1.1 CODE                                    
-                                </pre>
-                                <li>where CODE is:</li>
-                                <ul>
-                                    <li><code>200 OK</code> or <code>204 No Content</code> for updating: 
-                                    A resource with id <code>4456</code> <b>exists</b>, the client 
-                                        sends an updated resource</li>
-                                    <li><code>201 Created</code> for inserting: A resource <b>does not exist</b>, the client 
-                                        generates the id <code>4456</code> and sends a representation of it.</li>
-                                </ul>
-                                <li>It is <b>not safe</b> and it is <b>idempotent</b></li>
-                            </ul>
-    					</ul>
-    				</div> 
-
-        			<div class="slide">
-    					<hgroup>
-    						<h1>POST</h1>
-    					</hgroup>
-    					<ul class="small">
-    						<li>Inserting</li>
-    						<ul>
-    							<li><code>POST</code> inserts a new resource</li>
-                                <li>A server generates a new resource ID, client only supplies a content and a resource URI where the new
-                                resource will be inserted.</li>
-                                <pre class="brush: xml; gutter: 'false'">
-                                    &gt; POST /orders HTTP/1.1
-                                    &gt; Content-Type: application/xml
-                                    &gt;
-                                    &gt; &lt;order>...&lt;/order>                                    
-
-                                    &lt; HTTP/1.1 201 Created
-                                    &lt; Location: /orders/4456
-                                </pre>
-    							<li>It is <b>not safe</b> an it is <b>not idempotent</b><br/>
-                                <li class="space-before">A client may "suggest" a resource's id using the <code>Slug</code> header</li>
-                                <ul>
-                                    <li>Defined in <span class="h-ref" id="rfc-5023">AtomPub protocol</li></li>
-                                </ul>
-    						</ul>
-    					</ul>
-    				</div> 
-
-        			<div class="slide">
-    					<hgroup>
-    						<h1>DELETE</h1>
-    					</hgroup>
-    					<ul class="small">
-    						<li>Deleting</li>
-    						<ul>
-    							<li><code>DELETE</code> deletes a resource with specified URI</li>
-                                <pre class="brush: plain; gutter: 'false'">
-                                &gt; DELETE /orders/4456 HTTP/1.1
-                                
-                                &lt; HTTP/1.1 CODE
-                                </pre>
-                                <li>where CODE is:</li>
-                                <ul>
-                                    <li><code>200 OK</code>: the response body contains an entity describing a result of the operation.</li>
-                                    <li><code>204 No Content</code>: there is no response body.</li>
-                                </ul>
-                                <li class="space-before">It is <b>not safe</b> and it is <b>idempotent</b></li>
-                                <ul>
-                                    <li>Multiple invocation of <code>DELETE /orders/4456</code> has always the same effect &ndash; the resource 
-                                    <code>/orders/4456</code> does not exist.</li>
-                                </ul>
-    						</ul>
-    					</ul>
-    				</div> 
-
-    				<div class="slide">
-    					<hgroup>
-    						<h1>Other</h1>
-    					</hgroup>
-    					<ul class="small">
-    						<li>HEAD</li>
-    						<ul>
-    							<li>same as <code>GET</code> but only retrieves HTTP headers</li>
-                                <li>It is <b>safe</b> and <b>idempotent</b></li>
-    						</ul>
-        					<li>OPTIONS</li>
-    						<ul>
-    							<li>queries the resource for resource configuration</li>
-                                <li>It is <b>safe</b> and <b>idempotent</b></li>                                
-    						</ul>
-    					</ul>
-    				</div> 
-                </section>
-
-                <div class="slide outline"></div>
-                
-                <section>
-                    <header>Handling Errors</header>
-                    
-                    <div class="slide">
-                        <hgroup>
-                            <h1>Types of Errors</h1>
-                        </hgroup>
-                        <ul class="x-small">
-                            <li>Client-side &ndash; status code <code>4xx</code></li>
-                            <ul>
-    							<li><code>400 Bad Request</code></li>
-                                <ul>
-        							<li>generic client-side error</li>
-    							    <li>invalid format, such as syntax or validation error</li>
-                                </ul>
-        						<li><code>404 Not Found</code></li>
-                                <ul>
-        							<li>server can't map URI to a resource</li>
-                                </ul>
-    							<li><code>401 Unauthorized</code></li>
-                                <ul>
-        							<li>wrong credentials (such as user/pass, or API key)</li>
-        							<li>the response contains <code>WWW-Authenticate</code> indicating what kind of authentication
-        							the service accepts</li>
-                                </ul>
-    							<li><code>405 Method Not Allowed</code></li>
-                                <ul>
-    							    <li>the resource does not support the HTTP method the client used</li>
-    							    <li>the response contains <code>Allow</code> header to indicate methods it supports</li>
-                                </ul>
-    							<li><code>406 Not Acceptable</code></li>
-                                <ul>
-    							    <li>so many restrictions on acceptable content types (using <code>Accept-*</code>)</li>
-    							    <li>server cannot serialize the resource to requested content types</li>
-                                </ul>                                
-                            </ul>
+            <div class="slide">
+                <hgroup>
+                    <h1>Safe and Unsafe Operations</h1>
+                </hgroup>
+                <ul class="small">
+                    <li>Safe operations</li>
+                    <ul>
+                        <li>Do not change the resource state</li>
+                        <li>Usually "read-only" or "lookup" operation</li>
+                        <li>Clients can cache the results and refresh the cache freely</li>
+                    </ul>
+                    <li>Unsafe operations</li>
+                    <ul>
+                        <li>May change the state of the resource</li>
+                        <li>Transactions such as buy a ticket, post a message</li>
+                        <li>Unsafe does not mean dangerous!</li>
+                    </ul>
+                    <li>Unsafe interactions and transaction results</li>
+                    <ul>
+                        <li><code>POST</code> response may include transaction results</li>
+                        <ul>
+                            <li>you buy a ticket and submit a purchase data</li>
+                            <li>you get transaction results</li>
+                            <li>and you cannot bookmark this..., why?</li>
                         </ul>
-                    </div>
-
-                    <div class="slide">
-                        <hgroup>
-                            <h1>Types of Errors (Cont.)</h1>
-                        </hgroup>
-                        <ul class="x-small">
-                            <li>Server-side &ndash; status code <code>5xx</code></li>
-                            <ul>
-        						<li><code>500 Internal Server Error</code></li>
-        						<ul>
-                                    <li>generic server-side error</li>
-                                    <li>usually not expressive, logs a message for system admins</li>
-                                </ul>
-    							<li><code>503 Service Not Available</code></li>
-                                <ul>
-    							    <li>server is overloaded or is under maintenance</li>
-    							    <li>the response contains <code>Retry-After</code> header</li>
-                                </ul>
-                            </ul>
-                        </ul>
-                    </div>
-                    
-                    <div class="slide">
-    					<hgroup>
-    						<h1>Use of Status Codes</h1>
-    					</hgroup>
-    					<ul class="small">
-    						<li>Service should respect semantics of status codes!</li>
-    						<ul>
-                                <pre class="brush: js; gutter: 'false''">
-        							&gt; GET /orders HTTP/1.1
-        							&gt; Accept: application/json
-                                    
-                                    &lt; HTTP/1.1 200 OK
-                                    &lt; Content-Type: application/json
-                                    &lt;
-                                    &lt; { "error" : 
-                                    &lt;    { "error_text" : 
-                                    &lt;        "you do not have rights to access this resource " } 
-                                    &lt; }
-                                </pre>
-                                <li>Client must understand the semantics of the response.</li>
-                                <li>This breaks loose coupling and reusability service principles</li>
-                                <li>The response should be:</li>
-                                <pre class="brush: plain; gutter: 'false'">
-                                    &lt; HTTP/1.1 401 Unauthorized
-                                    &lt; ...
-                                    
-                                    &lt; ...optional text describing the error...
-                                </pre>
-    						</ul>
-    					</ul>
-                    </div>
-
-                </section>
-            </section>
-
+                        <li>Should be referable with a persistent URI</li>
+                    </ul>
+                </ul>
+            </div>
+                
+            <div class="slide">
+                <hgroup>
+                    <h1>Idempotence</h1>
+                </hgroup>
+                <ul>
+                    <li>Idempotent operation</li>
+                    <ul>
+                        <li>Invoking a method on the same resource always has the same effect</li>
+                        <li>Operations <code>GET</code>, <code>PUT</code>, <code>DELETE</code></li>
+                    </ul>
+                    <li>Non-idempotent operation</li>
+                    <ul>
+                        <li>Invoking a method on the same resource may have different effects</li>
+                        <li>Operation <code>POST</code></li>
+                    </ul>
+                    <li>Effect = a state change</li>
+                    <ul>
+                        <li>recall the effect definition in MDW</li>
+                    </ul>
+                </ul>
+            </div>
+                
             <div class="slide outline"></div>
-            
+                
             <section>
-                <header>Asynchronous Communication</header>
+                <header>Basic operations</header>
 
                 <div class="slide">
                     <hgroup>
-                        <h1>Asynchronous Communication</h1>
+                        <h1>GET</h1>
                     </hgroup>
                     <ul class="small">
-                        <li>Recall asynchronous communication from MDW</a></li>
-                        <li>Asynchronous communication in HTTP</li>
+                        <li>Reading</li>
                         <ul>
-                            <li>Server cannot establish a connection, always clients need to</li>
-                            <ul>
-                                <li>clients are browsers behind firewalls</li>
-                            </ul>
-                        </ul>
-                    </ul>
-                    <div class="h-drawing" style="height: 300px" id="1cy6MqkN_U_1oRNDJhR8pT_snON_nTU7jga2qbvB4oYU"></div>
-                </div>
-                
-                <div class="slide">
-                    <hgroup>
-                        <h1>Asynchronous and Polling/Pushing</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>Submit request for processing</li>
-                        <ul>
-                            <li>Always through HTTP request and <code>202 Accepted</code> response and <code>Location</code> header
-                            with a monitor resource</li>
-                            <li>Methods: <code>PUT</code>, <code>POST</code>, <code>DELETE</code></li>
-                        </ul>
-                        <li>Getting the status from the monitor resource</li>
-                        <ul>
-                            <li><b>polling</b> &ndash; a client periodically checks for changes via <code>GET</code></li>
-                            <ul>
-                                <li>Most natural solution, not a real-time solution</li>
-                            </ul>
-                            <li><b>pushing</b> &ndash; a server pushes changes back to the client</li>
-                            <ul>
-                                <li>Part of real-time Web efforts</li> 
-                            </ul>
-                            <li>More details in <a href="lecture8.html">Lecture 8: Protocols for the Realtime Web</a></li>
-                        </ul>
-                </div>
-                
-                
-            </section>
+                            <li><code>GET</code> retrieves a representation of a state of a resource</li>
+                            <pre class="brush: plain; gutter: 'false'">
+                                &gt; GET /orders HTTP/1.1
+                                &gt; Accept: application/xml
 
-            <div class="slide outline"></div>
-            
-            <section>
-                <header>Implementing a RESTful Service</header>
-
-                <div class="slide">
-    				<hgroup>
-						<h1>Service Description</h1>
-					</hgroup>
-                    <ul class="xx-small">
-                        <li>Example service: Oder processing</li>
-                        <ul class="no-bullet"><li><code>https://github.com/tomvit/w20/tree/master/examples/restful-service</code></li></ul>
-                        <pre class="brush: plain; gutter: true; class-name: 'tight'">
-                            * the service provides three operations: 'open', 'add', 'close'
-                            * operation 'open' opens the order
-                                - input: none
-                                - output: text informing that the order was opened
-                                
-                            * operation 'add' adds an item to the order
-                                - input: an item name, the syntax is [0-9A-Za-z\-]+
-                                - output: text informing that the item was added to the order
-                                
-                            * operation 'close' closes the order and returns all items in the order
-                                - input: none
-                                - output: list of all items previously added to the order
-                            
-                            * the public process is: S0--open--S1, S1--add--S1, S1--close--S0, where
-                              S0, S1 are states such that S0 = order is closed, and S1 = order is opened.               
-                              
-                            * protocol is HTTP, RESTful service 
-                              running at ec2.vitvar.com, tcp/9900
-                        </pre> 
-                        <li>Basic steps to define a RESTful service</li>
-                        <ol>
-                            <li>identify resources and URIs</li>
-                            <li>specify resources' representations</li>
-                            <li><b>define service operations</b> (methods and status codes)</li>                                
-                        </ol>
-                    </ul>
-                </div>
-                                
-                <div class="slide outline"></div>
-                
-                <section>
-                    <header>Basic Implementation</header>
-
-                    <div class="slide">
-            			<hgroup>
-    						<h1>Resources, URIs and Representations</h1>
-    					</hgroup>
-                        <ul class="x-small">
-                            <li>There are three resources</li>
-                            <ul>
-                                <li>Resource <code>/orders</code> is a container of all orders</li>
-                                <li>Resource <code>/orders/{order-id}</code> is an order with resource id <code>order-id</code>.</li>
-                                <li>Resource <code>/orders/{order-id}/{item-id}</code> is an item that belongs to the order <code>order-id</code> 
-                                and that has a resource id <code>item-id</code>.</li>
-                            </ul>
-                            <li>Structure</li>
-                            <ul>
-                                <li><code>/orders</code></li>
-                                <ul>
-                                    <li>list of all orders</li>
-                                </ul>
-                                <li><code>/orders/{order-id}</code></li>
-                                <ul>
-                                    <li>status, order id, list of all items in the order</li>
-                                </ul>
-                                <li><code>/orders/{order-id}/{item-id}</code></li>
-                                <ul>
-                                    <li>item id, name, price</li>
-                                </ul>
-                            </ul>
-                            <li>Resource representations</li>
-                            <ul>
-                                <li>We define representations in JSON</li>
-                            </ul>
-                        </ul>
-                    </div>
-                
-                    <div class="slide">
-                		<hgroup>
-    						<h1>Open Order</h1>
-    					</hgroup>
-                        <ul class="x-small">
-                            <li>To open an order</li>
-                            <ul>
-                                <li>Insert a new order to <code>/orders</code> using <code>POST</code></li>
-                                <li>Set the new order's status to "open"</li>
-                                <div class="h-github" cid="50e4378" name="examples/restful-service/order-service.js" lines="45-59"></div>
-                                <ul>                                
-                                    <li><code>storage.getOrderSeqId()</code> returns the order ID</li>
-                                    <li><code>storage.orders</code> (line 37) is an array of all orders in a storage</li>
-                                </ul>
-                            </ul>
-                        </ul>                
-                    </div>
-                                
-                    <div class="slide">
-                    	<hgroup>
-    						<h1>Add Item to Order</h1>
-    					</hgroup>
-                        <ul class="x-small">
-                            <li>To add an item to the order</li>
-                            <ul>
-                                <li>Insert a new item to the order <code>/orders/{order-id}</code> using <code>POST</code></li>
-                            </ul>
-                            <div class="h-github" cid="50e4378" name="examples/restful-service/order-service.js" lines="74-94"></div>
-                        </ul>                
-                    </div>
-
-                    <div class="slide">
-                        <hgroup>
-    						<h1>Close Order</h1>
-    					</hgroup>
-                        <ul class="x-small">
-                            <li>To close an order</li>
-                            <ul>
-                                <li>Update the status of the order <code>/orders/{order-id}</code> using <code>PUT</code></li>
-                            </ul>
-                            <div class="h-github" cid="50e4378" name="examples/restful-service/order-service.js" lines="97-116"></div>
-                        </ul>                
-                    </div>
-
-                    <div class="slide">
-                        <hgroup>
-        					<h1>Other Operations</h1>
-    					</hgroup>
-                        <ul class="x-small">
-                            <li>To get, delete an order and get, delete and update an item</li>
-                            <ul>
-                                <li>Delete an order <code>/orders/{order-id}</code> using <code>DELETE</code></li>                            
-                                <li>Get an order's item <code>/orders/{order-id}/{item-id}</code> using <code>GET</code></li>                            
-                                <li>Update an order's item <code>/orders/{order-id}/{item-id}</code> using <code>PUT</code></li>                            
-                                <li>Delete an order's item <code>/orders/{order-id}/{item-id}</code> using <code>DELETE</code></li>                            
-                            </ul>
-                            <li>Other methods are not allowed</li>
-                            <ul>
-                                <li>Send <code>405 Not Allowed</code> status with <code>Allow</code> header to indicate which methods
-                                are allowed on a resource</li>
-                            </ul>
-                            <pre class="brush: js">
-                                if (method != "GET" && method != "PUT" && method != "POST" && method != "DELETE")
-                                    return { 
-                                        status: "405", // method not allowed 
-                                        headers : { "Allow" : "GET, PUT, POST, DELETE" } 
-                                    };                                
+                                &lt; HTTP/1.1 200 OK
+                                &lt; Content-Type: application/xml
+                                &lt;
+                                &lt; ...resource representation in xml...
                             </pre>
-                            <li class="task">Task</li>
-                            <ul>
-                                <li>Implement the remaining methods listed above</li>
-                            </ul>                        
-                        </ul>                
-                    </div>
+                            <li>It is read-only operation</li>
+                            <li>It is <b>safe</b></li>
+                            <li>It is <b>idempotent</b></li>
+                            <li class="space-before"><code>GET</code> retrieves different states over time but
+                            the effect is always the same, cf.
+                            <a href="lecture2.html#/resource-state">resource state</a> hence it is idempotent.</li>
+                            <li>Invocation of <code>GET</code> involves content negotiation</li>
+                        </ul>
+                    </ul>
+                </div>
 
-                    <div class="slide">
-                        <hgroup>
-            				<h1>Testing</h1>
-    					</hgroup>
-                        <ul class="xx-small">
-                            <li>Test the service using a bash script <code>test.sh</code></li>
-                            <div class="h-github" cid="50e4378" name="examples/restful-service/test.sh" config="highlight: [7,16,17,18,21,24]" 
-                                brush="bash" cid="fef7e41" lines="3-24"></div>
-                            <li class="task">Task</li>
-                            <ul>
-                                <li>Run service and test it using the <code>test.sh</code> script.</li>
-                            </ul>                        
-                        </ul>                
-                    </div>
+                <div class="slide" id="PUT">
+                    <hgroup>
+                        <h1>PUT</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>Updating or Inserting</li>
+                        <ul>
+                            <li><code>PUT</code> updates a representation of a state of a resource or inserts a new resource</li>
+                            <pre class="brush: xml; gutter: 'false'">
+                                &gt; PUT /orders/4456 HTTP/1.1
+                                &gt; Content-Type: application/xml
+                                &gt;
+                                &gt; &lt;order>...&lt;/order>
 
-                    <div class="slide">
-                        <hgroup>
-            				<h1>RESTful Public Process</h1>
-    					</hgroup>
-                        <div class="h-drawing" style="height: 350px" id="1ZZsczsf7O-4HLuf_Flk0Ruttv5buKRmM7afQvgGWK8w"></div>
-                        <ul class="x-small">
-                            <li>Note</li>
+                                &lt; HTTP/1.1 CODE
+                            </pre>
+                            <li>where CODE is:</li>
                             <ul>
-                                <li>client, service communicate through metadata and representations</li>
-                                <li>There is no need for a stateful server</li>
+                                <li><code>200 OK</code> or <code>204 No Content</code> for updating:
+                                A resource with id <code>4456</code> <b>exists</b>, the client
+                                    sends an updated resource</li>
+                                <li><code>201 Created</code> for inserting: A resource <b>does not exist</b>, the client
+                                    generates the id <code>4456</code> and sends a representation of it.</li>
                             </ul>
-                        </ul>                
-                    </div>   
-                    
-                </section>
-                
+                            <li>It is <b>not safe</b> and it is <b>idempotent</b></li>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>POST</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>Inserting</li>
+                        <ul>
+                            <li><code>POST</code> inserts a new resource</li>
+                            <li>A server generates a new resource ID, client only supplies a content and a resource URI where the new
+                            resource will be inserted.</li>
+                            <pre class="brush: xml; gutter: 'false'">
+                                &gt; POST /orders HTTP/1.1
+                                &gt; Content-Type: application/xml
+                                &gt;
+                                &gt; &lt;order>...&lt;/order>
+
+                                &lt; HTTP/1.1 201 Created
+                                &lt; Location: /orders/4456
+                            </pre>
+                            <li>It is <b>not safe</b> an it is <b>not idempotent</b><br/>
+                            <li class="space-before">A client may "suggest" a resource's id using the <code>Slug</code> header</li>
+                            <ul>
+                                <li>Defined in <span class="h-ref" id="rfc-5023">AtomPub protocol</li></li>
+                            </ul>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>DELETE</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>Deleting</li>
+                        <ul>
+                            <li><code>DELETE</code> deletes a resource with specified URI</li>
+                            <pre class="brush: plain; gutter: 'false'">
+                            &gt; DELETE /orders/4456 HTTP/1.1
+
+                            &lt; HTTP/1.1 CODE
+                            </pre>
+                            <li>where CODE is:</li>
+                            <ul>
+                                <li><code>200 OK</code>: the response body contains an entity describing a result of the operation.</li>
+                                <li><code>204 No Content</code>: there is no response body.</li>
+                            </ul>
+                            <li class="space-before">It is <b>not safe</b> and it is <b>idempotent</b></li>
+                            <ul>
+                                <li>Multiple invocation of <code>DELETE /orders/4456</code> has always the same effect &ndash; the resource
+                                <code>/orders/4456</code> does not exist.</li>
+                            </ul>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Other</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>HEAD</li>
+                        <ul>
+                            <li>same as <code>GET</code> but only retrieves HTTP headers</li>
+                            <li>It is <b>safe</b> and <b>idempotent</b></li>
+                        </ul>
+                        <li>OPTIONS</li>
+                        <ul>
+                            <li>queries the resource for resource configuration</li>
+                            <li>It is <b>safe</b> and <b>idempotent</b></li>
+                        </ul>
+                    </ul>
+                </div>
             </section>
+
+            <div class="slide outline"></div>
+                
+            <section>
+                <header>Handling Errors</header>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Types of Errors</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>Client-side &ndash; status code <code>4xx</code></li>
+                        <ul>
+                            <li><code>400 Bad Request</code></li>
+                            <ul>
+                                <li>generic client-side error</li>
+                                <li>invalid format, such as syntax or validation error</li>
+                            </ul>
+                            <li><code>404 Not Found</code></li>
+                            <ul>
+                                <li>server can't map URI to a resource</li>
+                            </ul>
+                            <li><code>401 Unauthorized</code></li>
+                            <ul>
+                                <li>wrong credentials (such as user/pass, or API key)</li>
+                                <li>the response contains <code>WWW-Authenticate</code> indicating what kind of authentication
+                                the service accepts</li>
+                            </ul>
+                            <li><code>405 Method Not Allowed</code></li>
+                            <ul>
+                                <li>the resource does not support the HTTP method the client used</li>
+                                <li>the response contains <code>Allow</code> header to indicate methods it supports</li>
+                            </ul>
+                            <li><code>406 Not Acceptable</code></li>
+                            <ul>
+                                <li>so many restrictions on acceptable content types (using <code>Accept-*</code>)</li>
+                                <li>server cannot serialize the resource to requested content types</li>
+                            </ul>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Types of Errors (Cont.)</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>Server-side &ndash; status code <code>5xx</code></li>
+                        <ul>
+                            <li><code>500 Internal Server Error</code></li>
+                            <ul>
+                                <li>generic server-side error</li>
+                                <li>usually not expressive, logs a message for system admins</li>
+                            </ul>
+                            <li><code>503 Service Not Available</code></li>
+                            <ul>
+                                <li>server is overloaded or is under maintenance</li>
+                                <li>the response contains <code>Retry-After</code> header</li>
+                            </ul>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Use of Status Codes</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>Service should respect semantics of status codes!</li>
+                        <ul>
+                            <pre class="brush: js; gutter: 'false''">
+                                &gt; GET /orders HTTP/1.1
+                                &gt; Accept: application/json
+
+                                &lt; HTTP/1.1 200 OK
+                                &lt; Content-Type: application/json
+                                &lt;
+                                &lt; { "error" :
+                                &lt;    { "error_text" :
+                                &lt;        "you do not have rights to access this resource " }
+                                &lt; }
+                            </pre>
+                            <li>Client must understand the semantics of the response.</li>
+                            <li>This breaks loose coupling and reusability service principles</li>
+                            <li>The response should be:</li>
+                            <pre class="brush: plain; gutter: 'false'">
+                                &lt; HTTP/1.1 401 Unauthorized
+                                &lt; ...
+
+                                &lt; ...optional text describing the error...
+                            </pre>
+                        </ul>
+                    </ul>
+                </div>
+
+            </section>
+        </section>
+
+        <div class="slide outline"></div>
+
+        <section>
+            <header>Asynchronous Communication</header>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Asynchronous Communication</h1>
+                </hgroup>
+                <ul class="small">
+                    <li>Recall asynchronous communication from MDW</a></li>
+                    <li>Asynchronous communication in HTTP</li>
+                    <ul>
+                        <li>Server cannot establish a connection, always clients need to</li>
+                        <ul>
+                            <li>clients are browsers behind firewalls</li>
+                        </ul>
+                    </ul>
+                </ul>
+                <div class="h-drawing" style="height: 300px" id="1cy6MqkN_U_1oRNDJhR8pT_snON_nTU7jga2qbvB4oYU"></div>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Asynchronous and Polling/Pushing</h1>
+                </hgroup>
+                <ul class="small">
+                    <li>Submit request for processing</li>
+                    <ul>
+                        <li>Always through HTTP request and <code>202 Accepted</code> response and <code>Location</code> header
+                        with a monitor resource</li>
+                        <li>Methods: <code>PUT</code>, <code>POST</code>, <code>DELETE</code></li>
+                    </ul>
+                    <li>Getting the status from the monitor resource</li>
+                    <ul>
+                        <li><b>polling</b> &ndash; a client periodically checks for changes via <code>GET</code></li>
+                        <ul>
+                            <li>Most natural solution, not a real-time solution</li>
+                        </ul>
+                        <li><b>pushing</b> &ndash; a server pushes changes back to the client</li>
+                        <ul>
+                            <li>Part of real-time Web efforts</li>
+                        </ul>
+                        <li>More details in <a href="lecture8.html">Lecture 8: Protocols for the Realtime Web</a></li>
+                    </ul>
+            </div>
+
+
+        </section>
+
+        <div class="slide outline"></div>
+            
+        <section>
+            <header>Implementing a RESTful Service</header>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Service Description</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Example service: Oder processing</li>
+                    <ul class="no-bullet"><li><code>https://github.com/tomvit/w20/tree/master/examples/restful-service</code></li></ul>
+                    <pre class="brush: plain; gutter: true; class-name: 'tight'">
+                        * the service provides three operations: 'open', 'add', 'close'
+                        * operation 'open' opens the order
+                            - input: none
+                            - output: text informing that the order was opened
+
+                        * operation 'add' adds an item to the order
+                            - input: an item name, the syntax is [0-9A-Za-z\-]+
+                            - output: text informing that the item was added to the order
+
+                        * operation 'close' closes the order and returns all items in the order
+                            - input: none
+                            - output: list of all items previously added to the order
+
+                        * the public process is: S0--open--S1, S1--add--S1, S1--close--S0, where
+                          S0, S1 are states such that S0 = order is closed, and S1 = order is opened.
+
+                        * protocol is HTTP, RESTful service
+                          running at ec2.vitvar.com, tcp/9900
+                    </pre>
+                    <li>Basic steps to define a RESTful service</li>
+                    <ol>
+                        <li>identify resources and URIs</li>
+                        <li>specify resources' representations</li>
+                        <li><b>define service operations</b> (methods and status codes)</li>
+                    </ol>
+                </ul>
+            </div>
 
             <div class="slide outline"></div>
 
             <section>
-                    <header>Advanced Design Issues</header>
+                <header>Basic Implementation</header>
 
-                    <div class="slide">
-                        <hgroup>
-    						<h1>Respect HTTP Semantics</h1>
-    					</hgroup>
-                        <ul class="small">
-                            <li>Do not overload semantics of HTTP methods</li>
-                            <ul>
-                                <li>For example, <code>GET</code> is read-only method and idempotent</li>
-                                <li>REST Anti-pattern:</li>
-                                <li class="no-bullet">&nbsp;&nbsp;&nbsp;<code>GET /orders/?add=new_order</code></li>
-                                <ul>
-                                    <li>This is not REST!</li>
-                                    <li>This breaks both safe and idempotent principles</li>                                
-                                </ul>
-                            </ul>
-                            <li>Consequences</li>
-                            <ul>
-                                <li>Result of <code>GET</code> can be cached by proxy servers</li>
-                                <li>They can revalidate their caches freely</li>
-                                <li>You can end up with new entries in your storage without you knowing!</li>
-                            </ul>      
-                            <li>The same is true for other methods</li>
-                        </ul>                
-                    </div>
-
-    				<div class="slide">
-    					<hgroup>
-    						<h1>Change Order Status</h1>
-    					</hgroup>
-    					<ul class="small">
-                            <li><code>status</code> property of <code>/orders/{order-id}</code> resource</li>
-                            <ul>
-                                <li>reflects a state of the process</li>
-                                <li>No need to use a stateful service, state is communicated through the order representation</li>
-                            </ul>
-    						<li>How do you implement a canceling an order?</li>
-    						<ul>
-    							<li>You can delete it using <code>DELETE</code></li>
-                                <li>But you may want to cancel it in order to:</li>
-                                <ul>
-    							    <li>maintain a list of canceled orders</li>
-                                    <li>have a possibility to "roll-back" canceled orders</li>
-                                </ul>
-    						</ul>
-    					</ul>
-    				</div> 
-    
-    				<div class="slide">
-    					<hgroup>
-    						<h1>DELETE to cancel</h1>
-    					</hgroup>
-    					<ul class="small">
-    						<li>A bad solution to cancel the order</li>
-    						<ul>
-    							<li>to cancel with DELETE<br/>
-    							<code>DELETE /orders/3454/?cancel=true</code>
-    							<li>you overload the meaning of DELETE</li>
-        						<li>you violate the uniform interface principle</li>
-    						</ul>
-    						<li>Always ask a question:</li>
-    						<ul>
-    							<li><b>Is the operation a state of the resource?</b></li>
-    							<li>if yes, the operation should be:</li>
-                                <ul>
-    							    <li>modeled within the data format</li>
-    							    <li>or as a separated resource (sub-resource)</li>
-                                </ul>
-    						</ul>
-        					<li>No verbs in <code>path</code> and <code>query</code> components!</li>
-                            <ul>
-                                <li><code>/cancelOrder</code>, <code>/orders/{order-id}/?action=delete</code>, etc.</li>
-                                <li>Verbs in URIs indicate that a resource is actually an operation!</li> 
-                            </ul>
-    					</ul>
-    				</div> 
-    
-    				<div class="slide">
-    					<hgroup>
-    						<h1>PUT to cancel</h1>
-    					</hgroup>
-    					<ul class="small">
-    						<li>A RESTful solution to cancel an order</li>
-    						<ol>
-    							<li>first, have an order's status</li>
-                                <ul>
-    							    <li>as part of the Order representation format</li>
-                                    <li>we extend "open" and "close" with "cancel"</li>
-                                </ul>
-    							<li>Use PUT to cancel an order</li>
-                                <pre class="brush: js">
-                                &gt; PUT /orders/{order-id}
-                                &gt; Content-Type: application/json
-                                &gt; 
-                                &gt; { "status" : "cancel" }
-                                 
-                                &lt; HTTP/1.1 204 No Content
-                                </pre>
-    						</ol>
-    						<li>Clean-up all cancelled orders</li>
-    						<ul>
-    							<li>you can have a resource "all valid orders": <code>/orders/valid</code><br/>
-                                (~ all orders that are not canceled)</li>
-                                <ul>
-        						    <li><code>GET /orders/valid</code> will return all non-canceled orders</li>
-    							    <li><code>POST /orders/valid</code> will purge all cancelled orders</li>
-                                </ul>
-    						</ul>
-    					</ul>
-    				</div> 
-                    
-                    <div class="slide" id="evaluation">
-                        <hgroup>
-            				<h1>Evaluation</h1>
-        				</hgroup>
-                        <ul class="x-small">
-                            <li>How "good" is our Order Book service?</li>
-                            <ul>
-                                <li>Analysis of the service by service characteristics (see MDW for details) and HTTP principles.</li> 
-                            </ul>
-                            
-                            <style>
-                                .fr:last-child td,
-                                .fr > td:first-child {
-                                    background-color: white;                            
-                                    border-bottom: 1px solid whitesmoke;
-                                }
-                                .fr > td:first-child {
-                                    border-right: 1px solid LightSteelBlue;
-                                    background-color: LightSteelBlue;
-                                    color: white;
-                                    font-weight: bold;
-                                }
-                                .fr:last-child td {                            
-                                    border-bottom: 1px solid LightSteelBlue;
-                                }                            
-                            </style>
-                            
-                            <table style="width: 890px" class="first-col-header">
-                                <thead>
-                                    <th style="width: 160px">Principle</th><th style="width: 30px">&plus;/&minus;</th><th>Comment</th>
-                                </thead>
-                                <tbody>
-                                    <tr class="fr">
-                                        <td rowspan="5">Loose Coupling</td>
-                                        <td>&nbsp;&plus;</td><td>Uses standard response codes.</td></tr>
-                                    <tr><td>&nbsp;&plus;</td><td>Uses representation of resources and HTTP Location header to implement the public process.</td></tr>
-                                    <tr><td>&nbsp;&minus;</td><td>Does not use hypermedia; client needs to construct links for some resources.</td></tr>
-                                    <tr><td>&nbsp;&plus;</td><td>Properly models resource URIs and resource IDs; they have hierarchical nature; does not use verbs.</td></tr>
-                                    <tr><td>&nbsp;&plus;</td><td>Respects semantics of HTTP methods and extensively uses them.</td></tr>
-                                            
-                                    <tr class="fr">
-                                        <td rowspan="2">Reusability</td>
-                                        <td>&nbsp;&plus;</td><td>Unforeseen clients will likely use the service as the application state is communicated through HTTP.</td></tr>
-                                    <tr><td>&nbsp;&minus;</td><td>Only offers one representation format (JSON).</td></tr>
-    
-    
-                                    <tr class="fr">
-                                        <td rowspan="1">Contracting and Discoverability</td>
-                                        <td>&nbsp;&minus;</td><td>Does not describe content type nor public process such as by using Internet Media Types.</td></tr>
-    
-                                    <tr class="fr">
-                                        <td rowspan="1">Composability</td>
-                                        <td>&nbsp;&plus;</td><td>Does not obstruct composition.</td></tr>
-    
-                                    <tr class="fr">
-                                        <td rowspan="1">Abstraction</td>
-                                        <td>&nbsp;&plus;</td><td>Service description can be implemented by various implementation technologies.</td></tr>
-    
-                                    <tr class="fr">
-                                        <td rowspan="1">Encapsulation</td>
-                                        <td>&nbsp;&plus;</td><td>Distinguishes interface from implementation, processing logic is not exposed 
-                                            to clients through the interface.</td></tr>
-                                </tbody>
-                            </table>                        
+                <div class="slide">
+                    <hgroup>
+                        <h1>Resources, URIs and Representations</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>There are three resources</li>
+                        <ul>
+                            <li>Resource <code>/orders</code> is a container of all orders</li>
+                            <li>Resource <code>/orders/{order-id}</code> is an order with resource id <code>order-id</code>.</li>
+                            <li>Resource <code>/orders/{order-id}/{item-id}</code> is an item that belongs to the order <code>order-id</code>
+                            and that has a resource id <code>item-id</code>.</li>
                         </ul>
-        			</div>                 
+                        <li>Structure</li>
+                        <ul>
+                            <li><code>/orders</code></li>
+                            <ul>
+                                <li>list of all orders</li>
+                            </ul>
+                            <li><code>/orders/{order-id}</code></li>
+                            <ul>
+                                <li>status, order id, list of all items in the order</li>
+                            </ul>
+                            <li><code>/orders/{order-id}/{item-id}</code></li>
+                            <ul>
+                                <li>item id, name, price</li>
+                            </ul>
+                        </ul>
+                        <li>Resource representations</li>
+                        <ul>
+                            <li>We define representations in JSON</li>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Open Order</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>To open an order</li>
+                        <ul>
+                            <li>Insert a new order to <code>/orders</code> using <code>POST</code></li>
+                            <li>Set the new order's status to "open"</li>
+                            <div class="h-github" cid="50e4378" name="examples/restful-service/order-service.js" lines="45-59"></div>
+                            <ul>
+                                <li><code>storage.getOrderSeqId()</code> returns the order ID</li>
+                                <li><code>storage.orders</code> (line 37) is an array of all orders in a storage</li>
+                            </ul>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Add Item to Order</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>To add an item to the order</li>
+                        <ul>
+                            <li>Insert a new item to the order <code>/orders/{order-id}</code> using <code>POST</code></li>
+                        </ul>
+                        <div class="h-github" cid="50e4378" name="examples/restful-service/order-service.js" lines="74-94"></div>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Close Order</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>To close an order</li>
+                        <ul>
+                            <li>Update the status of the order <code>/orders/{order-id}</code> using <code>PUT</code></li>
+                        </ul>
+                        <div class="h-github" cid="50e4378" name="examples/restful-service/order-service.js" lines="97-116"></div>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Other Operations</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>To get, delete an order and get, delete and update an item</li>
+                        <ul>
+                            <li>Delete an order <code>/orders/{order-id}</code> using <code>DELETE</code></li>
+                            <li>Get an order's item <code>/orders/{order-id}/{item-id}</code> using <code>GET</code></li>
+                            <li>Update an order's item <code>/orders/{order-id}/{item-id}</code> using <code>PUT</code></li>
+                            <li>Delete an order's item <code>/orders/{order-id}/{item-id}</code> using <code>DELETE</code></li>
+                        </ul>
+                        <li>Other methods are not allowed</li>
+                        <ul>
+                            <li>Send <code>405 Not Allowed</code> status with <code>Allow</code> header to indicate which methods
+                            are allowed on a resource</li>
+                        </ul>
+                        <pre class="brush: js">
+                            if (method != "GET" && method != "PUT" && method != "POST" && method != "DELETE")
+                                return {
+                                    status: "405", // method not allowed
+                                    headers : { "Allow" : "GET, PUT, POST, DELETE" }
+                                };
+                        </pre>
+                        <li class="task">Task</li>
+                        <ul>
+                            <li>Implement the remaining methods listed above</li>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Testing</h1>
+                    </hgroup>
+                    <ul class="xx-small">
+                        <li>Test the service using a bash script <code>test.sh</code></li>
+                        <div class="h-github" cid="50e4378" name="examples/restful-service/test.sh" config="highlight: [7,16,17,18,21,24]"
+                            brush="bash" cid="fef7e41" lines="3-24"></div>
+                        <li class="task">Task</li>
+                        <ul>
+                            <li>Run service and test it using the <code>test.sh</code> script.</li>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>RESTful Public Process</h1>
+                    </hgroup>
+                    <div class="h-drawing" style="height: 350px" id="1ZZsczsf7O-4HLuf_Flk0Ruttv5buKRmM7afQvgGWK8w"></div>
+                    <ul class="x-small">
+                        <li>Note</li>
+                        <ul>
+                            <li>client, service communicate through metadata and representations</li>
+                            <li>There is no need for a stateful server</li>
+                        </ul>
+                    </ul>
+                </div>
 
             </section>
 
+        </section>
 
-            
+        <div class="slide outline"></div>
+
+        <section>
+                <header>Advanced Design Issues</header>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Respect HTTP Semantics</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>Do not overload semantics of HTTP methods</li>
+                        <ul>
+                            <li>For example, <code>GET</code> is read-only method and idempotent</li>
+                            <li>REST Anti-pattern:</li>
+                            <li class="no-bullet">&nbsp;&nbsp;&nbsp;<code>GET /orders/?add=new_order</code></li>
+                            <ul>
+                                <li>This is not REST!</li>
+                                <li>This breaks both safe and idempotent principles</li>
+                            </ul>
+                        </ul>
+                        <li>Consequences</li>
+                        <ul>
+                            <li>Result of <code>GET</code> can be cached by proxy servers</li>
+                            <li>They can revalidate their caches freely</li>
+                            <li>You can end up with new entries in your storage without you knowing!</li>
+                        </ul>
+                        <li>The same is true for other methods</li>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Change Order Status</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li><code>status</code> property of <code>/orders/{order-id}</code> resource</li>
+                        <ul>
+                            <li>reflects a state of the process</li>
+                            <li>No need to use a stateful service, state is communicated through the order representation</li>
+                        </ul>
+                        <li>How do you implement a canceling an order?</li>
+                        <ul>
+                            <li>You can delete it using <code>DELETE</code></li>
+                            <li>But you may want to cancel it in order to:</li>
+                            <ul>
+                                <li>maintain a list of canceled orders</li>
+                                <li>have a possibility to "roll-back" canceled orders</li>
+                            </ul>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>DELETE to cancel</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>A bad solution to cancel the order</li>
+                        <ul>
+                            <li>to cancel with DELETE<br/>
+                            <code>DELETE /orders/3454/?cancel=true</code>
+                            <li>you overload the meaning of DELETE</li>
+                            <li>you violate the uniform interface principle</li>
+                        </ul>
+                        <li>Always ask a question:</li>
+                        <ul>
+                            <li><b>Is the operation a state of the resource?</b></li>
+                            <li>if yes, the operation should be:</li>
+                            <ul>
+                                <li>modeled within the data format</li>
+                                <li>or as a separated resource (sub-resource)</li>
+                            </ul>
+                        </ul>
+                        <li>No verbs in <code>path</code> and <code>query</code> components!</li>
+                        <ul>
+                            <li><code>/cancelOrder</code>, <code>/orders/{order-id}/?action=delete</code>, etc.</li>
+                            <li>Verbs in URIs indicate that a resource is actually an operation!</li>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>PUT to cancel</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>A RESTful solution to cancel an order</li>
+                        <ol>
+                            <li>first, have an order's status</li>
+                            <ul>
+                                <li>as part of the Order representation format</li>
+                                <li>we extend "open" and "close" with "cancel"</li>
+                            </ul>
+                            <li>Use PUT to cancel an order</li>
+                            <pre class="brush: js">
+                            &gt; PUT /orders/{order-id}
+                            &gt; Content-Type: application/json
+                            &gt;
+                            &gt; { "status" : "cancel" }
+
+                            &lt; HTTP/1.1 204 No Content
+                            </pre>
+                        </ol>
+                        <li>Clean-up all cancelled orders</li>
+                        <ul>
+                            <li>you can have a resource "all valid orders": <code>/orders/valid</code><br/>
+                            (~ all orders that are not canceled)</li>
+                            <ul>
+                                <li><code>GET /orders/valid</code> will return all non-canceled orders</li>
+                                <li><code>POST /orders/valid</code> will purge all cancelled orders</li>
+                            </ul>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide" id="evaluation">
+                    <hgroup>
+                        <h1>Evaluation</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>How "good" is our Order Book service?</li>
+                        <ul>
+                            <li>Analysis of the service by service characteristics (see MDW for details) and HTTP principles.</li>
+                        </ul>
+
+                        <style>
+                            .fr:last-child td,
+                            .fr > td:first-child {
+                                background-color: white;
+                                border-bottom: 1px solid whitesmoke;
+                            }
+                            .fr > td:first-child {
+                                border-right: 1px solid LightSteelBlue;
+                                background-color: LightSteelBlue;
+                                color: white;
+                                font-weight: bold;
+                            }
+                            .fr:last-child td {
+                                border-bottom: 1px solid LightSteelBlue;
+                            }
+                        </style>
+
+                        <table style="width: 890px" class="first-col-header">
+                            <thead>
+                                <th style="width: 160px">Principle</th><th style="width: 30px">&plus;/&minus;</th><th>Comment</th>
+                            </thead>
+                            <tbody>
+                                <tr class="fr">
+                                    <td rowspan="5">Loose Coupling</td>
+                                    <td>&nbsp;&plus;</td><td>Uses standard response codes.</td></tr>
+                                <tr><td>&nbsp;&plus;</td><td>Uses representation of resources and HTTP Location header to implement the public process.</td></tr>
+                                <tr><td>&nbsp;&minus;</td><td>Does not use hypermedia; client needs to construct links for some resources.</td></tr>
+                                <tr><td>&nbsp;&plus;</td><td>Properly models resource URIs and resource IDs; they have hierarchical nature; does not use verbs.</td></tr>
+                                <tr><td>&nbsp;&plus;</td><td>Respects semantics of HTTP methods and extensively uses them.</td></tr>
+
+                                <tr class="fr">
+                                    <td rowspan="2">Reusability</td>
+                                    <td>&nbsp;&plus;</td><td>Unforeseen clients will likely use the service as the application state is communicated through HTTP.</td></tr>
+                                <tr><td>&nbsp;&minus;</td><td>Only offers one representation format (JSON).</td></tr>
+
+
+                                <tr class="fr">
+                                    <td rowspan="1">Contracting and Discoverability</td>
+                                    <td>&nbsp;&minus;</td><td>Does not describe content type nor public process such as by using Internet Media Types.</td></tr>
+
+                                <tr class="fr">
+                                    <td rowspan="1">Composability</td>
+                                    <td>&nbsp;&plus;</td><td>Does not obstruct composition.</td></tr>
+
+                                <tr class="fr">
+                                    <td rowspan="1">Abstraction</td>
+                                    <td>&nbsp;&plus;</td><td>Service description can be implemented by various implementation technologies.</td></tr>
+
+                                <tr class="fr">
+                                    <td rowspan="1">Encapsulation</td>
+                                    <td>&nbsp;&plus;</td><td>Distinguishes interface from implementation, processing logic is not exposed
+                                        to clients through the interface.</td></tr>
+                            </tbody>
+                        </table>
+                    </ul>
+                </div>
+
+        </section>
 
     </body>
 </html>
