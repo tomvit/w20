@@ -1,5 +1,7 @@
 # Makefile for humla lectures
 
+.PHONY: pdf
+
 help:
 	@echo "make <target>"
 	@echo "http	starts the http server listening on tcp/9000."
