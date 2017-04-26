@@ -1,5 +1,4 @@
 # Makefile for humla lectures
-#
 
 help:
 	@echo "make <target>"
