@@ -588,7 +588,7 @@
 						</pre>
 						<ul>
 							<li>The organization of files allows for efficient use of disk space.</li>
-							<li>There are <b>files unique to every layer</b> and <b>hard links to the data</b> that is shared with lower layers</li>
+							<li>There are <b>files unique to every layer</b> and <b>hard links to files</b> shared with lower layers</li>
 							</ul>
 						</ul>
 					</ul>
@@ -705,7 +705,6 @@
 								postgres=# SELECT inet_server_addr();
 								postgres=# SELECT * FROM pg_stat_activity \x\g\x
 							</pre>
-							<li>The container sees the provided name as a DNS address</li>
 						</ul>
 					</ul>
 				</div>
@@ -787,7 +786,7 @@
 					<hgroup>
 						<h1>Dockerfile</h1>
 					</hgroup>
-					<ul class="xx-small" style="zoom: 0.95">
+					<ul class="xx-small" style="zoom: 0.90">
 						<li>Dockerfile is a script that creates a new image</li>
 						<pre class="brush: plain; gutter: 'false'">
 						# This is a comment
@@ -821,8 +820,8 @@
 						 ---> Running in 3c1c0273a1ef
 						</pre>
 
-						<ul>
-							<li>If the processing fails at some point, all preceding points will be loaded from the cache on the next run.</li>
+						<ul class="no-bullet">
+							<li>If processing fails at some step, all preceeding steps will be loaded from the cache on the next run.</li>
 						</ul>
 
 
