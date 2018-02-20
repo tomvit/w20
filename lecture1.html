@@ -98,7 +98,7 @@
                     <li>Objects and Arrays</li>
     				<pre class="brush: js; class-name: 'tight'">
                         // objects - key/value pairs
-                        var obj = { name: "Tomas", main-city : "Innsbruck", value : 3 };
+                        var obj = { name: "Tomas", "main-city" : "Innsbruck", value : 3 };
                         obj.name = "Peter"; // assign the name property another value
                         obj["main-city"] = "Prague"; // another way to access object's values; it's not an array!
                         
@@ -113,8 +113,8 @@
                             { name : "Peter", city : "Prague" }, 
                             { name : "Alice", cities : ["Prague", "Brno"] } ];
                             
-                        for (var i = 0; i < obj_a.length; i++)
-                            // do something with obj_a[i].name, ...
+                        for (var j = 0; j < obj_a.length; j++)
+                            // do something with obj_a[j].name, ...
                     </pre>                                                            
                     <li>Functions</li>
     				<pre class="brush: js; class-name: 'tight'">
@@ -184,7 +184,7 @@
                     </ul>
                     <pre class="brush: js; class-name: 'tight'">
                         function adder() {
-                                sum = 0;
+                                var sum = 0;
                                 return function(x) {
                                         sum += x;
                                         return sum;
