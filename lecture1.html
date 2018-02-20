@@ -63,15 +63,15 @@
 			<hgroup>
 				<h1>JavaScript</h1>
 			</hgroup>
-			<ul class="small">
+			<ul class="x-small">
 				<li>Lightweight, interpreted, object-oriented language</li>
 				<li>Standard</li>
 				<ul>
-					<li>All major browsers support ECMAScript 6 and 7</li>
+					<li>Current stable release is ECMAScript 2017 (standard ECMA-262)</li>
 				</ul>	
 				<li>Major characteristics</li>
 				<ul>
-					<li>First-class functions</li>
+                    <li>First-class functions</li>
 					<ul>
 						<li>functions as first-class citizens</li>
 						<li>language supports: passing functions as arguments to other functions, returning functions 
@@ -173,33 +173,138 @@
 				</ul>
 			</div>
 
-        	<div class="slide"> 
-				<hgroup> 
-					<h1>Closures</h1> 
-				</hgroup>
-				<ul class="xx-small">
+            <div class="slide"> 
+                <hgroup> 
+                    <h1>Closures</h1> 
+                </hgroup>
+                <ul class="xx-small">
                     <li>Closures</li>
                     <ul>    
                         <li>A function value that references variables from outside its body</li>                        
                     </ul>
-    				<pre class="brush: js; class-name: 'tight'">
-						function adder() {
-						        sum = 0;
-						        return function(x) {
-						                sum += x;
-						                return sum;
-						        }
-						}
+                    <pre class="brush: js; class-name: 'tight'">
+                        function adder() {
+                                sum = 0;
+                                return function(x) {
+                                        sum += x;
+                                        return sum;
+                                }
+                        }
 
-						var pos = adder();
+                        var pos = adder();
 
-						console.log(pos(3)); // returns 3 
-						console.log(pos(4)); // returns 7
-						console.log(pos(5)); // returns 12    					
+                        console.log(pos(3)); // returns 3 
+                        console.log(pos(4)); // returns 7
+                        console.log(pos(5)); // returns 12                      
                     </pre>  
-				</ul>
-			</div>
+                </ul>
+            </div>
 
+            <div class="slide"> 
+                <hgroup> 
+                    <h1>Objects</h1> 
+                </hgroup>
+                <ul class="xx-small">
+                    <li><code>this</code> problem</li>
+                    <ul>    
+                        <li>A new function defines its own <code>this</code> value.</li>                        
+                    </ul>
+                    <pre class="brush: js; class-name: 'tight'">
+                        function Person() {
+                          // The Person() constructor defines `this` as an instance of itself.
+                          this.age = 0;
+
+                          setInterval(function growUp() {
+                            // the growUp() function defines `this` as the global object, 
+                            // which is different from the `this`
+                            // defined by the Person() constructor.
+                            this.age++;
+                          }, 1000);
+                        }
+
+                        var p = new Person();                    
+                    </pre>  
+                    <ul>
+                        <li>Solution</li>
+                    </ul>
+                    <pre class="brush: js; class-name: 'tight'">
+                        function Person() {
+                          var that = this;
+                          that.age = 0;
+
+                          setInterval(function growUp() {
+                            // The callback refers to the `that` variable of which
+                            // the value is the expected object.
+                            that.age++;
+                          }, 1000);
+                        }                        
+                    </pre>  
+                </ul>
+            </div>
+
+            <div class="slide"> 
+                <hgroup> 
+                    <h1>Arrow Functions</h1> 
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Arrow function expression</li>
+                    <ul>    
+                        <li>defined in ECMAScript 2015</li>
+                        <li>shorter syntax than a function expression</li>
+                        <li>non-binding of <code>this</code></li>
+                    </ul>
+                    <pre class="brush: js; class-name: 'tight'">
+                        function Person(){
+                          this.age = 0;
+
+                          setInterval(() => {
+                            this.age++; // |this| now refers to the person object
+                          }, 1000);
+                        }
+
+                        var p = new Person();
+                    </pre>  
+                    <li>Syntax, function body</li>
+                    <pre class="brush: js; class-name: 'tight'">
+                        // concise body syntax, implied "return"
+                        var func = x => x * x;                  
+
+                        // with block body, explicit "return" needed
+                        var func = (x, y) => { return x + y; }; 
+
+                        // remember to wrap the object literal in parentheses
+                        var func = () => ({foo: 1});
+                    </pre>
+
+                </ul>
+            </div>
+
+            <div class="slide"> 
+                <hgroup> 
+                    <h1>Promise</h1> 
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Promise</li> 
+                    <ul>
+                        <li>An object representing <i>completion</i> or <i>failure</i> of an asynchronous operation.</li>
+                    </ul>
+                    <li>Example <code>Promise</code> object</li>
+                    <pre class="brush: js; class-name: 'tight'">
+                        function myAsyncFunction(url) {
+                          return new Promise((resolve, reject) => {
+                            const xhr = new XMLHttpRequest();
+                            xhr.open("GET", url);
+                            xhr.onload = () => resolve(xhr.responseText);
+                            xhr.onerror = () => reject(xhr.statusText);
+                            xhr.send();
+                          });
+                        }
+
+                        myAsyncFunction("http://www.cvut.cz").then(successCallback, failureCallback);                        
+                    </pre>
+                </ul>
+
+            </div>
 
 		</section>
 
@@ -319,6 +424,47 @@
                     </ul>
 				</ul>
 			</div>
+
+            <div class="slide"> 
+                <hgroup> 
+                    <h1>Node.js Event Loop</h1> 
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Allows Node.js to perform non-blocking I/O operations.</li>
+                    <pre class="brush: bash; class-name: 'tight'; gutter: false;">
+                       ┌───────────────────────┐
+                    ┌─>│        timers         │
+                    │  └──────────┬────────────┘
+                    │  ┌──────────┴────────────┐
+                    │  │     I/O callbacks     │
+                    │  └──────────┬────────────┘
+                    │  ┌──────────┴────────────┐
+                    │  │     idle, prepare     │
+                    │  └──────────┬────────────┘      ┌───────────────┐
+                    │  ┌──────────┴────────────┐      │   incoming:   │
+                    │  │         poll          │<─────┤  connections, │
+                    │  └──────────┬────────────┘      │   data, etc.  │
+                    │  ┌──────────┴────────────┐      └───────────────┘
+                    │  │        check          │
+                    │  └──────────┬────────────┘
+                    │  ┌──────────┴────────────┐
+                    └──┤    close callbacks    │
+                       └───────────────────────┘                        
+                    </pre>
+                    <ul>
+                        <li>Six phases, each phase has a FIFO queue of callbacks to execute.</li>
+                        <ul>
+                            <li><b>timers</b> &ndash; executes callbacks sheduled by <code>setTimeout()</code> and <code>setInterval()</code></li>
+                            <li><b>I/O callbacks</b> &ndash; executes all I/O callbacks except close callbacks.</li>
+                            <li><b>idle/prepare</b> &ndash; used internally</li>
+                            <li><b>poll</b> &ndash; retrieve new I/O events</li>
+                            <li><b>check</b> &ndash; invokes <code>setImmediate()</code> callbacks</li>
+                            <li><b>close callbacks</b> &ndash; executes close callback, e.g. socket.on('close', ...).</li>
+                        </ul>
+                    </ul>
+                </ul>
+            </div>
+
 
             <div class="slide">
 				<hgroup>
