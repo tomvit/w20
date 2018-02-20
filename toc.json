@@ -1,7 +1,7 @@
 { "lectures" : [
 {"title":"Motivation and Course Overview","slide-url":"lecture0.html#/1","sections":[{"title":"Motivation","slide-url":"lecture0.html#/2","sections":[]},{"title":"Scope, Requirements, Learnings","slide-url":"lecture0.html#/5","sections":[]},{"title":"Assessment, Resources, Communication","slide-url":"lecture0.html#/9","sections":[]}],"lastModified":"Tue Feb 20 2018, 10:59:56"}
 ,
-{"title":"Introduction to JavaScript","slide-url":"lecture1.html#/1","sections":[{"title":"JavaScript Basics","slide-url":"lecture1.html#/4","sections":[]},{"title":"Server-side JavaScript","slide-url":"lecture1.html#/11","sections":[]}],"lastModified":"Tue Feb 20 2018, 10:59:56"}
+{"title":"Introduction to JavaScript","slide-url":"lecture1.html#/1","sections":[{"title":"JavaScript Basics","slide-url":"lecture1.html#/4","sections":[]},{"title":"Server-side JavaScript","slide-url":"lecture1.html#/11","sections":[]}],"lastModified":"Tue Feb 20 2018, 11:09:05"}
 ,
 {"title":"Representational State Transfer","slide-url":"lecture2.html#/1","sections":[{"title":"Introduction to REST","slide-url":"lecture2.html#/2","sections":[]},{"title":"Uniform Resource Identifier","slide-url":"lecture2.html#/10","sections":[{"title":"Resources and Application Data","slide-url":"lecture2.html#/13","sections":[]},{"title":"Good URI/URL Design","slide-url":"lecture2.html#/20","sections":[]}]},{"title":"Resource Representation","slide-url":"lecture2.html#/34","sections":[{"title":"Representation, Data Format and Metadata","slide-url":"lecture2.html#/29","sections":[]},{"title":"Resource State","slide-url":"lecture2.html#/34","sections":[]},{"title":"Content Negotiation","slide-url":"lecture2.html#/37","sections":[]}]}],"lastModified":"Tue Mar 21 2017, 22:58:16"}
 ,
