@@ -11,7 +11,7 @@ help:
 	@echo "all	cleans everything and creates all pdf files and toc." 
 	@echo ""
 
-http:
+http:   
 	humla/bin/http-server.sh
 
 clean:

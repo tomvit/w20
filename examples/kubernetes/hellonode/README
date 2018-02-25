@@ -1,0 +1,77 @@
+
+PREREQUISITES
+
+1. Make sure Docker and Minikube is installed
+
+2. Make sure your docker is linked with minikube 
+   eval $(minikube docker-env)
+
+TEST
+
+1. Create server.js
+
+  var http = require('http');
+  var os = require('os');
+
+  var handleRequest = function(request, response) {
+  	console.log('Received request for URL: ' + request.url);
+  	response.writeHead(200);
+  	response.end('Hello World from ' + os.hostname());
+  };
+  var www = http.createServer(handleRequest);
+  www.listen(8080);
+
+1. Test the server
+   node server.js
+
+2. Build the docker image
+   docker build -t hello-node:v1 .
+
+3. Create the deployment from docker image
+   kubectl run hello-node --image=hello-node:v1 --port=8080
+
+   View the deployment
+   kubectl get deployments
+
+   View the pod
+   kubectl get pods
+
+4. Create the service
+   kubectl expose deployment hello-node --type=LoadBalancer
+
+   View the service
+   kubectl get services
+
+   Access the service from the browser
+   minikube service hello-node
+
+5. Change the number of replicas using the dashboard
+
+6. Run the test script to access the service from command line
+   ./test.sh
+
+    rm -f out.log; touch out.log;
+    while true; do
+            # get all pods
+            kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | \
+
+            # count number of responses in the log for each pod
+            while read line; do
+                    echo -n $line; grep $line out.log | wc -l;
+            done;
+
+            # fire requests at the service
+            for i in `seq 1 100`; do
+                    curl --silent http://192.168.99.100:31143/ >>out.log;
+                    echo "" >>out.log;
+            done;
+
+            echo "===";
+
+            sleep 0.5;
+    done
+
+
+
+
+

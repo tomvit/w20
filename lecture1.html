@@ -8,7 +8,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
         <meta name="course"   content="Web 2.0"/>
 		<meta name="lecture"  content="Lecture 1"/>
-   		<meta name="keywords" content="JavaScript"/>
+   		<meta name="keywords" content="javascript, arrow function, promise, nodejs, event loop, blocking i/o"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
         <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
@@ -269,10 +269,10 @@
                         // concise body syntax, implied "return"
                         var func = x => x * x;                  
 
-                        // with block body, explicit "return" needed
+                        // with block body, explicit "return" required
                         var func = (x, y) => { return x + y; }; 
 
-                        // remember to wrap the object literal in parentheses
+                        // object literal needs to be wrapped in parentheses
                         var func = () => ({foo: 1});
                     </pre>
 
@@ -344,29 +344,6 @@
 	                </ul>
 	            </ul>                
 	        </div>
-
-           <!-- <div class="slide">
-				<hgroup> 
-					<h1>Blocking I/O Model</h1> 
-				</hgroup> 
-				<ul class="small">
-					<li>The server creates a thread for every connection</li>
-                    <ul>                    
-                        <li>For example, 1K connections = 1K threads, big overhead</li>
-                    </ul>
-                </ul>
-    			<div id="1QP7gZSS1WS3YquzLekSgdZfcmi4BYArm-K9tuWrULQs" class="h-drawing" style="height: 220px"></div>
-                <ul class="small">
-                    <li>Characteristics</li>
-                    <ul>
-    					<li>the thread is reserved for the connection</li>
-					<li>When processing of the request requires other interactions with DB/FS or network 
-						communication is slow</li>
-                    <ul>
-                        <li>scales very bad as the thread's execution is "blocked"</li>
-                    </ul>
-				</ul>
-			</div> -->
 
             <div class="slide"> 
     			<hgroup> 
@@ -541,35 +518,6 @@
                 </ul>
             </div>
 
-            <div class="slide"> 
-                <hgroup> 
-                    <h1>Rhino</h1> 
-                </hgroup>
-                <ul class="x-small">
-                    <li><span id="rhino" class="h-ref">Rhino</span></li>
-                    <ul>
-                        <li>open-source implementation of JavaScript written entirely in Java</li>
-                        <li>managed by the Mozilla Foundation</li>
-                        <ul>
-                            <li>also provides another implementation of JavaScript engine written in C named SpiderMonkey</li>
-                        </ul>
-                        <li>typically embedded into Java applications to provide scripting to end users</li>
-                        <li>core language only and doesn't contain objects or methods for manipulating HTML documents</li>
-                        <li>enabling development of webapps with JavaScript in containers like Jetty, Tomcat, and Google AppEngine</li>
-                    </ul>               
-                    <pre class="brush: bash; class-name: ''">
-                            $ cat echo.js
-                            for (i in arguments) {
-                              print(arguments[i])
-                            }
-                            $ java org.mozilla.javascript.tools.shell.Main echo.js foo bar
-                            foo
-                            bar
-                            $
-                        </pre>     
-                </ul>
-            </div>
-			
         </section>
 
 		

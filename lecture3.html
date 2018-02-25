@@ -16,7 +16,7 @@
         <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
 
         <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>Uniform Interface</title>
+        <title>REST Architecture 2</title>
     </head>
     
     <body>
@@ -390,249 +390,10 @@
                 </div>
 
             </section>
-        </section>
-
-        <div class="slide outline"></div>
-
-        <section>
-            <header>Asynchronous Communication</header>
-
-            <div class="slide">
-                <hgroup>
-                    <h1>Asynchronous Communication</h1>
-                </hgroup>
-                <ul class="small">
-                    <li>Recall asynchronous communication from MDW</a></li>
-                    <li>Asynchronous communication in HTTP</li>
-                    <ul>
-                        <li>Server cannot establish a connection, always clients need to</li>
-                        <ul>
-                            <li>clients are browsers behind firewalls</li>
-                        </ul>
-                    </ul>
-                </ul>
-                <div class="h-drawing" style="height: 300px" id="1cy6MqkN_U_1oRNDJhR8pT_snON_nTU7jga2qbvB4oYU"></div>
-            </div>
-
-            <div class="slide">
-                <hgroup>
-                    <h1>Asynchronous and Polling/Pushing</h1>
-                </hgroup>
-                <ul class="small">
-                    <li>Submit request for processing</li>
-                    <ul>
-                        <li>Always through HTTP request and <code>202 Accepted</code> response and <code>Location</code> header
-                        with a monitor resource</li>
-                        <li>Methods: <code>PUT</code>, <code>POST</code>, <code>DELETE</code></li>
-                    </ul>
-                    <li>Getting the status from the monitor resource</li>
-                    <ul>
-                        <li><b>polling</b> &ndash; a client periodically checks for changes via <code>GET</code></li>
-                        <ul>
-                            <li>Most natural solution, not a real-time solution</li>
-                        </ul>
-                        <li><b>pushing</b> &ndash; a server pushes changes back to the client</li>
-                        <ul>
-                            <li>Part of real-time Web efforts</li>
-                        </ul>
-                        <li>More details in <a href="lecture8.html">Lecture 8: Protocols for the Realtime Web</a></li>
-                    </ul>
-            </div>
-
-
-        </section>
-
-        <div class="slide outline"></div>
-            
-        <section>
-            <header>Implementing a RESTful Service</header>
-
-            <div class="slide">
-                <hgroup>
-                    <h1>Service Description</h1>
-                </hgroup>
-                <ul class="xx-small">
-                    <li>Example service: Oder processing</li>
-                    <ul class="no-bullet"><li><code>https://github.com/tomvit/w20/tree/master/examples/restful-service</code></li></ul>
-                    <pre class="brush: plain; gutter: true; class-name: 'tight'">
-                        * the service provides three operations: 'open', 'add', 'close'
-                        * operation 'open' opens the order
-                            - input: none
-                            - output: text informing that the order was opened
-
-                        * operation 'add' adds an item to the order
-                            - input: an item name, the syntax is [0-9A-Za-z\-]+
-                            - output: text informing that the item was added to the order
-
-                        * operation 'close' closes the order and returns all items in the order
-                            - input: none
-                            - output: list of all items previously added to the order
-
-                        * the public process is: S0--open--S1, S1--add--S1, S1--close--S0, where
-                          S0, S1 are states such that S0 = order is closed, and S1 = order is opened.
-
-                        * protocol is HTTP, RESTful service
-                          running at ec2.vitvar.com, tcp/9900
-                    </pre>
-                    <li>Basic steps to define a RESTful service</li>
-                    <ol>
-                        <li>identify resources and URIs</li>
-                        <li>specify resources' representations</li>
-                        <li><b>define service operations</b> (methods and status codes)</li>
-                    </ol>
-                </ul>
-            </div>
 
             <div class="slide outline"></div>
 
             <section>
-                <header>Basic Implementation</header>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Resources, URIs and Representations</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>There are three resources</li>
-                        <ul>
-                            <li>Resource <code>/orders</code> is a container of all orders</li>
-                            <li>Resource <code>/orders/{order-id}</code> is an order with resource id <code>order-id</code>.</li>
-                            <li>Resource <code>/orders/{order-id}/{item-id}</code> is an item that belongs to the order <code>order-id</code>
-                            and that has a resource id <code>item-id</code>.</li>
-                        </ul>
-                        <li>Structure</li>
-                        <ul>
-                            <li><code>/orders</code></li>
-                            <ul>
-                                <li>list of all orders</li>
-                            </ul>
-                            <li><code>/orders/{order-id}</code></li>
-                            <ul>
-                                <li>status, order id, list of all items in the order</li>
-                            </ul>
-                            <li><code>/orders/{order-id}/{item-id}</code></li>
-                            <ul>
-                                <li>item id, name, price</li>
-                            </ul>
-                        </ul>
-                        <li>Resource representations</li>
-                        <ul>
-                            <li>We define representations in JSON</li>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Open Order</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>To open an order</li>
-                        <ul>
-                            <li>Insert a new order to <code>/orders</code> using <code>POST</code></li>
-                            <li>Set the new order's status to "open"</li>
-                            <div class="h-github" cid="50e4378" name="examples/restful-service/order-service.js" lines="45-59"></div>
-                            <ul>
-                                <li><code>storage.getOrderSeqId()</code> returns the order ID</li>
-                                <li><code>storage.orders</code> (line 37) is an array of all orders in a storage</li>
-                            </ul>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Add Item to Order</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>To add an item to the order</li>
-                        <ul>
-                            <li>Insert a new item to the order <code>/orders/{order-id}</code> using <code>POST</code></li>
-                        </ul>
-                        <div class="h-github" cid="50e4378" name="examples/restful-service/order-service.js" lines="74-94"></div>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Close Order</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>To close an order</li>
-                        <ul>
-                            <li>Update the status of the order <code>/orders/{order-id}</code> using <code>PUT</code></li>
-                        </ul>
-                        <div class="h-github" cid="50e4378" name="examples/restful-service/order-service.js" lines="97-116"></div>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Other Operations</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>To get, delete an order and get, delete and update an item</li>
-                        <ul>
-                            <li>Delete an order <code>/orders/{order-id}</code> using <code>DELETE</code></li>
-                            <li>Get an order's item <code>/orders/{order-id}/{item-id}</code> using <code>GET</code></li>
-                            <li>Update an order's item <code>/orders/{order-id}/{item-id}</code> using <code>PUT</code></li>
-                            <li>Delete an order's item <code>/orders/{order-id}/{item-id}</code> using <code>DELETE</code></li>
-                        </ul>
-                        <li>Other methods are not allowed</li>
-                        <ul>
-                            <li>Send <code>405 Not Allowed</code> status with <code>Allow</code> header to indicate which methods
-                            are allowed on a resource</li>
-                        </ul>
-                        <pre class="brush: js">
-                            if (method != "GET" && method != "PUT" && method != "POST" && method != "DELETE")
-                                return {
-                                    status: "405", // method not allowed
-                                    headers : { "Allow" : "GET, PUT, POST, DELETE" }
-                                };
-                        </pre>
-                        <li class="task">Task</li>
-                        <ul>
-                            <li>Implement the remaining methods listed above</li>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Testing</h1>
-                    </hgroup>
-                    <ul class="xx-small">
-                        <li>Test the service using a bash script <code>test.sh</code></li>
-                        <div class="h-github" cid="50e4378" name="examples/restful-service/test.sh" config="highlight: [7,16,17,18,21,24]"
-                            brush="bash" cid="fef7e41" lines="3-24"></div>
-                        <li class="task">Task</li>
-                        <ul>
-                            <li>Run service and test it using the <code>test.sh</code> script.</li>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>RESTful Public Process</h1>
-                    </hgroup>
-                    <div class="h-drawing" style="height: 350px" id="1ZZsczsf7O-4HLuf_Flk0Ruttv5buKRmM7afQvgGWK8w"></div>
-                    <ul class="x-small">
-                        <li>Note</li>
-                        <ul>
-                            <li>client, service communicate through metadata and representations</li>
-                            <li>There is no need for a stateful server</li>
-                        </ul>
-                    </ul>
-                </div>
-
-            </section>
-
-        </section>
-
-        <div class="slide outline"></div>
-
-        <section>
                 <header>Advanced Design Issues</header>
 
                 <div class="slide">
@@ -744,75 +505,408 @@
                         </ul>
                     </ul>
                 </div>
+            </section>
 
-                <div class="slide" id="evaluation">
+        </section>
+
+        <section>
+            <header>Selected Protocols</header>
+
+            <div class="slide outline"></div>
+            
+            <section>
+                <header>Caching and Revalidation</header>
+                
+                <div class="slide">
                     <hgroup>
-                        <h1>Evaluation</h1>
+                        <h1>Scalability</h1>
                     </hgroup>
-                    <ul class="x-small">
-                        <li>How "good" is our Order Book service?</li>
+                    <ul>
+                        <li>Need for scalability</li>
                         <ul>
-                            <li>Analysis of the service by service characteristics (see MDW for details) and HTTP principles.</li>
+                            <li>Huge amount of requests on the Web every day</li>
+                            <li>Huge amount of data downloaded</li>
                         </ul>
-
-                        <style>
-                            .fr:last-child td,
-                            .fr > td:first-child {
-                                background-color: white;
-                                border-bottom: 1px solid whitesmoke;
-                            }
-                            .fr > td:first-child {
-                                border-right: 1px solid LightSteelBlue;
-                                background-color: LightSteelBlue;
-                                color: white;
-                                font-weight: bold;
-                            }
-                            .fr:last-child td {
-                                border-bottom: 1px solid LightSteelBlue;
-                            }
-                        </style>
-
-                        <table style="width: 890px" class="first-col-header">
-                            <thead>
-                                <th style="width: 160px">Principle</th><th style="width: 30px">&plus;/&minus;</th><th>Comment</th>
-                            </thead>
-                            <tbody>
-                                <tr class="fr">
-                                    <td rowspan="5">Loose Coupling</td>
-                                    <td>&nbsp;&plus;</td><td>Uses standard response codes.</td></tr>
-                                <tr><td>&nbsp;&plus;</td><td>Uses representation of resources and HTTP Location header to implement the public process.</td></tr>
-                                <tr><td>&nbsp;&minus;</td><td>Does not use hypermedia; client needs to construct links for some resources.</td></tr>
-                                <tr><td>&nbsp;&plus;</td><td>Properly models resource URIs and resource IDs; they have hierarchical nature; does not use verbs.</td></tr>
-                                <tr><td>&nbsp;&plus;</td><td>Respects semantics of HTTP methods and extensively uses them.</td></tr>
-
-                                <tr class="fr">
-                                    <td rowspan="2">Reusability</td>
-                                    <td>&nbsp;&plus;</td><td>Unforeseen clients will likely use the service as the application state is communicated through HTTP.</td></tr>
-                                <tr><td>&nbsp;&minus;</td><td>Only offers one representation format (JSON).</td></tr>
-
-
-                                <tr class="fr">
-                                    <td rowspan="1">Contracting and Discoverability</td>
-                                    <td>&nbsp;&minus;</td><td>Does not describe content type nor public process such as by using Internet Media Types.</td></tr>
-
-                                <tr class="fr">
-                                    <td rowspan="1">Composability</td>
-                                    <td>&nbsp;&plus;</td><td>Does not obstruct composition.</td></tr>
-
-                                <tr class="fr">
-                                    <td rowspan="1">Abstraction</td>
-                                    <td>&nbsp;&plus;</td><td>Service description can be implemented by various implementation technologies.</td></tr>
-
-                                <tr class="fr">
-                                    <td rowspan="1">Encapsulation</td>
-                                    <td>&nbsp;&plus;</td><td>Distinguishes interface from implementation, processing logic is not exposed
-                                        to clients through the interface.</td></tr>
-                            </tbody>
-                        </table>
+                        <li>Some examples</li>
+                        <ul>
+                            <li>Google, Facebook: 5 billion API calls/day</li>
+                            <li>Twitter: 3 billions of API calls/day (75% of all the traffic)<br/>
+                              &rarr; 50 million tweets a day</li>
+                            <li>eBay: 8 billion API calls/month</li>
+                            <li>Bing: 3 billion API calls/month</li>
+                            <li>Amazon WS: over 100 billion objects stored in S3</li>
+                        </ul>
+                        <li>Scalability in REST</li>
+                        <ul>
+                            <li>Caching and revalidation</li>
+                            <li>Concurrency control</li>
+                        </ul>
+                    </ul>
+                </div>
+                            
+                <div class="slide">
+                    <hgroup>
+                        <h1>Caching</h1>
+                    </hgroup>
+                    <div class="h-drawing" id="1nc-u-R3NUvur4WBAB1yxSqtj3PfmsSWF8iMo0aLT-Nc"
+                        style="height: 200px"></div>
+                    <ul class="x-small">
+                        <li>Your service should cache:</li>
+                        <ul>
+                            <li>anytime there is a static resource</li>
+                            <li>even there is a dynamic resource</li>
+                            <ul>
+                                <li>with chances it updates often</li>
+                                <li>you can force clients to always revalidate</li>
+                            </ul>
+                        </ul>
+                        <li>three steps:</li>
+                        <ul>
+                            <li>client GETs the resource representation</li>
+                            <li>server controls how it should cache through <code>Cache-Control</code>
+                            header</li>
+                            <li>client revalidates the content via conditional GET</li>
+                        </ul>
                     </ul>
                 </div>
 
+                <div class="slide">
+                    <hgroup>
+                        <h1>Cache Headers</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li><code>Cache-Control</code> response header</li>
+                        <ul>
+                            <li>controls over local and proxy caches</li>
+                            <li><code>private</code> &ndash; no proxy should cache, only clients can</li>
+                            <li><code>public</code> &ndash; any intermediary can cache (proxies and clients)</li>
+                            <li><code>no-cache</code> &ndash; the response should not be cached. 
+                            If it is cached, the content should always be revalidated.</li>
+                            <li><code>no-store</code> &ndash; can cache but should not store persistently. When a client restarts, content is lost</li>
+                            <li><code>no-transform</code> &ndash; no transformation of cached data; e.g. compressions</li>
+                            <li><code>max-age</code>, <code>s-maxage</code> a time in seconds how long the cache is valid; 
+                            <code>s-maxage</code> for proxies</li>
+                        </ul>
+                        <li><code>Last-Modified</code> and <code>ETag</code> response headers</li>
+                        <ul>
+                            <li>Content last modified date and a content entity tag</li> 
+                        </ul>
+                        <li><code>If-Modified-Since</code> and <code>If-None-Match</code> request headers</li>
+                        <ul>
+                            <li>Content revalidation (conditional GET)</li> 
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Example Date Revalidation</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>Cache control example:</li>
+                        <ul>
+                            <pre class="brush: plain; gutter: 'false'">
+                            &gt; GET /orders HTTP/1.1
+                            &gt; ...
+                            
+                            &lt; HTTP/1.1 200 OK
+                            &lt; Content-Type: application/xml
+                            &lt; Cache-Control: private, no-store, max-age=200
+                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
+                            &lt;
+                            &lt; ...data...
+                            </pre>
+                            <li>only client can cache, must not be stored on the disk, 
+                              the cache is valid for 200 seconds.</li>
+                        </ul>
+                        <li>Revalidation (conditional GET) example:</li>
+                        <ul>
+                            <li>A client revalidates the cache after <code>200</code> seconds.</li>
+                            <pre class="brush: plain; gutter: 'false'">
+                            &gt; GET /orders HTTP/1.1
+                            &gt; If-Modified-Since: Sun, 7 Nov 2011, 09:40 CET
+                            
+                            &lt; HTTP/1.1 304 Not Modified
+                            &lt; Cache-Control: private, no-store, max-age=200
+                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
+                            </pre>
+                        </ul>
+                    </ul>
+                </div>
+                
+                <div class="slide">
+                    <hgroup>
+                        <h1>Entity Tags</h1>
+                    </hgroup>
+                        <ul class="x-small">
+                            <li>Signature of the response body</li>
+                            <ul>
+                                <li>A hash such as MD5</li>
+                                <li>A sequence number that changes with any modification of the content</li>
+                            </ul>
+                            <li>Types of tag</li>
+                            <ul>
+                                <li>Strong ETag: reflects the content bit by bit</li>
+                                <li>Weak ETag: reflects the content "semantically"</li>
+                                <ul>
+                                    <li>The app defines the meaning of its weak tags</li>
+                                </ul>
+                            </ul>
+                            <li>Example content revalidation with <code>ETag</code></li>
+                            <pre class="brush: plain; gutter: 'false'; class-name: 'tight'">
+                            &lt; HTTP/1.1 200 OK
+                            &lt; Cache-Control: private, no-store, max-age=200
+                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
+                            &lt; ETag: "4354a5f6423b43a54d"
+                            
+                            &gt; GET /orders HTTP/1.1
+                            &gt; If-None-Match: "4354a5f6423b43a54d"
+                            
+                            &lt; HTTP/1.1 304 Not Modified
+                            &lt; Cache-Control: private, no-store, max-age=200
+                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
+                            &lt; ETag: "4354a5f6423b43a54d"
+                            </pre>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Design Suggestions</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>Composed resources use weak ETags</li>
+                        <ul>
+                            <li>For example <code>/orders</code></li>
+                            <ul>
+                                <li>a composed resource that contains a summary information</li>
+                                <li>changes to an order's items will not change semantics of <code>/orders</code></li>
+                            </ul>
+                            <li>It is usually not possible to perform updates on these resources</li>
+                        </ul>
+                        <li>Non-composed resources use strong ETags</li>
+                        <ul>
+                            <li>For example <code>/orders/{order-id}</code></li>
+                            <li>They can be updated</li>
+                        </ul>
+                        <li>Further notes</li>
+                        <ul class="small">
+                            <li>Server should send both <code>Last-Modified</code> and
+                            <code>ETag</code> headers</li>
+                            <li>If client sends both <code>If-Modified-Since</code> and <code>If-None-Match</code>,<br/>
+                            <code>ETag</code> validation takes preference</li>
+                        </ul>                        
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Weak ETag Example</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>App specific, <code>/orders</code> resource example</li>
+                        <pre class="brush: js; class-name: 'tight'">
+                        { 
+                            "orders" : 
+                                [
+                                    { "id"        : 2245,
+                                      "customer"  : "Tomas",
+                                      "descr"     : "Stuff to build a house.",
+                                      "items"     : [...] },
+                                    { "id"        : 5546,
+                                      "customer"  : "Peter",
+                                      "descr"     : "Things to build a pipeline.",
+                                      "items"     : [...] }
+                                ] 
+                        }
+                        </pre>
+                        <li>Weak ETag compute function example</li>
+                        <ul>
+                            <li>Any modification to an order's items is not significant for <code>/orders</code>:</li>
+                        </ul>
+                        <pre class="brush: js; class-name: 'tight'">
+                            var crypto = require("crypto");
+                        
+                            function computeWeakETag(orders) {
+                                var content = "";
+                                for (var i = 0; i < orders.length; i++)
+                                    content += orders[i].id + orders[i].customer + orders[i].descr;
+                                return crypto.createHash('md5').update(content).digest("hex");
+                            }
+                        </pre>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Weak ETag Revalidation</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>Updating <code>/orders</code> resource</li>
+                        <ul>
+                            <li><code>POST /orders/{order-id}</code> inserts a new item to an order</li>
+                            <li>Any changes to orders' items will not change the Weak ETag</li>
+                        </ul>
+                    </ul>
+                    <div class="h-drawing" id="1n1jGatYjOc_kgMhWSuXyReptynOFn1CEDELB75Qj_3A"
+                        style="height: 380px"></div>
+                </div>
+                                    
+            </section>
+                
+            <div class="slide outline"></div>
+            
+            <section>
+                <header>Concurrency Control</header>
+                
+                <div class="slide">
+                    <hgroup>
+                        <h1>Concurrency</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>Two clients may update the same resource</li>
+                        <ul class="no-bullet">
+                            <li>1) a client GETs a resource <code>GET /orders/5545</code></li>
+                            <li>2) the client modifies the resource</li>
+                            <li>3) the client updates the resource via <code>PUT /orders/5545 HTTP/1.1</code></li>
+                            <li class="space-before">What happens if another client updates the 
+                            resource between 1) and 3) ?</li>
+                        </ul>
+                        
+                        <li>Concurrency control</li>
+                        <ul>
+                            <li>Conditional <code>PUT</code></li>
+                            <ul>
+                                <li>Update the resource only if it has not changed since a specified date or 
+                                a specified ETag matches the resource content</li>
+                            </ul>
+                            <li><code>If-Unmodified-Since</code> and <code>If-Match</code> headers</li>
+                            <li>Response to conditional <code>PUT</code>:</li>
+                            <ul>
+                                <li><code>200 OK</code> if the <code>PUT</code> was successful</li>
+                                <li><code>412 Precondition Failed</code> if the resource was updated in the meantime.</li>
+                            </ul>
+                        </ul>                        
+                    </ul>
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Concurrency Control Protocol</h1>
+                    </hgroup>
+                    <div class="h-drawing" id="1D9w_NKq3AqIl14fn0vGFBmVlbNMrAQqeYljjOYLcqCo"
+                        style="height: 380px"></div>
+                    <ul class="x-small">
+                        <li>Conditional PUT and ETags</li>
+                        <ul>
+                            <li>Conditional PUT must always use strong entity tags or date validation</li>
+                        </ul>
+                    </ul>
+                </div>
+
+            </section>
         </section>
+
+        <div class="slide outline"></div>        
+
+        <section>
+            <header>Selected Extensions</header>
+
+            <div class="slide">
+            <hgroup>
+                <h1>GData Protocol: Partial Update</h1>
+            </hgroup>
+                <ul class="x-small">
+                    <li><code>PATCH</code> HTTP Method</li>
+                    <ul>
+                        <li>IETF specification, see <span id="rfc-5789" class="h-ref"></span></li>
+                        <li>Add, modify or delete selected elements of an entry</li>
+                    </ul>
+                    <li>Examples</li>
+                    <ul>
+                        <li>To delete a description element and add a new title element</li>
+                        <li><code>gd:fields</code> uses partial response syntax</li>
+                    </ul>
+                    <pre class="brush: xml; class-name: 'tight'">
+                        PATCH /myFeed/1/1/
+                        Content-Type: application/xml
+
+                        &lt;entry xmlns='http://www.w3.org/2005/Atom'
+                            xmlns:gd='http://schemas.google.com/g/2005'
+                            gd:fields='description'>
+                          &lt;title>New title&lt;/title>
+                        &lt;/entry></pre>
+                    <li>Rules</li>
+                    <ul>
+                        <li>Fields not already present are added</li>
+                        <li>Non-repeating fields already present are updated</li>
+                        <li>Repeating fields already present are appended</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>GData Protocol: Entity Tags</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>Resource Versioning</li>
+                    <ul>
+                        <li>Conditional GET and PUT (concurrencyl control)</li>
+                        <ul>
+                            <li>See <a href="lecture4.html#!/17/v1">
+                                Lecture 4 &ndash; scalability</a></li>
+                        </ul>
+                        <li>Etgas on atom and entry elements</li>
+                    </ul>
+                    <li>Example</li>
+                    <pre class="brush: xml; class-name: 'tight'">
+                        GData-Version: 2.0
+                        ETag: W/"C0QBRXcycSp7ImA9WxRVFUk."
+                        ...
+                        &lt;?xml version='1.0' encoding='utf-8'?>
+                        &lt;feed xmlns='http://www.w3.org/2005/Atom'
+                            xmlns:gd='http://schemas.google.com/g/2005'
+                            gd:etag='W/"C0QBRXcycSp7ImA9WxRVFUk."'>
+                          ...
+                          &lt;entry gd:etag='"CUUEQX47eCp7ImA9WxRVEkQ."'>
+                            ...
+                          &lt;/entry>
+                        &lt;/feed>
+                    </pre>
+                    <ul>
+                        <li>It is possible to do a conditional GET/PUT on the entry by using the
+                            ETag <code>"CUUEQX47eCp7ImA9WxRVEkQ."</code></li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                        <h1>GData Protocol: HTTP Methods Overriding</h1>
+                </hgroup>
+                <ul>
+                    <li>Firewall restrictions</li>
+                    <ul>
+                        <li>Some firewall configurations do not allow to send HTTP request other than GET and POST</li>
+                    </ul>
+                    <li>HTTP methods overriding through <code>POST</code></li>
+                    <pre class="brush: bash; class-name: 'tight'; gutter: 'false'">
+                        X-HTTP-Method-Override: PUT
+                        X-HTTP-Method-Override: DELETE
+                        X-HTTP-Method-Override: PATCH</pre>
+                    <li>Example</li>
+                    <pre class="brush: bash; class-name: 'tight'">
+                        POST /myfeed/1/1/
+                        X-HTTP-Method-Override: PATCH
+                        Content-Type: application/xml
+                        ... </pre>
+                </ul>
+            </div>
+
+        </section>
+
 
     </body>
 </html>
