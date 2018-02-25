@@ -8,14 +8,14 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
         <meta name="course"   content="Web 2.0"/>
 		<meta name="lecture"  content="Lecture 5"/>
-   		<meta name="keywords" content="atom, atompub procotol, atom feed, atom entry"/>
+   		<meta name="keywords" content="JSON, JSONP, JavaScript, AJAX, CORS"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
         <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
         <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
 
         <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>Advanced Resource Representation</title>
+        <title>Accessing and Utilizing Services</title>
 	</head>
 	<body> 
     
@@ -49,619 +49,598 @@
 				<a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
 				<div class="oppa"></div>
 			</div>
-		</div>		
+		</div>
 		
-		<div class="slide outline"></div>
-		
-		<section>
-			<header>Overview of Formats and Protocols</header>
+        <div class="slide outline"></div>		
 
+		<section>
+			<header>Mashups and XHR</header>
+			
 			<div class="slide">
 				<hgroup>
-					<h1>Data on the Web</h1>
+					<h1>Mashups</h1>
 				</hgroup>
-				<div class="h-drawing" style="height: 450px" 
-					id="161LY9K1fWd-G3iNpulEEEXq1yoxvjsQxombdyV4Yyfc"></div>
+				<ul class="x-small">
+					<li>Web application hybrid/Web 2.0 application</li>
+					<ul>
+						<li>Uses APIs of two or more applications to provide new value-added functionality</li>
+					</ul>	
+					<li>Types</li>
+					<ul>
+						<li>Data mashup &ndash; integration/aggregation of data (read only)</li>
+						<li>Service mashup &ndash; more sophisticated workflows (read, write)</li>
+						<li>Visualization &ndash; involves UI, e.g., third-party data displayed on the Google map</li>
+					</ul>
+					<li>Client-Server View</li>
+					<ul>
+						<li>client-side mashups (mainly in a browser)</li>
+						<ul>
+							<li>JavaScript, Dynamic HTML, AJAX, JSON/JSONP</li>
+						</ul>
+						<li>server-side mashups</li>
+						<ul>
+							<li>server-side integration of services and data</li>
+							<li>third-party programming languages</li>
+							<li>specialized environments: Google AppsScript</li>
+						</ul>
+					</ul>
+					<li>Web Apps developments will all be about mashups!</li>
+				</ul>
+			</div>
+			
+			<div class="slide">
+				<hgroup>
+					<h1>XMLHttpRequest (XHR)</h1>
+				</hgroup>
+				<ul>
+					<li>Interface to utilize HTTP protocol in JavaScript</li>
+					<ul>
+						<li>standardized by <span id="webapps-wg" class="h-ref"></span> at W3C</li>
+						<li>basis for AJAX</li>
+						<ul>
+							<li>Asynchronous JavaScript and XML</li>
+						</ul>
+					</ul>
+					<li>Typical usage</li>
+					<ol>
+						<li>Browser loads a page that includes a script</li>
+						<li>User clicks on a HTML element</li>
+						<ul>
+							<li>it triggers a JavaScript function</li>
+						</ul>
+						<li>The function invokes a service through XHR</li>
+						<ul>
+							<li>same origin policy, cross-origin resource sharing</li>
+						</ul>
+						<li>The function receives data and modifies HTML in the page</li>
+					</ol>
+				</ul>
 			</div>
 
 			<div class="slide">
 				<hgroup>
-					<h1>Data Syntax, Structure and Semantics</h1>
+					<h1>XHR Interface &ndash; Key Methods and Properties</h1>
 				</hgroup>
-				<div class="h-drawing" style="height: 430px" 
-					id="1sm2ZB4YcB2FHzj5uD0xBLeIDZjmz14NzjyGeSgmBl0U"></div>
+				<ul class="x-small">
+					<li>Method and properties of XHR object</li>
+					<ul>
+						<li><code>open</code>, opens the request, parameters:<br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;<code>method</code> &ndash; method to be used (e.g. GET, PUT, POST),<br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;<code>url</code> &ndash; url of the resource,<br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;<code>asynch</code> &ndash; true to make asynchronous call,<br/>
+						&nbsp;&nbsp;&nbsp;&nbsp;<code>user</code>, <code>pass</code> &ndash; credentials for authentication.</li>
+						<li><code>onReadyStateChange</code> &ndash; JavaScript function object, it is called when 
+						  <code>readyState</code> changes (uninitialized, loading, loaded, interactive, completed).</li>
+						<li><code>send</code>, <code>abort</code> &ndash; sends or aborts the request 
+							(for asynchronous calls)</li>
+						<li><code>status</code>, <code>statusText</code> &ndash; HTTP status code and a 
+							corresponding text.</li>
+						<li><code>responseText</code>, <code>responseXML</code> &ndash; response as text or 
+							as a DOM document (if possible).</li>
+						<li><code>onload</code> &ndash; event listener to support server push.</li>
+					</ul>					
+					<li>See <span id="xhr-w3c" class="h-ref"></span>, or 
+						<span id="xhr-moz" class="h-ref"></span> for a complete reference.</li>
+				</ul>
+			</div>
+			
+			<div class="slide">
+				<hgroup>
+					<h1>How XHR works</h1>
+				</hgroup>
+				<div style="height: 440px; margin-top: 20px" 
+				  id="1kI3tlZl6PHZ_J_uwn_SVyT8_F05yE5Hi0B9pOEI37Z8" class="h-drawing"></div>
 			</div>
 		</section>
+			
+        <div class="slide outline"></div>						
+
+		<section>
+			<header>Security Mechanisms</header>
 		
-		<div class="slide">
-			<hgroup>
-				<h1>Atom Standard</h1>
-			</hgroup>
-			<ul class="spacing-20">
-				<li>A need for a standard syndication format</li>
-				<ul class="x-small">
-					<li>machine-processable Web site content</li>
-					<li>Alternative to RSS</li>
+			<div class="slide" id="sameorigin">
+				<hgroup>
+					<h1>Same Origin Policy</h1>
+				</hgroup>
+				<div style="height: 310px" 
+				  id="1xg_D6b_EBQDYol5Kk7b-UdhbuVsbjBHfaKaNTgH_rkY" class="h-drawing"></div>
+				<ul class="xx-small">
+					<li>JavaScript code can only access resources on the same domain</li>
 					<ul>
-						<li>RSS spec does not say how to encode content, strings only ASCII-encoded, 
-					not clearly defined meaning of RSS elements, etc.</li>
+						<li>XHR to GET, POST, PUT, UPDATE, DELETE</li>
+						<li>Browsers apply <b>same origin policy</b></li>
+					</ul>	
+					<li>Solutions</li>
+					<ul>
+						<li>JSON and JSONP (GET only)</li>
+						<li>Cross-origin Resource Sharing Protocol (CORS)</li>
 					</ul>
 				</ul>
-				<li>IETF Atom Publishing Format and Protocol WG</li>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Why Same Origin Policy?</h2>
+				</hgroup>
 				<ul>
-					<li>RFC 4287: <span id="rfc-4287" class="h-ref"></span></li>
-					<li>RFC 5023: <span id="rfc-5023" class="h-ref"></span></li>
+					<li>Without the same origin policy, the following POST would be possible</li>
 				</ul>
-				<li>Adoption</li>
-				<ul>
-					<li>Google: Google Data Protocol (GData)</li>
-					<li>Microsoft: Open Data Protocol (OData)</li>
-				</ul>
-			</ul>
-		</div>
-	
-		<div class="slide outline"></div>
+				<div style="height: 350px; margin-top: 30px" 
+				  id="1J14eY2C9O1g8oPI9GhkOn0tRCB5z_NodiBzPX2oEabY" class="h-drawing"></div>
+			</div>
+
+        	<div class="slide outline"></div>						
+
+			<section>
+				<header>Scripting Attacks</header>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Overview</h1>
+					</hgroup>
+	                <ul class="small">
+	                	<li>Scripting Attacks</li>
+	                	<ul>
+	                		<li>Intruders make users perform action that has side effects on their resources</li>
+	                		<li>Intruders inject malicious code to Web pages</li>
+	                	</ul>
+	                	<li>Roles in Security Scenarios</li>
+	                	<ul>
+		                    <li>Alice, Bob</li>
+		                    <ul>
+		                        <li>Normal users, usually Alices wants to send a message to Bob or Alice accesses a Bob's site.</li>
+		                    </ul>
+		                    <li>Eve</li>
+		                    <ul>
+		                    	<li>A user with bad intentions, usually a passive attacker.</li> 
+		                    </ul>
+		                    <li>Mallory</li>
+		                    <ul>
+		                    	<li>An active attacker, usually sends a link to a page with malicious code. 
+		                    </ul>	
+		                </ul>
+	                </ul>					
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Recall: State management in HTTP</h1>
+					</hgroup>
+	                <ul class="small">
+	                    <li>Request-response interaction with cookies</li>
+	                    <ul>
+	                        <li>Session is a logical channel maintained by the server</li>
+	                    </ul>
+	                    <div class="h-drawing" style="height: 250px" id="1mVCe8EtqVApZVRV_RHYQKtqDNELKdo84qzCqGvAs7iA"></div>
+	                    <li>Stateful Server</li>
+	                    <ul>
+	                        <li>Server remembers the session information in a server memory</li>
+	                        <li>Server memory is a non-persistent storage, when server restarts the memory content is lost!</li>
+	                    </ul>
+	                </ul>					
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>Cross-site Request Forgery (CSRF)</h1>
+					</hgroup>
+	                <ul class="x-small">
+	                	<li>Exploits a trust of a website in a user's browser</li>
+	                	<li>Scenario</li>
+	                	<ol>
+	                		<li>Mallory sends a link to Alice (in an email, in a chat, etc.)</li>
+	                		<ul>
+	                			<li>The link points to a page that has HTML code with hrefs to Alice's private resources</li>
+	                			<li>For example, to perform an action on Alice's account, <br/>
+	                				it is possible to use <code>img</code> like this:</li>
+								<pre class="brush: html">
+								&lt;img src="https://bank.com/account?do=transfer_money&amp;amount=50000"/></pre>
+	                		</ul>
+	                		<li>Alice loads the page in her browser</li>
+	                		<ul>
+	                			<li>Alice is authenticated to the bank's website, the browser sends Alice's authentication cookies 
+	                				with the request.</li>
+	                		</ul>
+	                	</ol>
+	                	<li>Issues and Prevention</li>
+	                	<ul class="xx-small">
+	                		<li>The bank site vilotes REST, i.e. overloading of GET for making actions</li>
+	                		<li>The bank should check HTTP <code>referer</code> header</li>
+	                		<li>It is a "blind" attack, Mallory does not see the result</li>
+	                		<li>To perform POST, current browsers today use <a href="#CORS">CORS protocol</a></li> 
+	                	</ul>
+	                </ul>					
+				</div>
+
+				<div class="slide">	
+					<hgroup>
+						<h1>Cross-site Scripting Attack (XSS)</h1>
+					</hgroup>
+					<ul>
+						<li>Exploits a trust of a user in a website</li>
+					</ul>
+					<div id="1pOK4HZPt7d4j-KSllCa8BUx5Amjlq28L6sQh3Wac8kI" class="h-drawing" style="height: 250px"></div>
+					<ul class="small">
+						<li>Example Scenario</li>
+						<ol>
+							<li>An attacker injects a code to a page</li>
+							<li>A users executes the code in his/her browser's session</li>
+							<li>The code provides information (cookies) to the attacker</li>
+							<li>The attacker uses the cookies to access the user's data</li>
+						</ol>
+					</ul>	
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>XSS Examples</h1>
+					</hgroup>
+					<ul class="small">
+						<li>Twitter in Sep 2010</li>
+						<ul>
+							<li>Injection of JavaScript code to a page using a tweet</li>
+							<li>You posted following tweet to Twitter</li>
+							<pre class="brush: plain">
+								There is a great event happening at 
+								http://someurl.com/@"onmouseover="alert('test xss')"/</pre>
+							<li>Twitter parses the link and wraps it with <code>&lt;a></code> element</li>
+							<pre class="brush: 'xml'">
+								There is a great event happening at 
+								&lt;a href="http://someurl.com/@"onmouseover="alert('test xss')" 
+									target="_blank">http://someurl.com/@"onmouseover=
+									"alert('test xss')"/&lt;/a></pre>
+							<li>See details at <span id="twitter-xss" class="h-ref"></span></li>
+						</ul>
+						<li>Other example: Google Contacts</li>
+					</ul>
+				</div>	
+
+			</section>
+				
+        	<div class="slide outline"></div>						
+
+			<section>
+				<header>Cross-origin Resource Sharing Protocol (CORS)</header>
+
+				<div class="slide" id="CORS">
+					<hgroup>
+						<h1>Overview</h1>
+					</hgroup>
+					<ul>
+						<li>Increasing number of mashup applications</li>
+						<ul>
+							<li>client-side mashups involving multiple sites</li>
+							<li>mechanism to control an access to sites from within JavaScript</li>
+						</ul>
+						<li>Allow for <b>cross-site HTTP requests</b></li>
+						<ul>
+							<li>HTTP requests for resources from a different domain than the domain of the resource making the request.</li>
+						</ul>
+						<li>W3C Recommendation</li>
+						<ul>
+							<li>see <span class="h-ref" id="cors-w3c"></span></li>
+							<li>Browsers support it</li>
+							<ul>
+								<li>see <span class="h-ref" id="cors-moz"></span> at Mozilla</li>
+							</ul>
+						</ul>
+					</ul>
+				</div>
+
+				<div class="slide">
+					<hgroup>
+						<h1>CORS Protocol &ndash; GET</h1>
+					</hgroup>
+					<div style="height: 280px" id="1cAgbH75PndD38nY1IJo4QfN5Yp7siHQXfNF5oD6x9SM" class="h-drawing"></div>
+					<ul class="x-small">
+						<li>Read-only resource access via HTTP GET</li>
+						<li>Headers:</li>
+						<ul>
+							<li><code>Origin</code> &ndash; identifies the origin of the request</li>
+							<li><code>Access-Control-Allow-Origin</code> &ndash; defines who can access the resource</li>
+							<li>either the full domain name or the wildcard (*) is allowed.</li>							
+						</ul>
+					</ul>
+				</div>			
+				
+				<div class="slide">
+					<hgroup>
+						<h1>CORS Protocol &ndash; other methods and "preflight"</h1>
+					</hgroup>
+					<div style="height: 320px" id="1-dVhDx5pka4BElYu0WzFkqkLQWsb8aphcy16l-bET80" 
+						class="h-drawing"></div>
+					<ul class="xx-small">
+						<li>Preflight request queries the resource using <code>OPTIONS</code> method</li>
+						<ul>
+							<li>requests other than GET (except POST w/o payload) or with custom headers</li>
+							<li>A browser should run preflight automatically for any XHR request meeting preflight conditions</li>
+							<li>The browser caches responses according to <code>Access-Control-Max-Age</code></li>
+						</ul>
+					</ul>
+				</div>				
+
+			</section>
+		</section>
+
+	    <div class="slide outline"></div>		
 				
 		<section>
-			<header>Atom Syndication Format</header>
+			<header>JSON and JSONP</header>
 
 			<div class="slide">
 				<hgroup>
-					<h1>Atom Syndication Format</h1>
+					<h1>Recall: JSON</h1>
 				</hgroup>
-				<div style="height: 290px" id="1zk9j2KMGel79M1x94pFz8We0aPuKl9X9p9sJehFA-M8" 
-					class="h-drawing"></div>
-				<ul>
-					<li>Two types of atom documents</li>
-					<ul class="x-small">
-						<li>Atom Feed Document</li>
+				<ul class="x-small">
+					<li>JSON = JavaScript Object Notation</li>
+					<ul>
+						<li>Serialization format for data representation</li>
+						<li>Very easy to use in JavaScript</li>
 						<ul>
-							<li>represents an atom feed, its metadata and some or all entries associated with it.</li>
+							<li>no need to use a parser explicitly</li>
 						</ul>
-						<li>Atom Entry Document</li>
+						<li>Also great support in many programming environments</li>
+					</ul>
+					<li>Key constructs</li>
+					<ul class="xx-small">
+						<li><b>object</b> is a collection of comma-separated key/value pairs:<br/>
+						<code>{"name" : "tomas", "age" : 18, "student" : false, &nbsp;"car" : null}</code></li>
+						<li style="margin-top: 5px"><b>array</b> is an order list of values:<br/>
+						<code>[ "prague", "innsbruck", 45 ]</code></li>
+						<li style="margin-top: 5px">can be nested: objects as values in an <b>array</b>:<br/>
+						<code>[ { "name" : "tomas", "age" : 18 }, <br/>&nbsp;&nbsp;{ "name" : "peter", "age" : 19 } ]</code></li>
+						<li style="margin-top: 5px">and the other way around: array as values in an <b>object</b>:<br/>
+						<code>{ "cities" : ["prague", "innsbruck"],<br/>&nbsp;&nbsp;"states" : ["CZ", "AT"] }</code></li>
+						<li style="margin-top: 5px">A complete grammar see <span id="json" class="h-ref"></span></li>												
+					</ul>
+					
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>JSON in JavaScript</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Native data format</li>
+					<pre class="brush: javascript; class-name: 'tight'">
+					// data needs to be assigned
+					var data = { "people" : ["tomas", "peter", "alice", "jana"] };
+					
+					// go through the list of people
+					for (i = 0; i < data.people.length; i++) {
+					    man = data.people[i];
+					    // ... do something with this man
+					}</pre>
+					<li>Responses of service calls in JSON</li>
+					<ul>
+						<li>Many support JSON, how can we load that data?</li>
+					</ul>
+					<li>Example Request-Response</li>
+					<pre class="brush: javascript; class-name: 'tight'">
+						GET http://pipes.yahoo.com/pipes/pipe.run?_id=638c670c40c97b62&_render=json
+						
+					 	{"count":1,"value":  
+						   {"title":"Web 2.0 announcements",
+						    "description":"Pipes Output",
+						    "link":"http:\/\/pipes.yahoo.com\/pipes\/pipe.info...",
+						    "pubDate":"Mon, 07 Mar 2011 18:27:20 +0000",
+						    "generator":"..."
+						    ...
+						   }
+						}</pre>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>JSONP</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Service that supports JSONP</li>
+					<ul>
+						<li>allows to specify a query string parameter for a wrapper function
+						to load the data in JavaScript code</li>
+						<li>otherwise the data cannot be used in JavaScript</li>
 						<ul>
-							<li>represents exactly one entry, outside of context of atom feed</li>
+							<li>they're loaded into the memory but assigned to nothing</li>
 						</ul>
+					</ul>
+					<li>Example</li>
+					<ul>
+						<li>if a resource at <code style="zoom: 0.9">http://someurl.org/json_data</code> returns
+						<pre class="brush: javascript; gutter: false">
+							 { "people" : ["tomas", "peter", "alice", "jana"] }</pre>
+						then the resource at<br/>
+						<code style="zoom: 0.9">http://someurl.org/json_data?_callback=loadData</code> returns
+						<pre class="brush: javascript; gutter: false">
+							 loadData({ "people" : ["tomas", "peter", "alice", "jana"] });</pre></li>
+					</ul>
+					<li>A kind of workaround for the same origin policy</li>
+					<ul>
+						<li>only <code>GET</code>, nothing else works obviously</li>
+						<li>no XHR, need to load the data through the dynamic <code>&lt;script></code> element</li>
 					</ul>
 				</ul>
 			</div>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>Atom Syndication Format</h1>
-				</hgroup>
-				<ul>
-					<li>Atom Feed Document Example</li>
-				</ul>
-				<pre class="brush: xml; class-name: 'tight'" style="zoom: 0.6">
-				&lt;?xml version="1.0" encoding="utf-8"?>
-				&lt;feed xmlns="http://www.w3.org/2005/Atom">
 
-				   &lt;title>Example Feed&lt;/title>
-				   &lt;link href="http://example.org/"/>
-				   &lt;updated>2003-12-13T18:30:02Z&lt;/updated>
-				   &lt;author>
-				      &lt;name>John Doe&lt;/name>
-				    &lt;/author>
-				    &lt;id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6&lt;/id>
-				    
-				    &lt;entry>
-				    	&lt;title>Example feed title&lt;/title>
-				    	&lt;link href="http://example.org/2003/12/13/atom03"/>
-				    	&lt;id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a&lt;/id>
-				    	&lt;updated>2003-12-13T18:30:02Z&lt;/updated>
-				    	&lt;summary>Some text&lt;/summary>
-				    &lt;/entry>
-				&lt;/feed></pre>
-				
-			</div>
-			
 			<div class="slide">
 				<hgroup>
-					<h1>Atom Elements &ndash; Atom Feed</h1>
+					<h1>JSONP in JavaScript</h1>
 				</hgroup>
 				<ul class="xx-small">
-					<li>Specification</li>
-					<ul class="small">
-						<li>defined as XML information set, serialized as XML 1.0</li>
-						<li>must be well-formed, no DTD/Schema &rarr; no requirements to be valid.</li>
+					<li>JSONP example</li>
+					<ul>
+						<li>loads JSON data using JSONP by dynamically inserting <code>&lt;script></code>
+							into the current document. This will download JSON data and triggers the script.</li>
 					</ul>
-					<li><code>atom:feed</code> element</li>
-					<ul class="no-bullet">
-						<li><code>(*)</code>: zero or more occurencies &ndash; repeating fields</li>
-						<li><code>(?)</code>: zero or one occurence &ndash; non-repeating fields</li>
-						<li><code>( )</code>: exactly one occurence &ndash; non-repeating fields</li>
-					</ul>	
-					<pre class="brush: bash; class-name: 'tight' ">
-				atomFeed =
-      				   element atom:feed {
-         			      atomCommonAttributes,
-         			         (atomAuthor*
-          			         & atomCategory*
-          			         & atomContributor*
-          			         & atomGenerator?
-          			         & atomIcon?
-          			         & atomId
-          			         & atomLink*
-          			         & atomLogo?
-          			         & atomRights?
-          			         & atomSubtitle?
-          			         & atomTitle
-          			         & atomUpdated
-          			         & extensionElement*),
-         			      atomEntry*
-      				   }</pre>
+					<pre class="brush: javascript">
+					var TWITTER_URL = "http://api.twitter.com/1/statuses/user_timeline.json?" + 
+					  "&screen_name=web2e&count=100&callback=loadData";
+				
+					// this needs to be loaded in window.onload
+					// after all document has finished loading...
+					function insertData() {
+					    var se = document.createElement('script');
+					    se.setAttribute("type","text/javascript");
+					    se.setAttribute("src", TWITTER_URL);	
+					    document.getElementsByTagName("head")[0].appendChild(se);	
+					    // And data will be loaded when loadDta callback fires...
+					}
+				
+					// loads the data when they arrive 
+					function loadData(data) {
+					    // we need to know the the structure of JSON data that is returned 
+					    // and code it here accordingly
+					    for (i = 0; i < data.length; i++) {
+					        data[i].created_at // contains date the tweet was created
+					        data[i].text // contains the tweet
+					    }
+					}</pre>
 				</ul>
 			</div>
 
 			<div class="slide">
 				<hgroup>
-					<h1>Atom Elements &ndash; Atom Entry</h1>
+					<h1>JSON Vulnerability</h1>
 				</hgroup>
-				<ul class="small">
-					<li><code>atom:entry</code> element</li>
-					<ul class="no-bullet">
-						<li><code>(*)</code>: zero or more occurencies &ndash; repeating fields</li>
-						<li><code>(?)</code>: zero or one occurence &ndash; non-repeating fields</li>
-						<li><code>( )</code>: exactly one occurence &ndash; non-repeating fields</li>
-					</ul>	
-					<pre class="brush: bash; class-name: 'tight' ">
-				atomEntry =
-      				   element atom:entry {
-         			      atomCommonAttributes,
-         			        (atomAuthor*
-          			        & atomCategory*
-							& atomContent?
-							& atomContributor*
-							& atomId
-          					& atomLink*
-          					& atomPublished?
-          					& atomRights?
-          					& atomSource?
-          					& atomSummary?
-          					& atomTitle
-          					& atomUpdated
-          					& extensionElement*)
-      				}</pre>					
-				</ul>
-			</div>
+                <ul class="x-small">
+                	<li>What it is</li>
+                	<ul>
+                		<li>JSON array data accessible via GET (normal access is via XHR)</li>
+                		<li>Attacker may load the data in a <code>script</code>, redefine <code>Array</code> object,
+                			and assign the data to a variable.</li>
+                		<li>Attacker's page with a script that you access:</li>
+                		<ul>
+                			<li>your browser uses your cookies to load the resource</li>
+                		</ul>
+                	</ul>
+                	<pre class="brush: html; highlight: [3,4]; class-name: tight">
+                		&lt;script type="text/javascript">
+                		var yourData;
+                		Array = function() {
+                			yourData = this;
+                		}
+                		&lt;/script>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Pointers to other information</h1>
-				</hgroup>
-				<ul class="x-spacing">
-					<li>URI identifier</li>
-					<ul>
-						<li>unique identification of things</li>
-						<li>feed/entry <code>id</code></li>
-						<li><code>author</code> and <br/><code>contributor</code> (person uri)</li>
-						<li><code>generator</code> (uri)</li>
-						<li><code>category</code> schema (uri), term (uri)<br/>
-						example:<br/>
-						<pre class="brush: xml; class-name: 'tight' ">
-							&lt;category scheme="http://example.org/dogs"
-							&nbsp;&nbsp;term="http://example.org/dogs#basset"
-							&nbsp;&nbsp;label="Basset"/></pre>	
-						</li>
-					</ul>
-					<div style="height: 200px; margin-left: 190px; margin-top: -360px; 
-					padding-bottom: 140px" id="1ipVoIozMTXFeRaTfwTf9_QQajA_drinXdy5JZcXLDtk" class="h-drawing"></div>
-					
-					<li>Unambiguous identification of things using URIs</li>
-					<ul class="x-small">
-						<li>Helps interoperability, can take advantage of wikipedia concepts</li>
-						<ul>
-							<li>still not very common, will improve with linked data</li>
-						</ul>
-					</ul>
-				</ul>
-			</div>
+                		&lt;script src="yourdomain.cz/yoursecretdata.json" type="text/javascript">&lt;/script></pre>
+            		<li>Prevention</li>
+            		<ul class="xx-small">
+            			<li>Using prefix in the data &ndash; the prefix makes the JSON data invalid; the client must
+            				strip the prefix before parsing the data as JSON</li>
+            			<pre class="brush: javascript; class-name: tight">
+            				[ "a": "account", 433, 5543 ]</pre>
+            			<li>Use only POST for sensitive data</li>
+            		</ul>
+                </ul>					
+			</div>			
 
-			<div class="slide">
-				<hgroup>
-					<h1>Atom Links</h1>
-				</hgroup>
-				<ul class="x-spacing">
-					<li>Links to other Atom documents</li>
-					<ul>
-						<li>Atom defines simple link structure</li>
-						<li><code>type</code> defines content type</li>
-						<li><code>rel</code> defines relation to this resource</li>
-						<ul>
-							<li>self, alternate, related, enclosure, via</li>
-							<li>standardized by IANA</li>
-						</ul>
-					</ul>
-					<li>Adoption by RESTful services</li>
-					<ul>
-						<li>Core for HATEOAS</li>
-						<li>Adopted in Link header, see <span id="rfc-5988" class="h-ref"></span></li>
-						<li>More details in 
-							<a href="lecture4.html#!/11/v1">Lecture 4 &ndash; HATEOAS</a>.</li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Encoding Textual Content</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Plain text</li>
-					<ul class="small">
-						<pre class="brush: xml; class-name: 'tight' ">
-						    &lt;title type="text">
-						       Less: &amplt;
-						    &lt;/text></pre>
-   						<li>simple text, must not contain child elements</li>
-					</ul>
-					<li>HTML</li>
-					<ul class="small">
-						<pre class="brush: xml; class-name: 'tight' ">
-						    &lt;title type="html">
-						       Less: &amplt;em> &ampamp;lt; &amplt;/em>
-						    &lt;/text></pre>
-   						<li>html text, must not contain child elements</li>
-   						<li>any markup must be escaped,</li>
-   						<li>should be possible to display it as HTML inside <code>&lt;div></code> element</li>
-					</ul>
-					<li>XHTML</li>
-					<ul class="small">
-						<pre class="brush: xml; class-name: 'tight' ">
-						    &lt;title type="xhtml" xmlns:x="http://www.w3.org/1999/xhtml">
-						       &lt;x:div>Less: &lt;x:em> &ampamp;lt; &lt;/x:em>&lt;/x:div>
-						    &lt;/text></pre>
-   						<li>the value is a single xhtml <code>&lt;div></code> element, 
-   						not part of the content</li>
- 					</ul>
-				</ul>	
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Aggregation</h1>
-				</hgroup>
-				<div style="height: 300px" id="1mH5Q9FLc7p0NKBC-OxiVq5SzlUqwiS4tYxCNQ0fGtxA" 
-					class="h-drawing"></div>
-				<ul style="margin-top: 30px">
-					<ul class="small">
-						<li>Atom feed may include entries from another atom feed</li>
-						<ul>
-							<li>these entries do not originally belong to this feed</li>
-						</ul>
-						<li><code>source</code> element should contain at least:</li>
-						<ul> 
-							<li>required atom feed's metadata
-								<code>id</code>, <code>title</code> and <code>updated</code></li>
-						</ul>
-						<li>retains information about an entry's source feed</li>
-					</ul>
-				</ul>	
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Data and Time</h1>
-				</hgroup>
-				<ul>
-					<li>Notion of time</li>
-					<ul>
-						<li>Atom document is a snapshot of resource in some time</li>
-						<li><code>updated</code> (feed, entry) &ndash; last update of the resource</li>
-						<li><code>published</code> (entry) &ndash; initial creation of the first availability of the resource</li>
-					</ul>
-					<li>Data format</li>
-					<ul>
-					<li>Examples:<br/>
-					<pre class="brush: xml; class-name: 'tight'">
-					    &lt;updated>2003-12-13&lt;/updated>
-					    &lt;updated>2003-12-13T18:30:02.25Z&lt;/updated>
-					    &lt;updated>2003-12-13T18:30:02.25+01:00&lt;/updated></pre>
-   					<code>T</code> &ndash; time delimiter<br/>
-   					<code>Z</code> &ndash; identifies UTC time (~GMT)<br/>
-   					<code>(+|-)hh:mm</code> &ndash; defines local time and a shift in hours 
-						and minutes from the UTC time</li>
-				</ul>	
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Polling</h1>
-				</hgroup>
-				<div style="height: 390px" 
-					id="15d4SxbbGYqPVyZXn01QeoODggGiHIfR9y8bowuHcdHY" class="h-drawing"></div>
-				<ul style="margin-top: 20px"><ul class="small">
-					<li><code>updated</code> is the last updated time of the resource at the server</li>
-					<li>resource refresh interval is pre-defined by the serice</li>
-				</ul></ul>
-			</div>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>Extensions</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Possible to combine various vocabularies</li>
-					<ul>
-						<li>through namespaces <code>xmlns</code> attribute, extensions of <code>link.rel</code> attribute</li>
-					</ul>
-					<li>Example: GData (PicasaWeb, Docs, ...)</li>
-					<ul class="xx-small">
-						<li>combines vocabularies such as Geo location</li>
-					<pre class="brush: xml; class-name: 'tight'; highlight: [3,4,16,17,18,19,20,21]">
-					&lt;?xml version='1.0' encoding='UTF-8'?&gt;
-					&lt;feed xmlns='http://www.w3.org/2005/Atom' xmlns:gml='http://www.opengis.net/gml' 
-					   xmlns:gphoto='http://schemas.google.com/photos/2007'
-					   xmlns:georss='http://www.georss.org/georss'&gt;
-					      &lt;id&gt;http://picasaweb.google.com/.../albumid/5262593967320034641&lt;/id&gt;
-					      &lt;updated&gt;2010-02-25T20:47:53.295Z&lt;/updated&gt;
-					      &lt;category 
-					         scheme='http://schemas.google.com/g/2005#kind' 
-					         term='http://schemas.google.com/photos/2007#album' /&gt;
-					      &lt;title type='text'&gt;Památkově chráněný dům v Loukově&lt;/title&gt;
-					      &lt;link rel='http://schemas.google.com/g/2005#feed' type='application/atom+xml'
-					        href='http://picasaweb.google.com/.../albumid/5262593967320034641?hl=en_US' /&gt;
-					      &lt;link rel='http://schemas.google.com/photos/2007#slideshow' 
-					        type='application/x-shockwave-flash'
-					        href='https://picasaweb.google.com/s/c/bin/slideshow.swf?...' /&gt;
-					      &lt;georss:where&gt;
-					         &lt;gml:Point&gt;
-					           &lt;gml:pos&gt;50.5576865 15.0356436&lt;/gml:pos&gt;
-					        &lt;/gml:Point&gt;
-					      &lt;/georss:where&gt;
-					      &lt;gphoto:allowPrints&gt;true&lt;/gphoto:allowPrints&gt;
-					      ...
-					&lt;/feed&gt;</pre>
-					</ul>
-				</ul>
-			</div>
 		</section>
-			
-		<div class="slide outline"></div>
-		
+
+	<!--	<div class="slide outline"></div>
+	    		
 		<section>
-			<header>Extensions</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Extensions</h1>
-				</hgroup>
-				<ul class="x-spacing">
-					<li>OpenSearch</li>
-					<ul>
-						<li>Specification: <span id="open-search" class="h-ref"></span></li>
-						<li>Search service description and search results</li>
-					</ul>
-					<li>Google Data Protocol</li>
-					<ul>
-						<li>Filtering, partial response and partial update</li>
-						<li>Entity tag attribute for <code>&lt;feed></code>
-							and <code>&lt;entry></code> elements</li>
-						<li>HTTP methods overriding</li></li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>OpenSearch</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Open Search Specification</li>
-					<ul>
-						<li><b>Open Search Description Document (OSDD)</b></li>
-						<ul>
-							<li>description of a search service</li>
-						</ul>
-						<li><b>OpenSearch Response Document</b></li>
-						<ul>
-							<li>Standard description of search results by search services</li>
-							<li>extension of syndication formats, RSS and Atom</li>
-						</ul>
-					</ul>
-					<li>Adoption</li>
-					<ul>
-						<li>Browsers such as IE, Google Chrome &ndash;
-							search engines you can use to search various sites.</li>
-						<li>APIs such as Bing API, Google Docs, etc. &ndash; description of search results.</li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>OpenSearch Description Document</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Example:</li>
-				<pre class="brush: xml; class-name: 'tight'">
-				 &lt;?xml version="1.0" encoding="UTF-8"?>
-				 &lt;OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-				   &lt;ShortName>Web Search&lt;/ShortName>
-				   &lt;Description>Use Example.com to search the Web.&lt;/Description>
-				   &lt;Tags>example web&lt;/Tags>
-				   &lt;Contact>admin@example.com&lt;/Contact>
-				   &lt;Url type="application/atom+xml"
-						template="http://example.com/?q={searchTerms}&amp;pw={startPage?}&amp;format=atom"/>
-				   &lt;Url type="application/rss+xml"
-						template="http://example.com/?q={searchTerms}&amp;pw={startPage?}&amp;format=rss"/>
-				   &lt;Url type="text/html"
-						template="http://example.com/?q={searchTerms}&amp;pw={startPage?}"/>
-				   &lt;Image height="64" width="64" type="image/png">
-						http://example.com/websearch.png
-				   &lt;/Image>
-				   &lt;Query role="example" searchTerms="cat" />
-				   &lt;Developer>Example.com Development Team&lt;/Developer>
-				   &lt;AdultContent>false&lt;/AdultContent>
-				   &lt;Language>en-us&lt;/Language>
-				   &lt;OutputEncoding>UTF-8&lt;/OutputEncoding>
-				   &lt;InputEncoding>UTF-8&lt;/InputEncoding>
-				 &lt;/OpenSearchDescription></pre>
-				<ul style="margin-top: 25px"><li><code>searchTerms</code> is a free text</li></ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>OpenSearch Response Document</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Example:</li>
-					<ul>
-						<li>Result in Atom format of a search query</li>
-					</ul>
-				<pre class="brush: xml; class-name: 'tight'; highlight: [10,11,12,13,15,16]">
-					&lt;?xml version="1.0" encoding="UTF-8"?>
-					&lt;feed xmlns="http://www.w3.org/2005/Atom"
-						   xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
-					   &lt;title>Example.com Search: New York history</title>
-					   &lt;updated>2003-12-13T18:30:02Z&lt;/updated>
-					   &lt;author>
-						 &lt;name>Example.com, Inc.&lt;/name>
-					   &lt;/author>
-					   &lt;id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6&lt;/id>
-					   &lt;opensearch:totalResults>4230000&lt;/opensearch:totalResults>
-					   &lt;opensearch:startIndex>21&lt;/opensearch:startIndex>
-					   &lt;opensearch:itemsPerPage>10&lt;/opensearch:itemsPerPage>
-					   &lt;opensearch:Query role="request" searchTerms="New York History" />
-						...
-					   &lt;link rel="search" type="application/opensearchdescription+xml"
-							href="http://example.com/opensearchdescription.xml"/>
-					   &lt;entry>
-						 &lt;title>New York History&lt;/title>
-						 ...
-					   &lt;/entry>
-					 &lt;/feed>
-					</pre>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>GData Protocol: Advanced Search Query</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>OpenSearch does not specify syntax for search query</li>
-					<ul>
-						<li>It can be anything, free text</li>
-						<li>GData Protocol further allows for filtering and projection</li>
-					</ul>
-					<li>Filtering</li>
-					<ul>
-						<li>Fine-grained conditions based on values of various elements</li>
-						<ul>
-						<li>such as <code>author</code>, <code>category</code>, <code>max-results</code>,
-						  min and max of <code>published</code> and <code>updated</code> elements.</li>
-						</ul>
-					</ul>
-					<pre class="brush: bash; class-name: 'tight'">
-						http://www.example.com/feeds/jo?q=Darcy&amp;updated-min=2005-04-19T15:30:00Z
-						http://www.example.com/feeds?category=Fritz%7CLaurie // URL encoded OR
-						http://www.example.com/feeds?category=Fritz,CLaurie  // AND</pre>
-					<li>Partial Response (~Projection)</li>
-					<ul class="small">
-						<li>Which elements of an entry should appear in the search result</li>
-						<li>A language based on XPath syntax (subset of a valid XPath expression)</li>
-					</ul>
-					<pre class="brush: bash; class-name: 'tight'">
-						http://example.org/blog/main?fields=link,entry(@gd:etag,updated,link[@rel='edit']))</pre>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>GData Protocol: Partial Update</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li><code>PATCH</code> HTTP Method</li>
-					<ul>
-						<li>IETF specification, see <span id="rfc-5789" class="h-ref"></span></li>
-						<li>Add, modify or delete selected elements of an entry</li>
-					</ul>
-					<li>Examples</li>
-					<ul>
-						<li>To delete a description element and add a new title element</li>
-						<li><code>gd:fields</code> uses partial response syntax</li>
-					</ul>
-					<pre class="brush: xml; class-name: 'tight'">
-						PATCH /myFeed/1/1/
-						Content-Type: application/xml
-
-						&lt;entry xmlns='http://www.w3.org/2005/Atom'
-							xmlns:gd='http://schemas.google.com/g/2005'
-							gd:fields='description'>
-						  &lt;title>New title&lt;/title>
-						&lt;/entry></pre>
-					<li>Rules</li>
-					<ul>
-						<li>Fields not already present are added</li>
-						<li>Non-repeating fields already present are updated</li>
-						<li>Repeating fields already present are appended</li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>GData Protocol: Entity Tags</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Resource Versioning</li>
-					<ul>
-						<li>Conditional GET and PUT (concurrencyl control)</li>
-						<ul>
-							<li>See <a href="lecture4.html#!/17/v1">
-								Lecture 4 &ndash; scalability</a></li>
-						</ul>
-						<li>Etgas on atom and entry elements</li>
-					</ul>
-					<li>Example</li>
-					<pre class="brush: xml; class-name: 'tight'">
-						GData-Version: 2.0
-						ETag: W/"C0QBRXcycSp7ImA9WxRVFUk."
-						...
-						&lt;?xml version='1.0' encoding='utf-8'?>
-						&lt;feed xmlns='http://www.w3.org/2005/Atom'
-							xmlns:gd='http://schemas.google.com/g/2005'
-							gd:etag='W/"C0QBRXcycSp7ImA9WxRVFUk."'>
-						  ...
-						  &lt;entry gd:etag='"CUUEQX47eCp7ImA9WxRVEkQ."'>
-							...
-						  &lt;/entry>
-						&lt;/feed>
-					</pre>
-					<ul>
-						<li>It is possible to do a conditional GET/PUT on the entry by using the
-							ETag <code>"CUUEQX47eCp7ImA9WxRVEkQ."</code></li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-						<h1>GData Protocol: HTTP Methods Overriding</h1>
-				</hgroup>
-				<ul>
-					<li>Firewall restrictions</li>
-					<ul>
-						<li>Some firewall configurations do not allow to send HTTP request other than GET and POST</li>
-					</ul>
-					<li>HTTP methods overriding through <code>POST</code></li>
-					<pre class="brush: bash; class-name: 'tight'; gutter: 'false'">
-						X-HTTP-Method-Override: PUT
-						X-HTTP-Method-Override: DELETE
-						X-HTTP-Method-Override: PATCH</pre>
-					<li>Example</li>
-					<pre class="brush: bash; class-name: 'tight'">
-						POST /myfeed/1/1/
-						X-HTTP-Method-Override: PATCH
-						Content-Type: application/xml
-						...	</pre>
-				</ul>
-			</div>
-
-		</section>
+			<header>Application State</header>
 			
+			<div class="slide">
+				<hgroup>
+					<h1>Application State</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Application state in Web 1.0 apps</li>
+					<div style="height: 260px; margin-left: -30px" 
+						id="1ikPrTDmdmCzwR3OcGESteSMUnHQ-B9VRhuaOeQGki9A" class="h-drawing"></div>
+					<li>Application state in Web 2.0 apps</li>
+					<ul>
+						<li>JavaScript code changes the state</li>
+						<ul>
+							<li>the URL should contain the state information</li>
+						</ul>
+						<li>JavaScript cannot modify the whole URL but only the hash (<code>#</code>) part</li>
+						<li><code>http://seller.com/products</code> becomes <code>http://seller.com/#products</code></li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Application State and Web Crawling</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Obviously we want our pages to be crawlable</li>
+					<ul>
+						<li>JavaScript generated content on clients does not exist on the server</li>
+					</ul>
+					<div style="height: 250px; margin-left: -30px" id="1u-6vCrF9f6rojKEY2Dxtgrss06MckN4SV1f0YuF1ptU" 
+					  class="h-drawing"></div>
+					<li>Solutions</li>
+					<ul>
+						<li>Crawler runs headless Browser &ndash; not feasible</li>
+						<ul>
+							<li>high requirements for computing resources</li>
+						</ul>
+						<li>Server generates content according to specific rules</li>
+						<ul>
+							<li>Google AJAX Crawling</li>
+						</ul>
+					</ul>
+				</ul>				
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Google AJAX Crawling</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Steps</li>
+					<ol>
+						<li>Web app provider exposes AJAX content with pretty URLs<br/>
+						<code>http://seller.com/#!products</code></li>
+						<li>Web crawler finds those URLs</li>
+						<li>Web crawler transforms the pretty URL to ugly URL<br/>
+						<code>http://seller.com/?_escapped_fragment_=products</code></li>
+						<li>Web crawler access the content of the page at ugly URL and indexes it</li>
+					</ol>
+					<li>Prerequisites</li>
+					<ul>
+						<li>Web app provider must expose AJAX generated content at ugly URLs</li>
+						<li>Options:</li>
+						<ul>
+							<li>uses a headless browser to generate the content at the server</li>
+							<li>rewrites the JavaScript code in a server-side language</li>
+						</ul>
+					</ul>
+					<li>Reference</li>
+					<ul>
+						<li>See <span id="ajax-crawling" class="h-ref"></span> for details</li>
+					</ul>
+				</ul>				
+			</div>
+
+		</section>	-->
+		
+		
+		
+		
 	</body>
 </html>	

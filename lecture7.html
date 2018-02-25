@@ -7,15 +7,15 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
         <meta name="course"   content="Web 2.0"/>
-		<meta name="lecture"  content="Lecture 7"/>
-   		<meta name="keywords" content="OAuth 2.0, open id, security, authorization, authentication"/>
+		<meta name="lecture"  content="Lecture 8"/>
+   		<meta name="keywords" content="polling, long-polling, WebSockets, new I/O"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
         <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
         <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
 
         <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>Security</title>
+        <title>Protocols for the Realtime Web</title>
 	</head>
 	<body> 
     
@@ -50,886 +50,535 @@
 				<div class="oppa"></div>
 			</div>
 		</div>
-				
+		
         <div class="slide outline"></div>		
 
-        <section>
-            <header>Security Concepts</header>
-            
-    		<div class="slide">
-				<hgroup>
-					<h1>Web Service Security Concepts</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Securing the client-server communcation</li>
-					<ul>
-						<li>Message-level security</li>
-						<li>Transport-level security</li>
-					</ul>
-					<li>Ensure</li>
-					<ul>
-						<li>Authentication &ndash; verify a client's identity</li>
-                        <li>Authorizaton &ndash; rights to access resources</li>
-						<li>Message Confidentiality &ndash; keep message content secret</li>
-						<li>Message Integrity &ndash; message content does not change during transmission</li>
-						<li>Non-repudiation &ndash; proof of integrity and origin of data</li>
-					</ul>
-                    <div class="h-drawing" style="height: 190px; margin-top: 30px" id="1JhEX5OGpHhQY49mxA4-r7taripW6bkWwLCu94BU9QFI"></div>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Data on the Web</h1>
-				</hgroup>
-				<div class="h-drawing" style="height: 450px" 
-					id="161LY9K1fWd-G3iNpulEEEXq1yoxvjsQxombdyV4Yyfc"></div>
-			</div>
-
-        </section>
-        
-        <div class="slide outline"></div>
-        
-        <section>
-            <header>Authentication and Authorization</header>
-            
-    		<div class="slide">
-				<hgroup>
-					<h1>Authentication and Authorization</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Authentication</li>
-					<ul>
-						<li>verification of user's identity</li>
-					</ul>
-					<li>Authorization</li>
-					<ul>
-						<li>verification that a user has rights to access a resource</li>
-					</ul>
-					<li>Standard: HTTP authentication</li>
-					<ul>
-						<li>HTTP defines two options</li>
-						<ul>
-							<li>Basic Access Authentication</li>
-							<li>Digest Access Authentication</li>
-						</ul>
-						<li>They are defined in</li>
-						<ul>
-							<li><span class="h-ref" id="rfc-2616">RFC 2616: Hypertext 
-							Transfer Protocol &ndash; HTTP/1.1</span></li>
-							<li><span class="h-ref" id="rfc-2617">RFC 2617: 
-							HTTP Authentication: Basic and Digest Access Authentication</span></li> 
-						</ul>
-					</ul>
-					<li>Custom/proprietary: use of cookies</li>
-				</ul>
-			</div>                                    
-
-    		<div class="slide">
-				<hgroup>
-					<h1>Basic Access Authentication</h1>
-				</hgroup>
-				<div class="h-drawing" style="height: 280px" id="1OYyQduAQYodoiQ48uYTCB1iVn6UHcCcdDocjLOA9b9Y"></div>
-				<ul class="x-small">
-					<li>Realm</li>
-					<ul>
-						<li>an identifier of the space on the server (~ a collection of resources and their sub-resources)</li>
-						<li>A client may associate a valid credentials with realms such that it copies authorization information 
-							in requests for which server requires authentication (by <code>WWW-Authenticate</code> header)</li>
-				</ul>
-			</div>                                    
-
-    		<div class="slide">
-				<hgroup>
-					<h1>Basic Access Authentication &ndash; Credentials</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Credentials</li>
-					<ul>
-						<li>credentials are base64 encoded</li>
-						<li>the format is: <code>username:password</code></li>
-					</ul>
-					<pre class="brush: bash">
-						# to encode in linux
-						echo "novak:heslo" | base64
-						> bm92YWs6aGVzbG8K
-							
-						# and to decode
-						echo "bm92YWs6aGVzbG8K" | base64 -d # use capital "D" in OS X
-						> novak:heslo</pre>
-							
-					<li>Comments</li>
-					<ul class="x-small">
-						<li>When SSL is not used, the password can be read</li>
-						<li>An attacker can repeat interactions</li> 
-					</ul>
-				</ul>
-				
-			</div>                                    
-
-    		<div class="slide">
-				<hgroup>
-					<h1>Digest Access Authentication</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>RFC 2617 &ndash; Basic and Digest Access Authentication</li>
-					<ul>
-						<li>No password between a client and a server but a hash value</li>
-						<li>Simple and advanced mechanisms (only server-generated nonce value &ndash; replay-attacks or 
-							with client-generated nonce value)</li>
-					</ul>							
-					<li>Basic Steps</li>
-					<ol>
-						<li>Client accesses a protected area</li>
-						<pre class="brush:bash; class-name: 'tight'">
-							> GET / HTTP/1.1</pre>
-						<li>Server requests authentication with <code>WWW-Authenticate</code></li>
-							<pre class="brush:bash; class-name: 'tight'">
-								&lt; HTTP/1.1 401 Unauthorized
-								&lt; WWW-Authenticate: Digest realm="ProtectedArea", 
-								  nonce="BbdQof3DBAA=a293ff3d724989371610f03015f2d23f3cd2c045", 
-								  algorithm=MD5, domain="/", qop="auth"</pre>
-						<li>Client calculates a response hash by using the realm, his/her username, the password, and the 
-							quality of protection (QoP) and requests the resource with <code>authorization</code> header</li>
-							<pre class="brush:bash; class-name: 'tight'">
-								> GET / HTTP/1.1
-								> Authorization: Digest username="novak", realm="ProtectedArea",
-								  nonce="BbdQof3DBAA=a293ff3d724989371610f03015f2d23f3cd2c045", uri="/", 
-								  algorithm=MD5, response="c4ea2293aeb318826d1e533f363efd90", qop=auth, 
-								  nc=00000001, cnonce="531ee8ba7f2a8fd1"</pre>								
-					</ol>
-				</ul>
-			</div>                                    
-
-    		<div class="slide">
-				<hgroup>
-					<h1>Nonce and QoP</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Nonce</li>
-					<ul>
-						<li>A value to identify an interaction that should occur only once</li>
-						<li><code>nonce</code> &ndash; generated by the server</li>
-						<ul>
-							<li>may have a time period for which the nonce is valid</li>
-							<li>may be computed using client IP, ETag of the resource, etc.</li>
-							<li>this limits chances for the replay attack.</li>
-						</ul>
-						<li><code>cnonce</code> &ndash; generated by the client</li>
-					</ul>
-					<li>QoP &ndash; quality of protection</li>
-					<ul>
-						<li>Further improvements to prevent replay attacks and enables non-repudiation</li>
-					</ul>
-				</ul>
-			</div>  
-
-    		<div class="slide">
-				<hgroup>
-					<h1>Algorithms</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Algorithm for <code>response</code> value of <code>authorization</code> header</li>
-					<ul>
-						<li>No quality of protection (<code>qop</code> is missing or <code>qop=none</code>)</li>
-						<ul>
-							<li>limits chances of replay-attacks</li>
-						</ul>
-						<pre class="brush: bash; class-name: 'tight'">
-							HA1 = MD5(username:realm:password)
-							HA2 = MD5(method:digestURI)
-							response = MD5(HA1:nonce:HA2)</pre>
-						<li>with quality of protection (<code>qop=auth</code>)</li>
-						<pre class="brush: bash; class-name: 'tight'">
-							HA1 = MD5(username:realm:password)
-							HA2 = MD5(method:digestURI)
-							response = MD5(HA1:nonce:nonceCount:cnonce:qop:HA2)</pre>				
-							<li>with quality of protection for message integrity (<code>qop=auth-int</code>)</li>
-							<ul>
-								<li>enables non-repudiation (i.e., proof of integrity and origin of data)</li>
-							</ul>
-							<pre class="brush: bash; class-name: 'tight'">
-								HA1 = MD5(username:realm:password)
-								HA2 = MD5(method:digestURI:MD5(payload))
-								response = MD5(HA1:nonce:nonceCount:cnonce:qop:HA2)</pre>											
-					</ul>
-					
-				</ul>
-			</div>  
-
-    		<div class="slide">
-				<hgroup>
-					<h1>Replay Attack</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Replay Attack Scenario (quality of protection is <code>none</code>)</li>
-					<ul>
-						<li>The communication is not encrypted (i.e., no use of HTTPS)</li>
-						<li>Eve listens to the Alice's communication (e.g. on a proxy server)</li>
-						<li>Eve resends requests with headers from Alice's requests</li>
-					</ul>
-				</ul>
-				<div class="h-drawing" id="1gQvg53vE3p9o_YRI3zYx3uBEfiT6YjiuznHN0A8O2QA" style="height: 380px"></div>
-			</div>                                  
-
-    		<div class="slide">
-				<hgroup>
-					<h1>Replay Attack (Cont.)</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Replay Attack Scenario (quality of protection is <code>auth</code> or <code>auth-int</code>)</li>
-					<ul>
-						<li><code>nonceCount</code> should be incremented in every request to a response of the nonce 
-							value from the server</li>
-					</ul>
-				</ul>
-				<div class="h-drawing" id="1Jto8zZvp-q7IANoQ0lckKsPHP1e5LetG7nJs8jI3Xyg" style="height: 380px"></div>
-			</div>                                  
-            
-        </section>        
-
-        <div class="slide outline"></div>
-
 		<section>
-			<header>OAuth 2.0</header>
-			
+			<header>Long-polling and Streaming</header>
+
 			<div class="slide">
 				<hgroup>
-					<h1>Motivation</h1>
+					<h1>Pushing and Polling</h1>
+				</hgroup>
+				<div id="1TXuRmtQIG5wJtioixp-dizSX_TguDBJwE5WoYpCyQnE" class="h-drawing"
+				  style="height: 200px"></div>
+				<ul class="xx-small">
+					<li>Conceptual basis in messaging architectures</li>
+					<ul>
+						<li>event-driven architectures (EDA)</li>
+					</ul>
+					<li><b>HTTP is a request-response protocol</b></li>
+					<ul>
+						<li>response cannot be sent without request</li>
+						<li>server cannot initiate the communication</li>
+					</ul>
+					<li><b>Polling</b> &ndash; client periodically checks for updates on the server</li>
+					<li><b>Pushing</b> &ndash; updates from the server (also called COMET)<br/>
+					= <b>long polling</b> &ndash; server holds the request for some time<br/>
+					= <b>streaming</b> &ndash; server sends updates without closing the socket</li>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>HTTP Long Polling</h1>
+				</hgroup>
+				<div id="1-YIqxkEw22GP7dIa0uqKbEpVzuCQt8yeJLMhiFiPGrs" class="h-drawing" 
+				  style="height: 280px"></div>
+				<ul class="xx-small">
+					<li>Server holds long-poll requests</li>
+					<ul>
+						<li>server responds when an event or a timeout occurs</li>
+						<li>saves computing resources at the server as well as network resources</li>
+						<li>can be applied over HTTP persistent and non-persistent communication</li>
+					</ul>
+					<li>Issues:</li>
+					<ul>
+						<li>maximum time of the request processing at the server</li>
+						<li>concurrent requests processing at the server</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>HTTP Streaming</h1>
+				</hgroup>
+				<div id="1j6nE63Ed5zVDIgUVJeool8t9mWHtPsrs8e356Wc0b3E" class="h-drawing"
+					style="height: 280px"></div>
+				<ul class="xx-small">
+					<li>server deffers the response until an event or timeout is available</li>
+					<li>when an event is available, server sends it back to client as part of 
+					the response; this does not terminate the connection</li>
+					<li>server is able to send pieces of response w/o terminating the conn.</li>
+					<ul>
+						<li>using <code>transfer-encoding</code> header in HTTP 1.1</li>
+						<li>using End of File in HTTP 1.0<br/>
+							(server omits <code>content-lenght</code> in the response)</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Chunked Response</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Transfer encoding <code>chunked</code></li>
+					<ul>
+						<li>It allows to send multiple sets of data over a single connection</li>
+						<li>a chunk represents data for the event</li> 
+						<pre class="brush: plain">
+						HTTP/1.1 200 OK
+						Content-Type: text/plain
+						Transfer-Encoding: chunked
+
+						25
+						This is the data in the first chunk 
+
+						1C
+						and this is the second one 
+
+						0</pre>
+						<li>Each chunk starts with hexadecimal value for length</li>
+						<li>End of response is marked with the chunk length of 0</li>
+					</ul>
+					<li>Steps:</li>
+					<ul>
+						<li>server sends HTTP headers and the first chunk (step 3)</li>
+						<li>server sends second and subsequent chunk of data (step 4)</li>
+						<li>server terminates the connection (step 5)</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Issues with Chunked Response</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Chunks vs. Events</li>
+					<ul>
+						<li>chunks cannot be considered as app messages (events)</li>
+						<li>intermediaries might "re-chunk" the message stream<br/>
+						&rarr; e.g., combining different chunks into a longer one</li>
+					</ul>
+					<li>Client Buffering</li>
+					<ul>
+						<li>clients may buffer all data chunks before they make the response
+						available to the client application</li>
+					</ul>
+					<li>HTTP streaming in browsers</li>
+					<ul>
+						<li>Server-sent events</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Server-Sent Events</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>W3C specification</li>
+					<ul>
+						<li>part of HTML5 specs, see <span id="w3c-sse" class="h-ref"></span></li>
+						<li>API to handle HTTP streaming in browsers by using DOM events</li>
+						<li>transparent to underlying HTTP streaming mechanism</li>
+						<ul>
+							<li>can use both chunked messages and EOF</li>
+						</ul>
+						<li>same origin policy applies</li>
+					</ul>
+					<li><code>EventSource</code> interface</li>
+					<ul>
+						<li>event handlers: <code>onopen</code>, <code>onmessage</code>, <code>onerror</code></li>
+						<li>constructor <code>EventSource(url)</code> &ndash; creates and opens the stream</li>
+						<li>method <code>close()</code> &ndash; closes the connection</li>
+						<li>attribute <code>readyState</code></li>
+						<ul>
+							<li><code>CONNECTING</code> &ndash; The connection has not yet been established, or it was 
+								closed and the user agent is reconnecting.</li>
+							<li><code>OPEN</code> &ndash; The user agent has an open connection and is dispatching 
+								events as it receives them.</li>
+							<li><code>CLOSED</code> &ndash; The conn. is not open, the user agent is not 
+								reconnecting.</li>
+						</ul>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Example</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Initiating <code>EventSource</code></li>
+					<pre class="brush: javascript; class-name: 'tight'">
+					if (window.EventSource != null) {
+					  var source = new EventSource('your_event_stream.php');
+					} else {
+					  // Result to xhr polling :(
+					}</pre>
+					<li>Defining event handlers</li>
+					<pre class="brush: javascript">
+					source.addEventListener('message', function(e) {
+					  // fires when new event occurs, e.data contains the event data
+					}, false);
+					
+					source.addEventListener('open', function(e) {
+					  // Connection was opened
+					}, false);
+					
+					source.addEventListener('error', function(e) {
+					  if (e.readyState == EventSource.CLOSED) {
+						// Connection was closed
+					  }
+					}, false);</pre>
+					<ul class="small">
+						<li>when the conn. is closed, the browser reconnects every ~3 seconds</li>
+						<ul>
+							<li>can be changed using <code>retry</code> attribute in the message data</li>
+						</ul>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Event Stream Format</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Format</li>
+					<ul>
+						<li>response's <code>content-type</code> must be <code>text/event-stream</code></li>
+						<li>every line starts with <code>data:</code>, event message terminates with 2 <code>\n</code> chars.</li>
+						<li>every message may have associated <code>id</code> (is optional)</li>
+						<pre class="brush: plain">
+						id: 12345\n
+						data: first line\n
+						data: second line\n\n</pre>
+					</ul>
+					<li>JSON data in multiple lines of the message</li>
+					<ul>
+						<pre class="brush: plain">
+						data: {\n
+						data: "msg": "hello world",\n
+						data: "id": 12345\n
+						data: }\n\n</pre>
+					</ul>
+					<li>Changing the reconnection time</li>
+					<ul>
+						<li>default is 3 seconds</li>
+						<pre class="brush: plain">
+						retry: 10000\n
+						data: hello world\n\n</pre>					
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Server-side implementation</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Java Servlet</li>
+					<ul>
+						<li>method <code>doGet</code></li>
+					</ul>
+					<pre class="brush: java">
+					public void doGet(HttpServletRequest req, HttpServletResponse resp)
+					    throws IOException {
+					
+					    // set http headers
+					    resp.setContentType("text/event-stream");
+					    resp.setHeader("cache-control", "no-cache");
+					
+						// current time in milliseconds
+					    long ms = System.currentTimeMillis(); 
+
+					    // push data to the client for 20 seconds
+					    // client should reconnect when the connection is closed
+					    while (System.currentTimeMillis() - ms < 20000) {
+					        resp.getWriter().print("data: servlet runs for " + 
+					            (System.currentTimeMillis() - ms)/1000 + " seconds.\n\n");
+					        resp.getWriter().flush();
+					        try {
+					            Thread.sleep(4000);
+					        } catch (InterruptedException e) {
+					            // do nothing;
+					        }
+					    }
+					}</pre>
+				</ul>
+			</div>
+
+			<!--<div class="slide">
+				<hgroup>
+					<h1>Demo</h1>
 				</hgroup>
 				<ul>
-					<li>Cloud Computing &ndash; Software as a Service</li>
-					<ul>
-						<li>Users utilize apps in clouds</li>
-						<ul>
-							<li>they access <b>resources</b> via Web browsers</li>
-							<li>they store their data in the cloud</li>
-							<li>Google Docs, PicasaWeb, etc.</li>
-						</ul>
-						<li>The trend is that SaaS are open</li>
-						<ul>
-							<li>can be extended by 3rd-party developers through APIs</li>
-							<li>attract more users &rArr; increases value of apps</li>
-						</ul>
-						<li>Apps extensions need to have an access to users' data</li>
+					<li>Example Server-sent events demo</li>
+					<ul class="small" style="zoom: 0.9; margin-bottom: 20px">
+						<li>requires a server running at <code style="zoom: 0.9">http://demo-sse.vitvar.com:8080</code></li>
+						<li>runs in <code>iframe</code>, same origin policy applies</li>
+						<li>call <code>http://demo-sse.vitvar.com:8080/echo?msg=text</code>,<br/>
+						&rarr; the message should be displayed as event</li>
 					</ul>
-					<li>Need for a new mechanism to access resources</li>
-					<ul>
-						<li><b>Users can grant access to third-party apps without exposing 
-						their users' credentials</b></li>
-					</ul>
-				</ul>
-			</div>
-
+					<input id="btn" type="button" onclick="javascript:run_stop_demo()" value="Run Demo"></input>&nbsp;
+					<input type="button" onclick="javascript:generateEvent()" value="Generate Event"></input>
+					<input id="event" type="text" value="sample text" style="width: 300px"></input><br/>
+					
+					<script>
+						var demoURL = "http://demo-sse.vitvar.com:8080";
+						
+						function run_stop_demo() {
+							fr = document.getElementById("if-sse");
+							bt = document.getElementById("btn");
+							if (bt.value == "Run Demo") {
+								fr.src = demoURL;
+								bt.value = "Stop Demo";
+							} else {
+								fr.src = "";
+								bt.value = "Run Demo";
+							}
+						}
+						
+						function generateEvent() {
+							fr = document.getElementById("if-gev");
+							fr.src = demoURL + "/echo?msg=" + document.getElementById("event").value;
+						}
+						
+					</script>
+					
+					<iframe id="if-sse" style="width: 620px; margin-top: 10px; height: 270px; 
+					  border: 1px solid silver"></iframe>
+					<iframe id="if-gev" style="display: none"></iframe>
+			</div>-->
+			
 			<div class="slide">
 				<hgroup>
-					<h1>When there is no OAuth</h1>
-				</hgroup>
-				<div id="1wy5WvxoCMRKcNVCo59i25gvxNIH-1-LPiNLBJcePeq8" class="h-drawing" style="height: 350px"></div>
-				<ul class="xx-small">
-					<li>Users must share their credentials with the 3rd-party app</li>
-					<li>Users cannot control what and how long the app can access resources</li>
-					<li>Users must trust the app</li>
-					<ul>
-						<li>In case of misuse, users can only change their passwords</li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>OAuth 2.0 Protocol</h1>
-				</hgroup>
-				<ul class="small">
-					<li>OAuth Objectives</li>
-					<ul>
-						<li>users can grant access to third-party applications</li>
-						<li>users can revoke access any time</li>
-						<li>supports:</li>
-						<ul>
-							<li>client-side web apps (implicit grant),</li>
-							<li>server-side apps (authorization code), and</li>
-							<li>native (desktop) apps (authorization code)</li>
-						</ul>
-					</ul>
-					<li>History</li>
-					<ul class="x-small">
-						<li>Initiated by Google, Twitter, Yahoo!</li>
-						<li>Different, non-standard protocols first: ClientLogin, AuthSub</li>
-						<li>OAuth 1.0 &ndash; first standard, security problems, quite complex</li>
-						<li>OAuth 2.0 &ndash; new version, not backward compatibile with 1.0</li>
-					</ul>
-					<li>Specifications and adoption</li>
-					<ul class="x-small">
-						<li><span class="h-ref" id="oauth"></span></li>
-						<li><span class="h-ref" id="oauth20-google"></span></li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Terminology</h1>
+					<h1>Other Technologies</h1>
 				</hgroup>
 				<ul class="x-small">
-					<li><b>Client</b></li>
-					<ul><li>a third-party app accessing resources owned by <b>resource owner</b></li></ul>
-					<li><b>Resource Owner</b> (also user)</li>
-					<ul><li>a person that owns a resource stored in the <b>resource server</b></li></ul>
-					<li><b>Authorization and Token Endpoints</b></li>
-					<ul><li>endpoints provided by an <b>authorization server</b> through which 
-						  a <b>resource owner</b> authorizes requests.</li></ul>
-					<li><b>Resource Server</b></li>
-					<ul><li>an app that stores resources owned by a <b>resource owner</b> (e.g., pictures in Google PicasaWeb)</li></ul>
-					<li><b>Authorization Code</b></li>
-					<ul><li>a code that a <b>client</b> uses to request <b>access tokens</b> to access resources</li></ul>
-					<li><b>Access Token</b></li>
-					<ul><li>a code that a <b>client</b> uses to access resources</li></ul>
+					<li>Cross-document messaging</li>
+					<div id="1DRm9FfN_CyiaYCccFkFOrcygsrwF_cpy7gKg6gEscEU" 
+						style="height: 165px" class="h-drawing"></div>
+					<ul style="margin-top: 10px">
+						<li>The use of Cross Document Messaging for streaming</li>
+						<ul class="no-bullet">
+							<li>1. The client loads a streaming resource in a hidden <code>iframe</code></li>	
+							<li>2. The server pushes a JavaScript code to the <code>iframe</code></li>
+							<li>3. The browser executes the code as it arrives from the server</li>
+							<li>4. The embedded iframe's code posts a message to the upper document</li>
+						</ul>
+					</ul>
+					<li>Channel API</li>
+					<ul>
+						<li>Google Technology for streaming API for AppEngine</li>
+						<li>not based on HTTP streaming</li>
+						<li>utilizes XMPP capabilities + hidden iframe at client-side</li>
 					</ul>
 				</ul>
 			</div>
-
-	        <div class="slide outline"></div>		
-
-			<section>
-				<header>Client-side Web Apps</header>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Client-side Web Apps</h1>
-					</hgroup>
-					<ul class="small">
-						<li>Simplified version of OAuth 2.0 protocol</li>
-						<ul>
-							<li>JavaScript/AJAX apps running in a browser</li>
-							<li>Apps that cannot easily "remember" app state</li>
-							<li>limited number of interactions</li>
-						</ul>
-						<li>Architecture</li>
-						<ul>
-							<li>User-agent processes a javascript/HTML code from the client</li>
-							<li>No need of authorization code</li>
-						</ul>
-						<li>Basic Steps</li>
-						<ul>
-							<li>A client redirects a user agent to the authorization endpoint</li>
-							<li>A resource owner grants an access to the client or rejects the request</li>
-							<li>Authorization server provides an <code>access_token</code> to the client</li>
-							<li>Client access the resource with the <code>access_token</code></li>
-							<li>When the token expires, client requests new token</li>
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Demo &ndash; List of Contacts</li>
-					</hgroup>
-					<ul class="small">
-						<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js" type="text/javascript"></script>
-						<li>Display your Google contacts</li>
-						<ul>
-							<li>this demo requests authorization from you to access your Google contacts using client-side OAuth 2.0 protocol
-							and then displays the contacts below. In order to transfer <code>access_token</code> from authorization window,
-							it stores the <code>access_token</code> in a cookie.</li>
-							<li><code>access_token</code> <input style="font-size: 18px" id="ati" type="text" value="" size="60"></input></li>
-							<li><a href="javascript:showContacts()">Show contacts</a> or <a target="revokew" 
-								href="https://www.google.com/accounts/IssuedAuthSubTokens">revoke access</a></li>
-						</ul>
-						
-						<div id="contacts_out" style="height: 200px; overflow: hidden"></div>
-						
-						<style>
-							#contacts_out {
-								margin: 10px 0px 0px 8px;
-							}
-							
-							#contacts_out p {
-								margin: 0px 0px 3px 0px;
-								font-size: 13px;
-							}
-						</style>
-						
-						<script type="text/javascript">
-							// gets the cookie based on its name
-							function getCookie(c_name) {
-        						var i,x,y,ARRcookies=document.cookie.split(";");
-        						for (i=0;i<ARRcookies.length;i++) {
-                					x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
-                					y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
-                					x=x.replace(/^\s+|\s+$/g,"");
-                					if (x==c_name) {
-                        				return unescape(y);
-                					}
-        						}
-							}
-							
-							// shows a dialog to ask the user for authorization
-							function requestAuth() {
-							    document.getElementById("ati").value = "";
-								url = "https://accounts.google.com/o/oauth2/auth?scope=https://www.google.com/m8/feeds&" + 								  		
-								"client_id=621535099260.apps.googleusercontent.com&redirect_uri=" + 
-								"http://w20.vitvar.com/examples/oauth/callback.html&response_type=token";
-							 	var newWindow = window.open(url, 'name', 'height=600,width=450');
-							  	if (window.focus) {
-									newWindow.focus();
-							  	}
-							  	return;
-							}
-							
-							// displays contacts; if not authorized asks for authorization first
-							function showContacts() {
-								document.getElementById("contacts_out").innerHTML = "";
-								var ati = document.getElementById("ati");
-								var at = getCookie("w20-token");
-								
-								if (ati.value != "")
-									at = ati.value;
-								
-								if (at == null) {
-									// access token not found, request authorization
-									requestAuth();
-								} else {
-									ati.value = at;
-									var url = "https://www.google.com/m8/feeds/contacts/default/full?oauth_token=" + 
-										at + "&alt=json";
-									try {
-										// send XHR, synchronously 
-										xhr = new XMLHttpRequest();
-										xhr.open("GET", url, false);
-										xhr.send();
-										
-										// get the JSON data
-										data = eval("(" + xhr.responseText + ')');
-										
-										// format and display output
-										var l = "";
-										for (i = 0; i < data.feed.entry.length; i++)
-											if (data.feed.entry[i].title.$t != "")
-												l+= "<p>" + data.feed.entry[i].title.$t + "</p>";
-										document.getElementById("contacts_out").innerHTML = l;
-										
-									} catch (e) {
-									    // error, 101 is a network error such as invalid token
-										if (e.code == 101)
-											requestAuth();
-										else
-											// throw the error otherwise
-											throw e;
-									}
-								}
-							}
-						</script>
-						
-					</ul>
-				</div>
-
-				<!--<div class="slide">
-					<hgroup>
-						<h1>Demo Details</li>
-					</hgroup>
-					<div id="1t5Oe1WzstsrOomFF0SHszjYztMgwHnv0thAjecUlA0Y" 
-						style="height: 470px; margin-top: 20px" class="h-drawing"></div>
-				</div>-->				
-
-				<div class="slide">
-					<hgroup>
-						<h1>Client-side Web Apps Protocol</li>
-					</hgroup>
-					<div id="1Qik6Z_dLbSkcQmS7ubWtcUpyvhF12zqqLgcY634Y7TA" 
-					  style="height: 440px; margin-top: 20px; margin-left: -10px" class="h-drawing"></div>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Redirection &ndash; Step 1</li>
-					</hgroup>
-					<ul class="x-small">
-						<li>Methods and Parameters</li>
-						<ul>
-							<li>Methods: <code>GET</code> or <code>POST</code></li>
-							<li>example authorazation endpoint url (Google): <code>https://accounts.google.com/o/oauth2/auth</code></li>
-							<li>query string parameters or <code>application/x-www-form-urlencoded</code></li>
-							<ul>
-								<li><code>client_id</code> &ndash; id of the client that was previously registered</li>
-								<li><code>redirect_uri</code> &ndash; an URI that auth. server will redirect to when user grants/rejects</li>
-								<li><code>scope</code> &ndash; string identifying resources/services to be accessed</li>
-								<li><code>response_type</code> &ndash; type of the response (<code>token</code> or <code>code</code>)</li>
-								<li><code>state</code> (optional) &ndash; state between request and redirect</li>
-							</li>
-						</ul>
-						<li>Example</li>
-						<pre class="brush: plain; class-name: 'tight'">
-							https://accounts.google.com/o/oauth2/auth? 
-							client_id=621535099260.apps.googleusercontent.com&amp;
-							redirect_uri=http://w20.vitvar.com/examples/oauth/callback.html&
-							scope=https://www.google.com/m8/feeds&
-							response_type=token</pre>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Callback &ndash; steps 4 and 5</li>
-					</hgroup>
-					<ul class="small">
-						<li>Resource owner grants the access</li>
-						<ul>
-							<li>authorization server calls back <code>redirect_uri</code></li>
-							<li>client parses URL in JavaScript (Step 5)</li>
-							<ul>
-								<li>extracts <code>access_token</code> and <code>expires_in</code> 
-								(by using <code>window.location.hash</code>)</li>
-							</ul>
-							<li>Example:</li>
-							<pre class="brush: plain">
-							http://w20.vitvar.com/examples/oauth/callback.html#
-							access_token=1/QbZfgDNsnd&
-							expires_in=4301</pre>
-						</ul>
-						<li>Resource owner rejects the access</li>
-						<ul>
-							<li>authorization server calls back <code>redirect_uri</code> with query string parameter
-							<code>error=access_denied</code></li>
-							<li>Example:</li>
-							<pre class="brush: plain">
-								hhttp://w20.vitvar.com/examples/oauth/callback.html?
-								error=access_denied</pre>
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Accessing Resources &ndash; Step 6</li>
-					</hgroup>
-					<ul class="x-small">
-						<li>Request</li>
-						<ul>
-							<li>client can access resources defined by <code>scope</code></li>
-							<li>resources' URIs defined in a particular documentation</li>
-							<li>Example Google Contacts</li>
-							<ul>
-								<li>to access all users' contacts stored in Google</li>
-								<li><code>scope</code> is <code>https://www.google.com/m8/feeds</code></li>
-							</ul>
-							<li>Query string parameter <code>oauth_token</code></li>
-							<pre class="brush: plain; class-name: 'tight'">
-							curl https://www.google.com/m8/feeds/contacts/default/full?
-								oauth_token=1/dERFd34Sf</pre>
-							<li>HTTP Header <code>Authorization</code></li>
-							<pre class="brush: plain; class-name: 'tight'">
-								curl -H "Authorization: OAuth 1/dERFd34Sf" 
-									https://www.google.com/m8/feeds/contacts/default/full</pre>
-							<li>The client can do any allowed operations on the resource</li>
-						</ul>
-						<li>Response</li>
-						<ul>
-							<li>Success &ndash; <code>200 OK</code></li>
-							<li>Error &ndash; <code>401 Unauthorized</code> when
-							token expires or the client hasn't performed the authorization request.</li>
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Cross-Origin Resource Sharing</li>
-					</hgroup>
-					<div id="1UBnN8oyshd9h67q-xNiXq4bSoBBsx7D0E2PQA1gkB2s" class="h-drawing" style="height: 430px"></div>
-					<ul><ul class="small" style="margin-top: 20px">
-						<li>see <a target="lec4" href="lecture6.html#/sameorigin"> Same Origin and Cross-Origin</a> for details</li>
-					</ul></ul>
-				</div>
-				
-				<div class="slide">
-					<hgroup>
-						<h1>Example Application Registration</h1>
-					</hgroup>
-					<center>
-					<img src="img/l11/GoogleAPIConsole.png" style="height: 450px; margin-top: 20px" alt="Google API Console"></img>
-					</center>
-				</div>	
-				
-			</section>
-
-	        <div class="slide outline"></div>		
-
-			<section>
-				<header>Server-side Web Apps</header>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Server-side Web Apps</h1>
-					</hgroup>
-					<ul class="x-small">
-						<li>Additional interactions</li>
-						<ul>
-							<li>server-side code (any language), the app can maintain the state</li>
-							<li>additional interactions, authorization code</li>
-						</ul>
-						<li>Architecture</li>
-						<ul>
-							<li>Client at a server requests, remembers and refresh access tokens</li>
-						</ul>
-						<li>Basic steps</li>
-						<ul>
-							<li>Client redirects user agent to the authorization endpoint</li>
-							<li>Resource owner grants access to the client or rejects the request</li>
-							<li style="color: maroon">Authorization server provides <b>authorization code</b> to the client</li>
-							<li style="color: maroon">Client requests <b>access</b> and <b>refresh tokens</b> from the auth. server</li>
-							<li style="color: maroon">Client access the resource with the access token</li>
-							<li style="color: maroon">When the token expires, client refreshes a token with refresh token</li>
-						</ul>
-						<li>Advantages</li>
-						<ul>
-							<li>Access tokens not visible to clients, they are stored at the server</li>
-							<li>more secure, clients need to authenticate before they can get tokens</li>
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Server-side Web Apps Protocol</li>
-					</hgroup>
-					<div id="1dzS2Ol7ZLq-ZyN2o608ywULbaeTsaRlj1u-8EHkmRH0" 
-					  style="height: 440px; margin-top: 20px; margin-left: -10px" class="h-drawing"></div>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Redirection &ndash; Step 1</li>
-					</hgroup>
-					<ul class="x-small">
-						<li>Methods and Parameters</li>
-						<ul>
-							<li>same as for client-side app, except <code>response_type</code> must be <code>code</code></li>
-						</ul>
-						<li>Example</li>
-						<pre class="brush: plain; class-name: 'tight'">
-							https://accounts.google.com/o/oauth2/auth?
-							client_id=621535099260.apps.googleusercontent.com&
-							redirect_uri=http://w20.vitvar.com/examples/oauth/callback.html&
-							scope=https://www.google.com/m8/feeds&
-							response_type=code</pre>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Callback + Access Token Request &ndash; steps 4, 5</li>
-					</hgroup>
-					<ul class="x-small">
-						<li>Callback</li>
-						<ul>
-							<li>authorization server calls back <code>redirect_uri</code></li>
-							<li>client gets the <code>code</code> and requests <code>access_token</code></li>
-							<li>example (resource owner grants access):<br/>
-							<code>http://w20.vitvar.com/examples/oauth/callback.html?code=4/P7...</code></li>
-							<li>when user rejects &rarr; same as client-side access</li>
-						</ul>
-						<li>Access token request</li>
-						<ul>
-							<li><code>POST</code> request to token endpoint<br/>
-							&rarr; example Google token endpoint: <code>https://accounts.google.com/o/oauth2/token</code></li>
-							<pre class="brush: plain; class-name: 'tight'">
-							POST /o/oauth2/token HTTP/1.1
-							Host: accounts.google.com
-							Content-Type: application/x-www-form-urlencoded
-							
-							code=4/P7q7W91a-oMsCeLvIaQm6bTrgtp6&
-							client_id=621535099260.apps.googleusercontent.com&
-							client_secret=XTHhXh1S2UggvyWGwDk1EjXB&
-							redirect_uri=http://w20.vitvar.com/examples/oauth/callback.html&
-							grant_type=authorization_code</pre>
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Access Token (cont.)</li>
-					</hgroup>
-					<ul class="x-small">
-						<li>Access token response</li>
-						<ul>
-							<li>Token endpoint responds with <code>access_token</code> and <code>refresh_token</code></li>
-							<pre class="brush: javascript">
-							{ "access_token"   : "1/fFAGRNJru1FTz70BzhT3Zg",
-							  "expires_in"     : 3920,
-							  "refresh_token"  : "1/6BMfW9j53gdGImsixUH6kU5RsR4zwI9lUVX-tqf8JXQ" }</pre>
-						</ul>
-						<li>Refreshing a token</li>
-						<ul>
-							<li><code>POST</code> request to the token endpoint with <code>grant_type=refresh_token</code> and
-							the previously obtained value of <code>refresh_token</code></li>
-							<pre class="brush: plain">
-							POST /o/oauth2/token HTTP/1.1
-							Host: accounts.google.com
-							Content-Type: application/x-www-form-urlencoded
-							
-							client_id=21302922996.apps.googleusercontent.com&
-							client_secret=XTHhXh1SlUNgvyWGwDk1EjXB&
-							refresh_token=1/6BMfW9j53gdGImsixUH6kU5RsR4zwI9lUVX-tqf8JXQ&
-							grant_type=refresh_token</pre>
-						</ul>
-						<li>Accessing a resource is the same as in the client-side app</li>
-					</ul>
-				</div>
-
-			</section>
-			
-	        <div class="slide outline"></div>		
-
-			<section>
-				<header>OAuth 2.0 vs. OAuth 1.0</header>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Why new version?</h1>
-					</hgroup>
-					<ul class="small">
-						<li>OAuth 1.0 in brief</li>
-						<ul>
-							<li>security not based on SSL</li>
-							<li>client must sign every request using a defined algorithm</li>
-							<ul>
-								<li>e.g., public-private key signatures by RSA</li>
-							</ul>
-							<li>More complex to be implemented by clients</li>
-							<ul>
-								<li>although client libraries exist</li>
-							</ul>
-							<li>not suitable for JavaScript-based clients</li>
-						</ul>
-						<li>OAuth 2.0 simplifies the process</li>
-						<ul>
-							<li>SSL is required for all communications to generate the token</li>
-							<li>Signatures are not required for the actual API calls once the token has been generated</li>
-							<ul>
-								<li>SSL is also strongly recommended here</li>
-							</ul>
-							<li>supports various clients including JavaScript and mobile</li>
-						</ul>
-					</ul>
-				</div>
-			</section>
 			
 		</section>
 
-        <div class="slide outline"></div>		
+        <div class="slide outline"></div>				
 			
 		<section>
-			<header>OpenID</header>
-			
+			<header>WebSocket Protocol</header>
+										
 			<div class="slide">
 				<hgroup>
-					<h1>OpenID Protocol</h1>
+					<h1>WebSocket</h1>
 				</hgroup>
 				<ul class="x-small">
-					<li>Motivation &ndash; many user accounts</li>
+					<li>Specifications</li>
 					<ul>
-						<li>users need to maintain many accounts to access various services</li>
-						<li>multiple passwords problem</li>
+						<li>IETF defines <span id="websocket" class="h-ref"></span></li>
+						<li>W3C defines <span id="websocket-w3c" class="h-ref"></span></li>
 					</ul>
-					<li>Objectives</li>
+					<li>Design principles</li>
 					<ul>
-						<li>allows apps to utilize an OpenID provider</li>
+						<li>a new protocol</li>
 						<ul>
-							<li>a third-party authentication service</li>
-							<li>federated login</li>
+							<li>browsers, web servers, and proxy servers need to support it</li>
+						</ul> 
+						<li>a layer on top of TCP</li>
+						<li>bi-directional communication between client and servers</li>
+						<ul>
+							<li>low-latency apps without HTTP overhead</li>
 						</ul>
-						<li>users have one account with the OpenID provider and
-						use it for apps that support the provider</li>
+						<li>Web origin-based security model for browsers</li>
+						<ul>
+							<li>same origin policy, cross-origin resource sharing</li>
+						</ul>
+						<li>support multiple server-side endpoints</li>
 					</ul>
-					<li>OpenID providers</li>
+					<li>Two phases</li>
 					<ul>
-						<li>it is a protocol, anybody can build a provider</li>
-						<li>Google, Yahoo!, Seznam.cz, etc.</li>
-					</ul>
-					<li>Specification</li>
-					<ul>
-						<li><span id="openid" class="h-ref"></span></li>
+						<li>Handshake &ndash; as an <b>upgrade</b> of a HTTP connection</li>
+						<li>data transfer &ndash; the protocol-specific on-the-wire data transfer</li>
 					</ul>
 				</ul>
 			</div>
 
 			<div class="slide">
 				<hgroup>
-					<h1>Interaction Sequence</h1>
+					<h1>Handshake &ndash; Request</h1>
 				</hgroup>
-				<div id="1GSYwFzCiTi8QtQK1Ywgz1e2rVs-6VjuEJhnBb3E_ZEY" class="h-drawing" style="height: 340px"></div>
+				<ul class="small">
+					<li>Request</li>
+					<ul>
+						<li>client sends a following HTTP request to upgrade the connection to WebSocket</li>
+						<pre class="brush: plain">
+						GET /chat HTTP/1.1
+						Host: server.example.com
+						Upgrade: websocket
+						Connection: Upgrade
+						Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
+						Sec-WebSocket-Origin: http://example.com
+						Sec-WebSocket-Protocol: chat, superchat
+						Sec-WebSocket-Version: 7</pre>
+						<li><code>Connection</code> &ndash; request to upgrade the protocol</li>
+						<li><code>Upgrade</code> &ndash; protocol to upgrade to</li>
+						<li><code>Sec-WebSocket-Key</code> &ndash; a client key for later validation</li>
+						<li><code>Sec-WebSocket-Origin</code> &ndash; origin of the request</li>
+						<li><code>Sec-WebSocket-Protocol</code> &ndash; list of sub-protocols that client supports (proprietary)</li>
+					</ul>					
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Handshake &ndash; Response</h1>
+				</hgroup>
 				<ul class="xx-small">
-					<li>Discovery &ndash; discovery of a service associated with a resource</li>
-					<li>XRDS &ndash; eXtensible Resource Descriptor Sequence</li>
+					<li>Response</li>
 					<ul>
-						<li>format for discovery result</li>
-						<li>developed to serve resource discovery for OpenID</li>
-						<li>Web app retrieves endpoint to send login authentication requests</li>
+						<li>server accepts the request and responds as follows</li>
+						<pre class="brush: plain">
+						HTTP/1.1 101 Switching Protocols
+						Upgrade: websocket
+						Connection: Upgrade
+						Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
+						Sec-WebSocket-Protocol: chat</pre>
+						<ul>
+						<li><code>101 Switching Protocols</code> &ndash; status code for a successful upgrade</li>
+						<li><code>Sec-WebSocket-Protocol</code> &ndash; a sub-protocol that the server selected 
+							from the list of protocols in the request</li>
+						<li><code>Sec-WebSocket-Accept</code> &ndash; a key to prove it has received a client 
+							WebSocket handshake request</li>
+						</ul>
+						<li>Formula to compute <code>Sec-WebSocket-Accept</code></li>
+						<pre class="brush: plain">
+						Sec-WebSocket-Accept = Base64Encode(SHA-1(Sec-WebSocket-Key + 
+						  "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"))</pre>
+						<ul>
+						<li><code>SHA-1</code> &ndash; hashing function</li>
+						<li><code>Base64Encode</code> &ndash; Base64 encoding function</li>
+						<li><code>"258EAFA5-E914-47DA-95CA-C5AB0DC85B11"</code> &ndash; magic number</li>
+						</ul>
 					</ul>
 				</ul>
 			</div>
 
 			<div class="slide">
 				<hgroup>
-					<h1>Login Authentication Request &ndash; Step 5</h1>
+					<h1>Data Transfer</h1>
 				</hgroup>
-				<ul class="x-small">
-					<li>Example Google OpenID provider</li>
-					<pre class="brush: plain">
-					https://www.google.com/accounts/o8/id
-					?openid.ns=http://specs.openid.net/auth/2.0
-					&openid.return_to=https://www.example.com/checkauth
-					&openid.realm=http://www.example.com/
-					&openid.assoc_handle=ABSmpf6DNMw
-					&openid.mode=checkid_setup</pre>
-					<li>Parameters</li>
+				<ul class="small">
+					<li>After successful handshake</li>
 					<ul>
-						<li><code>ns</code> &ndash; protocol version (obtained from the XRDS)</li>
-						<li><code>mode</code> &ndash; type of message or additional semantics 
-							(<code>checkid_setup</code> indicates that interaction between the provider and the user 
-							is allowed during authentication)</li>
-						<li><code>return_to</code> &ndash; callback page the provider sends the result</li>
-						<li><code>realm</code> &ndash; domain the user will trust, consistent with <code>return_to</code></li>
-						<li><code>assoc_handle</code> &ndash; "log in" for web app with openid provider</li>
-						<li class="no-bullet" style="margin-top: 20px">* Not all fields shown,
-						check the OpenID spec for the full list of fields and their values</li>
+						<li>socket between the client and the "resource" at the server is established</li>
+						<li>client and the server can both read and write from/to the socket</li>
+						<li>No HTTP headers overhead</li>
+					</ul>
+					<li>Data Framing</li>
+					<ul>
+						<li>defines a format for data transmitted in TCP packets</li>
+						<li>payload length, closing frame, ping, pong,<br/>type of data (text/binary), etc. and payload (message data)</li>  
 					</ul>
 				</ul>
 			</div>
 
 			<div class="slide">
 				<hgroup>
-					<h1>Login Authentication Response &ndash; Step 8</h1>
+					<h1>WebSocket API</h1>
 				</hgroup>
-				<ul class="x-small">
-					<li>User logins successfully</li>
-					<pre class="brush: plain">
-					http://www.example.com/checkauth
-					?openid.ns=http://specs.openid.net/auth/2.0
-					&openid.mode=id_res
-					&openid.return_to=http://www.example.com:8080/checkauth
-					&openid.assoc_handle=ABSmpf6DNMw
-					&openid.identity=https://www.google.com/accounts/o8/id/id=ACyQatiscWvwqs4UQV_U</pre>
+				<ul class="xx-small">
+					<li>Client-side API</li>
 					<ul>
-						<li>Web app will use <code>identity</code> to identify user in the application</li>
-						<li>response is also signed using a list of fields in the response (not shown in the listing)</li>
+						<li>clients to utilize WebSocket, supported by Chrome, Safari</li>
+						<li>Hides complexity of WebSocket protocol for the developer</li>
 					</ul>
-					<li>User cancels</li>
-					<pre class="brush: plain">
-					http://www.example.com/checkauth
-					?openid.mode=cancel
-					&openid.ns=http://specs.openid.net/auth/2.0</pre>
-					<ul><li class="no-bullet" style="margin-top: 20px">* Not all fields shown,
-						check the OpenID spec for the full list of fields and their values</li></ul>
+					<li>JavaScript example</li>
+					<pre class="brush: javascript; class-name: tight">
+					// ws is a new URL schema for WebSocket protocol; 'chat' is a sub-protocol
+					var connection = new WebSocket('ws://server.example.org/chat', 'chat');
+
+					// When the connection is open, send some data to the server
+					connection.onopen = function () {
+					  // connection.protocol contains sub-protocol selected by the server
+					  console.log('subprotocol is: ' + connection.protocol); 
+					  connection.send('data'); 
+					};
+					
+					// Log errors
+					connection.onerror = function (error) {
+					  console.log('WebSocket Error ' + error);
+					};
+					
+					// Log messages from the server
+					connection.onmessage = function (e) {
+					  console.log('Server: ' + e.data);
+					};
+					
+					...
+					
+					// closes the connection
+					connection.close()</pre>
 				</ul>
 			</div>
 			
-		</section>			
-		
-		
-		
+			<div class="slide">
+				<hgroup>
+					<h1>Sockets.IO</h1>
+				</hgroup>
+				<ul class="x-small spacing">
+					<li>Many options for streaming</li>
+					<ul>
+						<li>long-polling, streaming, iframe, WebSockets</li>
+						<li>Not all browsers support WebSockets</li>
+						<li><span id="socket.io" class="h-ref"></span> &ndash; a layer providing a unified API</li> 
+					</ul>
+					<li>Sockets.IO</li>
+					<ul>
+						<li>API and JavaScript implementation</li>
+						<li>checks the availability of WebSocket protocol</li>
+						<ul>
+							<li>fallback to long-polling or other technologies when not available</li>
+						</ul>
+					</ul>
+					<pre class="brush: javascript">
+					// creates a new socket
+					var socket = new io.Socket(); 
+					
+					// event handlers
+					socket.on('connect', function(){ 
+					  socket.send('hi!'); 
+					}) 
+					socket.on('message', function(data){ 
+					  alert(data);
+					})
+					socket.on('disconnect', function(){})</pre>
+				</ul>
+			</div>
+			
+		</section>
+
+
 		
 	</body>
 </html>	

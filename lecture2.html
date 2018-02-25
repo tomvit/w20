@@ -16,7 +16,7 @@
         <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
 
         <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>Representational State Transfer</title>
+        <title>REST Architecture 1</title>
     </head>
     
     <body>
@@ -52,6 +52,28 @@
             </div>
         </div>
         
+        <div class="slide outline"></div>
+        
+        <section>
+            <header>Overview of Formats and Protocols</header>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Data on the Web</h1>
+                </hgroup>
+                <div class="h-drawing" style="height: 450px" 
+                    id="161LY9K1fWd-G3iNpulEEEXq1yoxvjsQxombdyV4Yyfc"></div>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Data Syntax, Structure and Semantics</h1>
+                </hgroup>
+                <div class="h-drawing" style="height: 430px" 
+                    id="1sm2ZB4YcB2FHzj5uD0xBLeIDZjmz14NzjyGeSgmBl0U"></div>
+            </div>
+        </section>
+
         <div class="slide outline"></div>
         
         <section>
@@ -154,21 +176,6 @@
 				</ul>
     		</div>
             
-            <div class="slide">
-    			<hgroup>
-    				<h1>Some Statistics</h1>
-    			</hgroup>
-                <ul class="small">
-                    <li>ProgrammableWeb data</li>
-                    <ul>
-                        <li>Distribution of API protocols and styles</li>
-                        <img src="img/l4/rest-vs-soap.png"></img>
-                        <li>Based on directory of 2,000 Web APIs listed at ProgrammableWeb, May 2010.</li>
-                        <li>Source <span class="h-ref" id="open-apis">Open APIs: a State of the Market</span></li>
-                    </ul>
-                </ul>
-    		</div>
-
             <div class="slide">
         		<hgroup>
     				<h1>REST Core Principles</h1>
@@ -488,239 +495,43 @@
                         
                     </ul>
                 </div>
-                
-            </section>
-            
-            <div class="slide outline"></div>
-            
-            <section>
-                <header>Good URI/URL Design</header>
 
-                <div class="slide" id="uri-alias-collision">
+                <div class="slide">
                     <hgroup>
-                        <h1>Capability URL</h1>
+                        <h1>Major characteristics</li>
                     </hgroup>
-                    <ul class="x-small">
-                        <li>What's capabiliy URL</li>
+                    <ul class="xx-small">
+                        <li>Capability URL</li>
                         <ul>
-                            <li>They are usually valid for a short period of time</li>
-                            <li>They are not public, they are private to one person or a group of people</li>
-                            <li>Ephemeral resources</li>
+                            <li>Short live URL generated for specific purpose</li>
+                            <li>For example, user e-mail verification</li>
                         </ul>
-                        <li>Examples</li>
+                        <li>URI Alias</li>
                         <ul>
-                            <li>Password resets, Polls, Google calendar's private URLs, ...</li>
-                            <li>Access control &ndash; key, session</li>
-                        </ul>
-                        <li>Design considerations</li>
-                        <ul>
-                            <li>They should be https resources!</li>
-                            <ul>
-                                <li>limits exposure, in logs or on the network</li>
-                            </ul>
-                            <li>They should be revokable by the user/owner</li>
-                            <li>They should not be persistent, they should expire</li>
-                        </ul>
-                        <li>Normal URLs</li>
-                        <ul>
-                            <li>No URL collision, URI opacity, human readable, independence on a context, persistent URI</li>
-                        </ul>
-                    </ul>
-                </div>
-
-    			<div class="slide" id="uri-alias-collision">
-    				<hgroup>
-    					<h1>URI Aliases and URI Collision</h1>
-    				</hgroup>
-    				<ul class="x-small">
-    					<li>URI Alias</li>
-                        <ul>
-                            <li>More than one URI identifies a single resource</li>
-                            <li>This happens, for example</li>
-                            <ul>
-                                <li>Different views on the same data entity<br/>
-                                view 1: <code>/customers/{customer-id}/orders</code><br/>
-                                view 2: <code>/orders/{customer-id}</code></li>
-                                
-                                <li>DNS load balancing:<br/>                                
-                                domain name 1: <code>http://api.company.com/orders</code><br/>
-                                domain name 2: <code>http://api2.company.com/orders</code></li>
-                            </ul>
+                            <li>Two URIs identifying the same resource</li>
                         </ul>
                         <li>URI Collision</li>
                         <ul>
-                            <li>Two resources have one URI</li>
-                            <li>This should not happen, for example</li>
-                            <ul>
-                                <li>A company uses an authority it does not own<br/>                                
-                                company Amazon: <code>http://amazon.com/orders</code><br/>
-                                company Knihy.cz: <code>http://amazon.com/orders</code></li>
-                                <li>Exception: domain <code>example.org</code></li>
-                            </ul>
+                            <li>Two URIs identifying the same resource (misuse of URI authority)</li>
+                        </ul>
+                        <li>URI Opacity</li>
+                        <ul>
+                            <li>Content type encoded as part of URI</li>
+                            <li><code>http://www.example.org/customers.xml</code>
+                        </ul>
+                        <li>Resource versions encoded in URI</li>
+                        <ul>
+                            <li>Two URIs identifying the same resource of different versions</li>
+                            <li><code>http://www.example.org/v1/customers.xml</code>
+                        </ul>
+                        <li>Persistent URL</li>
+                        <ul>
+                            <li>URL is valid even for obsolete resource</li>
+                            <li>For example, redirection should be in place</li>
                         </ul>
                     </ul>
-    			</div>
-    			
-    			<div class="slide">
-    				<hgroup>
-    					<h1>Representation Reuse</h1>
-    				</hgroup>
-    				<ul class="small">	
-    					<li>Compare this:</li>
-     					<ul>
-    						<li><code>http://company.com/tomas/orders/?date=111001</code><br/>
-    						&rarr; all orders of Tomas till 1st October 2011</li>
-    						<li><code>http://company.com/tomas/orders</code></li>
-                            <ul>
-        						<li>all orders of Tomas till today</li>
-    						    <li>when retrieved on 1st October 2011,<br/>will be the same as the first resource</li>
-                            </ul>
-                            <li class="space-before">These are different resources</li>
-                            <ul>
-                                <li>We say the two resources reused their representations</li>
-                                <li>Representation reuse only happens under certain conditions</li>                                
-                            </ul>
-    					</ul>
-    				</ul>
-    			</div>
-    
-    			<div class="slide" id="uri-opacity">
-    				<hgroup>
-    					<h1>URI Opacity</h1>
-    				</hgroup>
-    				<ul class="small">	
-                        <li>URI does not describe a resource data format</li>
-                        <ul>
-                            <li>In general it does not describe any resource metadata</li>
-                            <li>Thus we cannot determine a format through URIs</li>
-                            <ul>
-                                <li>There is no relation between URI and HTTP</li>
-        					    <li>HTTP media types does not affect URI path component</li>
-                            </ul>                            
-                        </ul>
-    					<li>Example</li>
-    					<ul>
-    						<li><code>http://company.com/orders.html</code></li>
-                            <ul>
-                                <li>there is no guarantee that the resource is in <code>text/html</code> format</li>
-                            </ul>
-    					</ul>
-                        <li>However, it sometimes comes handy</li>
-                        <ul>
-                            <li>Easy to retrieve a data format by tweaking URL (browser)</li>
-                            <li>For example, Google API uses query parameter <code>alt</code></li>
-                            <li>No need to fiddle with headers and using tools such as <code>curl</code></li>
-                        </ul>
-    				</ul>
-    			</div>
-    			
-    			<div class="slide">
-    				<hgroup>
-    					<h1>Human Readable URI</h1>
-    				</hgroup>
-    				<ul class="small">	
-    					<li>URIs are both for machines and users</li>
-    					<ul>
-    						<li>Users should be able to memorize them</li>
-                            <li>URIs should contain pronounceable words, good number of path components, 
-                            clear query parameters, etc.</li>
-    					</ul>
-    					<li>Example</li>
-    					<ul>
-    						<li>A human readable:<br/>
-    						<code>http://company.com/tomas/orders/</code></li>
-    						<li>Not really human readable:<br/>
-    						<code>http://company.com/?c=gjddjsj224&a=58584&jbd=5553a</code></li>							
-    					</ul>
-    					<li>URIs generated by a machine &ndash; capability URLs</li>
-    					<ul>
-                            <li>URLs that are not meant to be "remembered"</li>
-    					</ul>
-    				</ul>
-    			</div>
-    							
-    			<div class="slide">
-    				<hgroup>
-    					<h1>Independence on a Context</h1>
-    				</hgroup>
-    				<ul class="x-small">
-    					<li>URIs are independent on a user context</li>
-    					<ul>
-    						<li>It should be possible to share URIs among users</li>
-                            <ul>
-                                <li>For example, you send an URI over an IM system</li>
-                                <li>Others should be able to retrieve the same resource as you<br/>
-                                (if they have rights)</li>
-                            </ul>
-    					</ul>
-    					<li>BUT:</li>
-    					<ul>
-    						<li>URL may include an access or a session information &ndash; capability URL</li>
-    					</ul>
-    					<li>Example</li>
-    					<ul>
-    						<li>Capability URL: <code>http://company.com/orders/?session=5582&user=bob</code></li>
-                            <ul>
-                                <li>This cannot be reused by other user than Bob</li>
-                            </ul>
-    						<li>No context: <code>http://company.com/orders/</code></li>
-                            <ul>
-                                <li>a user needs to be logged in to access the resource</li>
-                                <li>HTTP authorization header identifies the user</li>
-                            </ul>
-    					</ul>
-    				</ul>
-    			</div>
-
-    			<div class="slide">
-					<hgroup>
-						<h1>Resource Versions</h1>
-					</hgroup>
-					<ul>
-						<li>Resources evolve over time</li>
-						<li>Need to deal with various versions</li>
-						<ul>
-							<li>need to support old clients on old versions</li>
-							<li>allow new clients to use new versions</li>
-						</ul>
-						<li>Versioning at URI level</li>
-						<ul>
-							<li>one path element to identify a version<br/>
-							<code>http://company.com/v1/tomas/orders</code>
-                            <li>should be part of the path component not a query</li>
-							<li>API version</li>
-                            <ul>
-                                <li>version applies to a set of resources</li>
-                            </ul>
-						</ul>
-						<li>Versioning at resource meta-data level</li>
-						<ul>
-							<li>cf. <a href="#/resource-versions">Version control via content negotiation</a></li>
-						</ul>
-					</ul>
-				</div> 
-    
-    			<div class="slide">
-    				<hgroup>
-    					<h1>Persistent URI</h1>
-    				</hgroup>
-    				<ul>
-    					<li>Good URLs should not change</li>
-    					<ul>
-    						<li>They should be indefinitely assigned to a resource</li>
-    						<li>even if the resource does not exist anymore</li>
-    					</ul>
-    					<li>HTTP and URI persistence</li>
-    					<ul>
-    						<li>new URI associated with the resource</li>
-    						<li>HTTP redirection through <code>3xx</code> response codes</li>
-                            <ul>
-                                <li>See response codes</li>
-                            </ul>
-    					</ul>
-                        <li>Capability URLs are not usually persisent</li>
-    				</ul>
-    			</div>        
+                </div>
+              
             </section>
     
         </section>
@@ -851,18 +662,12 @@
     					</ul>
     				</ul>
     			</div>             
-            </section>
-            
-            <div class="slide outline"></div>
-            
-            <section>
-                <header>Resource State</header>
            
             	<div class="slide">
     				<hgroup>
     					<h1>Resource State</h1>
     				</hgroup>
-                    <ul class="small">
+                    <ul class="x-small">
                         <li>State</li>
                         <ul>
                             <li>Resource representation is in fact a <b>representation of a resource state</b></li>
@@ -906,208 +711,249 @@
                         and <code>t3</code>.
                     </ul>
     			</div>           
-                
-                
+                    
+            </section>
+            
+        </section>
+
+        <div class="slide outline"></div>
+
+        <section>
+            <header>HATEOAS</header>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>HATEOAS</h1>
+                </hgroup>
+                <ul>
+                    <li>HATEOAS = Hypertext as the Engine for Application State</li>
+                    <ul>
+                        <li>The REST core principle</li> 
+                        <li><b>Hypertext</b></li>
+                        <ul>
+                            <li>Hypertext is a representation of a resource with <b>links</b></li>
+                            <li>A link is an URI of a resource</li>
+                            <li>Applying an access to a resource via its link = state transition</li>
+                        </ul>
+                    </ul>
+                    <li>Statelessness</li>
+                    <ul>
+                        <li>A service does not use a memory to remember a state</li>
+                        <li>HATEOAS enables stateless implementation of services</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="slide outline"></div>
+            
+            <section>
+                <header>Stateful vs. Stateless</header>
+            
+                <div class="slide">
+                    <hgroup>
+                        <h1>Stateful server</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>Sessions to store the application state</li>
+                        <ul>
+                            <li>Recall HTTP state management in MDW</li>
+                            <li>The app uses a server memory to remember the state</li>
+                            <li>When the server restarts, the app state is lost</li>
+                        </ul>
+                    </ul>
+                    <div class="h-drawing" style="height: 350px" 
+                        id="1CcGvRSm-RMa00XbHLlk2YhU8Wqz9Bl7nuWrynaFG3Sk"></div>                    
+                </div>
+    
+                <div class="slide">
+                    <hgroup>
+                        <h1>Stateless server</h1>
+                    </hgroup>
+                    <ul class="x-small">
+                        <li>HTTP and hypermedia to transfer the app state</li>
+                        <ul>
+                            <li>Does not use a server memory to remember the app state</li>
+                            <li>State transferred between a client and a service via HTTP metadata and resources' representations</li>
+                        </ul>
+                    </ul>
+                    <div class="h-drawing" style="height: 350px" 
+                        id="1ZZsczsf7O-4HLuf_Flk0Ruttv5buKRmM7afQvgGWK8w"></div>                    
+                </div>
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Persistent Storage and Session Memory</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>Persistent Storage</li>
+                        <ul>
+                            <li>Contains the app data</li>
+                            <li>Data is serialized into resource representation formats</li>
+                            <li>All sessions may access the data via resource IDs</li>
+                        </ul>
+                        <li>Session Memory</li>
+                        <ul>
+                            <li>Server memory that contains a state of the app</li>
+                            <li>A session may only access its session memory</li>
+                            <li>Access through cookies</li>
+                            <li>Note</li>
+                            <ul>
+                                <li>A session memory may be implemented via a persistent storage (such as in Google AppEngine)</li>
+                            </ul>
+                        </ul>
+                    </ul>
+                </div>
             </section>
             
             <div class="slide outline"></div>
-
-            <section>
-                <header>Content Negotiation</header>
+            
+            <section> 
+                <header>Links and Preconditions</header>
+                
+                <div class="slide">
+                    <hgroup>
+                        <h1>Link</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>Service operation</li>
+                        <ul>
+                            <li>Applying an access to a link (GET, PUT, POST, DELETE)</li>
+                            <li>Link: HTTP method + resource URI + optional link semantics</li>
+                        </ul>
+                        <li>Example: <code>getOrder</code>, <code>addOrder</code>, and <code>updateItem</code></li>
+                    </ul>
+                    <div class="h-drawing" id="16vcb0AGdT3N5Jd4FFw9YADqYoF_QQlP46UsYngjfTKs"
+                        style="height: 320px"></div>
+                </div>          
 
                 <div class="slide">
                     <hgroup>
-                        <h1>Content Negotiation</h1>
+                        <h1>Atom Links</h1>
                     </hgroup>
-                    <ul>
+                    <ul class="small">
+                        <li>Atom Syndication Format</li>
+                        <ul>
+                            <li>XML-based document format; Atom feeds</li>
+                            <li>Atom links becoming popular for RESTful applications</li>
+                            <pre class="brush: xml; highlight : [2,3,4,5]">
+                            &lt;order a:xmlns="http://www.w3.org/2005/Atom" xmlns="..."&gt;
+                                &lt;a:link 
+                                    rel="next" 
+                                    href="http://company.com/orders/5543" 
+                                    type="application/xml"/>
+                                &lt;customer&gt;Tomas&lt;/customer>
+                                &lt;items&gt;...&lt;/items>
+                            &lt;/order>
+                            </pre>
+                            <li>Link structure</li>
+                            <ul class="no-bullet">
+                                <li><code>rel</code> &ndash; name of the link<br/> 
+                                ~ semantics of an operation behind the link</li>
+                                <li><code>href</code> &ndash; URI to the resource described by the link</li>
+                                <li><code>type</code> &ndash; media type of the resource the link points to</li>
+                            </ul>
+                        </ul>
+                    </ul>
+                </div>          
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Link Semantics</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>Standard <code>rel</code> values</li>
+                        <ul>
+                            <li>Navigation: <code>next</code>, <code>previous</code>, <code>self</code></li>
+                            <li>Does not reflect a HTTP method you can use</li>
+                        </ul>
+                        <li>Extension <code>rel</code> values</li>
+                        <ul>
+                            <li>You can use <code>rel</code> to indicate a semantics of an operation</li>
+                            <li>Example: add item, delete order, update order, etc.</li>
+                            <li>A client associates this semantics with an operation it may apply at a particular state</li>
+                            <li>The semantics should be defined by using an URI</li>
+                            <pre class="brush: xml;">
+                            &lt;order a:xmlns="http://www.w3.org/2005/Atom" xmlns="..."&gt;
+                                &lt;id>2324&lt;/id>
+                                &lt;a:link rel="http://company.com/op/addItem" 
+                                    href="http://company.com/orders/2324"/>
+                                &lt;a:link rel="http://company.com/op/deleteOrder" 
+                                    href="http://company.com/orders/2324"/>
+                            &lt;/order>
+                            </pre>                            
+                        </ul>
+                    </ul>
+                </div>          
+
+                <div class="slide">
+                    <hgroup>
+                        <h1>Link Headers</h1>
+                    </hgroup>
+                    <ul class="small">
+                        <li>An alternative to Atom links in resource representations</li>
+                        <ul>
+                            <li>links defined in HTTP Link header, <span class="h-ref" id="rfc-5988">Web Linking IETF spec</a></li>
+                            <li>They have the same semantics as Atom Links</li>
+                            <li>Example:</li>
+                            <pre class="brush: plain; gutter: 'false'">
+                                &gt; HEAD /orders HTTP/1.1
+                                
+                                &lt; Content-Type: application/xml
+                                &lt; Link: &lt;http://company.com/orders/?page=2&amp;size=10&gt;; rel="next"
+                                &lt; Link: &lt;http://company.com/orders/?page=10&amp;size=10&gt;; rel="last"
+                            </pre>
+                        </ul>
                         <li>Advantages</li>
                         <ul>
-                            <li>Different clients may want to use different formats</li>
-                            <ul>
-                                <li>Web browser: JSON</li>
-                                <li>Java client: XML</li>
-                                <li>Ruby client: YAML</li>
-                            </ul>
-                            <li>Clients want internationalized data<br/>
-                                &rarr; translated information in various languages</li>
-                            <li>applications evolve<br/>
-                                &rarr; need for version support</li>
-                        </ul>
-                        <li>HTTP Content Negotiation</li>
-                        <ul>
-                            <li>a protocol, also called conneg</li>
-                            <li>format, encoding, language</li>
-                        </ul>
+                            <li>no need to get the entire document</li>
+                            <li>no need to parse the document to retrieve links</li>
+                            <li>use HTTP HEAD only</li>
+                        </ul>                       
                     </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Representation Negotiation</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Client requests specific media types it supports</li>
-                        <ul>
-                            <li>client sets <code>Accept</code> header in the request</li>
-                            <ul>
-                                <li>the value is a comma delimited set of content types</li>
-                            </ul>
-                        </ul>
-                        <li>Specific requests</li>
-                        <ul>
-                            <li>to ask for xml or json representations:</li>
-                            <pre class="brush: plain; gutter: 'false'">
-							&gt; GET /orders HTTP/1.1
-							&gt; Accept: application/xml, application/json
-                            </pre>
-                            <li>server choses one of the types (by applying preference ordering) and serializes the resource in that type</li>
-                            <li>when the server cannot find any type, it sends <code>406 Not Acceptable</code> response code</li>
-                        </ul>
-                        <li>Generic requests</li>
-                        <ul>
-                            <li>client may specify wildcards to ask for any type or subtype</li>
-                            <pre class="brush: plain; gutter: 'false'">
-    						&gt; GET /orders HTTP/1.1
-							&gt; Accept: text/*, text/html; level=1
-                            </pre>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Preference Ordering &ndash; Implicit Rule</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>Implicit rule</li>
-                        <ul>
-                            <li>More specific media type takes preference over less specific ones. Example:</li>
-                            <pre class="brush: plain; gutter: 'false'">
-        					&gt; GET /orders HTTP/1.1
-							&gt; Accept: text/*, text/html;level=1, */*, application/xml
-                            </pre>
-                            <li class="space-before">server interprets the client preference as:<br/>
-                                1. <code>text/html;level=1</code> &ndash; most specific<br/>
-                                2. <code>application/xml</code> &ndash; no parameters<br/>
-                                3. <code>text/*</code> &ndash; more concrete than match-all<br/>
-                                4. <code>*/*</code> &ndash; less specific<br/>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Preference Ordering &ndash; Explicit Rules</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>Explicit rules</li>
-                        <ul>
-                            <li>using <code>q</code> parameter (qualifier), numeric value from 0.0 to 1.0
-                                (1.0 indicates the most preferred type)</li>
-                            <pre class="brush: plain; gutter: 'false'">
-            				&gt; GET /orders HTTP/1.1
-							&gt; Accept: text/*;q=0.9, */*;q=0.1, application/json, application/xml;q=0.5
-                            </pre>
-                            <li class="space-before">server interprets the client preference as:<br/>
-                                1. <code>application/json</code> &ndash; implicit qualifier 1.0, most specific<br/>
-                                2. <code>text/*</code> &ndash; the second next highest qualifier 0.9<br/>
-                                3. <code>application/xml</code> &ndash; more specific but lower pref. value 0.5<br/>
-                                4. <code>*/*</code> &ndash; anything otherwise<br/>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Language and Encoding Negotiation</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Language negotiation</li>
-                        <ul>
-                            <li>Client uses <code>Accept-Language</code> header; the value is a comma
-                                separated list of language (ISO 639) and country codes (ISO 3166)</li>
-                            <pre class="brush: plain; gutter: 'false'; class-name: 'tight'">
-                			&gt; GET /orders HTTP/1.1
-							&gt; Accept-Language: en-us, cs, fr
-
-                            &lt; Content-Language: en-us
-                            </pre>
-                            <li>Supports preference qualifiers too</li>
-                        </ul>
-                        <li>Encoding negotiation</li>
-                        <ul>
-                            <li>Client uses <code>Accept-Encoding</code> for message compression<br/>
-                                the value is a comma separated list of acceptable compressions</li>
-                            <pre class="brush: plain; gutter: 'false'; class-name: 'tight'">
-                    		&gt; GET /orders HTTP/1.1
-							&gt; Accept-Encoding: gzip, deflate
-
-                            &lt; Content-Encoding: gzip
-                            </pre>
-                            <li>Supports preference qualifiers too</li>
-                            <li>When a client or a server compress a message body the
-                                <code>Content-Encoding</code> must always be specified!</li>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide" id="resource-versions">
-                    <hgroup>
-                        <h1>Resource Version Negotiation</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>Applications and their resources evolve</li>
-                        <ul>
-                            <li>A service need to support old clients</li>
-                            <li>The service's URI and methods do not need to change &ndash; the content it provides may be in different versions</li>
-                            <li>cf. <a href="lecture2.html#/resource-versions">resource versions in Lecture 2</a>.
-                        </ul>
-                        <li>Encode the version information</li>
-                        <pre class="brush: plain; gutter: 'false'">
-                			&gt; GET /orders HTTP/1.1
-							&gt; Accept: application/xml; version=2.0
-
-                            &lt; HTTP/1.1 200 OK
-                            &lt; Content-Type: application/xml; version=2.0
-                            </pre>
-                    </ul>
-
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Respecting Standards?</h1>
-                    </hgroup>
-                    <ul class="x-small spacing">
-                        <!--<li>HTTP specification is very powerful</li>
-                        <ul>
-                            <li>but some clients ignore HTTP features</li>
-                            <ul>
-                                <li>such as Firefox hardcodes <code>Accept</code> header as<br/>
-                                    <code>text/html,application/xhtml+xml,application/xml,*/*</code></li>
-                                <li>hence it is impossible to to negotiate e.g. a JSON format</li>
-                            </ul>
-                            <li>Or if you want to test something quickly</li>
-                            <ul>
-                                <li>using <code>curl</code> is not as quick as entering URL to a browser</li>
-                            </ul>
-                        </ul>-->
-                        <li>Negotiation by URI patterns</li>
-                        <ul>
-                            <li>quite common, for example:<br/>
-                                <code>http://company.com/orders/?alt=json</code> (Google APIs)</li>
-                            <li>or in the URI path component:<br/>
-                                <code>http://company.com/orders.xml</code><br/>
-                                <code>http://company.com/orders.xml.en-us</code><br/>
-                                <code>http://company.com/orders.json</code></li>
-                            <li>But be aware of the <a href="lecture2.html#/uri-opacity">URI Opacity</a>!</li>
-                        </ul>
-                    </ul>
-                </div>
+                </div>          
             </section>
+            
+            <div class="slide">
+                <hgroup>
+                    <h1>Preconditions and HATEOAS</li>
+                </hgroup>
+                <ul class="x-small">
+                    <li>Preconditions in HATEOAS</li>
+                    <ul>
+                        <li>Service in a current state generates only valid transitions 
+                        that it includes in the representation of the resource.</li>
+                        <li>Transition logic is realized at the server-side</li>
+                    </ul>
+                </ul>
+                <div class="h-drawing" style="height: 230px" 
+                    id="1H_GfN8C1DZObNC_9HcRLa6Nk-EuJUEr0h6-65HhHs0U"></div>
+            </div>                
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Advantages</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>Location transparency</li>
+                    <ul>
+                        <li>only "entry-level" links published to the World</li>
+                        <li>other links within documents can change without changing client's logic</li>
+                        <li>Hypertext represents the current user's view, i.e. rights or other context</li>                        
+                    </ul>
+                    <li>Loose coupling</li>
+                    <ul>
+                        <li>no need for a logic to construct the links</li>
+                        <li>Clients know to which states they can move via links</li>
+                    </ul>
+                    <li>Statelessness and Cloud</li>
+                    <ul>
+                        <li>Better implementation of scalability</li>
+                    </ul>
+                </ul>
+            </div>          
 
         </section>
+
 
     </body>
 </html>
