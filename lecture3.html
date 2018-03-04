@@ -52,33 +52,6 @@
             </div>
         </div>
 
-        <div class="slide">
-        	<hgroup>
-				<h1>REST Core Principles</h1>
-			</hgroup>
-            <ul class="small">
-                <li>REST architectural style defines constraints</li>
-                <ul>
-                    <li>if you follow them, they help you to achieve a good design, 
-                    interoperability and scalability.</li>
-                </ul>
-                <li>Constraints</li>
-                <ul>
-                    <li>Client/Server</li>
-                    <li>Statelessness</li>
-                    <li>Cacheability</li>
-                    <li>Layered system</li>
-                    <li><b>Uniform interface</b></li>
-                </ul>
-                <li>Guiding principles</li>                        
-                <ul>    
-                    <li>Identification of resources</li>
-                    <li>Representations of resources and self-descriptive messages</li>
-                    <li>Hypermedia as the engine of application state (HATEOAS)</li> 
-                </ul>
-            </ul>
-		</div>
-      
         <div class="slide outline"></div>
       
         <section>
@@ -199,7 +172,8 @@
                     <ul class="small">
                         <li>Updating or Inserting</li>
                         <ul>
-                            <li><code>PUT</code> updates a representation of a state of a resource or inserts a new resource</li>
+                            <li><code>PUT</code> updates or inserts a representation of a state of a resource</li>
+                            <li>Updating the resource is a <b>complete replacement of the resource</b></li>
                             <pre class="brush: xml; gutter: 'false'">
                                 &gt; PUT /orders/4456 HTTP/1.1
                                 &gt; Content-Type: application/xml
@@ -217,6 +191,39 @@
                                     generates the id <code>4456</code> and sends a representation of it.</li>
                             </ul>
                             <li>It is <b>not safe</b> and it is <b>idempotent</b></li>
+                        </ul>
+                    </ul>
+                </div>
+
+                <div class="slide">
+                <hgroup>
+                    <h1>PATCH</h1>
+                </hgroup>
+                    <ul class="x-small">
+                        <li><code>PATCH</code> to partial update a resource</li>
+                        <ul>
+                            <li>IETF specification, see <span id="rfc-5789" class="h-ref"></span></li>
+                        </ul>
+                        <li>Use in GData Protocol</li>
+                        <ul>
+                            <li>To add, modify or delete selected elements of an Atom feed entry</li>
+                            <li>Example to delete a description element and add a new title element
+                            <br/><code>gd:fields</code> uses the partial response syntax</li>
+                            <pre class="brush: xml; class-name: 'tight'">
+                                PATCH /myFeed/1/1/
+                                Content-Type: application/xml
+
+                                &lt;entry xmlns='http://www.w3.org/2005/Atom'
+                                    xmlns:gd='http://schemas.google.com/g/2005'
+                                    gd:fields='description'>
+                                  &lt;title>New title&lt;/title>
+                                &lt;/entry></pre>
+                            <li>Rules</li>
+                            <ul>
+                                <li>Fields not already present are added</li>
+                                <li>Non-repeating fields already present are updated</li>
+                                <li>Repeating fields already present are appended</li>
+                            </ul>
                         </ul>
                     </ul>
                 </div>
@@ -814,39 +821,6 @@
             <header>Selected Extensions</header>
 
             <div class="slide">
-            <hgroup>
-                <h1>GData Protocol: Partial Update</h1>
-            </hgroup>
-                <ul class="x-small">
-                    <li><code>PATCH</code> HTTP Method</li>
-                    <ul>
-                        <li>IETF specification, see <span id="rfc-5789" class="h-ref"></span></li>
-                        <li>Add, modify or delete selected elements of an entry</li>
-                    </ul>
-                    <li>Examples</li>
-                    <ul>
-                        <li>To delete a description element and add a new title element</li>
-                        <li><code>gd:fields</code> uses partial response syntax</li>
-                    </ul>
-                    <pre class="brush: xml; class-name: 'tight'">
-                        PATCH /myFeed/1/1/
-                        Content-Type: application/xml
-
-                        &lt;entry xmlns='http://www.w3.org/2005/Atom'
-                            xmlns:gd='http://schemas.google.com/g/2005'
-                            gd:fields='description'>
-                          &lt;title>New title&lt;/title>
-                        &lt;/entry></pre>
-                    <li>Rules</li>
-                    <ul>
-                        <li>Fields not already present are added</li>
-                        <li>Non-repeating fields already present are updated</li>
-                        <li>Repeating fields already present are appended</li>
-                    </ul>
-                </ul>
-            </div>
-
-            <div class="slide">
                 <hgroup>
                     <h1>GData Protocol: Entity Tags</h1>
                 </hgroup>
@@ -854,10 +828,6 @@
                     <li>Resource Versioning</li>
                     <ul>
                         <li>Conditional GET and PUT (concurrencyl control)</li>
-                        <ul>
-                            <li>See <a href="lecture4.html#!/17/v1">
-                                Lecture 4 &ndash; scalability</a></li>
-                        </ul>
                         <li>Etgas on atom and entry elements</li>
                     </ul>
                     <li>Example</li>
