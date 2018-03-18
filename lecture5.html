@@ -428,8 +428,8 @@
 					var data = { "people" : ["tomas", "peter", "alice", "jana"] };
 					
 					// go through the list of people
-					for (i = 0; i < data.people.length; i++) {
-					    man = data.people[i];
+					for (var i = 0; i < data.people.length; i++) {
+					    var man = data.people[i];
 					    // ... do something with this man
 					}</pre>
 					<li>Responses of service calls in JSON</li>
@@ -512,7 +512,7 @@
 					function loadData(data) {
 					    // we need to know the the structure of JSON data that is returned 
 					    // and code it here accordingly
-					    for (i = 0; i < data.length; i++) {
+					    for (var i = 0; i < data.length; i++) {
 					        data[i].created_at // contains date the tweet was created
 					        data[i].text // contains the tweet
 					    }
@@ -520,7 +520,7 @@
 				</ul>
 			</div>
 
-			<div class="slide">
+		<!--	<div class="slide">
 				<hgroup>
 					<h1>JSON Vulnerability</h1>
 				</hgroup>
@@ -553,7 +553,7 @@
             			<li>Use only POST for sensitive data</li>
             		</ul>
                 </ul>					
-			</div>			
+			</div> -->			
 
 		</section>
 
