@@ -7,7 +7,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
         <meta name="course"   content="Web 2.0"/>
-		<meta name="lecture"  content="Lecture 7"/>
+		<meta name="lecture"  content="Lecture 6"/>
    		<meta name="keywords" content="OAuth 2.0, open id, security, authorization, authentication"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
@@ -201,7 +201,7 @@
 				</ul>
 			</div>                                    
 
-    		<div class="slide">
+    	<!--	<div class="slide">
 				<hgroup>
 					<h1>Nonce and QoP</h1>
 				</hgroup>
@@ -284,8 +284,137 @@
 					</ul>
 				</ul>
 				<div class="h-drawing" id="1Jto8zZvp-q7IANoQ0lckKsPHP1e5LetG7nJs8jI3Xyg" style="height: 380px"></div>
-			</div>                                  
+			</div>      -->                            
             
+        </section>        
+
+        <div class="slide outline"></div>
+
+		<section>
+			<header>JSON Web Token</header>
+			
+			<div class="slide">
+				<hgroup>
+					<h1>Overview</h1>
+				</hgroup>
+				<ul>
+					<li>JSON Web Token (JWT)</li>
+					<ul>
+						<li>Open standard (RFC 7519)</li>
+						<li>Mechanism to securely transmit information between parties as a JSON object.</li>
+						<li>Can be <b>verified</b> and <b>trusted</b> as it is <b>digitally signed</b>.</li>
+					</ul>
+					<li>Basic concepts</li>
+					<ul>
+						<li>Compact</li>
+						<ul>
+							<li>has a small size</li>
+							<li>can be transmitted via a URL, POST, HTTP header.</li>
+						</ul>
+						<li>Self-contained</li>
+						<ul>
+							<li>payload contains all required user information.</li>
+						</ul>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Use of JWT</h1>
+				</hgroup>
+				<ul>
+					<li>Authentication</li>
+					<ul>
+						<li>After user logs in, all following requests contai JWT token.</li>
+						<li>Single Sign On widely uses JWT nowadays</li>
+					</ul>
+					<li>Information Exchange</li>
+					<ul>
+						<li>Signature ensures senders are who they say they are.</li>
+						<li>Message integrity &ndash; signature calculated using the header and the payload.</li> 
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>JWT Structure</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li class="no-bullet"><code>&lt;header&gt;.&lt;payload&gt;.&lt;signature&gt;</code></li>
+					<li>Header</li>
+					<ul>
+						<li>Contains two parts, the type of the token (JWT) and the hashing algorithm used being used (e.g. HMAC, SHA256, RSA).</li>
+
+						<pre class="brush: javascript; class-name: 'tight'; gutter: false">
+							{
+							  "alg": "HS256",
+							  "typ": "JWT"
+							}</pre>
+					</ul>
+					<li>Payload</li>
+					<ul>
+						<li>Contains the claims, i.e. statements about an entity (e.g. user).</li>
+						<li>Can be registered, public and private</li>
+						<li>Registered and public should be defined in <a href="https://www.iana.org/assignments/jwt/jwt.xhtml">IANA JSON Web Token Registry</a></li>
+
+						<pre class="brush: javascript; class-name: 'tight'; gutter: false">
+							{
+							  "sub": "1234567890",
+							  "name": "John Doe",
+							  "admin": true
+							}</pre>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>JWT Structure (Cont.)</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Signature</li>
+					<ul>
+						<li>Signed encoded header, encoded payload and a secret.</li>
+						<li>For example, signature using HMAC SHA256 algorithm</li>
+
+						<pre class="brush: plain; class-name: 'tight'; gutter: false">
+						HMACSHA256(
+  							base64UrlEncode(header) + "." +
+  							base64UrlEncode(payload),
+  							secret)</pre>
+					</ul>
+					<li>Example</li>
+					<ul>
+						<li>JWT is a three Base64-URL strings separated by dots</li>
+						<img src="img/jwt-example.png" style="width: 600px"></img>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>How to use JWT</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<img src="img/jwt-diagram.png" style="margin-left: 90px; margin-bottom: 5px; margin-top: 5px; width: 550px"></img>
+					<ol>
+						<li>User sends username and password</li>
+						<li>Server verifies user, creates JWT token with a secret and a expriation time</li>
+						<li>Server sends JWT token back to the Browser</li>
+						<li>Browser sends JWT token on subsequent interations</li>
+					</ol>
+					<ul>
+						<li class="no-bullet"><b>Notes</b></li>
+						<ul>
+							<li>Authorization header does not behave the same as cookies!</li>
+							<li>JWT should not contain secrets (passwords) as it can be read<br/>(on the client or if non-https connection is used)</li>
+						</ul>
+				</ul>
+			</div>
+
+
         </section>        
 
         <div class="slide outline"></div>
