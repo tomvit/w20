@@ -7,7 +7,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
         <meta name="course"   content="Web 2.0"/>
-		<meta name="lecture"  content="Lecture 8"/>
+		<meta name="lecture"  content="Lecture 7"/>
    		<meta name="keywords" content="polling, long-polling, WebSockets, new I/O"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
@@ -578,6 +578,253 @@
 			
 		</section>
 
+        <div class="slide outline"></div>				
+			
+		<section>
+			<header>WebRTC</header>
+										
+			<div class="slide">
+				<hgroup>
+					<h1>WebRTC</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Web Real-Time Communication</li>
+					<ul>
+						<li>API to eachange media and arbitrary data between peers inside Web pages</li>
+						<li>It uses peer-to-peer principles</li>
+						<li>Supported by Google, Mozilla, Microsoft, Opera</li>
+					</ul>
+					<li>Specifications</li>
+					<ul>
+						<li>IETF <a href="https://tools.ietf.org/wg/rtcweb/">Working Groups</a></li>
+						<li>W3C <a href="http://www.w3.org/2011/04/webrtc/">Working Groups</a></li>
+					</ul>
+					<li>History</li>
+					<ul>
+						<li>Google acquires company Global IP Solutions (GIPS) in 2010</li>
+						<li>GIPS developed underlying technology (codecs, echo cancellation techniques), released as open source</li>
+						<li>Google promoted the work around GIPS to W3C and IETF</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>WebRTC Main Tasks</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Acquiring audio and video</li>
+					<ul>
+						<li>JavaScript API: <code>MediaStream</code> (aka getUserMedia)</li>
+					</ul>
+					<li>Communicating audio and video</li>
+					<ul>
+						<li>JavaScript API: <code>RTCPeerConnection</code></li>
+					</ul>
+					<li>Communicating arbitrary data</li>
+					<ul>
+						<li>JavaScript API: <code>RTCDataChannel</code></li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>GetUserMedia</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>JavaScript code</li>
+						<pre class="brush: javascript">
+						var constraints = {video: true};
+
+						function successCallback(stream) {
+						  var video = document.querySelector("video");
+						  video.src = window.URL.createObjectURL(stream);
+						}
+
+						function errorCallback(error) {
+						  console.log("navigator.getUserMedia error: ", error);
+						}
+
+						navigator.getUserMedia(constraints, successCallback, errorCallback);
+						</pre>
+					<li>Constraints</li>
+					<ul>
+						<li>Control the contents of the MediaStream</li>
+						<li>Media type, resolution, frame rate</li>
+					</ul>
+					<li>JavaScript app can read and manipulate the stream.</li>
+					<li>It is also possible to acquire <b>audio</b> as well as <b>screen capture.</b></li>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>RTCPeerConnection</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Allows to communicate media stream acquired by <code>getUserMedia</code></li>
+					<ul>
+						<li>Video chat, audio chat, screen sharing</li>
+					</ul>
+					<li>Some capabilities of <code>RTCPeerConnection</code></li>
+					<ul>
+						<li>Signal processing</li>
+						<li>Code handling</li>
+						<li>Peer to peer communication</li>
+						<li>Security</li>
+						<li>Bandwidth management</li>
+					</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>WebRTC Architecture</h1>
+				</hgroup>
+				<ul>
+					<img src="img/webrtc-arch.png" style="padding-top: 10px"></img>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Communication</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Two phases</li>
+					<ol>
+						<li><b>Signaling</b></li>
+						<ul>
+							<li>WebRTC defines <b>abstract signalling</b></li>
+							<li>apps can use any singaling protocol, can use any such as SIP, XMPP, or custom using XHR or Websockets</li>
+						</ul>
+						<li><b>Exchange of real-time</b> data in peer-to-peer manner</li>
+					</ol>
+					<li>Abstract signaling</li>
+					<ul>
+						<li>Need to exhange <b>session description</b> objects</li>
+						<ul>
+							<li>Formats, codecs the peers want to use</li>
+							<li>Network information for peer-to-peer communication</li>
+							<li>This information is captured as <code>RTCSessionDescription</code> (also SDP) structure</li>
+						</ul>
+						<li>Any messaging mechanism and protocol</li>
+					</ul>	
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>SDP and SIP</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Standards</li>
+					<ul>
+						<li>SDP &ndash; Session Description Protocol, describes media for a session</li>
+						<li>SIP &ndash; Session Initiation Protocol, protocol to establish and modify sessions.</li>
+					</ul>
+					<li>SDP Example</li>
+					<pre class="brush: plain; gutter: 'none">
+					v=0
+					o=- 7614219274584779017 2 IN IP4 127.0.0.1
+					s=-
+					t=0 0
+					a=group:BUNDLE audio video
+					a=msid-semantic: WMS
+					m=audio 1 RTP/SAVPF 111 103 104 0 8 107 106 105 13 126
+					c=IN IP4 0.0.0.0
+					a=rtcp:1 IN IP4 0.0.0.0
+					a=ice-ufrag:W2TGCZw2NZHuwlnf
+					a=ice-pwd:xdQEccP40E+P0L5qTyzDgfmW
+					a=extmap:1 urn:ietf:params:rtp-hdrext:ssrc-audio-level
+					a=mid:audio
+					a=rtcp-mux
+					a=crypto:1 AES_CM_128_HMAC_SHA1_80 inline:9c1AHz27dZ9xPI91YNfSlI67/EMkjHHIHORiClQe
+					a=rtpmap:111 opus/48000/2
+					...</pre>					
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Signaling Diagram</h1>
+				</hgroup>
+				<ul>
+					<img src="img/jsep.png" style="padding-top: 40px; zoom: 0.8"></img>					
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>JavaScript Session Establishment (JSEP)</h1>
+				</hgroup>
+				<ul class="small">
+					<li>JSEP is a protocol to create a session between two parties</li>
+					<li>JSEP steps between Alice and Bob</li>
+					<ol>
+						<li>Alice creates an offer that contains her local SDP.</li>
+						<li>Alice attaches that offer to <code>RTCPeerConnection</code> object.</li>
+						<li>Alice sends the offer to a singaling server using custom-built mechanism (WebSocket, XHR, etc.)</li>
+						<li>Bob receives Alice's offer from the signaling server</li>
+						<li>Bob creates an answer using his local SDP.</li>
+						<li>Bob attaches his answer along with Alice's offer to his own <code>RTCPeerConnection</code> object.</li>
+						<li>Bob returns his answer to the singaling server.</li>
+						<li>Alice receives Bob's offer from the singaling server.</li>
+					</ol>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Interactive Connectivity Establishment</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>ICE &ndash; Interactive Connectivity Establishment</li>
+					<ul>
+						<li>Allows WebRTC to overcome complexities of real-world networking</li>
+						<li>Finds the best path to connect peers such as</li>
+						<ul>
+							<li>direct P2P communication.</li>
+							<li>by using STUN or TURN servers.</li>
+						</ul>
+					</ul>
+					<li>STUN &ndash; Session Traversal Utilities for NAT</li>
+					<ul>
+						<li>Allows to discover the presence of a NAT server.</li>
+						<li>Allows to discover the public IP address and a port that the NAT has allocated for UDP flows.</li> 
+						<li>It is provided as a third-party network server (STUN server) located on the public side of the NAT.</li>
+					</ul>
+					<li>TURN &ndash; Traversal Using Relays around NAT</li>
+					<ul>
+						<li>Communication relay for hosts behind NAT when STUN does not work.</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>STUN</h1>
+				</hgroup>
+				<ul>
+					<img src="img/stun.png" style="padding-top: 50px; padding-bottom: 50px; zoom: 0.6"></img>
+					<ul><ul>
+						<li>STUN is a simple server, cheap to run</li>
+						<li>Data flows peer-to-peer</li>
+					</ul></ul>					
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>TURN</h1>
+				</hgroup>
+				<ul>
+					<img src="img/turn.png" style="padding-top: 50px; padding-bottom: 50px; zoom: 0.6"></img>
+					<ul><ul>
+						<li>a cloud fallback when peer-to-peer does not work</li>
+						<li>data sent via a relay server, uses server bandwidth</li>
+					</ul></ul>					
+				</ul>
+			</div>
 
 		
 	</body>
