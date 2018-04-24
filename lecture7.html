@@ -488,7 +488,7 @@
 				<hgroup>
 					<h1>Data Transfer</h1>
 				</hgroup>
-				<ul class="small">
+				<ul class="xx-small">
 					<li>After successful handshake</li>
 					<ul>
 						<li>socket between the client and the "resource" at the server is established</li>
@@ -497,8 +497,30 @@
 					</ul>
 					<li>Data Framing</li>
 					<ul>
-						<li>defines a format for data transmitted in TCP packets</li>
-						<li>payload length, closing frame, ping, pong,<br/>type of data (text/binary), etc. and payload (message data)</li>  
+						<li>Data transmitted in TCP packets (see RFC6455: <span class="h-ref" id="ietf-ws-frame"></span>)</li>
+						<li>Contains payload length, closing frame, ping, pong, type of data (text/binary), etc. and payload (message data)</li> 
+						<div style="zoom: 0.85">
+						<pre class="brush: plain; class-name: tight; gutter: false;">  
+                           
+                          0                   1                   2                   3
+					      0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+					     +-+-+-+-+-------+-+-------------+-------------------------------+
+					     |F|R|R|R| opcode|M| Payload len |    Extended payload length    |
+					     |I|S|S|S|  (4)  |A|     (7)     |             (16/64)           |
+					     |N|V|V|V|       |S|             |   (if payload len==126/127)   |
+					     | |1|2|3|       |K|             |                               |
+					     +-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +
+					     |     Extended payload length continued, if payload len == 127  |
+					     + - - - - - - - - - - - - - - - +-------------------------------+
+					     |                               |Masking-key, if MASK set to 1  |
+					     +-------------------------------+-------------------------------+
+					     | Masking-key (continued)       |          Payload Data         |
+					     +-------------------------------- - - - - - - - - - - - - - - - +
+					     :                     Payload Data continued ...                :
+					     + - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+					     |                     Payload Data continued ...                |
+					     +---------------------------------------------------------------+							
+						</pre></div>
 					</ul>
 				</ul>
 			</div>
@@ -596,8 +618,8 @@
 					</ul>
 					<li>Specifications</li>
 					<ul>
-						<li>IETF <a href="https://tools.ietf.org/wg/rtcweb/">Working Groups</a></li>
-						<li>W3C <a href="http://www.w3.org/2011/04/webrtc/">Working Groups</a></li>
+						<li><span id="webrtc-ietf" class="h-ref"></span></li>
+						<li><span id="webrtc-w3c" class="h-ref"></span></li>
 					</ul>
 					<li>History</li>
 					<ul>
@@ -714,16 +736,16 @@
 
 			<div class="slide">
 				<hgroup>
-					<h1>SDP and SIP</h1>
+					<h1>SIP and SDP</h1>
 				</hgroup>
-				<ul class="x-small">
+				<ul class="xx-small">
 					<li>Standards</li>
 					<ul>
-						<li>SDP &ndash; Session Description Protocol, describes media for a session</li>
 						<li>SIP &ndash; Session Initiation Protocol, protocol to establish and modify sessions.</li>
+						<li>SDP &ndash; Session Description Protocol, describes media for a session, defined in <span class="h-ref" id="ietf-sdp"></span></li>
 					</ul>
 					<li>SDP Example</li>
-					<pre class="brush: plain; gutter: 'none">
+					<pre class="brush: plain; gutter: 'false'">
 					v=0
 					o=- 7614219274584779017 2 IN IP4 127.0.0.1
 					s=-
