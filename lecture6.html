@@ -326,7 +326,7 @@
 				<ul>
 					<li>Authentication</li>
 					<ul>
-						<li>After user logs in, all following requests contai JWT token.</li>
+						<li>After user logs in, all following requests contain JWT token.</li>
 						<li>Single Sign On widely uses JWT nowadays</li>
 					</ul>
 					<li>Information Exchange</li>
@@ -345,7 +345,7 @@
 					<li class="no-bullet"><code>&lt;header&gt;.&lt;payload&gt;.&lt;signature&gt;</code></li>
 					<li>Header</li>
 					<ul>
-						<li>Contains two parts, the type of the token (JWT) and the hashing algorithm used being used (e.g. HMAC, SHA256, RSA).</li>
+						<li>Contains two parts, the type of the token (JWT) and the hashing algorithm being used (e.g. HMAC, SHA256, RSA).</li>
 
 						<pre class="brush: javascript; class-name: 'tight'; gutter: false">
 							{
@@ -401,7 +401,7 @@
 					<img src="img/jwt-diagram.png" style="margin-left: 90px; margin-bottom: 5px; margin-top: 5px; width: 550px"></img>
 					<ol>
 						<li>User sends username and password</li>
-						<li>Server verifies user, creates JWT token with a secret and a expriation time</li>
+						<li>Server verifies user, creates JWT token with a secret and a expiration time</li>
 						<li>Server sends JWT token back to the Browser</li>
 						<li>Browser sends JWT token on subsequent interations</li>
 					</ol>
