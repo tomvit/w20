@@ -287,8 +287,10 @@
                     <li>Promise</li> 
                     <ul>
                         <li>An object representing <i>completion</i> or <i>failure</i> of an asynchronous operation.</li>
+												<li>A proxy for a value not necessarily known when the promise is created.</li>
+												<img src="img/promises.png" style="zoom: 0.7"></img>										
                     </ul>
-                    <li>Example <code>Promise</code> object</li>
+                    <li style="margin-top: -10px">Example <code>Promise</code> object</li>
                     <pre class="brush: js; class-name: 'tight'">
                         function myAsyncFunction(url) {
                           return new Promise((resolve, reject) => {
@@ -299,10 +301,10 @@
                             xhr.send();
                           });
                         }
-
                         myAsyncFunction("http://www.cvut.cz").then(successCallback, failureCallback);                        
                     </pre>
                 </ul>
+								
 
             </div>
 

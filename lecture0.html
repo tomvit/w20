@@ -101,7 +101,7 @@
 						</ul>
 						<li>It does not mean you cannot combine technologies</li>
 						<ul>
-							<li>Node.js as a Web server, Oracle Service Bus for middleware to build interfaces with back-end systems,
+							<li>Node.js as a Web server, ESB for proxy services with back-end systems,
 								all running in a cloud environment (auto scaling, load balancers, message queues, etc.)</li>
 						</ul>
 					</ul>
@@ -121,24 +121,11 @@
 					<h1>Scope</h1>
 				</hgroup>
 				<ul class="small">
-					<li>REST Architecture</li>
-					<ul>
-						<li>Principles</li>
-						<li>HTTP in a very deep detail, HTTP/2</li>
-						<li>Resource representation</li>
-					</ul>
-					
-					<li>Security</li>
-					<ul>
-						<li>OAuth, Open ID, JWT</li>
-					</ul>	
-
 					<li>Cloud Architectures</li>
 					<ul>
-						<li>Principles</li>						
-						<li>SaaS, PaaS, IaaS</li>
+						<li>Details of some IaaS and PaaS services</li>						
 					</ul>
-
+					
 					<li>Microservice Architecture</li>
 					<ul>
 						<li>Principles</li>						
@@ -146,6 +133,17 @@
 						<li>Docker, Kubernetes</li>
 					</ul>
 					
+					<li>Advanced REST</li>
+					<ul>
+						<li>Same origin policy, cross-origin</li>
+						<li>OAuth, Open ID, JWT</li>						
+					</ul>
+					
+					<li>Annotations</li>
+					<ul>
+						<li>Microdata, RDF</li>
+					</ul>	
+										
 				</ul>
 			</div>
 						
@@ -156,26 +154,26 @@
     			<ul class="x-small">
     				<li>13 Lectures</li>
                     <ul>
-                        <li>Czech: Mon 9:15-10:45, T9:107</li>
+                        <li>Czech: Mon 9:15-10:45, T9:111</li>
                         <li>English: TBA</li>
                     </ul>
     				
     				<li>Plan</li>
     				<ol class="xx-small">
-                        <li>19.02.2018 &#150; Motivation and Course Overview (<a href="lecture0.html">html</a>)</li>
-                        <li>19.02.2018 &#150; Introduction to JavaScript (<a href="lecture1.html">html</a>)</li>
-                        <li>26.02.2018 &#150; REST Architecture 1 (<a href="lecture2.html">html</a>)</li>
-                        <li>05.03.2018 &#150; REST Architecture 2 (<a href="lecture3.html">html</a>)</li>
-                        <li>12.03.2018 &#150; Reserve (REST Architecture)</li>
-                        <li>19.03.2018 &#150; HTTP/2 (<a href="lecture4.html">html</a>)</li>
-                        <li>26.03.2018 &#150; Accessing and Utilizing Services (<a href="lecture5.html">html</a>)</li>
-						<li>02.04.2018 &#150; Easters</li>
-                        <li>09.04.2018 &#150; Security (<a href="lecture7.html">html</a>)</li>
-                        <li>16.04.2018 &#150; Protocols for the Realtime Web (<a href="lecture8.html">html</a>)</li>
-                        <li>23.04.2018 &#150; Cloud Architectures (<a href="lecture9.html">html</a>)</li>
-                        <li>30.04.2018 &#150; Microservice Architecture (<a href="lecture10.html">html</a>)</li>
-                        <li>07.05.2018 &#150; Reserve</li>
-                        <li>14.05.2018 &#150; Reserve</li>
+	            <li>18.02.2019 &#150; Motivation and Course Overview (<a href="lecture0.html">html</a>)</li>
+	            <li>18.02.2019 &#150; Introduction to JavaScript (<a href="lecture1.html">html</a>)</li>
+	            <li>25.02.2019 &#150; Cloud Computing &ndash; IaaS<!--(<a href="">html</a>)--></li>
+							<li>04.03.2019 &#150; Microservice Architecture &ndash; Docker, PaaS <!--(<a href="">html</a>)--></li>
+	            <li>11.03.2019 &#150; Reserve (Cloud Computing)</li>
+	            <li>18.03.2019 &#150; Accessing and Utilizing Services <!--(<a href="">html</a>)--></li>
+	            <li>25.03.2019 &#150; Security <!--(<a href="">html</a>)--></li>
+	            <li>01.04.2019 &#150; Protocols for the Realtime Web <!--(<a href="">html</a>)--></li>
+							<li>08.04.2019 &#150; HTTP/2 <!--(<a href="">html</a>)--></li>
+							<li>15.04.2019 &#150; Blockchain &ndash; Hyperledger Fabric</li>
+							<li>22.04.2019 &#150; Easters</li>
+	            <li>29.04.2019 &#150; Reserve (Blockchain)</li>
+							<li>06.05.2019 &#150; Annotations</li>
+							<li>13.05.2019 &#150; Reserve (Annotations)</li>
     				</ol> 				
     			</ul>
     		</div>			
@@ -189,15 +187,14 @@
 					<li>Practicals every second week</li>
 					<li>Number of sessions: 6-7, 5 major tasks</li>
 					<ol>
-						<li>Introduction, JavaScript</li>
-						<li>Mashups</li>
-						<li>A RESTful service - development, consumption</li>
-						<li>HATEOAS</li>
-						<li>OAuth, Realtime Web</li>
+						<li>Introduction, JavaScript/AppScript</li>
+						<li>TBD</li>
+						<li>CORS/JSONP</li>
+						<li>OAuth (JWT)</li>
+						<li>Realtime Web</li>
+						<li>Annotations</li>						
 					</ol>		
 					<li>Plus a number of tasks to complete at home</li>
-					<li>All textual/design diagrams results in the wiki<br/>
-					&rarr; <a href="https://edux.fit.cvut.cz/courses/MI-W20/">https://edux.fit.cvut.cz/courses/MI-W20/</a></li>
 				</ul>
 			</div>
 			
@@ -287,10 +284,7 @@
 					</ul>
 					<li>Books</li>
 					<ul class="xx-small">
-						<li>G. Vossen, S. Hagermann: <i>Unleashing Web 2.0: from concepts to creativity</i>, 
-						  Elsevier/Morgan Kaufmann, 2007, ISBN&nbsp;9780123740342. (&rarr;&nbsp;Web 2.0 Concepts)</li>
-						<li>L. Richardson, S. Ruby: <i>RESTful Web Services: Web services for the real world</i>,
-						  O'Reilly Media, May 2007, ISBN&nbsp;9780596529260.</li>
+						<li>L. Richardson, M. Amundsen: <i>RESTful Web APIs</i>, O'Reilly Media, May 2015, ISBN&nbsp;978-1-449-35806-8.</li>
 					</ul>
 					<li>Other</li>
 					<ul>
