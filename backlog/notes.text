@@ -1,0 +1,12 @@
+
+Security lecture:
++ XSS headers ?
++ https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy ?
++ JWT
++ HTTP CONNECT, SSL, one-way, two-way
+- HTTP digest, only briefly not so detailed
+
+
+
+
+
