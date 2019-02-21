@@ -279,34 +279,118 @@
                 </ul>
             </div>
 
+						<div class="slide"> 
+                <hgroup> 
+                    <h1>Callback Hell</h1> 
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Callback in callback</li> 
+                    <ul>
+											<pre class="brush: js; class-name: 'tight'">
+											loadScript('/my/script1.js', function(script) {
+
+											  loadScript('/my/script2.js', function(script) {
+
+											    loadScript('/my/script3.js', function(script) {
+											      // ...continue after all script 1,2 and 3 are loaded
+											    });
+
+											  })
+
+											});</pre>
+											<li>Complex asnychronous code is hard to understand and manage</li>
+										</ul>
+										<li>Solution</li>
+										<ul>
+											<li>Promise &ndash; a proxy to a "future" value of the function</li>
+											<li>Async/await &ndash; language constructs to work with asynchronous code</li>
+										</ul> 
+                </ul>
+            </div>
+
             <div class="slide"> 
                 <hgroup> 
-                    <h1>Promise</h1> 
+                    <h1>Promise Object</h1> 
                 </hgroup>
                 <ul class="xx-small">
                     <li>Promise</li> 
                     <ul>
                         <li>An object representing <i>completion</i> or <i>failure</i> of an asynchronous operation.</li>
 												<li>A proxy for a value not necessarily known when the promise is created.</li>
-												<img src="img/promises.png" style="zoom: 0.7"></img>										
+												<img src="img/promises.png" style="zoom: 0.8"></img>										
                     </ul>
-                    <li style="margin-top: -10px">Example <code>Promise</code> object</li>
-                    <pre class="brush: js; class-name: 'tight'">
-                        function myAsyncFunction(url) {
-                          return new Promise((resolve, reject) => {
-                            const xhr = new XMLHttpRequest();
-                            xhr.open("GET", url);
-                            xhr.onload = () => resolve(xhr.responseText);
-                            xhr.onerror = () => reject(xhr.statusText);
-                            xhr.send();
-                          });
-                        }
-                        myAsyncFunction("http://www.cvut.cz").then(successCallback, failureCallback);                        
-                    </pre>
                 </ul>
 								
 
             </div>
+
+						<div class="slide"> 
+                <hgroup> 
+                    <h1>Promise Example</h1> 
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Example</li> 
+										<pre class="brush: js; class-name: 'tight'">
+										function myAsyncFunction(url) {
+										  return new Promise((resolve, reject) => {
+										    const xhr = new XMLHttpRequest();
+										    xhr.open("GET", url);
+										    xhr.onload = () => resolve(xhr.responseText);
+										    xhr.onerror = () => reject(xhr.statusText);
+										    xhr.send();
+										  });
+										}
+
+										myAsyncFunction("some_cors_enabled_url")
+										.then(
+										  (responseText) => {
+										    console.log("success!");
+										  }
+										)
+										.catch(
+										  (statusText) => {
+										    console.log("failure!");
+										  }
+										);</pre>
+            </div>
+
+						<div class="slide"> 
+                <hgroup> 
+                    <h1>async/await</h1> 
+                </hgroup>
+                <ul class="xx-small">
+                    <li><code>async</code></li>
+										<ul>
+												<li>the function always returns a Promise</li>
+												<li>if there is no Promise, the returned value is wrapped into Promise</li>
+										</ul>
+										<pre class="brush: js; class-name: 'tight'">
+										async function f() {
+										  return 1;
+										}
+									  
+									  f().then((v) => alert(v));</pre>
+										<li><code>await</code></li>
+										<ul>
+												<li>makes program to wait until the promise is resolved or rejected</li>
+												<li>it returns the resolved value and throws an exception when the promise is rejected</li>
+												<li>can only be usded inside <code>async</code> function</li>
+										</ul>
+										<pre class="brush: js; class-name: 'tight'">
+										async function f() {
+										  var promise = new Promise((resolve, reject) => {
+										    setTimeout(() => resolve("done!"), 1000)
+										  });
+
+										  var result = await promise; // wait untill the promise is resolved
+
+										  alert(result); 
+										}
+
+										f();</pre>
+								</ul>
+            </div>
+
 
 		</section>
 

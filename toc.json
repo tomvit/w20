@@ -1,5 +1,5 @@
 { "lectures" : [
 {"title":"Motivation and Course Overview","slide-url":"lecture0.html#/1","sections":[{"title":"Motivation","slide-url":"lecture0.html#/2","sections":[]},{"title":"Scope, Requirements, Learnings","slide-url":"lecture0.html#/5","sections":[]},{"title":"Assessment, Resources, Communication","slide-url":"lecture0.html#/9","sections":[]}],"lastModified":"Sun Feb 17 2019, 22:59:09"}
 ,
-{"title":"Introduction to JavaScript","slide-url":"lecture1.html#/1","sections":[{"title":"JavaScript Basics","slide-url":"lecture1.html#/4","sections":[]},{"title":"Server-side JavaScript","slide-url":"lecture1.html#/11","sections":[]}],"lastModified":"Sun Feb 17 2019, 22:59:09"}
+{"title":"Introduction to JavaScript","slide-url":"lecture1.html#/1","sections":[{"title":"JavaScript Basics","slide-url":"lecture1.html#/4","sections":[]},{"title":"Server-side JavaScript","slide-url":"lecture1.html#/14","sections":[]}],"lastModified":"Sun Feb 17 2019, 22:59:09"}
 ]}
