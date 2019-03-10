@@ -24,7 +24,7 @@ TEST
 1. Test the server
    node server.js
 
-2. Build the docker image
+2. Build the docker image - this will build the image in minikube's docker
    docker build -t hello-node:v1 .
 
 3. Create the deployment from docker image
