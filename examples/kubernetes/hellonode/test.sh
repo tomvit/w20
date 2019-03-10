@@ -12,7 +12,7 @@ while true; do
 	# replace IP with your minikube IP and port with the service port
 	# you can get this information by running minikube service hello-node
 	for i in `seq 1 100`; do 
-		curl --silent http://192.168.99.100:30792/ >>out.log; 
+		curl --silent http://192.168.99.100:30112/ >>out.log; 
 		echo "" >>out.log; 
 	done;
 
