@@ -592,6 +592,69 @@
 				</ul>
 			</div>
 			
+			<div class="slide">
+				<hgroup>
+					<h1>Streaming video</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Webcams, IP or USB</li>
+					<ul>
+						<li>Play video stream using RTSP or M-JPEG</li>
+						<li>RTSP (Realtime Streaming Protocol) defines sequences to control palying multimedia</li>
+					</ul>
+					<li>Sample tasks</li>
+					<ul>
+						<li>Add video stream to a web page</li>
+						<ul>
+							<li><code>video</code> HTML5 element</li> 
+						</ul>
+						<li>Capture frames from the camera and process them</li>
+						<ul>
+							<li>Capture frames in a specific format such as JPG</li>
+							<li>Specific software to capture frames, typically OpenCV</li>
+						</ul>
+						<li>Add annotation to video and expose as video stream</li>
+						<ul>
+							<li>Detect objects in pictures &ndash; machine learning/deep learning</li>
+							<li>Mark objects and expose frames as video to the client</li>
+							<li>Create RTSP stream by using e.g. GStreamer or FFMPEG</li>
+							<li>Create stream of JPG images, so called M-JPEG<br/> and push them to the client</li>
+						</ul>
+					</ul>
+			</div>
+			
+			<div class="slide">
+				<hgroup>
+					<h1>M-JPEG</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>M-JPEG - Motion JPEG</li>
+					<ul>
+						<li>Video compression format, each frame is represented as a JPEG image</li>
+						<li>Widely used by cameras today</li>
+						<li>Uses HTTP response stream of <code>multipart/x-mixed-replace</code> content type</li>  
+					</ul>
+					<li>Example HTTP response to a M-JPEG request</li>
+					<pre class="brush: bash">
+					HTTP/1.1 200 OK
+					Content-Type: multipart/x-mixed-replace; boundary=imgboundary
+
+					--imgboundary
+					Content-Type: image/jpeg
+					Content-length: 5432
+
+					[image 1 encoded jpeg data]
+
+					--imgboundary
+					Content-Type: image/jpeg
+					Content-length: 54335
+
+					[image 2 encoded jpeg data]
+
+					...					
+				  </pre>
+			</div>
+			
 		</section>
 
         <div class="slide outline"></div>				
@@ -773,8 +836,11 @@
 				<hgroup>
 					<h1>JavaScript Session Establishment (JSEP)</h1>
 				</hgroup>
-				<ul class="small">
+				<ul class="x-small">
 					<li>JSEP is a protocol to create a session between two parties</li>
+					<ul>
+						<li>The interface needed by an application to deal with the negotiated local and remote session descriptions</li>
+					</ul>
 					<li>JSEP steps between Alice and Bob</li>
 					<ol>
 						<li>Alice creates an offer that contains her local SDP.</li>

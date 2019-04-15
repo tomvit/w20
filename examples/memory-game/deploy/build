@@ -1,5 +1,0 @@
-cp ~/Develop/eclipse/libs/jetty/*.jar .
-jar -cvf memory-interface.jar -C ../bin memoryinterface/MemoryInterface.class
-mv ../bin/memoryinterface/MemoryInterface.class .
-jar -cvf memory-server.jar -C ../bin com/
-mv MemoryInterface.class ../bin/memoryinterface/
