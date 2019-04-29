@@ -163,6 +163,13 @@
 					</ul>
 				</ul>
 			</div>
+			
+			<div class="slide">
+				<hgroup>
+					<h1>HTTP/1.x Optimization</h1>
+				</hgroup>
+				<div id="1YgCc7gq-k3j4oWy8am9wiEg4ge0UPUk4moO6NV5W-gU" class="h-drawing" style="height: 300px; margin-top: 50px"></div>
+			</div>			
 
 			<div class="slide">
 				<hgroup>
@@ -273,6 +280,80 @@
 					<li>pushed resources must obey the same-origin policy</li>
 				</ul>
 			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Stream Prioritization</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Purpose</li>
+					<ul>
+						<li>Messages split into <b>frames</b> which are delivered in multiplexed <b>streams</b></li>
+						<li>The order in which frames are delivered is important for a good performance</li> 
+						<li>Client can define stream prioritization</li>
+						<ul>
+							<li>optimizations in the browser, change prioritization based on user interaction</li>
+						</ul>
+					</ul>
+					<li>Streams' weights and dependency</li>
+					<ul>
+						<li>Each stream can be assigned an integer weight between 1 and 256.</li>
+						<li>Each stream may be given an explicit dependency on another stream.</li>
+					</ul>
+					<img src="img/stream-prioritization.png" style="width: 685px; margin-top: 10px"> 
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Stream Prioritization (cont.)</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Dependency</li>
+					<ul>
+						<li>referencing the unique identifier of another stream as its parent</li>
+						<li>if the identifier is omitted the stream is dependent on the "root stream"</li> 
+						<li>The parent stream should be allocated resources ahead of its dependencies.</li>
+						<ul>
+							<li>"Please process and deliver response D before response C"</li>
+						</ul>
+					</ul>
+					<li>Weights</li>
+					<ul>
+						<li>Sibling streams have resources allocated as per their weights</li>
+						<li>Example</li>
+						<ul>
+							<li>Sum all the weights: <code>4 + 12 = 16</code></li>
+							<li>Divide each stream weight by the total weight: <code>A = 12/16</code>, <code>B = 4/16</code></li>
+							<li>Stream <code>A</code> receives <code>3/4</code> and stream <code>B</code> receives <code>1/4</code> of available resources;<br/></li>
+						</ul>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Header compression</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Purpose</li>
+					<ul>
+						<li>Each HTTP request/response contains a set of headers (metadata)</li>
+						<li>HTTP/1.x &ndash; metadata sent as plain text, adds 500-800 bytes per transfer</li> 
+					</ul>
+					<li>HTTP/2 provides</li>
+					<ul>
+						<li>Request and response metadata are compressed sing HPACK format</li>
+						<ul>
+							<li>header fields encoded via a static Huffman code &ndash; reduces size</li>
+							<li>client and server maintain an <b>indexed list of previously seen header fields</b></li>
+						</ul>
+					</ul>
+					<img src="img/header-compression.png" style="width: 350px; margin-top: 10px"> 
+					</ul>
+				</ul>
+			</div>
+
 
 		</section>
 		
