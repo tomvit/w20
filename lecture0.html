@@ -55,6 +55,22 @@
 		
 		<section>
 			<header>Motivation</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Web 2.0</h1>
+				</hgroup>
+				<ul>
+					<li>A new version of the Web?</li>
+					<li>Principles</li>
+					<ul>
+						<li>Read-Write Web</li>
+						<li>Programmable Web</li>
+						<li>Realtime Web</li>
+						<li>Social Web</li>
+					</ul>
+				</ul>
+			</div>
 			
 			<div class="slide">
 				<hgroup>
@@ -124,25 +140,20 @@
 					<li>Cloud Architectures</li>
 					<ul>
 						<li>Details of some IaaS and PaaS services</li>						
-					</ul>
-					
-					<li>Microservice Architecture</li>
-					<ul>
-						<li>Principles</li>						
+						<li>Cloud Native, Microservice Architecture</li>
 						<li>Containers</li>
 						<li>Docker, Kubernetes</li>
 					</ul>
 					
-					<li>Advanced REST</li>
+					<li>Advanced HTTP</li>
 					<ul>
 						<li>Same origin policy, cross-origin</li>
-						<li>OAuth, Open ID, JWT</li>						
+						<li>OAuth, Open ID, JWT</li>
+						<li>Realtime Web protocols</li>
+						<li>HTTP Performance</li>						
 					</ul>
 					
-					<li>Annotations</li>
-					<ul>
-						<li>Microdata, RDF</li>
-					</ul>	
+					<li>Selected middleware technologies</li>
 										
 				</ul>
 			</div>
@@ -154,26 +165,25 @@
     			<ul class="x-small">
     				<li>13 Lectures</li>
                     <ul>
-                        <li>Czech: Mon 9:15-10:45, T9:111</li>
+                        <li>Czech: Mon 9:15-10:45, THa:s135</li>
                         <li>English: TBA</li>
                     </ul>
     				
     				<li>Plan</li>
     				<ol class="xx-small">
-	            <li>18.02.2019 &#150; Motivation and Course Overview (<a href="lecture0.html">html</a>)</li>
-	            <li>18.02.2019 &#150; Introduction to JavaScript (<a href="lecture1.html">html</a>)</li>
-	            <li>25.02.2019 &#150; Cloud Computing &ndash; IaaS<!--(<a href="">html</a>)--></li>
-							<li>04.03.2019 &#150; Microservice Architecture &ndash; Docker, PaaS <!--(<a href="">html</a>)--></li>
-	            <li>11.03.2019 &#150; Reserve (Cloud Computing)</li>
-	            <li>18.03.2019 &#150; Accessing and Utilizing Services <!--(<a href="">html</a>)--></li>
-	            <li>25.03.2019 &#150; Security <!--(<a href="">html</a>)--></li>
-	            <li>01.04.2019 &#150; Protocols for the Realtime Web <!--(<a href="">html</a>)--></li>
-							<li>08.04.2019 &#150; HTTP/2 <!--(<a href="">html</a>)--></li>
-							<li>15.04.2019 &#150; HTTP/2 (Cont.)</li>
-							<li>22.04.2019 &#150; Easters</li>
-	            <li>29.04.2019 &#150; Annotations</li>
-							<li>06.05.2019 &#150; Annotations (Cont.)</li>
-							<li>13.05.2019 &#150; Reserve</li>
+	            <li>17.02.2019 &#150; Motivation and Course Overview</li>
+	            <li>24.02.2019 &#150; Asynchronous I/O</li>
+	            <li>02.03.2019 &#150; Introduction to Cloud Computing<!--(<a href="">html</a>)--></li>
+							<li>09.03.2019 &#150; Microservices and Cloud Native Architecture <!--(<a href="">html</a>)--></li>
+	            <li>16.03.2019 &#150; Reserve (Cloud Computing)</li>
+	            <li>23.03.2019 &#150; Accessing and Utilizing Services <!--(<a href="">html</a>)--></li>
+	            <li>30.03.2019 &#150; Security <!--(<a href="">html</a>)--></li>
+	            <li>06.04.2019 &#150; Protocols for the Realtime Web <!--(<a href="">html</a>)--></li>
+							<li>13.04.2019 &#150; Easters</li>
+							<li>20.04.2019 &#150; HTTP Performance Optimization<!--(<a href="">html</a>)--></li>
+							<li>27.04.2019 &#150; Blockchain</li>
+							<li>04.04.2019 &#150; Annotations</li>
+	            <li>11.04.2019 &#150; Reserve</li>
     				</ol> 				
     			</ul>
     		</div>			
@@ -217,25 +227,25 @@
 						<ul>
                             <li>You can miss up to 1 lab without sending regrets</li>
                         </ul>
-                        <li>Total maximal points: <span class="h-latex lower">p_p=40</span></li>
+                        <li>Total maximum points: P=40</span></li>
                         <ul>
                         	<li>exercises for labs + your activity + your homeworks</li>
                        	</ul> 
 						<li><b>to pass</b>: 
-						<span class="h-latex lower">p_p \geq 20</li>
+						P &gt;= 20</li>
                     </ul>
 					<li>Final exam</li>
 					<ul class="x-small">
 						<li>Mandatory written test: 3 parts, ~1 hour</li>
                         <ul>
-						    <li>each gives you a max. of <span class="h-latex">20</span> points, the total 
-                            <span class="h-latex lower">p_t = 60</span> points</li>
+						    <li>each gives you a max. of 20 points, the total 
+                            E = 60</span> points</li>
 							<li>you must have at least 50% of points from each theme covered by a test part and 50% 
 							of points in total</li>
                         </ul>
 						<li>Final score:</li>
                         <ul>
-                            <li><span class="h-latex x-lower">p_p + p_t = 100</span> maximum points</li>
+                            <li>P + E = 100</span> maximum points</li>
 						    <li>The more points you have from labs, the better for the exam!</li>
                         </ul>
 					</ul>
@@ -284,6 +294,8 @@
 					</ul>
 					<li>Books</li>
 					<ul class="xx-small">
+						<li>B. Burns: <i>Designing Distributed Systems</i>, O'Reily 2018</li>
+						<li>I. Grikorik: <i>High Performance Browser Networking</i>, O'Reily 2013</li>
 						<li>L. Richardson, M. Amundsen: <i>RESTful Web APIs</i>, O'Reilly Media, May 2015, ISBN&nbsp;978-1-449-35806-8.</li>
 					</ul>
 					<li>Other</li>
