@@ -19,7 +19,7 @@
 	</link>
 
 	<script type="text/javascript" src="humla/lib/humla.js"></script>
-	<title>Introduction to JavaScript</title>
+	<title>Asynchronous I/O</title>
 </head>
 
 <body>
@@ -60,43 +60,333 @@
 		</div>
 	</div>
 
-	<div class="slide">
-		<hgroup>
-			<h1>Web 2.0 Application Architecture</h1>
-		</hgroup>
-		<div id="1MXZwvAJA_NKdUnVm-1DNBtgFdCsoYSNIjkfaP2Q4TlY" class="h-drawing" style="height: 470px; margin-top: 20px"></div>
-	</div>
+	<div class="slide outline"></div>
 
-	<div class="slide">
+	<section>
+		<header>Asynchronous I/O Overview</header>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Programming Models</h1>
+			</hgroup>
+			
+			<ul class="small">
+				<li>Concurrency</li>
+				<ul>
+					<li>Multiple tasks have the ability to run in an overlapping manner</li>
+					<li>Concurrency does not imply parallelism!</li>
+				</ul>
+				<li>Multiprocessing</li>
+				<ul>
+					<li>CPU-bounded tasks</li>
+					<li>Allows to process multiple processes on different CPUs</li>
+				</ul>
+				<li>Multithreading</li>
+				<ul>
+					<li>I/O bound tasks</li>
+					<li>Multiple threads execute tasks</li>
+					<li>A process may contain multiple threads</li>
+					<li>It uses <b>preementive multitasking</b></li>
+					<ul>
+						<li>OS decides how long a task should run (no tasks cooperation)</li>
+						<li>context switching</li>
+					</ul>
+					<li>Threads can access shared memory; you need to controll this</li>
+				</ul>
+			</ul>			
+		</div>
+		
+		<div class="slide">
+			<hgroup>
+				<h1>Asynchronous I/O</h1>
+			</hgroup>
+		
+			<ul class="small">
+				<li>Asynchronous I/O</li>
+				<ul>
+					<li>A style of concurrent programming; it is not a parellelism</li>
+					<li>Single-threaded, single process design</li>
+					<li>It uses <b>cooperative multitasking</b></li>
+				</ul>
+				<li>Asynchronous processing of a task</li>
+				<ul>
+					<li>Tasks are running in so called <b>event loop</b></li>
+					<li>A task is able to "pause" when they wait for some result</li>
+					<ul>						
+						<li>A task let other tasks to run</li>
+					</ul>
+					<li>Asynchronous code faciliates concurrent execution</li>
+					<ul>
+						<li>It gives the "look and feel" of concurrent execution</li>
+					</ul>
+			  </ul>			
+	  </div>
+	
+		<div class="slide">
+			<hgroup>
+				<h1>Event Loop</h1>
+			</hgroup>
+		
+			<ul class="small">
+				<li>Event Loop</li>
+				<ul>
+					<li>Core element of an asynchrnous application</li>
+					<li>It schedulles and runs asynchronous tasks</li>
+				</ul>
+				<img src="img/event-loop.png"></img>
+	  </div>	
+
+	<!-- <div class="slide">
 		<hgroup>
-			<h1>JavaScript</h1>
+			<h1>Non-Blocking I/O Model</h1>
 		</hgroup>
-		<ul class="x-small">
-			<li>Lightweight, interpreted, object-oriented language</li>
-			<li>Standard</li>
+		<ul class="small">
+			<li>Connections maintained by the OS, not the Web app</li>
 			<ul>
-				<li>Current stable release is ECMAScript 2017 (standard ECMA-262)</li>
+				<li>The Web app registers events, OS triggers events when occur</li>
 			</ul>
-			<li>Major characteristics</li>
+		</ul>
+		<div id="1kxkFc3Chl4qFXxH_4f2seuNbpBdENMyZWMRUmxd1p28" class="h-drawing" style="height: 220px"></div>
+		<ul class="small">
+			<li>Characteristics</li>
 			<ul>
-				<li>First-class functions</li>
+				<li>Event examples: new connection, read, write, closed</li>
+				<li>The app may create working threads, but controls the number!</li>
 				<ul>
-					<li>functions as first-class citizens</li>
-					<li>language supports: passing functions as arguments to other functions, returning functions
-						as values from other functions, assigning functions to variables or storing them in data structures.</li>
+					<li>much less number of working threads as opposed to blocking I/O</li>
 				</ul>
-				<li>Anonymous functions</li>
-				<ul>
-					<li>declared without any named identifier to refer to it</li>
-				</ul>
-				<li>Closures</li>
 			</ul>
-	</div>
+		</ul>
+	</div>		 -->
+		
+	</section>
 
 	<div class="slide outline"></div>
 
 	<section>
-		<header>JavaScript Basics</header>
+		<header>Asynchronous I/O in JavaScript</header>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Web 2.0 Application Architecture</h1>
+			</hgroup>
+			<div id="1MXZwvAJA_NKdUnVm-1DNBtgFdCsoYSNIjkfaP2Q4TlY" class="h-drawing" style="height: 470px; margin-top: 20px"></div>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Recall: Application Server</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Environment that runs an application logic</li>
+				<ul>
+					<li>Client communicates with AS via an application protocol</li>
+					<li>Client &ndash; Browser, application protocol &ndash; HTTP</li>
+				</ul>
+				<li>Terminology</li>
+				<ul>
+					<li>Application Server &times; Web Server &times; HTTP Server</li>
+					<ul>
+						<li>AS is a modular environment; provides technology to realize enterprise systems</li>
+						<li>AS contains a Web server/HTTP server</li>
+					</ul>
+					<li>We will deal with Web server only</li>
+				</ul>
+				<li>Two major models to realize communication</li>
+				<ul>
+					<li>Blocking I/O (also called synchronous I/O)</li>
+					<li>Non-blocking I/O (also called asynchronous I/O)</li>
+				</ul>
+				<li>A technology we will look at</li>
+				<ul>
+					<li>Node.js &ndash; runs server-side Javascript</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>JavaScript</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Lightweight, interpreted, object-oriented language</li>
+				<li>Client-side (browser) and server-side (node.js, AppsScript)</li>
+				<li>Standard</li>
+				<ul>
+					<li>Current stable release is ECMAScript 2017 (standard ECMA-262)</li>
+				</ul>
+				<li>Major characteristics</li>
+				<ul>
+					<li>First-class functions</li>
+					<ul>
+						<li>functions as first-class citizens</li>
+						<li>language supports: passing functions as arguments to other functions, returning functions
+							as values from other functions, assigning functions to variables or storing them in data structures.</li>
+					</ul>
+					<li>Anonymous functions</li>
+					<ul>
+						<li>declared without any named identifier to refer to it</li>
+					</ul>
+					<li>Closures</li>
+				</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Node.js</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li><span id="nodejs" class="h-ref">Node.js</span></li>
+				<ul>
+					<li>Web server technology, very efficient and fast!</li>
+					<li>Event-driven I/O framework, based on JavaScript V8 engine</li>
+					<ul>
+						<li>Any I/O is non-blocking (it is asynchronous)</li>
+					</ul>
+					<li>One worker thread to process requests</li>
+					<ul>
+						<li>You do not need to deal with concurrency issues</li>
+					</ul>
+					<li>More threads to realize I/O</li>
+					<li>Open sourced, <span id="nodejs-github" class="h-ref">@GitHub</span>, many <span id="nodejs-libs" class="h-ref">libraries</span></li>
+					<li>Future platform for Web 2.0 apps</li>
+				</ul>
+				<li>Every I/O as an event</li>
+				<ul>
+					<li>reading and writing from/to files</li>
+					<li>reading and writing from/to sockets</li>
+					<pre class="brush: js; class-name: ''">
+    						// pseudo code; ask for the last edited time of a file
+    						stat( 'somefile', function( result ) {
+    						  // use the result here
+    						} );
+                            </pre>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Node.js Event Loop</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li>Allows Node.js to perform asynchronous I/O operations.</li>
+				<pre class="brush: bash; class-name: 'tight'; gutter: false;">
+                       ┌───────────────────────┐
+                    ┌─>│        timers         │
+                    │  └──────────┬────────────┘
+                    │  ┌──────────┴────────────┐
+                    │  │     I/O callbacks     │
+                    │  └──────────┬────────────┘
+                    │  ┌──────────┴────────────┐
+                    │  │     idle, prepare     │
+                    │  └──────────┬────────────┘      ┌───────────────┐
+                    │  ┌──────────┴────────────┐      │   incoming:   │
+                    │  │         poll          │<─────┤  connections, │
+                    │  └──────────┬────────────┘      │   data, etc.  │
+                    │  ┌──────────┴────────────┐      └───────────────┘
+                    │  │        check          │
+                    │  └──────────┬────────────┘
+                    │  ┌──────────┴────────────┐
+                    └──┤    close callbacks    │
+                       └───────────────────────┘                        
+                    </pre>
+				<ul>
+					<li>Six phases, each phase has a FIFO queue of callbacks to execute.</li>
+					<ul>
+						<li><b>timers</b> &ndash; executes callbacks sheduled by <code>setTimeout()</code> and <code>setInterval()</code></li>
+						<li><b>I/O callbacks</b> &ndash; executes all I/O callbacks except close callbacks.</li>
+						<li><b>idle/prepare</b> &ndash; used internally</li>
+						<li><b>poll</b> &ndash; retrieve new I/O events</li>
+						<li><b>check</b> &ndash; invokes <code>setImmediate()</code> callbacks</li>
+						<li><b>close callbacks</b> &ndash; executes close callback, e.g. socket.on('close', ...).</li>
+					</ul>
+				</ul>
+			</ul>
+		</div>
+
+
+		<div class="slide">
+			<hgroup>
+				<h1>HTTP Server in Node.js</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>HTTP Server implementation</li>
+				<ul>
+					<li>server running at <code>138.232.189.127</code>, port <code>8080</code>.</li>
+					<pre class="brush: js; class-name: ''">
+                            // http library
+                            var http = require("http");
+                            
+                            http.createServer(function(req, res) {
+                                // check the value of host header
+                                if (req.headers.host == "company.cz") {
+                                    res.writeHead(201, "Content-Type: text/plain");
+                                    res.end("This is the response...");
+                                } else ;
+                                    // handle enterprise.com app logic...
+                            }).listen('0.0.0.0', 8080);
+                        </pre>
+					<li>Test it using Telnet</li>
+					<pre class="brush: bash; class-name: ''">
+                            telnet 138.232.189.127 8080
+                            # ...lines omitted due to brevity
+                            GET /orders HTTP/1.1
+                            Host: company.cz
+                            
+                            HTTP/1.1 201 OK
+                            Content-Type: plain/text
+                            
+                            This is the response...
+                        </pre>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Google Apps Script</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li><span id="gas" class="h-ref">Google Apps Script</span></li>
+				<ul>
+					<li>JavaScript cloud scripting language</li>
+					<li>easy ways to automate tasks across Google products and third party services</li>
+				</ul>
+				<li>You can</li>
+				<ul>
+					<li>Automate repetitive processes and workflows</li>
+					<li>Link Google products with third party services</li>
+					<li>Create custom spreadsheet functions</li>
+					<li>Build rich graphical user interfaces and menus</li>
+				</ul>
+
+				<pre class="brush: js; class-name: ''">
+                            // create spreadsheet menu
+                            function onOpen() {
+                              var ss = SpreadsheetApp.getActiveSpreadsheet();
+                              var menuEntries = [ {name: "Say Hi", functionName: "sayHi"},
+                                                  {name: "Say Hello", functionName: "sayHello"} ];
+                              ss.addMenu("Tutorial", menuEntries);
+                            }
+
+                            function sayHi() {
+                              Browser.msgBox("Hi");
+                            }
+
+                            function sayHello() {
+                              Browser.msgBox("Hello");
+                            }
+                        </pre>
+			</ul>
+		</div>
+
+	</section>
+
+	<div class="slide outline"></div>
+
+	<section>
+		<header>JavaScript Language Overview</header>
 
 		<div class="slide">
 			<hgroup>
@@ -401,219 +691,6 @@
 
 
 	</section>
-
-
-	<div class="slide outline"></div>
-
-	<section>
-		<header>Server-side JavaScript</header>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Recall: Application Server</h1>
-			</hgroup>
-			<ul class="small">
-				<li>Environment that runs an application logic</li>
-				<ul>
-					<li>Client communicates with AS via an application protocol</li>
-					<li>Client &ndash; Browser, application protocol &ndash; HTTP</li>
-				</ul>
-				<li>Terminology</li>
-				<ul>
-					<li>Application Server &times; Web Server &times; HTTP Server</li>
-					<ul>
-						<li>AS is a modular environment; provides technology to realize enterprise systems</li>
-						<li>AS contains a Web server/HTTP server</li>
-					</ul>
-					<li>We will deal with Web server only</li>
-				</ul>
-				<li>Two major models to realize communication</li>
-				<ul>
-					<li>Blocking I/O (also called synchronous I/O)</li>
-					<li>Non-blocking I/O (also called asynchronous I/O)</li>
-				</ul>
-				<li>A technology we will look at</li>
-				<ul>
-					<li>Node.js &ndash; runs server-side Javascript</li>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Non-Blocking I/O Model</h1>
-			</hgroup>
-			<ul class="small">
-				<li>Connections maintained by the OS, not the Web app</li>
-				<ul>
-					<li>The Web app registers events, OS triggers events when occur</li>
-				</ul>
-			</ul>
-			<div id="1kxkFc3Chl4qFXxH_4f2seuNbpBdENMyZWMRUmxd1p28" class="h-drawing" style="height: 220px"></div>
-			<ul class="small">
-				<li>Characteristics</li>
-				<ul>
-					<li>Event examples: new connection, read, write, closed</li>
-					<li>The app may create working threads, but controls the number!</li>
-					<ul>
-						<li>much less number of working threads as opposed to blocking I/O</li>
-					</ul>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Node.js</h1>
-			</hgroup>
-			<ul class="x-small">
-				<li><span id="nodejs" class="h-ref">Node.js</span></li>
-				<ul>
-					<li>Web server technology, very efficient and fast!</li>
-					<li>Event-driven I/O framework, based on JavaScript V8 engine</li>
-					<ul>
-						<li>Any I/O is non-blocking (it is asynchronous)</li>
-					</ul>
-					<li>One worker thread to process requests</li>
-					<ul>
-						<li>You do not need to deal with concurrency issues</li>
-					</ul>
-					<li>More threads to realize I/O</li>
-					<li>Open sourced, <span id="nodejs-github" class="h-ref">@GitHub</span>, many <span id="nodejs-libs" class="h-ref">libraries</span></li>
-					<li>Future platform for Web 2.0 apps</li>
-				</ul>
-				<li>Every I/O as an event</li>
-				<ul>
-					<li>reading and writing from/to files</li>
-					<li>reading and writing from/to sockets</li>
-					<pre class="brush: js; class-name: ''">
-    						// pseudo code; ask for the last edited time of a file
-    						stat( 'somefile', function( result ) {
-    						  // use the result here
-    						} );
-                            </pre>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Node.js Event Loop</h1>
-			</hgroup>
-			<ul class="xx-small">
-				<li>Allows Node.js to perform non-blocking I/O operations.</li>
-				<pre class="brush: bash; class-name: 'tight'; gutter: false;">
-                       ┌───────────────────────┐
-                    ┌─>│        timers         │
-                    │  └──────────┬────────────┘
-                    │  ┌──────────┴────────────┐
-                    │  │     I/O callbacks     │
-                    │  └──────────┬────────────┘
-                    │  ┌──────────┴────────────┐
-                    │  │     idle, prepare     │
-                    │  └──────────┬────────────┘      ┌───────────────┐
-                    │  ┌──────────┴────────────┐      │   incoming:   │
-                    │  │         poll          │<─────┤  connections, │
-                    │  └──────────┬────────────┘      │   data, etc.  │
-                    │  ┌──────────┴────────────┐      └───────────────┘
-                    │  │        check          │
-                    │  └──────────┬────────────┘
-                    │  ┌──────────┴────────────┐
-                    └──┤    close callbacks    │
-                       └───────────────────────┘                        
-                    </pre>
-				<ul>
-					<li>Six phases, each phase has a FIFO queue of callbacks to execute.</li>
-					<ul>
-						<li><b>timers</b> &ndash; executes callbacks sheduled by <code>setTimeout()</code> and <code>setInterval()</code></li>
-						<li><b>I/O callbacks</b> &ndash; executes all I/O callbacks except close callbacks.</li>
-						<li><b>idle/prepare</b> &ndash; used internally</li>
-						<li><b>poll</b> &ndash; retrieve new I/O events</li>
-						<li><b>check</b> &ndash; invokes <code>setImmediate()</code> callbacks</li>
-						<li><b>close callbacks</b> &ndash; executes close callback, e.g. socket.on('close', ...).</li>
-					</ul>
-				</ul>
-			</ul>
-		</div>
-
-
-		<div class="slide">
-			<hgroup>
-				<h1>HTTP Server in Node.js</h1>
-			</hgroup>
-			<ul class="x-small">
-				<li>HTTP Server implementation</li>
-				<ul>
-					<li>server running at <code>138.232.189.127</code>, port <code>8080</code>.</li>
-					<pre class="brush: js; class-name: ''">
-                            // http library
-                            var http = require("http");
-                            
-                            http.createServer(function(req, res) {
-                                // check the value of host header
-                                if (req.headers.host == "company.cz") {
-                                    res.writeHead(201, "Content-Type: text/plain");
-                                    res.end("This is the response...");
-                                } else ;
-                                    // handle enterprise.com app logic...
-                            }).listen('0.0.0.0', 8080);
-                        </pre>
-					<li>Test it using Telnet</li>
-					<pre class="brush: bash; class-name: ''">
-                            telnet 138.232.189.127 8080
-                            # ...lines omitted due to brevity
-                            GET /orders HTTP/1.1
-                            Host: company.cz
-                            
-                            HTTP/1.1 201 OK
-                            Content-Type: plain/text
-                            
-                            This is the response...
-                        </pre>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Google Apps Script</h1>
-			</hgroup>
-			<ul class="xx-small">
-				<li><span id="gas" class="h-ref">Google Apps Script</span></li>
-				<ul>
-					<li>JavaScript cloud scripting language</li>
-					<li>easy ways to automate tasks across Google products and third party services</li>
-				</ul>
-				<li>You can</li>
-				<ul>
-					<li>Automate repetitive processes and workflows</li>
-					<li>Link Google products with third party services</li>
-					<li>Create custom spreadsheet functions</li>
-					<li>Build rich graphical user interfaces and menus</li>
-				</ul>
-
-				<pre class="brush: js; class-name: ''">
-                            // create spreadsheet menu
-                            function onOpen() {
-                              var ss = SpreadsheetApp.getActiveSpreadsheet();
-                              var menuEntries = [ {name: "Say Hi", functionName: "sayHi"},
-                                                  {name: "Say Hello", functionName: "sayHello"} ];
-                              ss.addMenu("Tutorial", menuEntries);
-                            }
-
-                            function sayHi() {
-                              Browser.msgBox("Hi");
-                            }
-
-                            function sayHello() {
-                              Browser.msgBox("Hello");
-                            }
-                        </pre>
-			</ul>
-		</div>
-
-	</section>
-
 
 </body>
 
