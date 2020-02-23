@@ -67,9 +67,40 @@
 
 		<div class="slide">
 			<hgroup>
+				<h1>Recall: Application Server</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Environment that runs an application logic</li>
+				<ul>
+					<li>Client communicates with AS via an application protocol</li>
+					<li>Client &ndash; Browser, application protocol &ndash; HTTP</li>
+				</ul>
+				<li>Terminology</li>
+				<ul>
+					<li>Application Server &times; Web Server &times; HTTP Server</li>
+					<ul>
+						<li>AS is a modular environment; provides technology to realize enterprise systems</li>
+						<li>AS contains a Web server/HTTP server</li>
+					</ul>
+					<li>We will deal with Web server only</li>
+				</ul>
+				<li>Two major models to realize communication</li>
+				<ul>
+					<li>Blocking I/O (also called synchronous I/O)</li>
+					<li>Non-blocking I/O (also called asynchronous I/O)</li>
+				</ul>
+				<li>A technology we will work with</li>
+				<ul>
+					<li>Node.js &ndash; runs server-side Javascript</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
 				<h1>Programming Models</h1>
 			</hgroup>
-			
+						
 			<ul class="small">
 				<li>Concurrency</li>
 				<ul>
@@ -122,7 +153,7 @@
 			  </ul>			
 	  </div>
 	
-		<div class="slide">
+		<!-- <div class="slide">
 			<hgroup>
 				<h1>Event Loop</h1>
 			</hgroup>
@@ -134,7 +165,7 @@
 					<li>It schedulles and runs asynchronous tasks</li>
 				</ul>
 				<img src="img/event-loop.png"></img>
-	  </div>	
+	  </div>	 -->
 
 	<!-- <div class="slide">
 		<hgroup>
@@ -175,37 +206,6 @@
 
 		<div class="slide">
 			<hgroup>
-				<h1>Recall: Application Server</h1>
-			</hgroup>
-			<ul class="small">
-				<li>Environment that runs an application logic</li>
-				<ul>
-					<li>Client communicates with AS via an application protocol</li>
-					<li>Client &ndash; Browser, application protocol &ndash; HTTP</li>
-				</ul>
-				<li>Terminology</li>
-				<ul>
-					<li>Application Server &times; Web Server &times; HTTP Server</li>
-					<ul>
-						<li>AS is a modular environment; provides technology to realize enterprise systems</li>
-						<li>AS contains a Web server/HTTP server</li>
-					</ul>
-					<li>We will deal with Web server only</li>
-				</ul>
-				<li>Two major models to realize communication</li>
-				<ul>
-					<li>Blocking I/O (also called synchronous I/O)</li>
-					<li>Non-blocking I/O (also called asynchronous I/O)</li>
-				</ul>
-				<li>A technology we will look at</li>
-				<ul>
-					<li>Node.js &ndash; runs server-side Javascript</li>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
 				<h1>JavaScript</h1>
 			</hgroup>
 			<ul class="x-small">
@@ -217,19 +217,41 @@
 				</ul>
 				<li>Major characteristics</li>
 				<ul>
-					<li>First-class functions</li>
+					<li>Function is an Object</li>
 					<ul>
-						<li>functions as first-class citizens</li>
-						<li>language supports: passing functions as arguments to other functions, returning functions
-							as values from other functions, assigning functions to variables or storing them in data structures.</li>
+						<li>passing functions as arguments to other functions</li>
+						<li>returning functions as values from other functions</li>
+						<li>assigning functions to variables</li>
+						<li>storing functions in data structures.</li>
 					</ul>
 					<li>Anonymous functions</li>
 					<ul>
 						<li>declared without any named identifier to refer to it</li>
 					</ul>
+					<li>Arrow functions</li>
 					<li>Closures</li>
 				</ul>
 		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Event Loop</h1>
+			</hgroup>
+			<ul class="x-small">	
+				<div id="1kfGhsbXThWPmWqMx6-Y8UkBUlgoaCbiJCFQ7qIIcddQ" class="h-drawing" style="height: 270px; margin-top: 20px"></div>
+				<!-- <li>Messages processing from the queue</li> -->
+				<ul style="margin-top: 20px">
+					<li>Message = data + callback to be processed</li>
+					<li>Messages are process completely one by one</li>
+					<ul>
+						<li>No "clashes" across messages' processing</li>
+						<li>Processing should not block for a long time &ndash; Workers</li>
+					</ul>
+					<li>Brwoser adds a new message when an event occurs and there is an event listener</li>			
+				</ul>
+			</ul>
+		</div>
+
 
 		<div class="slide">
 			<hgroup>
@@ -313,31 +335,22 @@
 			<ul class="x-small">
 				<li>HTTP Server implementation</li>
 				<ul>
-					<li>server running at <code>138.232.189.127</code>, port <code>8080</code>.</li>
+					<li>server running at <code>127.0.0.1</code>, port <code>8080</code>.</li>
 					<pre class="brush: js; class-name: ''">
-                            // http library
-                            var http = require("http");
-                            
-                            http.createServer(function(req, res) {
-                                // check the value of host header
-                                if (req.headers.host == "company.cz") {
-                                    res.writeHead(201, "Content-Type: text/plain");
-                                    res.end("This is the response...");
-                                } else ;
-                                    // handle enterprise.com app logic...
-                            }).listen('0.0.0.0', 8080);
-                        </pre>
-					<li>Test it using Telnet</li>
-					<pre class="brush: bash; class-name: ''">
-                            telnet 138.232.189.127 8080
-                            # ...lines omitted due to brevity
-                            GET /orders HTTP/1.1
-                            Host: company.cz
-                            
-                            HTTP/1.1 201 OK
-                            Content-Type: plain/text
-                            
-                            This is the response...
+						const http = require('http');
+
+						const hostname = '127.0.0.1';
+						const port = 3000;
+
+						const server = http.createServer((req, res) => {
+						  res.statusCode = 200;
+						  res.setHeader('Content-Type', 'text/plain');
+						  res.end('Hello World');
+						});
+
+						server.listen(port, hostname, () => {
+						  console.log(`Server running at http://${hostname}:${port}/`);
+						});
                         </pre>
 				</ul>
 			</ul>
@@ -624,32 +637,61 @@
 
 		<div class="slide">
 			<hgroup>
+				<h1>Callback Hell Example</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li>A callback in a callback</li>
+				<pre class="brush: js; class-name: 'tight'">
+const request = require('request');
+
+request("http://w20.vitvar.com/toc.json", { json: true }, 
+(err, res, body) => {
+   if (err)
+     console.log("error: " + err)
+   else {
+     console.log(body)
+     request("http://mdw.vitvar.com/toc.json", { json: true }, 
+     (err, res, body) => {
+         if (err)
+           console.log("error: " + err)
+         else
+           console.log(body)
+       })
+   }
+})</pre>
+		</div>
+
+		<div class="slide">
+			<hgroup>
 				<h1>Promise Example</h1>
 			</hgroup>
 			<ul class="xx-small">
-				<li>Example</li>
+				<li>A chain of Promise objects</li>
 				<pre class="brush: js; class-name: 'tight'">
-										function myAsyncFunction(url) {
-										  return new Promise((resolve, reject) => {
-										    const xhr = new XMLHttpRequest();
-										    xhr.open("GET", url);
-										    xhr.onload = () => resolve(xhr.responseText);
-										    xhr.onerror = () => reject(xhr.statusText);
-										    xhr.send();
-										  });
-										}
+					const request = require('request');
 
-										myAsyncFunction("some_cors_enabled_url")
-										.then(
-										  (responseText) => {
-										    console.log("success!");
-										  }
-										)
-										.catch(
-										  (statusText) => {
-										    console.log("failure!");
-										  }
-										);</pre>
+					function get_json(url) {
+					  return new Promise((resolve,reject)=>{
+					    request(url, { json: true }, (err, res, body) => {
+					      if (err)
+					        reject(err)
+					      else
+					        resolve(body)
+					    })
+					  })
+					};
+
+					get_json('http://w20.vitvar.com/toc.json')
+					.then((data)=>{
+					  console.log(data)
+					  return get_json('http://mdw.vitvar.com/toc.json')
+					})
+					.then((data)=>{
+					  console.log(data)
+					})
+					.catch((err)=>{
+					  console.log("error: " + err)
+					})</pre>
 		</div>
 
 		<div class="slide">
