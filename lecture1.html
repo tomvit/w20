@@ -117,7 +117,7 @@
 					<li>I/O bound tasks</li>
 					<li>Multiple threads execute tasks</li>
 					<li>A process may contain multiple threads</li>
-					<li>It uses <b>preementive multitasking</b></li>
+					<li>It uses <b>preemtive multitasking</b></li>
 					<ul>
 						<li>OS decides how long a task should run (no tasks cooperation)</li>
 						<li>context switching</li>
@@ -252,6 +252,44 @@
 			</ul>
 		</div>
 
+		<div class="slide">
+			<hgroup>
+				<h1>Web Workers</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li>A code that runs in a worker thread</li>
+				<ul>
+					<li>Every worker runs event loop; communicate via posting messages</li>
+					<li>Can do anything, but manipulate DOM</li>
+					<li>Can spawn a new workers</li>
+					<li>They are thread-safe</li>
+				</ul>
+				<li>Workers Types</li>
+				<ul>
+					<li>Dedicated workers &ndash; accessible by scripts that created them</li>
+					<li>Shared workers &ndash; accessible by multiple scripts (iframes, windows, workers)</li>
+				</ul>
+			</ul>
+			<ul class="xx-small">
+				<li>Example</li>
+				<pre class="brush: js; class-name: ''">
+				// main.js
+				var myWorker = new Worker('worker.js');
+
+				something.onchange = function() {
+				  myWorker.postMessage([value1,value2]);
+				}					
+
+				// worker.js
+				onmessage = function(e) {
+				  var workerResult = 'Result: ' + (e.data[0] * e.data[1]);
+				  postMessage(workerResult);
+				}
+
+				// ... and terminate
+				myWorker.terminate()</pre>	
+			</ul>
+		</div>
 
 		<div class="slide">
 			<hgroup>

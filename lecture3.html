@@ -1,646 +1,673 @@
 <!DOCTYPE html>
 <!--
 	Web 2.0, CTU course slides
-	(cc) 2010-2013 Tomas Vitvar, tomas@vitvar.com
+	(cc) 2010-2014 Tomas Vitvar, tomas@vitvar.com
 -->
-<html>   
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-        <meta name="course"   content="Web 2.0"/>
-		<meta name="lecture"  content="Lecture 3"/>
-   		<meta name="keywords" content="JSON, JSONP, JavaScript, AJAX, CORS"/>
-           
-        <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
-        <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
-        <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
+<html>
 
-        <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>Accessing and Utilizing Services</title>
-	</head>
-	<body> 
-    
-		<footer>
-			<p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester"/>,&nbsp;
-			<span class="meta_twitter"/></p>
-			<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
-		</footer>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="course" content="Web 2.0" />
+  <meta name="lecture" content="Lecture 3" />
+  <meta name="keywords" content="SaaS, IaaS, PaaS" />
 
-    	<div class="slide intro">
-			<hgroup>
-				<h1><span class="meta_course"/></h1>
- 				<h2>#META_LECTURE#: #TITLE#</h2>
-			</hgroup>
-			<div class="author">
-				<p class="meta_author"/>
-				<p><span class="meta_email"/> &bull; <span class="meta_twitter"/> &bull; 
-				<span class="meta_web"/></p>
-			</div>
-			<center><div class="meta_logo"></div></center>
-			<div class="org">
-				<p class="meta_org"/>
-				<p><span class="meta_orgfac"/> &bull; <span class="meta_field"/> 
-				&bull; <span class="meta_orgweb"/></p>
-			</div>
-			<div class="etc">
-        		<div class="text-info">
-    				Modified: #LAST_MODIFIED#<br/>
-					Humla v#HUMLA_VERSION#
-				</div>
-				<a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
-				<div class="oppa"></div>
-			</div>
-		</div>
-		
-        <div class="slide outline"></div>		
+  <link type="text/css" rel="stylesheet" href="css/meta.css">
+  </link>
+  <link type="text/css" rel="stylesheet" href="css/ctu-fit.css">
+  </link>
+  <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css">
+  </link>
 
-		<section>
-			<header>Mashups and XHR</header>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>Mashups</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Web application hybrid/Web 2.0 application</li>
-					<ul>
-						<li>Uses APIs of two or more applications to provide new value-added functionality</li>
-					</ul>	
-					<li>Types</li>
-					<ul>
-						<li>Data mashup &ndash; integration/aggregation of data (read only)</li>
-						<li>Service mashup &ndash; more sophisticated workflows (read, write)</li>
-						<li>Visualization &ndash; involves UI, e.g., third-party data displayed on the Google map</li>
-					</ul>
-					<li>Client-Server View</li>
-					<ul>
-						<li>client-side mashups (mainly in a browser)</li>
-						<ul>
-							<li>JavaScript, Dynamic HTML, AJAX, JSON/JSONP</li>
-						</ul>
-						<li>server-side mashups</li>
-						<ul>
-							<li>server-side integration of services and data</li>
-							<li>third-party programming languages</li>
-							<li>specialized environments: Google AppsScript</li>
-						</ul>
-					</ul>
-					<li>Web Apps developments will all be about mashups!</li>
-				</ul>
-			</div>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>XMLHttpRequest (XHR)</h1>
-				</hgroup>
-				<ul>
-					<li>Interface to utilize HTTP protocol in JavaScript</li>
-					<ul>
-						<li>standardized by <span id="webapps-wg" class="h-ref"></span> at W3C</li>
-						<li>basis for AJAX</li>
-						<ul>
-							<li>Asynchronous JavaScript and XML</li>
-						</ul>
-					</ul>
-					<li>Typical usage</li>
-					<ol>
-						<li>Browser loads a page that includes a script</li>
-						<li>User clicks on a HTML element</li>
-						<ul>
-							<li>it triggers a JavaScript function</li>
-						</ul>
-						<li>The function invokes a service through XHR</li>
-						<ul>
-							<li>same origin policy, cross-origin resource sharing</li>
-						</ul>
-						<li>The function receives data and modifies HTML in the page</li>
-					</ol>
-				</ul>
-			</div>
+  <script type="text/javascript" src="humla/lib/humla.js"></script>
+  <title>Microservices and Cloud Native</title>
+</head>
 
-			<div class="slide">
-				<hgroup>
-					<h1>XHR Interface &ndash; Key Methods and Properties</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Method and properties of XHR object</li>
-					<ul>
-						<li><code>open</code>, opens the request, parameters:<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;<code>method</code> &ndash; method to be used (e.g. GET, PUT, POST),<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;<code>url</code> &ndash; url of the resource,<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;<code>asynch</code> &ndash; true to make asynchronous call,<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;<code>user</code>, <code>pass</code> &ndash; credentials for authentication.</li>
-						<li><code>onReadyStateChange</code> &ndash; JavaScript function object, it is called when 
-						  <code>readyState</code> changes (uninitialized, loading, loaded, interactive, completed).</li>
-						<li><code>send</code>, <code>abort</code> &ndash; sends or aborts the request 
-							(for asynchronous calls)</li>
-						<li><code>status</code>, <code>statusText</code> &ndash; HTTP status code and a 
-							corresponding text.</li>
-						<li><code>responseText</code>, <code>responseXML</code> &ndash; response as text or 
-							as a DOM document (if possible).</li>
-						<li><code>onload</code> &ndash; event listener to support server push.</li>
-					</ul>					
-					<li>See <span id="xhr-w3c" class="h-ref"></span>, or 
-						<span id="xhr-moz" class="h-ref"></span> for a complete reference.</li>
-				</ul>
-			</div>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>How XHR works</h1>
-				</hgroup>
-				<div style="height: 440px; margin-top: 20px" 
-				  id="1kI3tlZl6PHZ_J_uwn_SVyT8_F05yE5Hi0B9pOEI37Z8" class="h-drawing"></div>
-			</div>
-		</section>
-			
-        <div class="slide outline"></div>						
+<body>
 
-		<section>
-			<header>Security Mechanisms</header>
-		
-			<div class="slide" id="sameorigin">
-				<hgroup>
-					<h1>Same Origin Policy</h1>
-				</hgroup>
-				<div style="height: 310px" 
-				  id="1xg_D6b_EBQDYol5Kk7b-UdhbuVsbjBHfaKaNTgH_rkY" class="h-drawing"></div>
-				<ul class="xx-small">
-					<li>JavaScript code can only access resources on the same domain</li>
-					<ul>
-						<li>XHR to GET, POST, PUT, UPDATE, DELETE</li>
-						<li>Browsers apply <b>same origin policy</b></li>
-					</ul>	
-					<li>Solutions</li>
-					<ul>
-						<li>JSON and JSONP (GET only)</li>
-						<li>Cross-origin Resource Sharing Protocol (CORS)</li>
-					</ul>
-				</ul>
-			</div>
+  <footer>
+    <p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester" />,&nbsp;
+      <span class="meta_twitter" /></p>
+    <p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
+  </footer>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Why Same Origin Policy?</h2>
-				</hgroup>
-				<ul>
-					<li>Without the same origin policy, the following POST would be possible</li>
-				</ul>
-				<div style="height: 350px; margin-top: 30px" 
-				  id="1J14eY2C9O1g8oPI9GhkOn0tRCB5z_NodiBzPX2oEabY" class="h-drawing"></div>
-			</div>
+  <div class="slide intro">
+    <hgroup>
+      <h1><span class="meta_course" /></h1>
+      <h2>#META_LECTURE#: #TITLE#</h2>
+    </hgroup>
+    <div class="author">
+      <p class="meta_author" />
+      <p><span class="meta_email" /> &bull; <span class="meta_twitter" /> &bull;
+        <span class="meta_web" /></p>
+    </div>
+    <center>
+      <div class="meta_logo"></div>
+    </center>
+    <div class="org">
+      <p class="meta_org" />
+      <p><span class="meta_orgfac" /> &bull; <span class="meta_field" />
+        &bull; <span class="meta_orgweb" /></p>
+    </div>
+    <div class="etc">
+      <div class="text-info">
+        Modified: #LAST_MODIFIED#<br />
+        Humla v#HUMLA_VERSION#
+      </div>
+      <a href="http://creativecommons.org/licenses/by-sa/3.0/">
+        <div class="license"></div>
+      </a>
+      <div class="oppa"></div>
+    </div>
+  </div>
 
-        	<div class="slide outline"></div>						
+  <div class="slide outline"></div>
 
-			<section>
-				<header>Scripting Attacks</header>
+  <section>
+    <header>Microservices Architecture</header>
 
-				<div class="slide">
-					<hgroup>
-						<h1>Overview</h1>
-					</hgroup>
-	                <ul class="small">
-	                	<li>Scripting Attacks</li>
-	                	<ul>
-	                		<li>Intruders make users perform action that has side effects on their resources</li>
-	                		<li>Intruders inject malicious code to Web pages</li>
-	                	</ul>
-	                	<li>Roles in Security Scenarios</li>
-	                	<ul>
-		                    <li>Alice, Bob</li>
-		                    <ul>
-		                        <li>Normal users, usually Alices wants to send a message to Bob or Alice accesses a Bob's site.</li>
-		                    </ul>
-		                    <li>Eve</li>
-		                    <ul>
-		                    	<li>A user with bad intentions, usually a passive attacker.</li> 
-		                    </ul>
-		                    <li>Mallory</li>
-		                    <ul>
-		                    	<li>An active attacker, usually sends a link to a page with malicious code. 
-		                    </ul>	
-		                </ul>
-	                </ul>					
-				</div>
+    <div class="slide">
+      <hgroup>
+        <h1>Overview</h1>
+      </hgroup>
+      <ul>
+        <li>Emerging software architecture</li>
+        <ul>
+          <li>monolithic vs. decoupled applications</li>
+          <li>applications as independenly deployable services</li>
+        </ul>
+        <img src="img/microservices.png" style="zoom: 0.7"></img>
+      </ul>
+    </div>
 
-				<div class="slide">
-					<hgroup>
-						<h1>Recall: State management in HTTP</h1>
-					</hgroup>
-	                <ul class="small">
-	                    <li>Request-response interaction with cookies</li>
-	                    <ul>
-	                        <li>Session is a logical channel maintained by the server</li>
-	                    </ul>
-	                    <div class="h-drawing" style="height: 250px" id="1mVCe8EtqVApZVRV_RHYQKtqDNELKdo84qzCqGvAs7iA"></div>
-	                    <li>Stateful Server</li>
-	                    <ul>
-	                        <li>Server remembers the session information in a server memory</li>
-	                        <li>Server memory is a non-persistent storage, when server restarts the memory content is lost!</li>
-	                    </ul>
-	                </ul>					
-				</div>
+    <div class="slide">
+      <hgroup>
+        <h1>Major Characteristics</h1>
+      </hgroup>
+      <ul>
+        <li>Loosely coupled</li>
+        <ul>
+          <li>Integrated using well-defined interfaces</li>
+        </ul>
+        <li>Technology-agnostic protocols</li>
+        <ul>
+          <li>HTTP, they use REST architecture</li>
+        </ul>
+        <li>Independently deployable and easy to replace</li>
+        <ul>
+          <li>A change in small part requires to redeploy only that part</li>
+        </ul>
+        <li>Organized around capabilities</li>
+        <ul>
+          <li>such as accounting, billing, recommendation, etc.</li>
+        </ul>
+        <li>Impplemented using different technologies</li>
+        <ul>
+          <li>polyglot &ndash; programming languages, databases</li>
+        </ul>
+      </ul>
+    </div>
 
-				<div class="slide">
-					<hgroup>
-						<h1>Cross-site Request Forgery (CSRF)</h1>
-					</hgroup>
-	                <ul class="x-small">
-	                	<li>Exploits a trust of a website in a user's browser</li>
-	                	<li>Scenario</li>
-	                	<ol>
-	                		<li>Mallory sends a link to Alice (in an email, in a chat, etc.)</li>
-	                		<ul>
-	                			<li>The link points to a page that has HTML code with hrefs to Alice's private resources</li>
-	                			<li>For example, to perform an action on Alice's account, <br/>
-	                				it is possible to use <code>img</code> like this:</li>
-								<pre class="brush: html">
-								&lt;img src="https://bank.com/account?do=transfer_money&amp;amount=50000"/></pre>
-	                		</ul>
-	                		<li>Alice loads the page in her browser</li>
-	                		<ul>
-	                			<li>Alice is authenticated to the bank's website, the browser sends Alice's authentication cookies 
-	                				with the request.</li>
-	                		</ul>
-	                	</ol>
-	                	<li>Issues and Prevention</li>
-	                	<ul class="xx-small">
-	                		<li>The bank site vilotes REST, i.e. overloading of GET for making actions</li>
-	                		<li>The bank should check HTTP <code>referer</code> header</li>
-	                		<li>It is a "blind" attack, Mallory does not see the result</li>
-	                		<li>To perform POST, current browsers today use <a href="#CORS">CORS protocol</a></li> 
-	                	</ul>
-	                </ul>					
-				</div>
+  </section>
 
-				<div class="slide">	
-					<hgroup>
-						<h1>Cross-site Scripting Attack (XSS)</h1>
-					</hgroup>
-					<ul>
-						<li>Exploits a trust of a user in a website</li>
-					</ul>
-					<div id="1pOK4HZPt7d4j-KSllCa8BUx5Amjlq28L6sQh3Wac8kI" class="h-drawing" style="height: 250px"></div>
-					<ul class="small">
-						<li>Example Scenario</li>
-						<ol>
-							<li>An attacker injects a code to a page</li>
-							<li>A users executes the code in his/her browser's session</li>
-							<li>The code provides information (cookies) to the attacker</li>
-							<li>The attacker uses the cookies to access the user's data</li>
-						</ol>
-					</ul>	
-				</div>
+  <div class="slide outline"></div>
 
-				<div class="slide">
-					<hgroup>
-						<h1>XSS Examples</h1>
-					</hgroup>
-					<ul class="small">
-						<li>Twitter in Sep 2010</li>
-						<ul>
-							<li>Injection of JavaScript code to a page using a tweet</li>
-							<li>You posted following tweet to Twitter</li>
-							<pre class="brush: plain">
-								There is a great event happening at 
-								http://someurl.com/@"onmouseover="alert('test xss')"/</pre>
-							<li>Twitter parses the link and wraps it with <code>&lt;a></code> element</li>
-							<pre class="brush: 'xml'">
-								There is a great event happening at 
-								&lt;a href="http://someurl.com/@"onmouseover="alert('test xss')" 
-									target="_blank">http://someurl.com/@"onmouseover=
-									"alert('test xss')"/&lt;/a></pre>
-							<li>See details at <span id="twitter-xss" class="h-ref"></span></li>
-						</ul>
-						<li>Other example: Google Contacts</li>
-					</ul>
-				</div>	
+  <section>
 
-			</section>
-				
-        	<div class="slide outline"></div>						
+    <header>Docker</header>
 
-			<section>
-				<header>Cross-origin Resource Sharing Protocol (CORS)</header>
+    <section>
+      <header>Overview</header>
 
-				<div class="slide" id="CORS">
-					<hgroup>
-						<h1>Overview</h1>
-					</hgroup>
-					<ul>
-						<li>Increasing number of mashup applications</li>
-						<ul>
-							<li>client-side mashups involving multiple sites</li>
-							<li>mechanism to control an access to sites from within JavaScript</li>
-						</ul>
-						<li>Allow for <b>cross-site HTTP requests</b></li>
-						<ul>
-							<li>HTTP requests for resources from a different domain than the domain of the resource making the request.</li>
-						</ul>
-						<li>W3C Recommendation</li>
-						<ul>
-							<li>see <span class="h-ref" id="cors-w3c"></span></li>
-							<li>Browsers support it</li>
-							<ul>
-								<li>see <span class="h-ref" id="cors-moz"></span> at Mozilla</li>
-							</ul>
-						</ul>
-					</ul>
-				</div>
+      <div class="slide">
+        <hgroup>
+          <h1>Overview</h1>
+        </hgroup>
 
-				<div class="slide">
-					<hgroup>
-						<h1>CORS Protocol &ndash; GET</h1>
-					</hgroup>
-					<div style="height: 280px" id="1cAgbH75PndD38nY1IJo4QfN5Yp7siHQXfNF5oD6x9SM" class="h-drawing"></div>
-					<ul class="x-small">
-						<li>Read-only resource access via HTTP GET</li>
-						<li>Headers:</li>
-						<ul>
-							<li><code>Origin</code> &ndash; identifies the origin of the request</li>
-							<li><code>Access-Control-Allow-Origin</code> &ndash; defines who can access the resource</li>
-							<li>either the full domain name or the wildcard (*) is allowed.</li>							
-						</ul>
-					</ul>
-				</div>			
-				
-				<div class="slide">
-					<hgroup>
-						<h1>CORS Protocol &ndash; other methods and "preflight"</h1>
-					</hgroup>
-					<div style="height: 320px" id="1-dVhDx5pka4BElYu0WzFkqkLQWsb8aphcy16l-bET80" 
-						class="h-drawing"></div>
-					<ul class="xx-small">
-						<li>Preflight request queries the resource using <code>OPTIONS</code> method</li>
-						<ul>
-							<li>requests other than GET (except POST w/o payload) or with custom headers</li>
-							<li>A browser should run preflight automatically for any XHR request meeting preflight conditions</li>
-							<li>The browser caches responses according to <code>Access-Control-Max-Age</code></li>
-						</ul>
-					</ul>
-				</div>				
+        <ul class="small">
+          <li>Linux Containers</li>
+          <ul>
+            <li>Introduced in 2008</li>
+            <li>Allow to run a process tree in a isolated system-level "virtualization"</li>
+            <li>Use much less resources and disk space than traditional virtualization</li>
+          </ul>
+          <li>Implementations</li>
+          <ul>
+            <li>LXC &ndash; default implementation in Linux</li>
+            <li><b>Docker Containers</b></li>
+            <ul>
+              <li>Builds on new Kernel features: control groups (cgroups), kernel namespaces,
+                union-capable file system (OverlayFS, AUFS, etc.)</li>
+              <li>A way to build, commit and share images</li>
+              <li>Build images using a description file called Dockerfile</li>
+              <li>Large number of available base and re-usable images</li>
+            </ul>
+          </ul>
+        </ul>
+      </div>
 
-			</section>
-		</section>
+      <div class="slide">
+        <hgroup>
+          <h1>VM vs. Docker Containers</h1>
+        </hgroup>
+        <img class="center" style="margin-top: 50px; height: 350px" src="./img/docker-vm.png" />
+      </div>
 
-	    <div class="slide outline"></div>		
-				
-		<section>
-			<header>JSON and JSONP</header>
+      <div class="slide">
+        <hgroup>
+          <h1>Docker Basic Terms</h1>
+        </hgroup>
+        <ul class="xx-small">
+          <li>Image</li>
+          <ul>
+            <li>Bssis for containers.</li>
+            <li>An image contains a union of layered filesystems stacked on top of each other.</li>
+            <li>An image does not have state and it never changes.</li>
+          </ul>
+          <li>Container</li>
+          <ul>
+            <li>A runtime instance of a Docker image, a standard to "ship software".</li>
+          </ul>
+          <li>Docker Engine</li>
+          <ul>
+            <li>The core process providing the Docker capabilities on a host.</li>
+          </ul>
+          <li>Docker Client</li>
+          <ul>
+            <li>Interface that integrates with docker engine.</li>
+          </ul>
+          <li>Registry</li>
+          <ul>
+            <li>A hosted service containing repository of images.</li>
+            <li>A registry provides a registry API to search, pull and push images.</li>
+            <li>Docker Hub is the default Docker registry.</li>
+          </ul>
+          <li>Swarm</li>
+          <ul>
+            <li>A cluster of one or more docker engines.</li>
+          </ul>
+        </ul>
+      </div>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Recall: JSON</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>JSON = JavaScript Object Notation</li>
-					<ul>
-						<li>Serialization format for data representation</li>
-						<li>Very easy to use in JavaScript</li>
-						<ul>
-							<li>no need to use a parser explicitly</li>
-						</ul>
-						<li>Also great support in many programming environments</li>
-					</ul>
-					<li>Key constructs</li>
-					<ul class="xx-small">
-						<li><b>object</b> is a collection of comma-separated key/value pairs:<br/>
-						<code>{"name" : "tomas", "age" : 18, "student" : false, &nbsp;"car" : null}</code></li>
-						<li style="margin-top: 5px"><b>array</b> is an order list of values:<br/>
-						<code>[ "prague", "innsbruck", 45 ]</code></li>
-						<li style="margin-top: 5px">can be nested: objects as values in an <b>array</b>:<br/>
-						<code>[ { "name" : "tomas", "age" : 18 }, <br/>&nbsp;&nbsp;{ "name" : "peter", "age" : 19 } ]</code></li>
-						<li style="margin-top: 5px">and the other way around: array as values in an <b>object</b>:<br/>
-						<code>{ "cities" : ["prague", "innsbruck"],<br/>&nbsp;&nbsp;"states" : ["CZ", "AT"] }</code></li>
-						<li style="margin-top: 5px">A complete grammar see <span id="json" class="h-ref"></span></li>												
-					</ul>
-					
-				</ul>
-			</div>
+      <div class="slide">
+        <hgroup>
+          <h1>Docker Images</h1>
+        </hgroup>
+        <img style="margin-left: 50px; margin-top: 15px; margin-bottom: 10px; height: 280px" src="./img/docker-container-stack.png" />
+        <ul class="x-small" style="margin-left: -10px">
+          <ul>
+            <li>Containers are made up of R/O layers via a storage driver<br />(OverlayFS, AUFS, etc.)</li>
+            <li>Containers are designed to support a single application</li>
+            <li>Instances are ephemeral, persistent data is stored in bind
+              mounts or data volume containers.</li>
+          </ul>
+        </ul>
+      </div>
+    </section>
 
-			<div class="slide">
-				<hgroup>
-					<h1>JSON in JavaScript</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Native data format</li>
-					<pre class="brush: javascript; class-name: 'tight'">
-					// data needs to be assigned
-					var data = { "people" : ["tomas", "peter", "alice", "jana"] };
-					
-					// go through the list of people
-					for (var i = 0; i < data.people.length; i++) {
-					    var man = data.people[i];
-					    // ... do something with this man
-					}</pre>
-					<li>Responses of service calls in JSON</li>
-					<ul>
-						<li>Many support JSON, how can we load that data?</li>
-					</ul>
-					<li>Example Request-Response</li>
-					<pre class="brush: javascript; class-name: 'tight'">
-						GET http://pipes.yahoo.com/pipes/pipe.run?_id=638c670c40c97b62&_render=json
-						
-					 	{"count":1,"value":  
-						   {"title":"Web 2.0 announcements",
-						    "description":"Pipes Output",
-						    "link":"http:\/\/pipes.yahoo.com\/pipes\/pipe.info...",
-						    "pubDate":"Mon, 07 Mar 2011 18:27:20 +0000",
-						    "generator":"..."
-						    ...
-						   }
-						}</pre>
-				</ul>
-			</div>
+    <div class="slide outline"></div>
 
-			<div class="slide">
-				<hgroup>
-					<h1>JSONP</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Service that supports JSONP</li>
-					<ul>
-						<li>allows to specify a query string parameter for a wrapper function
-						to load the data in JavaScript code</li>
-						<li>otherwise the data cannot be used in JavaScript</li>
-						<ul>
-							<li>they're loaded into the memory but assigned to nothing</li>
-						</ul>
-					</ul>
-					<li>Example</li>
-					<ul>
-						<li>if a resource at <code style="zoom: 0.9">http://someurl.org/json_data</code> returns
-						<pre class="brush: javascript; gutter: false">
-							 { "people" : ["tomas", "peter", "alice", "jana"] }</pre>
-						then the resource at<br/>
-						<code style="zoom: 0.9">http://someurl.org/json_data?_callback=loadData</code> returns
-						<pre class="brush: javascript; gutter: false">
-							 loadData({ "people" : ["tomas", "peter", "alice", "jana"] });</pre></li>
-					</ul>
-					<li>A kind of workaround for the same origin policy</li>
-					<ul>
-						<li>only <code>GET</code>, nothing else works obviously</li>
-						<li>no XHR, need to load the data through the dynamic <code>&lt;script></code> element</li>
-					</ul>
-				</ul>
-			</div>
+    <section>
 
-			<div class="slide">
-				<hgroup>
-					<h1>JSONP in JavaScript</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>JSONP example</li>
-					<ul>
-						<li>loads JSON data using JSONP by dynamically inserting <code>&lt;script></code>
-							into the current document. This will download JSON data and triggers the script.</li>
-					</ul>
-					<pre class="brush: javascript">
-					var TWITTER_URL = "http://api.twitter.com/1/statuses/user_timeline.json?" + 
-					  "&screen_name=web2e&count=100&callback=loadData";
-				
-					// this needs to be loaded in window.onload
-					// after all document has finished loading...
-					function insertData() {
-					    var se = document.createElement('script');
-					    se.setAttribute("type","text/javascript");
-					    se.setAttribute("src", TWITTER_URL);	
-					    document.getElementsByTagName("head")[0].appendChild(se);	
-					    // And data will be loaded when loadDta callback fires...
-					}
-				
-					// loads the data when they arrive 
-					function loadData(data) {
-					    // we need to know the the structure of JSON data that is returned 
-					    // and code it here accordingly
-					    for (var i = 0; i < data.length; i++) {
-					        data[i].created_at // contains date the tweet was created
-					        data[i].text // contains the tweet
-					    }
-					}</pre>
-				</ul>
-			</div>
+      <header>Image Layering</header>
 
-		<!--	<div class="slide">
-				<hgroup>
-					<h1>JSON Vulnerability</h1>
-				</hgroup>
-                <ul class="x-small">
-                	<li>What it is</li>
-                	<ul>
-                		<li>JSON array data accessible via GET (normal access is via XHR)</li>
-                		<li>Attacker may load the data in a <code>script</code>, redefine <code>Array</code> object,
-                			and assign the data to a variable.</li>
-                		<li>Attacker's page with a script that you access:</li>
-                		<ul>
-                			<li>your browser uses your cookies to load the resource</li>
-                		</ul>
-                	</ul>
-                	<pre class="brush: html; highlight: [3,4]; class-name: tight">
-                		&lt;script type="text/javascript">
-                		var yourData;
-                		Array = function() {
-                			yourData = this;
-                		}
-                		&lt;/script>
+      <div class="slide">
+        <hgroup>
+          <h1>Image Layering with OverlayFS</h1>
+        </hgroup>
+        <ul class="x-small">
+          <li>OverlayFS</li>
+          <ul>
+            <li>A filesystem service implementing a <b>union mount</b> for other file systems.</li>
+            <li>Docker uses <code>overlay</code> and <code>overlay2</code> storage drivers
+              to build and manage on-disk structures of images and containers.</li>
+          </ul>
+          <li>Image Layering</li>
+          <ul>
+            <li>OverlayFS takes two directories on a single Linux host, layers one on top of the other, and provides
+              a single unified view.</li>
+            <li>Only works for two layers, in multi-layered images hard links are used to
+              reference data shared with lower layers.</li>
+          </ul>
+          <img src="img/overlay_constructs.jpg" style="width: 700px; margin-top: 10px" />
+        </ul>
+      </div>
 
-                		&lt;script src="yourdomain.cz/yoursecretdata.json" type="text/javascript">&lt;/script></pre>
-            		<li>Prevention</li>
-            		<ul class="xx-small">
-            			<li>Using prefix in the data &ndash; the prefix makes the JSON data invalid; the client must
-            				strip the prefix before parsing the data as JSON</li>
-            			<pre class="brush: javascript; class-name: tight">
-            				[ "a": "account", 433, 5543 ]</pre>
-            			<li>Use only POST for sensitive data</li>
-            		</ul>
-                </ul>					
-			</div> -->			
+      <div class="slide">
+        <hgroup>
+          <h1>Image Layers Example</h1>
+        </hgroup>
+        <ul class="xx-small" style="margin-top:20px; zoom:0.9">
+          <li>Pulling out the image from the registry</li>
+          <pre class="brush: plain; gutter: 'false'">
+            $ sudo docker pull ubuntu
 
-		</section>
+            Using default tag: latest
+            latest: Pulling from library/ubuntu
 
-	<!--	<div class="slide outline"></div>
-	    		
-		<section>
-			<header>Application State</header>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>Application State</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Application state in Web 1.0 apps</li>
-					<div style="height: 260px; margin-left: -30px" 
-						id="1ikPrTDmdmCzwR3OcGESteSMUnHQ-B9VRhuaOeQGki9A" class="h-drawing"></div>
-					<li>Application state in Web 2.0 apps</li>
-					<ul>
-						<li>JavaScript code changes the state</li>
-						<ul>
-							<li>the URL should contain the state information</li>
-						</ul>
-						<li>JavaScript cannot modify the whole URL but only the hash (<code>#</code>) part</li>
-						<li><code>http://seller.com/products</code> becomes <code>http://seller.com/#products</code></li>
-					</ul>
-				</ul>
-			</div>
+            5ba4f30e5bea: Pull complete
+            9d7d19c9dc56: Pull complete
+            ac6ad7efd0f9: Pull complete
+            e7491a747824: Pull complete
+            a3ed95caeb02: Pull complete
+            Digest: sha256:46fb5d001b88ad904c5c732b086b596b92cfb4a4840a3abd0e35dbb6870585e4
+            Status: Downloaded newer image for ubuntu:latest
+          </pre>
+          <ul>
+            <li>Each image layer has its own directory under <code>/var/lib/docker/overlay/</code>.</li>
+            <li>This is where the contents of each image layer are stored.</li>
+          </ul>
+          <li>Directories on the file system</li>
+          <pre class="brush: plain; gutter: 'false'">
+            $ ls -l /var/lib/docker/overlay/
 
-			<div class="slide">
-				<hgroup>
-					<h1>Application State and Web Crawling</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Obviously we want our pages to be crawlable</li>
-					<ul>
-						<li>JavaScript generated content on clients does not exist on the server</li>
-					</ul>
-					<div style="height: 250px; margin-left: -30px" id="1u-6vCrF9f6rojKEY2Dxtgrss06MckN4SV1f0YuF1ptU" 
-					  class="h-drawing"></div>
-					<li>Solutions</li>
-					<ul>
-						<li>Crawler runs headless Browser &ndash; not feasible</li>
-						<ul>
-							<li>high requirements for computing resources</li>
-						</ul>
-						<li>Server generates content according to specific rules</li>
-						<ul>
-							<li>Google AJAX Crawling</li>
-						</ul>
-					</ul>
-				</ul>				
-			</div>
+            total 20
+            drwx------ 3 root root 4096 Jun 20 16:11 38f3ed2eac129654acef11c32670b534670c3a06e483fce313d72e3e0a15baa8
+            drwx------ 3 root root 4096 Jun 20 16:11 55f1e14c361b90570df46371b20ce6d480c434981cbda5fd68c6ff61aa0a5358
+            drwx------ 3 root root 4096 Jun 20 16:11 824c8a961a4f5e8fe4f4243dab57c5be798e7fd195f6d88ab06aea92ba931654
+            drwx------ 3 root root 4096 Jun 20 16:11 ad0fe55125ebf599da124da175174a4b8c1878afe6907bf7c78570341f308461
+            drwx------ 3 root root 4096 Jun 20 16:11 edab9b5e5bf73f2997524eebeac1de4cf9c8b904fa8ad3ec43b3504196aa3801
+          </pre>
+          <ul>
+            <li>The organization of files allows for efficient use of disk space.</li>
+            <li>There are <b>files unique to every layer</b> and <b>hard links to files</b> shared with lower layers</li>
+          </ul>
+        </ul>
+        </ul>
+      </div>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Google AJAX Crawling</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Steps</li>
-					<ol>
-						<li>Web app provider exposes AJAX content with pretty URLs<br/>
-						<code>http://seller.com/#!products</code></li>
-						<li>Web crawler finds those URLs</li>
-						<li>Web crawler transforms the pretty URL to ugly URL<br/>
-						<code>http://seller.com/?_escapped_fragment_=products</code></li>
-						<li>Web crawler access the content of the page at ugly URL and indexes it</li>
-					</ol>
-					<li>Prerequisites</li>
-					<ul>
-						<li>Web app provider must expose AJAX generated content at ugly URLs</li>
-						<li>Options:</li>
-						<ul>
-							<li>uses a headless browser to generate the content at the server</li>
-							<li>rewrites the JavaScript code in a server-side language</li>
-						</ul>
-					</ul>
-					<li>Reference</li>
-					<ul>
-						<li>See <span id="ajax-crawling" class="h-ref"></span> for details</li>
-					</ul>
-				</ul>				
-			</div>
+    </section>
 
-		</section>	-->
-		
-		
-		
-		
-	</body>
-</html>	
+    <div class="slide outline"></div>
+
+    <section>
+
+      <header>Working with Docker</header>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Docker Container Lifecycle State Diagram</h1>
+        </hgroup>
+
+        <div class="h-drawing" style="height: 440px" id="1JGxpdEWDh9lBbLg3JFVr53LBg1BM520LYXyYkdi-2ws"></div>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Commands (1)</h1>
+        </hgroup>
+        <ul class="xx-small no-bullet" style="zoom:0.95">
+          <li><code>docker version</code></li>
+          <ul>
+            <li>list current version of docker engine and client</li>
+          </ul>
+          <li><code>docker search &lt;image&gt;</code></li>
+          <ul>
+            <li>search for an image in the registry</li>
+          </ul>
+          <li><code>docker pull &lt;image[:version]&gt;</code></li>
+          <ul>
+            <li>download an image of a specific version from the registry</li>
+            <li>if the version is not provided, the latest version will be downloaded</li>
+          </ul>
+          <li><code>docker images</code></li>
+          <ul>
+            <li>list all local images</li>
+          </ul>
+          <li><code>docker run -it &lt;image[:version]&gt; &lt;command&gt;</code></li>
+          <ul>
+            <li>start the image and run the command inside the image</li>
+            <li>if the image is not found locally, it will be downloaded from the registry</li>
+            <li>option <code>-i</code> starts the container in interactive mode</li>
+            <li>option <code>-t</code> allocates a pseudo TTY</li>
+          </ul>
+          <li><code>docker ps [-as]</code></li>
+          <ul>
+            <li>list all running containers</li>
+            <li>option <code>-a</code> will list all containers including the stopped ones.</li>
+            <li>option <code>-s</code> will list the container's size.</li>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Commands (2)</h1>
+        </hgroup>
+        <ul class="xx-small no-bullet" style="zoom:0.95">
+          <li><code>docker rm &lt;container&gt;</code></li>
+          <ul>
+            <li>remove the container</li>
+          </ul>
+          <li><code>docker rmi &lt;image&gt;</code></li>
+          <ul>
+            <li>remove the image</li>
+          </ul>
+          <li><code>docker commit &lt;container&gt; &lt;name[:version]&gt;</code></li>
+          <ul>
+            <li>create an image from the container with the name and the version</li>
+          </ul>
+          <li><code>docker history &lt;image&gt;</code></li>
+          <ul>
+            <li>display the image history</li>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Networking and Linking</h1>
+        </hgroup>
+        <ul class="xx-small">
+          <li>There are 3 docker networks by default</li>
+          <ul>
+            <li><b>bridge</b> &ndash; container can access host's network (default)</li>
+            <ul>
+              <li>Docker creates subnet <code>172.17.0.0/16</code> and gateway to the network</li>
+              <li>When a container is started, it is automatically added to this network</li>
+              <li>All containers in this network can communicate with each other</li>
+            </ul>
+            <li><b>host</b> &ndash; all host's network interfaces will be available in the container.</li>
+            <li><b>none</b> &ndash; container will be placed on its own network and no network interfaces will be configured.</li>
+          </ul>
+          <li>Custom Network configuration</li>
+          <ul>
+            <li>You can create a new network and add containers to it</li>
+            <li>Containers in the new network can communicate with each other but the network will be isolated
+              from the host network</li>
+          </ul>
+          <li>Linking containers (legacy)</li>
+          <ul>
+            <pre class="brush: plain; gutter: 'false'">
+              $ docker run -d --name redmine-db postgres
+              $ docker run -it --link redmine-db:db postgres /bin/bash
+              root@c4b12143ebe8:/# psql -h db -U postgres
+              psql (9.6.1)
+              Type "help" for help.
+              postgres=# SELECT inet_server_addr();
+              postgres=# SELECT * FROM pg_stat_activity \x\g\x
+            </pre>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Networking Commands</h1>
+        </hgroup>
+        <ul class="xx-small no-bullet" style="zoom:0.95">
+          <li><code>docker network ls</code></li>
+          <ul>
+            <li>lists all available networks</li>
+          </ul>
+          <li><code>docker network inspect &lt;network-id&gt;</code></li>
+          <ul>
+            <li>Returns the details of specific network</li>
+          </ul>
+          <li><code>docker network create --driver bridge isolated_nw</code></li>
+          <ul>
+            <li>creates a new isolated network</li>
+          </ul>
+          <li><code>docker run -it --network=isolated_nw ubuntu bin/bash</code></li>
+          <ul>
+            <li>starts the container ubuntu and attaches it to the isolated network</li>
+          </ul>
+        </ul>
+      </div>
+
+
+      <div class="slide">
+        <hgroup>
+          <h1>Data Volumes</h1>
+        </hgroup>
+        <ul class="xx-small" style="zoom:0.95">
+          <li>Data Volume</li>
+          <ul>
+            <li>A directory that bypass the union file system</li>
+            <li>Data volumes can be shared and reused among containers</li>
+            <li>Data volume persists even if the container is deleted</li>
+            <li>It is possible to mount a shared sotrage volume as a data volue by using
+              a volume plugin to mount e.g. NFS</li>
+          </ul>
+
+          <li>Adding a data volume</li>
+          <ul>
+            <li class="no-bullet">
+              <code>docker run -d -v /webapp training/webapp python app.py</code>
+            </li>
+            <li class="no-bullet">will create a new value with name <code>webapp</code>,</li>
+            <li class="no-bullet">the location of the volume can be determined by using <code>docker inspect</code>.</li>
+
+          </ul>
+          <li>Mount a host directory as a data volume</li>
+          <ul>
+            <li class="no-bullet">
+              <code>docker run -d -v /src/webapp:/webapp training/webapp python app.py</code>
+            </li>
+            <li class="no-bullet">if the path exists in the container, it will be overlayed (not removed),</li>
+            <li class="no-bullet">if the host directory does not exist, the docker engine creates it.</li>
+
+          </ul>
+          <li>Data volume container</li>
+          <ul>
+            <li>Persistent data to be shared among two or more containers</li>
+            <li class="no-bullet">
+              <code>docker create -v /dbdata --name dbstore training/postgres /bin/true</code>
+            </li>
+            <li class="no-bullet">
+              <code>docker run -d --volumes-from dbstore --name db1 training/postgres</code>
+            </li>
+            <li class="no-bullet">
+              <code>docker run -d --volumes-from dbstore --name db2 training/postgres</code>
+            </li>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Dockerfile</h1>
+        </hgroup>
+        <ul class="xx-small" style="zoom: 0.90">
+          <li>Dockerfile is a script that creates a new image</li>
+          <pre class="brush: plain; gutter: 'false'">
+          # This is a comment
+          FROM oraclelinux:7
+          MAINTAINER Tomas Vitvar &lt;tomas@vitvar.com>
+          RUN yum install -q -y httpd
+          EXPOSE 80
+          CMD httpd -X
+          </pre>
+
+          <li>A line in the Dockerfile will create an intermediary layer</li>
+
+          <pre class="brush: plain; gutter: 'false'">
+          $ docker build -t tomvit/httpd:v1 .
+          Sending build context to Docker daemon 2.048 kB
+          Step 1 : FROM oraclelinux:7
+           ---> 4c357c6e421e
+          Step 2 : MAINTAINER Tomas Vitvar &lt;tomas@vitvar.com>
+           ---> Running in 35feebb2ffab
+           ---> 95b35d5d793e
+          Removing intermediate container 35feebb2ffab
+          Step 3 : RUN yum install -q -y httpd
+           ---> Running in 3b9aee3c3ef1
+           ---> 888c49141af9
+          Removing intermediate container 3b9aee3c3ef1
+          Step 4 : EXPOSE 80
+           ---> Running in 03e1ef9bf875
+           ---> c28545e3580c
+          Removing intermediate container 03e1ef9bf875
+          Step 5 : CMD httpd -X
+           ---> Running in 3c1c0273a1ef
+          </pre>
+
+          <ul class="no-bullet">
+            <li>If processing fails at some step, all preceeding steps will be loaded from the cache on the next run.</li>
+          </ul>
+
+
+        </ul>
+      </div>
+    </section>
+
+    <div class="slide outline"></div>
+
+    <section>
+      <header>Swarm</header>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Swarm</h1>
+        </hgroup>
+        <img src="img/swarm-diagram.png" style="width: 750px; margin-left: 25px; margin-top: 20px" />
+      </div>
+    </section>
+
+
+  </section>
+
+  <div class="slide outline"></div>
+
+  <section>
+    <header>Kubernetes</header>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Overview</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>In your architecture...</li>
+        <ul>
+          <li>Containers are atomic pieces of application architecture</li>
+          <li>Containers can be linked (e.g. web server, DB)</li>
+          <li>Containers access shared resources (e.g. disk volumes)</li>
+        </ul>
+        <li>Kubernetes</li>
+        <ul>
+          <li>Automation of deployments, scaling, management of containerized applications across number of nodes</li>
+          <li>Based on Borg, a parent project from Goolge</li>
+        </ul>
+        <img src="img/kubernetes-overview.png" width="400px" style="margin-top: 10px; margin-left: 20px"></img>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>System Architecture</h1>
+      </hgroup>
+      <img src="img/pre-ccm-arch.png" style="margin-left: -100px; margin-top: 20px; zoom: 0.88"></img>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Major Terms</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>Node</li>
+        <ul>
+          <li>a worker machine in Kubernetes, previously known as a minion (a VM or physical machine). It uses <code>kubelet</code> and <code>kube-proxy</code> to communicate with the master and other nodes/services.</li>
+        </ul>
+        <li>Master</li>
+        <ul>
+          <li>A node that manages the cluster of nodes.</li>
+        </ul>
+        <li>Pod</li>
+        <ul>
+          <li>The basic building block of Kubernetes, one or more dependant containers.</li>
+        </ul>
+        <li>Service</li>
+        <ul>
+          <li>A set of pods with rules allowing pods to talk to each other, such as:</li>
+          <ul>
+            <li><code>NodePort</code> exposes the pod under a cluster IP.</li>
+            <li><code>LoadBalancer</code> exposes the pod for load balancing by external load balancer</li>
+          </ul>
+        </ul>
+        <li>Controllers</li>
+        <ul>
+          <li>Worker units to ensure a desired state, such as:</li>
+          <ul>
+            <li><code>ReplicaSet</code> ensures that a specified number of pod replicas are running.</li>
+            <li><code>Deployment</code> manages ReplicaSets, provides declarative updates to pods.</li>
+            <li><code>StatefulSet</code> manages deployment and scaling of a set of Pods.</li>
+            <li><code>DeamonSet</code> ensures that all (or some) Nodes run a copy of a Pod.</li>
+          </ul>
+        </ul>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Features</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>Automatic binpacking</li>
+        <ul>
+          <li>Automatically places containers onto nodes based on their resource requirements and other constraints.</li>
+        </ul>
+        <li>Horizontal scaling</li>
+        <ul>
+          <li>Scales your application up and down with a simple command, with a UI, or automatically based on CPU usage.</li>
+        </ul>
+        <li>Automated rollouts and rollbacks</li>
+        <ul>
+          <li>Progressive rollout out of changes to application/configuration, monitoring application health
+            and rollback when something goes wrong.</li>
+        </ul>
+        <li>Storage orchestration</li>
+        <ul>
+          <li>Automatically mounts the storage system (local or in the cloud)</li>
+        </ul>
+        <li>Self-healing</li>
+        <ul>
+          <li>Restarts containers that fail, replaces and reschedules containers when nodes die, kills containers that don't respond to user-defined health checks.</li>
+        </ul>
+        <li>Service discovery and load balancing</li>
+        <ul>
+          <li>Gives containers their own IP addresses and a single DNS name for a set of containers, and can load-balance across them.</li>
+        </ul>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Demo</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>Environment Setup</li>
+        <ul class="no-bullet">
+          <li><code>minikube</code> &ndash; a local virtual machine (running a master and a single node)</li>
+          <li><code>kubectl</code> &ndash; CLI to access Kubernetes cluster</li>
+        </ul>
+        <li>Steps</li>
+
+        <style>
+          #steps li {
+            margin-top: 5px;
+          }
+        </style>
+
+        <ol id="steps">
+          <li>create <code>hello-node</code> app in node.js and test it [see <a href="examples/kubernetes/hellonode/server.js">server.js</a>]<br />
+            <code>node server.js</code></li>
+          <li>create docker image for the app [see <a href="examples/kubernetes/hellonode/Dockerfile">Dockerfile</a>]<br />
+            <code>docker build -t hello-node:v1 .</code></li>
+          <li>deploy the app to Kubernetes by using <code>kubectl</code><br />
+            <code>kubectl run hello-node --image=hello-node:v1 --port=8080</code></li>
+          <li>Expose the app as a load balancer service.<br />
+            <code>kubectl expose deployment hello-node --type=LoadBalancer</code></li>
+          <li>Explore the app in minikube dashboard.<br />
+            <code>minikube dashboard</code></li>
+          <li>Fire requests at the service and count them [see <a href="examples/kubernetes/hellonode/test.sh">test.sh</a>]<br />
+            <code>./test.sh</code>.</li>
+          <li>Change the number of replicas by using the dashboard or <code>kubectl</code>.</li>
+        </ol>
+    </div>
+
+
+
+  </section>
+
+
+
+  </section>
