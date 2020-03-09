@@ -135,8 +135,7 @@
             <li>LXC &ndash; default implementation in Linux</li>
             <li><b>Docker Containers</b></li>
             <ul>
-              <li>Builds on new Kernel features: control groups (cgroups), kernel namespaces,
-                union-capable file system (OverlayFS, AUFS, etc.)</li>
+              <li>Builds on Linux namespaces and union file system (OverlayFS, AUFS, etc.)</li>
               <li>A way to build, commit and share images</li>
               <li>Build images using a description file called Dockerfile</li>
               <li>Large number of available base and re-usable images</li>
@@ -144,6 +143,26 @@
           </ul>
         </ul>
       </div>
+      
+      <div class="slide">
+        <hgroup>
+          <h1>Linux Namespaces</h1>
+        </hgroup>
+        <ul>
+          <li>"Isolation" of Linux processes</li>
+          <li>There are 7 namespaces</li>
+          <ul>
+            <li>Mount &ndash; isolae filesystem mount points</li>
+            <li>UTS &ndash; isolate hostname and domainname</li>
+            <li>IPC &ndash; isolate interprocess communication resources</li>
+            <li>PID &ndash; isolate PID number space</li>
+            <li>Network &ndash; isolate network interfaces</li>
+            <li>User &ndash; isolate UID/GID number spaces</li>
+            <li>cgroup &ndash; isolate cgroup root directory</li>
+          </ul>
+        </ul>
+      </div>
+
 
       <div class="slide">
         <hgroup>
