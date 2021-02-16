@@ -3,338 +3,386 @@
 	Web 2.0, CTU course slides
 	(cc) 2010-2014 Tomas Vitvar, tomas@vitvar.com
 -->
-<html>   
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-        <meta name="course"   content="Web 2.0"/>
-		<meta name="lecture"  content="Lecture 00"/>
-   		<meta name="keywords" content="motivation, scope, requirements, labs, resources"/>
-           
-        <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
-        <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
-        <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
+<html>
 
-        <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>Motivation and Course Overview</title>
-	</head>
-	<body> 
-    
-		<footer>
-			<p><b>#TITLE#</b>,&nbsp;<span class="meta_semester"/>,&nbsp;
-			<span class="meta_twitter"/></p>
-			<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
-		</footer>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="course" content="Web 2.0" />
+	<meta name="lecture" content="Lecture 00" />
+	<meta name="keywords" content="motivation, scope, requirements, labs, resources" />
 
-    	<div class="slide intro">
+	<link type="text/css" rel="stylesheet" href="css/meta.css">
+	</link>
+	<link type="text/css" rel="stylesheet" href="css/ctu-fit.css">
+	</link>
+	<link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css">
+	</link>
+
+	<script type="text/javascript" src="humla/lib/humla.js"></script>
+	<title>Motivation and Course Overview</title>
+</head>
+
+<body>
+
+	<footer>
+		<p><b>#TITLE#</b>,&nbsp;<span class="meta_semester" />,&nbsp;
+			<span class="meta_twitter" /></p>
+		<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
+	</footer>
+
+	<div class="slide intro">
+		<hgroup>
+			<h1><span class="meta_course" /></h1>
+			<h2>#TITLE#</h2>
+		</hgroup>
+		<div class="author">
+			<p class="meta_author" />
+			<p><span class="meta_email" /> &bull; <span class="meta_twitter" /> &bull;
+				<span class="meta_web" /></p>
+		</div>
+		<center>
+			<div class="meta_logo"></div>
+		</center>
+		<div class="org">
+			<p class="meta_org" />
+			<p><span class="meta_orgfac" /> &bull; <span class="meta_field" />
+				&bull; <span class="meta_orgweb" /></p>
+		</div>
+		<div class="etc">
+			<div class="text-info">
+				Modified: #LAST_MODIFIED#<br />
+				Humla v#HUMLA_VERSION#
+			</div>
+			<a href="http://creativecommons.org/licenses/by-sa/3.0/">
+				<div class="license"></div>
+			</a>
+			<div class="oppa"></div>
+		</div>
+	</div>
+
+	<div class="slide outline"></div>
+
+	<section>
+		<header>Motivation</header>
+
+		<div class="slide">
 			<hgroup>
-				<h1><span class="meta_course"/></h1>
- 				<h2>#TITLE#</h2>
+				<h1>Web 2.0</h1>
 			</hgroup>
-			<div class="author">
-				<p class="meta_author"/>
-				<p><span class="meta_email"/> &bull; <span class="meta_twitter"/> &bull; 
-				<span class="meta_web"/></p>
-			</div>
-			<center><div class="meta_logo"></div></center>
-			<div class="org">
-				<p class="meta_org"/>
-				<p><span class="meta_orgfac"/> &bull; <span class="meta_field"/> 
-				&bull; <span class="meta_orgweb"/></p>
-			</div>
-			<div class="etc">
-        		<div class="text-info">
-    				Modified: #LAST_MODIFIED#<br/>
-					Humla v#HUMLA_VERSION#
-				</div>
-				<a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
-				<div class="oppa"></div>
-			</div>
-		</div>
-		
-        <div class="slide outline"></div>
-		
-		<section>
-			<header>Motivation</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Web 2.0</h1>
-				</hgroup>
+			<ul>
+				<li>A new version of the Web?</li>
+				<li>Principles</li>
 				<ul>
-					<li>A new version of the Web?</li>
-					<li>Principles</li>
-					<ul>
-						<li>Read-Write Web</li>
-						<li>Programmable Web</li>
-						<li>Realtime Web</li>
-						<li>Social Web</li>
-					</ul>
+					<li>Read-Write Web</li>
+					<li><b>Programmable Web</b></li>
+					<li><b>Realtime Web</b></li>
+					<li>Social Web</li>
 				</ul>
-			</div>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>Motivation in Brief</h1>
-				</hgroup>
-				<ul>
-					<li>The Web is programmable</li>
-					<ul>
-						<li>Applications provide <b>data</b> and <b>functionality</b></li>
-						<li>Users &ndash; end-users (GUI) and programmers (API)</li>
-						<li>Any company with a Web presence has an API</li>
-						<ul>
-								<li>Google, Amazon, LinkedIn, Facebook, ...</li>
-						</ul>
-					</ul>
-					<li>Need for highly scalable apps</li>
-					<ul>
-						<li>Sudden increase in traffic</li>
-						<li>Slashdot effect</li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>W20 and MDW Courses</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li><b>W20 builds on MDW!</b></li>
-					<li>Application Architecture</li>
-					<ul>
-						<li>Multi-tier client-server architecture</li>
-						<li>Interface of the app, REST</li>
-						<li>Client side of the architecture, JavaScript, AJAX</li>
-						<li>Infrastructure empowered by cloud technologies</li>
-					</ul>
-					<li>Technology, Platform</li>
-					<ul>
-						<li>JEE was a platform in enterprise environments</li>
-						<li>JavaScript</li>
-						<ul>
-							<li>client-side + related technologies</li>
-							<li>server-side &ndash; asynchronous I/O, node.js</li>
-						</ul>
-						<li>It does not mean you cannot combine technologies</li>
-						<ul>
-							<li>Node.js as a Web server, ESB for proxy services with back-end systems,
-								all running in a cloud environment (auto scaling, load balancers, message queues, etc.)</li>
-						</ul>
-					</ul>
-
-				</ul>
-			</div>
-	
-		</section>
-		
-        <div class="slide outline"></div>		
-
-		<section>
-			<header>Scope, Requirements, Learnings</header>
-		
-			<div class="slide" id="scope">
-				<hgroup>
-					<h1>Scope</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Cloud Architectures</li>
-					<ul>
-						<li>Details of some IaaS and PaaS services</li>						
-						<li>Cloud Native, Microservice Architecture</li>
-						<li>Containers</li>
-						<li>Docker, Kubernetes</li>
-					</ul>
-					
-					<li>Advanced HTTP</li>
-					<ul>
-						<li>Same origin policy, cross-origin</li>
-						<li>OAuth, Open ID, JWT</li>
-						<li>Realtime Web protocols</li>
-						<li>HTTP Performance</li>						
-					</ul>
-					
-					<li>Selected middleware technologies</li>
-										
-				</ul>
-			</div>
-						
-        	<div class="slide" id="plan">
-    			<hgroup>
-    				<h1>Organization of Lectures</h1>
-    			</hgroup>
-    			<ul class="x-small">
-    				<li>13 Lectures</li>
-                    <ul>
-                        <li>Czech: Mon 9:15-10:45, THa:s135</li>
-                        <li>English: TBA</li>
-                    </ul>
-    				
-    				<li>Plan</li>
-    				<ol class="xx-small">
-	            <li>17.02.2019 &#150; Motivation and Course Overview</li>
-	            <li>24.02.2019 &#150; Asynchronous I/O</li>
-	            <li>02.03.2019 &#150; Introduction to Cloud Computing<!--(<a href="">html</a>)--></li>
-							<li>09.03.2019 &#150; Microservices and Cloud Native Architecture <!--(<a href="">html</a>)--></li>
-	            <li>16.03.2019 &#150; Reserve (Cloud Computing)</li>
-	            <li>23.03.2019 &#150; Accessing and Utilizing Services <!--(<a href="">html</a>)--></li>
-	            <li>30.03.2019 &#150; Security <!--(<a href="">html</a>)--></li>
-	            <li>06.04.2019 &#150; Protocols for the Realtime Web <!--(<a href="">html</a>)--></li>
-							<li>13.04.2019 &#150; Easters</li>
-							<li>20.04.2019 &#150; HTTP Performance Optimization<!--(<a href="">html</a>)--></li>
-							<li>27.04.2019 &#150; Blockchain</li>
-							<li>04.04.2019 &#150; Annotations</li>
-	            <li>11.04.2019 &#150; Reserve</li>
-    				</ol> 				
-    			</ul>
-    		</div>			
-	
-			<div class="slide">
-				<hgroup>
-					<h1>Organization of Practicals</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Work alone, you can collaborate</li>
-					<li>Practicals every second week</li>
-					<li>Number of sessions: 6-7, 5 major tasks</li>
-					<ol>
-						<li>Introduction, JavaScript/AppScript</li>
-						<li>TBD</li>
-						<li>CORS/JSONP</li>
-						<li>OAuth (JWT)</li>
-						<li>Realtime Web</li>
-						<li>Annotations</li>						
-					</ol>		
-					<li>Plus a number of tasks to complete at home</li>
-				</ul>
-			</div>
-			
-		</section>
-
-		<div class="slide outline">
+			</ul>
 		</div>
 
-		<section>
-			<header>Assessment, Resources, Communication</header>
-		
-    		<div class="slide" id="assessment">
-    			<hgroup>
-    				<h1>Assessment</h1>
-    			</hgroup>
-    			<ul class="small">
-    				<li>Labs</li>
-    				<ul>
-						<li>Presence is mandatory</li>
-						<ul>
-                            <li>You can miss up to 1 lab without sending regrets</li>
-                        </ul>
-                        <li>Total maximum points: P=40</span></li>
-                        <ul>
-                        	<li>exercises for labs + your activity + your homeworks</li>
-                       	</ul> 
-						<li><b>to pass</b>: 
+		<div class="slide">
+			<hgroup>
+				<h1>Motivation in Brief</h1>
+			</hgroup>
+			<ul>
+				<li>Need for highly performant and scalable apps</li>
+				<ul>
+					<li>Sudden increase in traffic</li>
+					<li>Slashdot effect</li>
+				</ul>
+				<li>The Web is programmable</li>
+				<ul>
+					<li>Applications provide <b>data</b> and <b>functionality</b></li>
+					<li>Users &ndash; end-users (GUI) and programmers (API)</li>
+					<li>Any company with a Web presence has an API</li>
+					<ul>
+						<li>Google, Amazon, LinkedIn, Facebook, ...</li>
+					</ul>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>AM2 and AM1 Courses</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li><b>AM2 builds on AM1</b></li>
+				<li>Application Architecture</li>
+				<ul>
+					<li>Multi-tier client-server architecture</li>
+					<li>Cloud native and microservices</li>
+					<li>Interface of the app, REST</li>
+					<li>Client side of the architecture, JavaScript, AJAX</li>
+					<li>Infrastructure empowered by cloud technologies</li>
+				</ul>
+				<li>Technology, Platform</li>
+				<ul>
+					<li>JavaScript</li>
+					<ul>
+						<li>client-side + related technologies</li>
+						<li>server-side &ndash; asynchronous I/O, node.js</li>
+					</ul>
+					<li>It does not mean you cannot combine technologies</li>
+					<ul>
+						<li>Node.js as a Web server, ESB for proxy services with back-end systems,
+							all running in a cloud environment (auto scaling, load balancers, message queues, etc.)</li>
+					</ul>
+				</ul>
+
+			</ul>
+		</div>
+
+	</section>
+
+	<div class="slide outline"></div>
+
+	<section>
+		<header>Scope, Requirements, Learnings</header>
+
+		<div class="slide" id="scope">
+			<hgroup>
+				<h1>Scope</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Cloud Architectures</li>
+				<ul>
+					<li>Details of some IaaS and PaaS services</li>
+					<li>Cloud Native, Microservice Architecture</li>
+					<li>Containers</li>
+					<li>Docker, Kubernetes</li>
+				</ul>
+
+				<li>Advanced HTTP</li>
+				<ul>
+					<li>Same origin policy, cross-origin</li>
+					<li>OAuth, Open ID, JWT</li>
+					<li>Realtime Web protocols</li>
+					<li>HTTP Performance, HTTP/2</li>
+				</ul>
+
+				<li>Selected middleware technologies</li>
+
+			</ul>
+		</div>
+
+		<div class="slide" id="plan">
+			<hgroup>
+				<h1>Organization of Lectures</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>13 Lectures</li>
+				<ul>
+					<li>Czech: Mon 9:15-10:45, online</li>
+				</ul>
+
+				<li>Plan</li>
+				<ol class="xx-small">
+					<li>15.02.2021 &#150; Motivation and Course Overview</li>
+					<li>22.02.2021 &#150; Asynchronous I/O</li>
+					<li>01.03.2021 &#150; Introduction to Cloud Computing
+						<!--(<a href="">html</a>)-->
+					</li>
+					<li>08.03.2021 &#150; Cloud Native Architecture
+						<!--(<a href="">html</a>)-->
+					</li>
+					<li>15.03.2021 &#150; Microservices Patterns</li>
+					<li>22.03.2021 &#150; Accessing and Utilizing Services
+						<!--(<a href="">html</a>)-->
+					</li>
+					<li>29.03.2021 &#150; Security
+						<!--(<a href="">html</a>)-->
+					</li>
+					<li>05.04.2021 &#150; Easters</li>
+					<li>12.04.2021 &#150; Protocols for the Realtime Web
+						<!--(<a href="">html</a>)-->
+					</li>
+					<li>19.04.2021 &#150; HTTP Performance Optimization
+						<!--(<a href="">html</a>)-->
+					</li>
+					<li>26.04.2021 &#150; Kafka</li>
+					<li>03.05.2021 &#150; Reserve</li>
+					<li>10.05.2021 &#150; Reserve</li>
+				</ol>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Organization of Practicals</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Work alone, you can collaborate</li>
+				<li>Practicals every second week</li>
+				<li>Number of sessions: 6-7, 5 major tasks</li>
+				<ol>
+					<li>Introduction, JavaScript</li>
+					<li>CORS/JSONP</li>
+					<li>OAuth (JWT)</li>
+					<li>Realtime Web</li>
+					<li>HTTP/2</li>
+				</ol>
+				<li>Plus a number of tasks to complete at home</li>
+			</ul>
+		</div>
+
+	</section>
+
+	<div class="slide outline">
+	</div>
+
+	<section>
+		<header>Assessment, Resources, Communication</header>
+
+		<div class="slide" id="assessment">
+			<hgroup>
+				<h1>Assessment</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Labs</li>
+				<ul>
+					<li>Presence is mandatory</li>
+					<ul>
+						<li>You can miss up to 1 lab without sending regrets</li>
+					</ul>
+					<li>Total maximum points: P=40</span></li>
+					<ul>
+						<li>exercises for labs + your activity + your homeworks</li>
+					</ul>
+					<li><b>to pass</b>:
 						P &gt;= 20</li>
-                    </ul>
-					<li>Final exam</li>
-					<ul class="x-small">
-						<li>Mandatory written test: 3 parts, ~1 hour</li>
-                        <ul>
-						    <li>each gives you a max. of 20 points, the total 
-                            E = 60</span> points</li>
-							<li>you must have at least 50% of points from each theme covered by a test part and 50% 
+				</ul>
+				<li>Final exam</li>
+				<ul class="x-small">
+					<li>Mandatory written test: 3 parts, ~1 hour</li>
+					<ul>
+						<li>each gives you a max. of 20 points, the total
+							E = 60</span> points</li>
+						<li>you must have at least 50% of points from each theme covered by a test part and 50%
 							of points in total</li>
-                        </ul>
-						<li>Final score:</li>
-                        <ul>
-                            <li>P + E = 100</span> maximum points</li>
-						    <li>The more points you have from labs, the better for the exam!</li>
-                        </ul>
 					</ul>
-                </ul>
-    		</div>
-	
-			<div class="slide">
-				<hgroup>
-					<h1>Assessment &ndash; Final Marks</h1>
-				</hgroup>
-					<center>
-						<table class="prettytable" style="margin-top: 30px; margin-bottom: 30px; width: 450px">
-							<caption>Source: http://www.cvut.cz/pracoviste/pravni-odbor/dokumenty/studijni-predpisy/studijnirad.pdf</caption>
-							<thead>
-								<tr><th>Mark</th><th>Points</th><th>In words</th></tr>
-							</thead>
-							<tbody>
-								<tr><td>A</td><td>100&ndash;90</td><td>výborně</td></tr>
-								<tr><td>B</td><td>89&ndash;80</td><td>velmi dobře</td></tr>
-								<tr><td>C</td><td>79&ndash;70</td><td>dobře</td></tr>
-								<tr><td>D</td><td>69&ndash;60</td><td>uspokojivě</td></tr>
-								<tr><td>E</td><td>59&ndash;50</td><td>dostatečně</td></tr>
-								<tr><td>F</td><td>49&ndash;0</td><td>nedostatečně</td></tr>
-							</tbody>
-						</table>
-					</center>
+					<li>Final score:</li>
 					<ul>
-						<li>Everything good and bad will count</li>
-						<ul>
-							<li>practicals, coding, (pro-)activity, passiveness, <br/>
-							hacking, lectures, exam, cheating, ...</li>
-						</ul>
-					</ul>
-			</div>
-		
-			<div class="slide" id="resources">
-				<hgroup>
-					<h1>Resources</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Online sources</li>
-					<ul class="x-small">
-						<li><a href="https://edux.fit.cvut.cz/courses/MI-W20/">https://edux.fit.cvut.cz/courses/MI-W20/</a> &ndash; EDUX</li>
-						<li><a href="https://project.fit.cvut.cz">https://project.fit.cvut.cz/</a> &ndash; your project home</li>
-						<li><a href="http://w20.vitvar.com">http://w20.vitvar.com</a> &ndash; both html and pdf (1 and 2 slides per page)</li>
-					</ul>
-					<li>Books</li>
-					<ul class="xx-small">
-						<li>B. Burns: <i>Designing Distributed Systems</i>, O'Reily 2018</li>
-						<li>I. Grikorik: <i>High Performance Browser Networking</i>, O'Reily 2013</li>
-						<li>L. Richardson, M. Amundsen: <i>RESTful Web APIs</i>, O'Reilly Media, May 2015, ISBN&nbsp;978-1-449-35806-8.</li>
-					</ul>
-					<li>Other</li>
-					<ul>
-						<li>Many sources on the Web, to be listed throughout the course</li>
-						<li>A lot of W3C sources, Web architecture, HTTP</li>
+						<li>P + E = 100</span> maximum points</li>
+						<li>The more points you have from labs, the better for the exam!</li>
 					</ul>
 				</ul>
-			</div>
-	
-    		<div class="slide" id="humla">
-    			<hgroup>
-    				<h1>About Slides</h1>
-    			</hgroup>
-    			<ul class="x-small">
-    				<li>Humla &#150; Open Source HTML5 Presentation Environment</li>
-    				<ul>
-                        <li>every slide has a unique URL</li>
-                        <li>all figures linked with Google drawings</li>
-                        <li>possible to format and print in PDF</li>
-                        <li>running local, with back-end NodeJS support, and offline</li>
-                        <li>Fork it at <a href="https://github.com/tomvit/humla">Humla github repo</a></li>
-    				</ul>
-                    <li>Keys</li>
-                    <ul class="no-bullet spacing xx-small">
-                        <li><span class="key">1</span>&#160;&#160;default browsing mode</li>
-                        <li><span class="key">2</span>&#160;&#160;slideshow mode (automatically scales to full screen)</li>
-                        <li><span class="key">3</span>&#160;&#160;grid (overview) mode</li>
-                        <li><span class="key">4</span>&#160;&#160;print mode, 2 slides per page</li>
-                        <li><span class="key">&#8592;</span>&#160;&#160;slide left</li>
-                        <li><span class="key">&#8594;</span>&#160;&#160;slide right</li>
-                        <li><span class="key">d</span>&#160;&#160;debug mode</li>
-                        <li><span class="key">e</span>&#160;&#160;toggle last error messages on/off</li>
-                    </ul>
-    			</ul>
-    		</div>
-				
-		</section>
-		
-		
-	</body>
-</html>	
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Assessment &ndash; Final Marks</h1>
+			</hgroup>
+			<center>
+				<table class="prettytable" style="margin-top: 30px; margin-bottom: 30px; width: 450px">
+					<caption>Source: http://www.cvut.cz/pracoviste/pravni-odbor/dokumenty/studijni-predpisy/studijnirad.pdf</caption>
+					<thead>
+						<tr>
+							<th>Mark</th>
+							<th>Points</th>
+							<th>In words</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>A</td>
+							<td>100&ndash;90</td>
+							<td>výborně</td>
+						</tr>
+						<tr>
+							<td>B</td>
+							<td>89&ndash;80</td>
+							<td>velmi dobře</td>
+						</tr>
+						<tr>
+							<td>C</td>
+							<td>79&ndash;70</td>
+							<td>dobře</td>
+						</tr>
+						<tr>
+							<td>D</td>
+							<td>69&ndash;60</td>
+							<td>uspokojivě</td>
+						</tr>
+						<tr>
+							<td>E</td>
+							<td>59&ndash;50</td>
+							<td>dostatečně</td>
+						</tr>
+						<tr>
+							<td>F</td>
+							<td>49&ndash;0</td>
+							<td>nedostatečně</td>
+						</tr>
+					</tbody>
+				</table>
+			</center>
+			<ul>
+				<li>Everything good and bad will count</li>
+				<ul>
+					<li>practicals, coding, (pro-)activity, passiveness, <br />
+						hacking, lectures, exam, cheating, ...</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide" id="resources">
+			<hgroup>
+				<h1>Resources</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Online sources</li>
+				<ul class="x-small">
+					<li><a href="https://edux.fit.cvut.cz/courses/MI-W20/">https://edux.fit.cvut.cz/courses/MI-W20/</a> &ndash; EDUX</li>
+					<li><a href="https://project.fit.cvut.cz">https://project.fit.cvut.cz/</a> &ndash; your project home</li>
+					<li><a href="http://w20.vitvar.com">http://w20.vitvar.com</a> &ndash; both html and pdf (1 and 2 slides per page)</li>
+				</ul>
+				<li>Books</li>
+				<ul class="xx-small">
+					<li>I. Grikorik: <i>High Performance Browser Networking</i>, O'Reily 2013</li>
+					<li>B. Burns: <i>Designing Distributed Systems</i>, O'Reily 2018</li>
+					<li>L. Richardson, M. Amundsen: <i>RESTful Web APIs</i>, O'Reilly Media, May 2015, ISBN&nbsp;978-1-449-35806-8.</li>
+				</ul>
+				<li>Other</li>
+				<ul>
+					<li>Many sources on the Web, to be listed throughout the course</li>
+					<li>A lot of W3C sources, Web architecture, HTTP</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide" id="humla">
+			<hgroup>
+				<h1>About Slides</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Humla &#150; Open Source HTML5 Presentation Environment</li>
+				<ul>
+					<li>every slide has a unique URL</li>
+					<li>all figures linked with Google drawings</li>
+					<li>possible to format and print in PDF</li>
+					<li>running local, with back-end NodeJS support, and offline</li>
+					<li>Fork it at <a href="https://github.com/tomvit/humla">Humla github repo</a></li>
+				</ul>
+				<li>Keys</li>
+				<ul class="no-bullet spacing xx-small">
+					<li><span class="key">1</span>&#160;&#160;default browsing mode</li>
+					<li><span class="key">2</span>&#160;&#160;slideshow mode (automatically scales to full screen)</li>
+					<li><span class="key">3</span>&#160;&#160;grid (overview) mode</li>
+					<li><span class="key">4</span>&#160;&#160;print mode, 2 slides per page</li>
+					<li><span class="key">&#8592;</span>&#160;&#160;slide left</li>
+					<li><span class="key">&#8594;</span>&#160;&#160;slide right</li>
+					<li><span class="key">d</span>&#160;&#160;debug mode</li>
+					<li><span class="key">e</span>&#160;&#160;toggle last error messages on/off</li>
+				</ul>
+			</ul>
+		</div>
+
+	</section>
+
+
+</body>
+
+</html>
