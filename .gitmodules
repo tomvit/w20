@@ -1,6 +1,0 @@
-[submodule "humla"]
-	path = humla
-	url = https://github.com/tomvit/humla.git
-[submodule "lib/feed-tables"]
-	path = lib/feed-tables
-	url = https://github.com/tomvit/Feed-Tables.git

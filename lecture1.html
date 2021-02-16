@@ -152,43 +152,6 @@
 					</ul>
 			  </ul>			
 	  </div>
-	
-		<!-- <div class="slide">
-			<hgroup>
-				<h1>Event Loop</h1>
-			</hgroup>
-		
-			<ul class="small">
-				<li>Event Loop</li>
-				<ul>
-					<li>Core element of an asynchrnous application</li>
-					<li>It schedulles and runs asynchronous tasks</li>
-				</ul>
-				<img src="img/event-loop.png"></img>
-	  </div>	 -->
-
-	<!-- <div class="slide">
-		<hgroup>
-			<h1>Non-Blocking I/O Model</h1>
-		</hgroup>
-		<ul class="small">
-			<li>Connections maintained by the OS, not the Web app</li>
-			<ul>
-				<li>The Web app registers events, OS triggers events when occur</li>
-			</ul>
-		</ul>
-		<div id="1kxkFc3Chl4qFXxH_4f2seuNbpBdENMyZWMRUmxd1p28" class="h-drawing" style="height: 220px"></div>
-		<ul class="small">
-			<li>Characteristics</li>
-			<ul>
-				<li>Event examples: new connection, read, write, closed</li>
-				<li>The app may create working threads, but controls the number!</li>
-				<ul>
-					<li>much less number of working threads as opposed to blocking I/O</li>
-				</ul>
-			</ul>
-		</ul>
-	</div>		 -->
 		
 	</section>
 
@@ -213,7 +176,7 @@
 				<li>Client-side (browser) and server-side (node.js, AppsScript)</li>
 				<li>Standard</li>
 				<ul>
-					<li>Current stable release is ECMAScript 2017 (standard ECMA-262)</li>
+					<li>Current stable release is ECMAScript 2020</li>
 				</ul>
 				<li>Major characteristics</li>
 				<ul>
@@ -235,11 +198,64 @@
 
 		<div class="slide">
 			<hgroup>
+				<h1>Javascript Runtime</h1>
+			</hgroup>
+			<div id="1kfGhsbXThWPmWqMx6-Y8UkBUlgoaCbiJCFQ7qIIcddQ" format="png" class="h-drawing" style="height: 270px; margin-top: 20px"></div>
+			<ul class="xx-small">	
+				<li>Stack</li>
+				<ul>
+					<li>Contains frames, i.e. function parameters and local variables</li>
+				</ul>
+				<li>Heap</li>
+				<ul>
+					<li>Objects are allocated in a heap, a region of memory.</li>
+				</ul>
+				<li>Queue</li>
+				<ul>
+					<li>A list of messages to be processed</li>
+					<li>Message is <i>data</i> and <i>callback</i> to be processed</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Stack</h1>
+			</hgroup>
+			<ul class="xx-small">	
+				<li>When running a program...</li>
+				<pre class="brush: js; class-name: ''">
+					function foo(b) {
+					  let a = 10
+					  return a + b + 11
+					}
+
+					function bar(x) {
+					  let y = 3
+					  return foo(x * y)
+					}
+
+					console.log(bar(7)) //returns 42</pre>	
+				<ol style="margin-left: -40px">
+					<li>calling <code>bar</code>: a frame is created with bar's arguments and variables.</li>
+					<li><code>bar</code> calls <code>foo</code>: a new frame with foo's args and vars is created.</li>
+					<li><code>foo</code> returns: the top frame element is popped out of the stack.</li>
+					<li><code>bar</code> returns: the stack is empty.</li>
+				</ol>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
 				<h1>Event Loop</h1>
 			</hgroup>
-			<ul class="x-small">	
-				<div id="1kfGhsbXThWPmWqMx6-Y8UkBUlgoaCbiJCFQ7qIIcddQ" format="png" class="h-drawing" style="height: 270px; margin-top: 20px"></div>
-				<ul style="margin-top: 20px">
+			<ul class="xx-small">	
+				<li>Event loop</li>
+				<pre class="brush: js; class-name: ''">
+	      while (queue.waitForMessage()) {
+	        queue.processNextMessage()
+	      }</pre>	
+				<ul>
 					<li>Message = data + callback to be processed</li>
 					<li>Messages are process completely one by one</li>
 					<ul>
@@ -247,6 +263,33 @@
 						<li>Processing should not block for a long time &ndash; Workers</li>
 					</ul>
 					<li>Brwoser adds a new message when an event occurs and there is an event listener</li>			
+				</ul>
+				<li>Run-to-completion</li>
+				<ul>
+					<li>Each message is processed fully before any other message is processed.</li>
+					<li>A function runs entirely before any other code runs</li>
+					<ul>
+						<li>unlike in preemtive multitasking</li>
+					</ul>
+					<li>If a message takes much time to complete, all work can be blocked!</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Multiple Runtimes</h1>
+			</hgroup>
+			<ul class="x-small">					
+				<li>Runtime</li>
+					<ul>
+						<li>Stack, Heap, Message Queue</li>
+						<li><code>iframe</code> and a Web worker has its own runtimes</li>
+					</ul>
+				<li>Communication between runtimes</li>
+				<ul>
+					<li>Runtimes communicate via <code>postMessage</code></li>
+					<li>A runtime can receive a message if it listens to message events</li>
 				</ul>
 			</ul>
 		</div>
@@ -392,6 +435,16 @@
 				</ul>
 			</ul>
 		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Demo</h1>
+			</hgroup>
+			<ul class="x-small" style="margin-top: 10px; margin-left: -20px; width: 100%; height: 83%">
+				<iframe src="http://10.38.5.10:4200/local/" width="100%" height="100%" style="border:none"></iframe>
+			</ul>
+		</div>
+
 
 		<div class="slide">
 			<hgroup>

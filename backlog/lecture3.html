@@ -1,882 +1,692 @@
 <!DOCTYPE html>
 <!--
-    Middleware and Web Services, CTU course slides
-    (cc) 2010-2013 Tomas Vitvar, http://vitvar.com
-    written for Humla, an open source HTML5 presentation environment
+	Web 2.0, CTU course slides
+	(cc) 2010-2014 Tomas Vitvar, tomas@vitvar.com
 -->
-<html>  
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-        <meta name="course"   content="Middleware and Web Services"/>
-        <meta name="lecture"  content="Lecture 3"/>
-        <meta name="keywords" content="REST, uniform interface, asynchronous REST, content negotiation, error codes"/>
-           
-        <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
-        <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
-        <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
+<html>
 
-        <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>REST Architecture 2</title>
-    </head>
-    
-    <body>
-        <footer>
-            <p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester"/>,&nbsp;
-            <span class="meta_twitter"/></p>
-            <p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
-        </footer>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="course" content="Web 2.0" />
+  <meta name="lecture" content="Lecture 3" />
+  <meta name="keywords" content="SaaS, IaaS, PaaS" />
 
-        <div class="slide intro">
-            <hgroup>
-                <h1><span class="meta_course"/></h1>
-                <h2>#META_LECTURE#: #TITLE#</h2>
-            </hgroup>
-            <div class="author">
-                <p class="meta_author"/>
-                <p><span class="meta_email"/> &bull; <span class="meta_twitter"/> &bull; 
-                <span class="meta_web"/></p>
-            </div>
-            <center><div class="meta_logo"></div></center>
-            <div class="org">
-                <p class="meta_org"/>
-                <p><span class="meta_orgfac"/> &bull; <span class="meta_field"/> 
-                &bull; <span class="meta_orgweb"/></p>
-            </div>
-            <div class="etc">
-                <div class="text-info">
-                    Modified: #LAST_MODIFIED#<br/>
-                    Humla v#HUMLA_VERSION#
-                </div>
-                <a href="http://creativecommons.org/licenses/by-sa/3.0/"><div class="license"></div></a>
-                <div class="oppa"></div>
-            </div>
-        </div>
+  <link type="text/css" rel="stylesheet" href="css/meta.css">
+  </link>
+  <link type="text/css" rel="stylesheet" href="css/ctu-fit.css">
+  </link>
+  <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css">
+  </link>
 
-        <div class="slide outline"></div>
+  <script type="text/javascript" src="humla/lib/humla.js"></script>
+  <title>Microservices and Cloud Native</title>
+</head>
+
+<body>
+
+  <footer>
+    <p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester" />,&nbsp;
+      <span class="meta_twitter" /></p>
+    <p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
+  </footer>
+
+  <div class="slide intro">
+    <hgroup>
+      <h1><span class="meta_course" /></h1>
+      <h2>#META_LECTURE#: #TITLE#</h2>
+    </hgroup>
+    <div class="author">
+      <p class="meta_author" />
+      <p><span class="meta_email" /> &bull; <span class="meta_twitter" /> &bull;
+        <span class="meta_web" /></p>
+    </div>
+    <center>
+      <div class="meta_logo"></div>
+    </center>
+    <div class="org">
+      <p class="meta_org" />
+      <p><span class="meta_orgfac" /> &bull; <span class="meta_field" />
+        &bull; <span class="meta_orgweb" /></p>
+    </div>
+    <div class="etc">
+      <div class="text-info">
+        Modified: #LAST_MODIFIED#<br />
+        Humla v#HUMLA_VERSION#
+      </div>
+      <a href="http://creativecommons.org/licenses/by-sa/3.0/">
+        <div class="license"></div>
+      </a>
+      <div class="oppa"></div>
+    </div>
+  </div>
+
+  <div class="slide outline"></div>
+
+  <section>
+    <header>Microservices Architecture</header>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Overview</h1>
+      </hgroup>
+      <ul>
+        <li>Emerging software architecture</li>
+        <ul>
+          <li>monolithic vs. decoupled applications</li>
+          <li>applications as independenly deployable services</li>
+        </ul>
+        <img src="img/microservices.png" style="zoom: 0.7"></img>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Major Characteristics</h1>
+      </hgroup>
+      <ul>
+        <li>Loosely coupled</li>
+        <ul>
+          <li>Integrated using well-defined interfaces</li>
+        </ul>
+        <li>Technology-agnostic protocols</li>
+        <ul>
+          <li>HTTP, they use REST architecture</li>
+        </ul>
+        <li>Independently deployable and easy to replace</li>
+        <ul>
+          <li>A change in small part requires to redeploy only that part</li>
+        </ul>
+        <li>Organized around capabilities</li>
+        <ul>
+          <li>such as accounting, billing, recommendation, etc.</li>
+        </ul>
+        <li>Impplemented using different technologies</li>
+        <ul>
+          <li>polyglot &ndash; programming languages, databases</li>
+        </ul>
+      </ul>
+    </div>
+
+  </section>
+
+  <div class="slide outline"></div>
+
+  <section>
+
+    <header>Docker</header>
+
+    <section>
+      <header>Overview</header>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Overview</h1>
+        </hgroup>
+
+        <ul class="small">
+          <li>Linux Containers</li>
+          <ul>
+            <li>Introduced in 2008</li>
+            <li>Allow to run a process tree in a isolated system-level "virtualization"</li>
+            <li>Use much less resources and disk space than traditional virtualization</li>
+          </ul>
+          <li>Implementations</li>
+          <ul>
+            <li>LXC &ndash; default implementation in Linux</li>
+            <li><b>Docker Containers</b></li>
+            <ul>
+              <li>Builds on Linux namespaces and union file system (OverlayFS, AUFS, etc.)</li>
+              <li>A way to build, commit and share images</li>
+              <li>Build images using a description file called Dockerfile</li>
+              <li>Large number of available base and re-usable images</li>
+            </ul>
+          </ul>
+        </ul>
+      </div>
       
-        <section>
-            <header>Uniform Interface</header>
-
-            <div class="slide">
-                <hgroup>
-                    <h1>Uniform Interface</h1>
-                </hgroup>
-                <ul class="small">
-                    <li>Uniform interface = finite set of operations</li>
-                    <ul>
-                        <li>Resource manipulation</li>
-                        <ul>
-                            <li>CRUD &ndash; Create (POST/PUT), Read (GET), Update (PUT/PATCH), Delete (DELETE)</li>
-                        </ul>
-                        <li>operations are not domain-specific</li>
-                        <ul>
-                            <li>For example, <code>GET /orders</code> and not <code>getOrders()</code></li>
-                            <li>This reduces complexity when solving interoperability</li>
-                        </ul>
-                    </ul>
-                    <li>Integration issues examples</li>
-                </ul>
-                <div class="h-drawing" style="height: 190px"
-                    id="1hLogh6s5Az0vXhCW6e05l2MRMLPDtnYbxlPEctjJTAk"></div>
-            </div>
-
-            <div class="slide">
-                <hgroup>
-                    <h1>Safe and Unsafe Operations</h1>
-                </hgroup>
-                <ul class="small">
-                    <li>Safe operations</li>
-                    <ul>
-                        <li>Do not change the resource state</li>
-                        <li>Usually "read-only" or "lookup" operation</li>
-                        <li>Clients can cache the results and refresh the cache freely</li>
-                    </ul>
-                    <li>Unsafe operations</li>
-                    <ul>
-                        <li>May change the state of the resource</li>
-                        <li>Transactions such as buy a ticket, post a message</li>
-                        <li>Unsafe does not mean dangerous!</li>
-                    </ul>
-                    <li>Unsafe interactions and transaction results</li>
-                    <ul>
-                        <li><code>POST</code> response may include transaction results</li>
-                        <ul>
-                            <li>you buy a ticket and submit a purchase data</li>
-                            <li>you get transaction results</li>
-                            <li>and you cannot bookmark this..., why?</li>
-                        </ul>
-                        <li>Should be referable with a persistent URI</li>
-                    </ul>
-                </ul>
-            </div>
-                
-            <div class="slide">
-                <hgroup>
-                    <h1>Idempotence</h1>
-                </hgroup>
-                <ul>
-                    <li>Idempotent operation</li>
-                    <ul>
-                        <li>Invoking a method on the same resource always has the same effect</li>
-                        <li>Operations <code>GET</code>, <code>PUT</code>, <code>DELETE</code></li>
-                    </ul>
-                    <li>Non-idempotent operation</li>
-                    <ul>
-                        <li>Invoking a method on the same resource may have different effects</li>
-                        <li>Operation <code>POST</code></li>
-                    </ul>
-                    <li>Effect = a state change</li>
-                    <ul>
-                        <li>recall the effect definition in MDW</li>
-                    </ul>
-                </ul>
-            </div>
-                
-            <div class="slide outline"></div>
-                
-            <section>
-                <header>Basic operations</header>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>GET</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>Reading</li>
-                        <ul>
-                            <li><code>GET</code> retrieves a representation of a state of a resource</li>
-                            <pre class="brush: plain; gutter: 'false'">
-                                &gt; GET /orders HTTP/1.1
-                                &gt; Accept: application/xml
-
-                                &lt; HTTP/1.1 200 OK
-                                &lt; Content-Type: application/xml
-                                &lt;
-                                &lt; ...resource representation in xml...
-                            </pre>
-                            <li>It is read-only operation</li>
-                            <li>It is <b>safe</b></li>
-                            <li>It is <b>idempotent</b></li>
-                            <li class="space-before"><code>GET</code> retrieves different states over time but
-                            the effect is always the same, cf.
-                            <a href="lecture2.html#/resource-state">resource state</a> hence it is idempotent.</li>
-                            <li>Invocation of <code>GET</code> involves content negotiation</li>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide" id="PUT">
-                    <hgroup>
-                        <h1>PUT</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>Updating or Inserting</li>
-                        <ul>
-                            <li><code>PUT</code> updates or inserts a representation of a state of a resource</li>
-                            <li>Updating the resource is a <b>complete replacement of the resource</b></li>
-                            <pre class="brush: xml; gutter: 'false'">
-                                &gt; PUT /orders/4456 HTTP/1.1
-                                &gt; Content-Type: application/xml
-                                &gt;
-                                &gt; &lt;order>...&lt;/order>
-
-                                &lt; HTTP/1.1 CODE
-                            </pre>
-                            <li>where CODE is:</li>
-                            <ul>
-                                <li><code>200 OK</code> or <code>204 No Content</code> for updating:
-                                A resource with id <code>4456</code> <b>exists</b>, the client
-                                    sends an updated resource</li>
-                                <li><code>201 Created</code> for inserting: A resource <b>does not exist</b>, the client
-                                    generates the id <code>4456</code> and sends a representation of it.</li>
-                            </ul>
-                            <li>It is <b>not safe</b> and it is <b>idempotent</b></li>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                <hgroup>
-                    <h1>PATCH</h1>
-                </hgroup>
-                    <ul class="x-small">
-                        <li><code>PATCH</code> to partial update a resource</li>
-                        <ul>
-                            <li>IETF specification, see <span id="rfc-5789" class="h-ref"></span></li>
-                        </ul>
-                        <li>Use in GData Protocol</li>
-                        <ul>
-                            <li>To add, modify or delete selected elements of an Atom feed entry</li>
-                            <li>Example to delete a description element and add a new title element
-                            <br/><code>gd:fields</code> uses the partial response syntax</li>
-                            <pre class="brush: xml; class-name: 'tight'">
-                                PATCH /myFeed/1/1/
-                                Content-Type: application/xml
-
-                                &lt;entry xmlns='http://www.w3.org/2005/Atom'
-                                    xmlns:gd='http://schemas.google.com/g/2005'
-                                    gd:fields='description'>
-                                  &lt;title>New title&lt;/title>
-                                &lt;/entry></pre>
-                            <li>Rules</li>
-                            <ul>
-                                <li>Fields not already present are added</li>
-                                <li>Non-repeating fields already present are updated</li>
-                                <li>Repeating fields already present are appended</li>
-                            </ul>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>POST</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>Inserting</li>
-                        <ul>
-                            <li><code>POST</code> inserts a new resource</li>
-                            <li>A server generates a new resource ID, client only supplies a content and a resource URI where the new
-                            resource will be inserted.</li>
-                            <pre class="brush: xml; gutter: 'false'">
-                                &gt; POST /orders HTTP/1.1
-                                &gt; Content-Type: application/xml
-                                &gt;
-                                &gt; &lt;order>...&lt;/order>
-
-                                &lt; HTTP/1.1 201 Created
-                                &lt; Location: /orders/4456
-                            </pre>
-                            <li>It is <b>not safe</b> an it is <b>not idempotent</b><br/>
-                            <li class="space-before">A client may "suggest" a resource's id using the <code>Slug</code> header</li>
-                            <ul>
-                                <li>Defined in <span class="h-ref" id="rfc-5023">AtomPub protocol</li></li>
-                            </ul>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>DELETE</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>Deleting</li>
-                        <ul>
-                            <li><code>DELETE</code> deletes a resource with specified URI</li>
-                            <pre class="brush: plain; gutter: 'false'">
-                            &gt; DELETE /orders/4456 HTTP/1.1
-
-                            &lt; HTTP/1.1 CODE
-                            </pre>
-                            <li>where CODE is:</li>
-                            <ul>
-                                <li><code>200 OK</code>: the response body contains an entity describing a result of the operation.</li>
-                                <li><code>204 No Content</code>: there is no response body.</li>
-                            </ul>
-                            <li class="space-before">It is <b>not safe</b> and it is <b>idempotent</b></li>
-                            <ul>
-                                <li>Multiple invocation of <code>DELETE /orders/4456</code> has always the same effect &ndash; the resource
-                                <code>/orders/4456</code> does not exist.</li>
-                            </ul>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Other</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>HEAD</li>
-                        <ul>
-                            <li>same as <code>GET</code> but only retrieves HTTP headers</li>
-                            <li>It is <b>safe</b> and <b>idempotent</b></li>
-                        </ul>
-                        <li>OPTIONS</li>
-                        <ul>
-                            <li>queries the resource for resource configuration</li>
-                            <li>It is <b>safe</b> and <b>idempotent</b></li>
-                        </ul>
-                    </ul>
-                </div>
-            </section>
-
-            <div class="slide outline"></div>
-                
-            <section>
-                <header>Handling Errors</header>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Types of Errors</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Client-side &ndash; status code <code>4xx</code></li>
-                        <ul>
-                            <li><code>400 Bad Request</code></li>
-                            <ul>
-                                <li>generic client-side error</li>
-                                <li>invalid format, such as syntax or validation error</li>
-                            </ul>
-                            <li><code>404 Not Found</code></li>
-                            <ul>
-                                <li>server can't map URI to a resource</li>
-                            </ul>
-                            <li><code>401 Unauthorized</code></li>
-                            <ul>
-                                <li>wrong credentials (such as user/pass, or API key)</li>
-                                <li>the response contains <code>WWW-Authenticate</code> indicating what kind of authentication
-                                the service accepts</li>
-                            </ul>
-                            <li><code>405 Method Not Allowed</code></li>
-                            <ul>
-                                <li>the resource does not support the HTTP method the client used</li>
-                                <li>the response contains <code>Allow</code> header to indicate methods it supports</li>
-                            </ul>
-                            <li><code>406 Not Acceptable</code></li>
-                            <ul>
-                                <li>so many restrictions on acceptable content types (using <code>Accept-*</code>)</li>
-                                <li>server cannot serialize the resource to requested content types</li>
-                            </ul>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Types of Errors (Cont.)</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Server-side &ndash; status code <code>5xx</code></li>
-                        <ul>
-                            <li><code>500 Internal Server Error</code></li>
-                            <ul>
-                                <li>generic server-side error</li>
-                                <li>usually not expressive, logs a message for system admins</li>
-                            </ul>
-                            <li><code>503 Service Not Available</code></li>
-                            <ul>
-                                <li>server is overloaded or is under maintenance</li>
-                                <li>the response contains <code>Retry-After</code> header</li>
-                            </ul>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Use of Status Codes</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>Service should respect semantics of status codes!</li>
-                        <ul>
-                            <pre class="brush: js; gutter: 'false''">
-                                &gt; GET /orders HTTP/1.1
-                                &gt; Accept: application/json
-
-                                &lt; HTTP/1.1 200 OK
-                                &lt; Content-Type: application/json
-                                &lt;
-                                &lt; { "error" :
-                                &lt;    { "error_text" :
-                                &lt;        "you do not have rights to access this resource " }
-                                &lt; }
-                            </pre>
-                            <li>Client must understand the semantics of the response.</li>
-                            <li>This breaks loose coupling and reusability service principles</li>
-                            <li>The response should be:</li>
-                            <pre class="brush: plain; gutter: 'false'">
-                                &lt; HTTP/1.1 401 Unauthorized
-                                &lt; ...
-
-                                &lt; ...optional text describing the error...
-                            </pre>
-                        </ul>
-                    </ul>
-                </div>
-
-            </section>
-
-            <div class="slide outline"></div>
-
-            <section>
-                <header>Advanced Design Issues</header>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Respect HTTP Semantics</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>Do not overload semantics of HTTP methods</li>
-                        <ul>
-                            <li>For example, <code>GET</code> is read-only method and idempotent</li>
-                            <li>REST Anti-pattern:</li>
-                            <li class="no-bullet">&nbsp;&nbsp;&nbsp;<code>GET /orders/?add=new_order</code></li>
-                            <ul>
-                                <li>This is not REST!</li>
-                                <li>This breaks both safe and idempotent principles</li>
-                            </ul>
-                        </ul>
-                        <li>Consequences</li>
-                        <ul>
-                            <li>Result of <code>GET</code> can be cached by proxy servers</li>
-                            <li>They can revalidate their caches freely</li>
-                            <li>You can end up with new entries in your storage without you knowing!</li>
-                        </ul>
-                        <li>The same is true for other methods</li>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Change Order Status</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li><code>status</code> property of <code>/orders/{order-id}</code> resource</li>
-                        <ul>
-                            <li>reflects a state of the process</li>
-                            <li>No need to use a stateful service, state is communicated through the order representation</li>
-                        </ul>
-                        <li>How do you implement a canceling an order?</li>
-                        <ul>
-                            <li>You can delete it using <code>DELETE</code></li>
-                            <li>But you may want to cancel it in order to:</li>
-                            <ul>
-                                <li>maintain a list of canceled orders</li>
-                                <li>have a possibility to "roll-back" canceled orders</li>
-                            </ul>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>DELETE to cancel</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>A bad solution to cancel the order</li>
-                        <ul>
-                            <li>to cancel with DELETE<br/>
-                            <code>DELETE /orders/3454/?cancel=true</code>
-                            <li>you overload the meaning of DELETE</li>
-                            <li>you violate the uniform interface principle</li>
-                        </ul>
-                        <li>Always ask a question:</li>
-                        <ul>
-                            <li><b>Is the operation a state of the resource?</b></li>
-                            <li>if yes, the operation should be:</li>
-                            <ul>
-                                <li>modeled within the data format</li>
-                                <li>or as a separated resource (sub-resource)</li>
-                            </ul>
-                        </ul>
-                        <li>No verbs in <code>path</code> and <code>query</code> components!</li>
-                        <ul>
-                            <li><code>/cancelOrder</code>, <code>/orders/{order-id}/?action=delete</code>, etc.</li>
-                            <li>Verbs in URIs indicate that a resource is actually an operation!</li>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>PUT to cancel</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>A RESTful solution to cancel an order</li>
-                        <ol>
-                            <li>first, have an order's status</li>
-                            <ul>
-                                <li>as part of the Order representation format</li>
-                                <li>we extend "open" and "close" with "cancel"</li>
-                            </ul>
-                            <li>Use PUT to cancel an order</li>
-                            <pre class="brush: js">
-                            &gt; PUT /orders/{order-id}
-                            &gt; Content-Type: application/json
-                            &gt;
-                            &gt; { "status" : "cancel" }
-
-                            &lt; HTTP/1.1 204 No Content
-                            </pre>
-                        </ol>
-                        <li>Clean-up all cancelled orders</li>
-                        <ul>
-                            <li>you can have a resource "all valid orders": <code>/orders/valid</code><br/>
-                            (~ all orders that are not canceled)</li>
-                            <ul>
-                                <li><code>GET /orders/valid</code> will return all non-canceled orders</li>
-                                <li><code>POST /orders/valid</code> will purge all cancelled orders</li>
-                            </ul>
-                        </ul>
-                    </ul>
-                </div>
-            </section>
-
-        </section>
-
-        <section>
-            <header>Selected Protocols</header>
-
-            <div class="slide outline"></div>
-            
-            <section>
-                <header>Caching and Revalidation</header>
-                
-                <div class="slide">
-                    <hgroup>
-                        <h1>Scalability</h1>
-                    </hgroup>
-                    <ul>
-                        <li>Need for scalability</li>
-                        <ul>
-                            <li>Huge amount of requests on the Web every day</li>
-                            <li>Huge amount of data downloaded</li>
-                        </ul>
-                        <li>Some examples</li>
-                        <ul>
-                            <li>Google, Facebook: 5 billion API calls/day</li>
-                            <li>Twitter: 3 billions of API calls/day (75% of all the traffic)<br/>
-                              &rarr; 50 million tweets a day</li>
-                            <li>eBay: 8 billion API calls/month</li>
-                            <li>Bing: 3 billion API calls/month</li>
-                            <li>Amazon WS: over 100 billion objects stored in S3</li>
-                        </ul>
-                        <li>Scalability in REST</li>
-                        <ul>
-                            <li>Caching and revalidation</li>
-                            <li>Concurrency control</li>
-                        </ul>
-                    </ul>
-                </div>
-                            
-                <div class="slide">
-                    <hgroup>
-                        <h1>Caching</h1>
-                    </hgroup>
-                    <div class="h-drawing" id="1nc-u-R3NUvur4WBAB1yxSqtj3PfmsSWF8iMo0aLT-Nc"
-                        style="height: 200px"></div>
-                    <ul class="x-small">
-                        <li>Your service should cache:</li>
-                        <ul>
-                            <li>anytime there is a static resource</li>
-                            <li>even there is a dynamic resource</li>
-                            <ul>
-                                <li>with chances it updates often</li>
-                                <li>you can force clients to always revalidate</li>
-                            </ul>
-                        </ul>
-                        <li>three steps:</li>
-                        <ul>
-                            <li>client GETs the resource representation</li>
-                            <li>server controls how it should cache through <code>Cache-Control</code>
-                            header</li>
-                            <li>client revalidates the content via conditional GET</li>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Cache Headers</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li><code>Cache-Control</code> response header</li>
-                        <ul>
-                            <li>controls over local and proxy caches</li>
-                            <li><code>private</code> &ndash; no proxy should cache, only clients can</li>
-                            <li><code>public</code> &ndash; any intermediary can cache (proxies and clients)</li>
-                            <li><code>no-cache</code> &ndash; the response should not be cached. 
-                            If it is cached, the content should always be revalidated.</li>
-                            <li><code>no-store</code> &ndash; can cache but should not store persistently. When a client restarts, content is lost</li>
-                            <li><code>no-transform</code> &ndash; no transformation of cached data; e.g. compressions</li>
-                            <li><code>max-age</code>, <code>s-maxage</code> a time in seconds how long the cache is valid; 
-                            <code>s-maxage</code> for proxies</li>
-                        </ul>
-                        <li><code>Last-Modified</code> and <code>ETag</code> response headers</li>
-                        <ul>
-                            <li>Content last modified date and a content entity tag</li> 
-                        </ul>
-                        <li><code>If-Modified-Since</code> and <code>If-None-Match</code> request headers</li>
-                        <ul>
-                            <li>Content revalidation (conditional GET)</li> 
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Example Date Revalidation</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Cache control example:</li>
-                        <ul>
-                            <pre class="brush: plain; gutter: 'false'">
-                            &gt; GET /orders HTTP/1.1
-                            &gt; ...
-                            
-                            &lt; HTTP/1.1 200 OK
-                            &lt; Content-Type: application/xml
-                            &lt; Cache-Control: private, no-store, max-age=200
-                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
-                            &lt;
-                            &lt; ...data...
-                            </pre>
-                            <li>only client can cache, must not be stored on the disk, 
-                              the cache is valid for 200 seconds.</li>
-                        </ul>
-                        <li>Revalidation (conditional GET) example:</li>
-                        <ul>
-                            <li>A client revalidates the cache after <code>200</code> seconds.</li>
-                            <pre class="brush: plain; gutter: 'false'">
-                            &gt; GET /orders HTTP/1.1
-                            &gt; If-Modified-Since: Sun, 7 Nov 2011, 09:40 CET
-                            
-                            &lt; HTTP/1.1 304 Not Modified
-                            &lt; Cache-Control: private, no-store, max-age=200
-                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
-                            </pre>
-                        </ul>
-                    </ul>
-                </div>
-                
-                <div class="slide">
-                    <hgroup>
-                        <h1>Entity Tags</h1>
-                    </hgroup>
-                        <ul class="x-small">
-                            <li>Signature of the response body</li>
-                            <ul>
-                                <li>A hash such as MD5</li>
-                                <li>A sequence number that changes with any modification of the content</li>
-                            </ul>
-                            <li>Types of tag</li>
-                            <ul>
-                                <li>Strong ETag: reflects the content bit by bit</li>
-                                <li>Weak ETag: reflects the content "semantically"</li>
-                                <ul>
-                                    <li>The app defines the meaning of its weak tags</li>
-                                </ul>
-                            </ul>
-                            <li>Example content revalidation with <code>ETag</code></li>
-                            <pre class="brush: plain; gutter: 'false'; class-name: 'tight'">
-                            &lt; HTTP/1.1 200 OK
-                            &lt; Cache-Control: private, no-store, max-age=200
-                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
-                            &lt; ETag: "4354a5f6423b43a54d"
-                            
-                            &gt; GET /orders HTTP/1.1
-                            &gt; If-None-Match: "4354a5f6423b43a54d"
-                            
-                            &lt; HTTP/1.1 304 Not Modified
-                            &lt; Cache-Control: private, no-store, max-age=200
-                            &lt; Last-Modified: Sun, 7 Nov 2011, 09:40 CET
-                            &lt; ETag: "4354a5f6423b43a54d"
-                            </pre>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Design Suggestions</h1>
-                    </hgroup>
-                    <ul class="small">
-                        <li>Composed resources use weak ETags</li>
-                        <ul>
-                            <li>For example <code>/orders</code></li>
-                            <ul>
-                                <li>a composed resource that contains a summary information</li>
-                                <li>changes to an order's items will not change semantics of <code>/orders</code></li>
-                            </ul>
-                            <li>It is usually not possible to perform updates on these resources</li>
-                        </ul>
-                        <li>Non-composed resources use strong ETags</li>
-                        <ul>
-                            <li>For example <code>/orders/{order-id}</code></li>
-                            <li>They can be updated</li>
-                        </ul>
-                        <li>Further notes</li>
-                        <ul class="small">
-                            <li>Server should send both <code>Last-Modified</code> and
-                            <code>ETag</code> headers</li>
-                            <li>If client sends both <code>If-Modified-Since</code> and <code>If-None-Match</code>,<br/>
-                            <code>ETag</code> validation takes preference</li>
-                        </ul>                        
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Weak ETag Example</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>App specific, <code>/orders</code> resource example</li>
-                        <pre class="brush: js; class-name: 'tight'">
-                        { 
-                            "orders" : 
-                                [
-                                    { "id"        : 2245,
-                                      "customer"  : "Tomas",
-                                      "descr"     : "Stuff to build a house.",
-                                      "items"     : [...] },
-                                    { "id"        : 5546,
-                                      "customer"  : "Peter",
-                                      "descr"     : "Things to build a pipeline.",
-                                      "items"     : [...] }
-                                ] 
-                        }
-                        </pre>
-                        <li>Weak ETag compute function example</li>
-                        <ul>
-                            <li>Any modification to an order's items is not significant for <code>/orders</code>:</li>
-                        </ul>
-                        <pre class="brush: js; class-name: 'tight'">
-                            var crypto = require("crypto");
-                        
-                            function computeWeakETag(orders) {
-                                var content = "";
-                                for (var i = 0; i < orders.length; i++)
-                                    content += orders[i].id + orders[i].customer + orders[i].descr;
-                                return crypto.createHash('md5').update(content).digest("hex");
-                            }
-                        </pre>
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Weak ETag Revalidation</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Updating <code>/orders</code> resource</li>
-                        <ul>
-                            <li><code>POST /orders/{order-id}</code> inserts a new item to an order</li>
-                            <li>Any changes to orders' items will not change the Weak ETag</li>
-                        </ul>
-                    </ul>
-                    <div class="h-drawing" id="1n1jGatYjOc_kgMhWSuXyReptynOFn1CEDELB75Qj_3A"
-                        style="height: 380px"></div>
-                </div>
-                                    
-            </section>
-                
-            <div class="slide outline"></div>
-            
-            <section>
-                <header>Concurrency Control</header>
-                
-                <div class="slide">
-                    <hgroup>
-                        <h1>Concurrency</h1>
-                    </hgroup>
-                    <ul class="x-small">
-                        <li>Two clients may update the same resource</li>
-                        <ul class="no-bullet">
-                            <li>1) a client GETs a resource <code>GET /orders/5545</code></li>
-                            <li>2) the client modifies the resource</li>
-                            <li>3) the client updates the resource via <code>PUT /orders/5545 HTTP/1.1</code></li>
-                            <li class="space-before">What happens if another client updates the 
-                            resource between 1) and 3) ?</li>
-                        </ul>
-                        
-                        <li>Concurrency control</li>
-                        <ul>
-                            <li>Conditional <code>PUT</code></li>
-                            <ul>
-                                <li>Update the resource only if it has not changed since a specified date or 
-                                a specified ETag matches the resource content</li>
-                            </ul>
-                            <li><code>If-Unmodified-Since</code> and <code>If-Match</code> headers</li>
-                            <li>Response to conditional <code>PUT</code>:</li>
-                            <ul>
-                                <li><code>200 OK</code> if the <code>PUT</code> was successful</li>
-                                <li><code>412 Precondition Failed</code> if the resource was updated in the meantime.</li>
-                            </ul>
-                        </ul>                        
-                    </ul>
-                </div>
-
-                <div class="slide">
-                    <hgroup>
-                        <h1>Concurrency Control Protocol</h1>
-                    </hgroup>
-                    <div class="h-drawing" id="1D9w_NKq3AqIl14fn0vGFBmVlbNMrAQqeYljjOYLcqCo"
-                        style="height: 380px"></div>
-                    <ul class="x-small">
-                        <li>Conditional PUT and ETags</li>
-                        <ul>
-                            <li>Conditional PUT must always use strong entity tags or date validation</li>
-                        </ul>
-                    </ul>
-                </div>
-
-            </section>
-        </section>
-
-        <div class="slide outline"></div>        
-
-        <section>
-            <header>Selected Extensions</header>
-
-            <div class="slide">
-                <hgroup>
-                    <h1>GData Protocol: Entity Tags</h1>
-                </hgroup>
-                <ul class="x-small">
-                    <li>Resource Versioning</li>
-                    <ul>
-                        <li>Conditional GET and PUT (concurrency control)</li>
-                        <li>Etags on atom and entry elements</li>
-                    </ul>
-                    <li>Example</li>
-                    <pre class="brush: xml; class-name: 'tight'">
-                        GData-Version: 2.0
-                        ETag: W/"C0QBRXcycSp7ImA9WxRVFUk."
-                        ...
-                        &lt;?xml version='1.0' encoding='utf-8'?>
-                        &lt;feed xmlns='http://www.w3.org/2005/Atom'
-                            xmlns:gd='http://schemas.google.com/g/2005'
-                            gd:etag='W/"C0QBRXcycSp7ImA9WxRVFUk."'>
-                          ...
-                          &lt;entry gd:etag='"CUUEQX47eCp7ImA9WxRVEkQ."'>
-                            ...
-                          &lt;/entry>
-                        &lt;/feed>
-                    </pre>
-                    <ul>
-                        <li>It is possible to do a conditional GET/PUT on the entry by using the
-                            ETag <code>"CUUEQX47eCp7ImA9WxRVEkQ."</code></li>
-                    </ul>
-                </ul>
-            </div>
-
-            <div class="slide">
-                <hgroup>
-                        <h1>GData Protocol: HTTP Methods Overriding</h1>
-                </hgroup>
-                <ul>
-                    <li>Firewall restrictions</li>
-                    <ul>
-                        <li>Some firewall configurations do not allow to send HTTP request other than GET and POST</li>
-                    </ul>
-                    <li>HTTP methods overriding through <code>POST</code></li>
-                    <pre class="brush: bash; class-name: 'tight'; gutter: 'false'">
-                        X-HTTP-Method-Override: PUT
-                        X-HTTP-Method-Override: DELETE
-                        X-HTTP-Method-Override: PATCH</pre>
-                    <li>Example</li>
-                    <pre class="brush: bash; class-name: 'tight'">
-                        POST /myfeed/1/1/
-                        X-HTTP-Method-Override: PATCH
-                        Content-Type: application/xml
-                        ... </pre>
-                </ul>
-            </div>
-
-        </section>
+      <div class="slide">
+        <hgroup>
+          <h1>Linux Namespaces</h1>
+        </hgroup>
+        <ul>
+          <li>"Isolation" of Linux processes</li>
+          <li>There are 7 namespaces</li>
+          <ul>
+            <li>Mount &ndash; isolae filesystem mount points</li>
+            <li>UTS &ndash; isolate hostname and domainname</li>
+            <li>IPC &ndash; isolate interprocess communication resources</li>
+            <li>PID &ndash; isolate PID number space</li>
+            <li>Network &ndash; isolate network interfaces</li>
+            <li>User &ndash; isolate UID/GID number spaces</li>
+            <li>cgroup &ndash; isolate cgroup root directory</li>
+          </ul>
+        </ul>
+      </div>
 
 
-    </body>
-</html>
+      <div class="slide">
+        <hgroup>
+          <h1>VM vs. Docker Containers</h1>
+        </hgroup>
+        <img class="center" style="margin-top: 50px; height: 350px" src="./img/docker-vm.png" />
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Docker Basic Terms</h1>
+        </hgroup>
+        <ul class="xx-small">
+          <li>Image</li>
+          <ul>
+            <li>Bssis for containers.</li>
+            <li>An image contains a union of layered filesystems stacked on top of each other.</li>
+            <li>An image does not have state and it never changes.</li>
+          </ul>
+          <li>Container</li>
+          <ul>
+            <li>A runtime instance of a Docker image, a standard to "ship software".</li>
+          </ul>
+          <li>Docker Engine</li>
+          <ul>
+            <li>The core process providing the Docker capabilities on a host.</li>
+          </ul>
+          <li>Docker Client</li>
+          <ul>
+            <li>Interface that integrates with docker engine.</li>
+          </ul>
+          <li>Registry</li>
+          <ul>
+            <li>A hosted service containing repository of images.</li>
+            <li>A registry provides a registry API to search, pull and push images.</li>
+            <li>Docker Hub is the default Docker registry.</li>
+          </ul>
+          <li>Swarm</li>
+          <ul>
+            <li>A cluster of one or more docker engines.</li>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Docker Images</h1>
+        </hgroup>
+        <img style="margin-left: 50px; margin-top: 15px; margin-bottom: 10px; height: 280px" src="./img/docker-container-stack.png" />
+        <ul class="x-small" style="margin-left: -10px">
+          <ul>
+            <li>Containers are made up of R/O layers via a storage driver<br />(OverlayFS, AUFS, etc.)</li>
+            <li>Containers are designed to support a single application</li>
+            <li>Instances are ephemeral, persistent data is stored in bind
+              mounts or data volume containers.</li>
+          </ul>
+        </ul>
+      </div>
+    </section>
+
+    <div class="slide outline"></div>
+
+    <section>
+
+      <header>Image Layering</header>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Image Layering with OverlayFS</h1>
+        </hgroup>
+        <ul class="x-small">
+          <li>OverlayFS</li>
+          <ul>
+            <li>A filesystem service implementing a <b>union mount</b> for other file systems.</li>
+            <li>Docker uses <code>overlay</code> and <code>overlay2</code> storage drivers
+              to build and manage on-disk structures of images and containers.</li>
+          </ul>
+          <li>Image Layering</li>
+          <ul>
+            <li>OverlayFS takes two directories on a single Linux host, layers one on top of the other, and provides
+              a single unified view.</li>
+            <li>Only works for two layers, in multi-layered images hard links are used to
+              reference data shared with lower layers.</li>
+          </ul>
+          <img src="img/overlay_constructs.jpg" style="width: 700px; margin-top: 10px" />
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Image Layers Example</h1>
+        </hgroup>
+        <ul class="xx-small" style="margin-top:20px; zoom:0.9">
+          <li>Pulling out the image from the registry</li>
+          <pre class="brush: plain; gutter: 'false'">
+            $ sudo docker pull ubuntu
+
+            Using default tag: latest
+            latest: Pulling from library/ubuntu
+
+            5ba4f30e5bea: Pull complete
+            9d7d19c9dc56: Pull complete
+            ac6ad7efd0f9: Pull complete
+            e7491a747824: Pull complete
+            a3ed95caeb02: Pull complete
+            Digest: sha256:46fb5d001b88ad904c5c732b086b596b92cfb4a4840a3abd0e35dbb6870585e4
+            Status: Downloaded newer image for ubuntu:latest
+          </pre>
+          <ul>
+            <li>Each image layer has its own directory under <code>/var/lib/docker/overlay/</code>.</li>
+            <li>This is where the contents of each image layer are stored.</li>
+          </ul>
+          <li>Directories on the file system</li>
+          <pre class="brush: plain; gutter: 'false'">
+            $ ls -l /var/lib/docker/overlay/
+
+            total 20
+            drwx------ 3 root root 4096 Jun 20 16:11 38f3ed2eac129654acef11c32670b534670c3a06e483fce313d72e3e0a15baa8
+            drwx------ 3 root root 4096 Jun 20 16:11 55f1e14c361b90570df46371b20ce6d480c434981cbda5fd68c6ff61aa0a5358
+            drwx------ 3 root root 4096 Jun 20 16:11 824c8a961a4f5e8fe4f4243dab57c5be798e7fd195f6d88ab06aea92ba931654
+            drwx------ 3 root root 4096 Jun 20 16:11 ad0fe55125ebf599da124da175174a4b8c1878afe6907bf7c78570341f308461
+            drwx------ 3 root root 4096 Jun 20 16:11 edab9b5e5bf73f2997524eebeac1de4cf9c8b904fa8ad3ec43b3504196aa3801
+          </pre>
+          <ul>
+            <li>The organization of files allows for efficient use of disk space.</li>
+            <li>There are <b>files unique to every layer</b> and <b>hard links to files</b> shared with lower layers</li>
+          </ul>
+        </ul>
+        </ul>
+      </div>
+
+    </section>
+
+    <div class="slide outline"></div>
+
+    <section>
+
+      <header>Working with Docker</header>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Docker Container Lifecycle State Diagram</h1>
+        </hgroup>
+
+        <div class="h-drawing" style="height: 440px" id="1JGxpdEWDh9lBbLg3JFVr53LBg1BM520LYXyYkdi-2ws"></div>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Commands (1)</h1>
+        </hgroup>
+        <ul class="xx-small no-bullet" style="zoom:0.95">
+          <li><code>docker version</code></li>
+          <ul>
+            <li>list current version of docker engine and client</li>
+          </ul>
+          <li><code>docker search &lt;image&gt;</code></li>
+          <ul>
+            <li>search for an image in the registry</li>
+          </ul>
+          <li><code>docker pull &lt;image[:version]&gt;</code></li>
+          <ul>
+            <li>download an image of a specific version from the registry</li>
+            <li>if the version is not provided, the latest version will be downloaded</li>
+          </ul>
+          <li><code>docker images</code></li>
+          <ul>
+            <li>list all local images</li>
+          </ul>
+          <li><code>docker run -it &lt;image[:version]&gt; &lt;command&gt;</code></li>
+          <ul>
+            <li>start the image and run the command inside the image</li>
+            <li>if the image is not found locally, it will be downloaded from the registry</li>
+            <li>option <code>-i</code> starts the container in interactive mode</li>
+            <li>option <code>-t</code> allocates a pseudo TTY</li>
+          </ul>
+          <li><code>docker ps [-as]</code></li>
+          <ul>
+            <li>list all running containers</li>
+            <li>option <code>-a</code> will list all containers including the stopped ones.</li>
+            <li>option <code>-s</code> will list the container's size.</li>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Commands (2)</h1>
+        </hgroup>
+        <ul class="xx-small no-bullet" style="zoom:0.95">
+          <li><code>docker rm &lt;container&gt;</code></li>
+          <ul>
+            <li>remove the container</li>
+          </ul>
+          <li><code>docker rmi &lt;image&gt;</code></li>
+          <ul>
+            <li>remove the image</li>
+          </ul>
+          <li><code>docker commit &lt;container&gt; &lt;name[:version]&gt;</code></li>
+          <ul>
+            <li>create an image from the container with the name and the version</li>
+          </ul>
+          <li><code>docker history &lt;image&gt;</code></li>
+          <ul>
+            <li>display the image history</li>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Networking and Linking</h1>
+        </hgroup>
+        <ul class="xx-small">
+          <li>There are 3 docker networks by default</li>
+          <ul>
+            <li><b>bridge</b> &ndash; container can access host's network (default)</li>
+            <ul>
+              <li>Docker creates subnet <code>172.17.0.0/16</code> and gateway to the network</li>
+              <li>When a container is started, it is automatically added to this network</li>
+              <li>All containers in this network can communicate with each other</li>
+            </ul>
+            <li><b>host</b> &ndash; all host's network interfaces will be available in the container.</li>
+            <li><b>none</b> &ndash; container will be placed on its own network and no network interfaces will be configured.</li>
+          </ul>
+          <li>Custom Network configuration</li>
+          <ul>
+            <li>You can create a new network and add containers to it</li>
+            <li>Containers in the new network can communicate with each other but the network will be isolated
+              from the host network</li>
+          </ul>
+          <li>Linking containers (legacy)</li>
+          <ul>
+            <pre class="brush: plain; gutter: 'false'">
+              $ docker run -d --name redmine-db postgres
+              $ docker run -it --link redmine-db:db postgres /bin/bash
+              root@c4b12143ebe8:/# psql -h db -U postgres
+              psql (9.6.1)
+              Type "help" for help.
+              postgres=# SELECT inet_server_addr();
+              postgres=# SELECT * FROM pg_stat_activity \x\g\x
+            </pre>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Networking Commands</h1>
+        </hgroup>
+        <ul class="xx-small no-bullet" style="zoom:0.95">
+          <li><code>docker network ls</code></li>
+          <ul>
+            <li>lists all available networks</li>
+          </ul>
+          <li><code>docker network inspect &lt;network-id&gt;</code></li>
+          <ul>
+            <li>Returns the details of specific network</li>
+          </ul>
+          <li><code>docker network create --driver bridge isolated_nw</code></li>
+          <ul>
+            <li>creates a new isolated network</li>
+          </ul>
+          <li><code>docker run -it --network=isolated_nw ubuntu bin/bash</code></li>
+          <ul>
+            <li>starts the container ubuntu and attaches it to the isolated network</li>
+          </ul>
+        </ul>
+      </div>
+
+
+      <div class="slide">
+        <hgroup>
+          <h1>Data Volumes</h1>
+        </hgroup>
+        <ul class="xx-small" style="zoom:0.95">
+          <li>Data Volume</li>
+          <ul>
+            <li>A directory that bypass the union file system</li>
+            <li>Data volumes can be shared and reused among containers</li>
+            <li>Data volume persists even if the container is deleted</li>
+            <li>It is possible to mount a shared sotrage volume as a data volue by using
+              a volume plugin to mount e.g. NFS</li>
+          </ul>
+
+          <li>Adding a data volume</li>
+          <ul>
+            <li class="no-bullet">
+              <code>docker run -d -v /webapp training/webapp python app.py</code>
+            </li>
+            <li class="no-bullet">will create a new value with name <code>webapp</code>,</li>
+            <li class="no-bullet">the location of the volume can be determined by using <code>docker inspect</code>.</li>
+
+          </ul>
+          <li>Mount a host directory as a data volume</li>
+          <ul>
+            <li class="no-bullet">
+              <code>docker run -d -v /src/webapp:/webapp training/webapp python app.py</code>
+            </li>
+            <li class="no-bullet">if the path exists in the container, it will be overlayed (not removed),</li>
+            <li class="no-bullet">if the host directory does not exist, the docker engine creates it.</li>
+
+          </ul>
+          <li>Data volume container</li>
+          <ul>
+            <li>Persistent data to be shared among two or more containers</li>
+            <li class="no-bullet">
+              <code>docker create -v /dbdata --name dbstore training/postgres /bin/true</code>
+            </li>
+            <li class="no-bullet">
+              <code>docker run -d --volumes-from dbstore --name db1 training/postgres</code>
+            </li>
+            <li class="no-bullet">
+              <code>docker run -d --volumes-from dbstore --name db2 training/postgres</code>
+            </li>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Dockerfile</h1>
+        </hgroup>
+        <ul class="xx-small" style="zoom: 0.90">
+          <li>Dockerfile is a script that creates a new image</li>
+          <pre class="brush: plain; gutter: 'false'">
+          # This is a comment
+          FROM oraclelinux:7
+          MAINTAINER Tomas Vitvar &lt;tomas@vitvar.com>
+          RUN yum install -q -y httpd
+          EXPOSE 80
+          CMD httpd -X
+          </pre>
+
+          <li>A line in the Dockerfile will create an intermediary layer</li>
+
+          <pre class="brush: plain; gutter: 'false'">
+          $ docker build -t tomvit/httpd:v1 .
+          Sending build context to Docker daemon 2.048 kB
+          Step 1 : FROM oraclelinux:7
+           ---> 4c357c6e421e
+          Step 2 : MAINTAINER Tomas Vitvar &lt;tomas@vitvar.com>
+           ---> Running in 35feebb2ffab
+           ---> 95b35d5d793e
+          Removing intermediate container 35feebb2ffab
+          Step 3 : RUN yum install -q -y httpd
+           ---> Running in 3b9aee3c3ef1
+           ---> 888c49141af9
+          Removing intermediate container 3b9aee3c3ef1
+          Step 4 : EXPOSE 80
+           ---> Running in 03e1ef9bf875
+           ---> c28545e3580c
+          Removing intermediate container 03e1ef9bf875
+          Step 5 : CMD httpd -X
+           ---> Running in 3c1c0273a1ef
+          </pre>
+
+          <ul class="no-bullet">
+            <li>If processing fails at some step, all preceeding steps will be loaded from the cache on the next run.</li>
+          </ul>
+
+
+        </ul>
+      </div>
+    </section>
+
+    <div class="slide outline"></div>
+
+    <section>
+      <header>Swarm</header>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Swarm</h1>
+        </hgroup>
+        <img src="img/swarm-diagram.png" style="width: 750px; margin-left: 25px; margin-top: 20px" />
+      </div>
+    </section>
+
+
+  </section>
+
+  <div class="slide outline"></div>
+
+  <section>
+    <header>Kubernetes</header>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Overview</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>In your architecture...</li>
+        <ul>
+          <li>Containers are atomic pieces of application architecture</li>
+          <li>Containers can be linked (e.g. web server, DB)</li>
+          <li>Containers access shared resources (e.g. disk volumes)</li>
+        </ul>
+        <li>Kubernetes</li>
+        <ul>
+          <li>Automation of deployments, scaling, management of containerized applications across number of nodes</li>
+          <li>Based on Borg, a parent project from Goolge</li>
+        </ul>
+        <img src="img/kubernetes-overview.png" width="400px" style="margin-top: 10px; margin-left: 20px"></img>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>System Architecture</h1>
+      </hgroup>
+      <img src="img/pre-ccm-arch.png" style="margin-left: -100px; margin-top: 20px; zoom: 0.88"></img>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Major Terms</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>Node</li>
+        <ul>
+          <li>a worker machine in Kubernetes, previously known as a minion (a VM or physical machine). It uses <code>kubelet</code> and <code>kube-proxy</code> to communicate with the master and other nodes/services.</li>
+        </ul>
+        <li>Master</li>
+        <ul>
+          <li>A node that manages the cluster of nodes.</li>
+        </ul>
+        <li>Pod</li>
+        <ul>
+          <li>The basic building block of Kubernetes, one or more dependant containers.</li>
+        </ul>
+        <li>Service</li>
+        <ul>
+          <li>A set of pods with rules allowing pods to talk to each other, such as:</li>
+          <ul>
+            <li><code>NodePort</code> exposes the pod under a cluster IP.</li>
+            <li><code>LoadBalancer</code> exposes the pod for load balancing by external load balancer</li>
+          </ul>
+        </ul>
+        <li>Controllers</li>
+        <ul>
+          <li>Worker units to ensure a desired state, such as:</li>
+          <ul>
+            <li><code>ReplicaSet</code> ensures that a specified number of pod replicas are running.</li>
+            <li><code>Deployment</code> manages ReplicaSets, provides declarative updates to pods.</li>
+            <li><code>StatefulSet</code> manages deployment and scaling of a set of Pods.</li>
+            <li><code>DeamonSet</code> ensures that all (or some) Nodes run a copy of a Pod.</li>
+          </ul>
+        </ul>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Features</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>Automatic binpacking</li>
+        <ul>
+          <li>Automatically places containers onto nodes based on their resource requirements and other constraints.</li>
+        </ul>
+        <li>Horizontal scaling</li>
+        <ul>
+          <li>Scales your application up and down with a simple command, with a UI, or automatically based on CPU usage.</li>
+        </ul>
+        <li>Automated rollouts and rollbacks</li>
+        <ul>
+          <li>Progressive rollout out of changes to application/configuration, monitoring application health
+            and rollback when something goes wrong.</li>
+        </ul>
+        <li>Storage orchestration</li>
+        <ul>
+          <li>Automatically mounts the storage system (local or in the cloud)</li>
+        </ul>
+        <li>Self-healing</li>
+        <ul>
+          <li>Restarts containers that fail, replaces and reschedules containers when nodes die, kills containers that don't respond to user-defined health checks.</li>
+        </ul>
+        <li>Service discovery and load balancing</li>
+        <ul>
+          <li>Gives containers their own IP addresses and a single DNS name for a set of containers, and can load-balance across them.</li>
+        </ul>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Demo</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>Environment Setup</li>
+        <ul class="no-bullet">
+          <li><code>minikube</code> &ndash; a local virtual machine (running a master and a single node)</li>
+          <li><code>kubectl</code> &ndash; CLI to access Kubernetes cluster</li>
+        </ul>
+        <li>Steps</li>
+
+        <style>
+          #steps li {
+            margin-top: 5px;
+          }
+        </style>
+
+        <ol id="steps">
+          <li>create <code>hello-node</code> app in node.js and test it [see <a href="examples/kubernetes/hellonode/server.js">server.js</a>]<br />
+            <code>node server.js</code></li>
+          <li>create docker image for the app [see <a href="examples/kubernetes/hellonode/Dockerfile">Dockerfile</a>]<br />
+            <code>docker build -t hello-node:v1 .</code></li>
+          <li>deploy the app to Kubernetes by using <code>kubectl</code><br />
+            <code>kubectl run hello-node --image=hello-node:v1 --port=8080</code></li>
+          <li>Expose the app as a load balancer service.<br />
+            <code>kubectl expose deployment hello-node --type=LoadBalancer</code></li>
+          <li>Explore the app in minikube dashboard.<br />
+            <code>minikube dashboard</code></li>
+          <li>Fire requests at the service and count them [see <a href="examples/kubernetes/hellonode/test.sh">test.sh</a>]<br />
+            <code>./test.sh</code>.</li>
+          <li>Change the number of replicas by using the dashboard or <code>kubectl</code>.</li>
+        </ol>
+    </div>
+
+
+
+  </section>
+
+
+
+  </section>

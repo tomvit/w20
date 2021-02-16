@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <!--
 	Web 2.0, CTU course slides
-	(cc) 2010-2014 Tomas Vitvar, tomas@vitvar.com
+	(cc) 2010-2013 Tomas Vitvar, tomas@vitvar.com
 -->
 <html>   
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
         <meta name="course"   content="Web 2.0"/>
 		<meta name="lecture"  content="Lecture 8"/>
-   		<meta name="keywords" content="SaaS, IaaS, PaaS"/>
+   		<meta name="keywords" content="HTTP/2"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
         <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
         <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css"></link>   
 
         <script type="text/javascript" src="humla/lib/humla.js"></script>
-        <title>Cloud Architectures</title>
+        <title>HTTP/2</title>
 	</head>
 	<body> 
     
-		<footer >
+		<footer>
 			<p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester"/>,&nbsp;
 			<span class="meta_twitter"/></p>
 			<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
@@ -50,384 +50,317 @@
 				<div class="oppa"></div>
 			</div>
 		</div>
-        
-        <div class="slide outline"></div>
-        
-        <section>
-            <header>Introduction</header>
+		
+		<section>
+			<header>Introduction</header>
 
 			<div class="slide">
 				<hgroup>
-					<h1>What is a Cloud?</h1>
+					<h1>Overview</h1>
 				</hgroup>
-				<ul class="small">
-					<li>A different way of thinking</li>
+				<ul class="xx-small">
+					<li>Developed from SPDY (2009) experimental protocol by Google</li>
 					<ul>
-						<li>Got your grand mum's savings under your pillow?</li>
-                        <ul>
-						    <li>probably not, you better have them in your bank</li>
-                        </ul>
-						<li>Data is your major asset</li>
-						    <li>you better have them in a "bank" too</li>
-						    <li>Someone can abuse your data?<br/>
-						    <li>banks bankrupt too, sometimes &ndash; it is a risk you take</li>
-						    <li>there is a market and a competition</li>
-                        </li>
+						<li>May 2015: RFC 7540 (HTTP/2) and RFC 7541 (HPACK)</li>
+						<li>HTTP/2 standards extend (not replace) the previous HTTP standards</li>
 					</ul>
-					<li>Outsourcing of application infrastructure</li>
+					<li>HTTP/1.x limitations</li>
 					<ul>
-						<li>Reliability and availability</li>
-						<li>Low costs &ndash; pay-per-use</li>
-						<li>Elasticity &ndash; can dynamically grow with your apps</li>
+						<li>HTTP/1.x clients need to use multiple connections to achieve concurrency</li>
+						<li>unnecessary network traffic &ndash; request and response headers not compressed</li>
+						<li>no effective resource prioritization</li>
+					</ul>
+					<li>Primary goals</li>
+					<ul>
+						<li>Reduction of latency</li>
+						<li>enabling full request and response multiplexing</li>
+						<li>minimize protocol overhead via efficient compression of HTTP header fields</li>
+						<li>support for request prioritization and server push</li>
+					</ul>
+					<li>HTTP/2 does not modify application semantics of HTTP</li>
+					<ul>
+						<li>HTTP metods, URIs, header fields are the same</li>
+						<li>HTTP/2 modifies <b>how data is formatted and transported</b> in communication</li>
+					</ul>
+					<li>Literature and source</li>
+					<ul>
+						<li>I. Grigorik: <i>High Performance Browser Networking</i>, O'Reilly Media, Inc. 2013. ISBN: 9781449344757&nbsp;
+							<a class="ext-link ref" target="humla_reference" href="https://www.oreilly.com/library/view/high-performance-browser/9781449344757/"></a></li>
 					</ul>
 				</ul>
 			</div>
 
-    		<div class="slide">
+			<div class="slide">
 				<hgroup>
-					<h1>What is a Cloud?</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Any app you access over the web?</li>
-					<li>A datacenter?</li>
-                    <ul>
-                        <li>Offers virtualization</li>
-                        <li>Any company having a datacenter wants to move to</li>
-                    </ul>
-                    <li>Cloud provider should also offer services, such as:</li>
-                    <ul>
-                        <li>scalability, storage</li>
-                        <li>Possible to configure programmatically</li>
-                        <ul>
-                            <li>integration to enterprise administration processes</li>
-                            <li>usually REST interface</li>
-                        </ul>
-                    </ul>
-				</ul>
-			</div>                        
-
-    		<div class="slide">
-				<hgroup>
-					<h1>Traditional Solution to Infrastructure</h1>
-				</hgroup>
-                <ul class="small">
-                    <li>Traditional hardware model</li>
-                    <ul>
-                        <li>Up-front hardware investments</li>
-                        <li>Hardware not optimally utilized</li>
-                    </ul>
-                </ul>
-				<div class="h-drawing" style="height: 350px; margin-left: -10px" id="17jEYye-th5U5T-N-iE1gR7f_k5Bwrk9P7z9yYC4EZlw"><img style="height: 350px; " alt="traditional-hardware" src="https://docs.google.com/drawings/export/svg?id=17jEYye-th5U5T-N-iE1gR7f_k5Bwrk9P7z9yYC4EZlw" title="traditional-hardware"></div>
-			</div>
-
-            <div class="slide">
-				<hgroup>
-					<h1>Good Performance – Cloud Solution</h1>
-				</hgroup>
-                <ul class="small">
-                    <li>Cloud Computing model</li>
-                    <ul>
-                        <li>No up-front hardware investments</li>
-                        <li>Hardware optimally utilized</li>
-                    </ul>
-                </ul>
-				<div class="h-drawing" style="height: 350px; margin-left: -10px" id="1yeHPc2AqDeXanOV0Zi8MirHApMjf1Sa_2UCOt_9Avds"><img style="height: 350px; " alt="scalable-cloud-model" src="https://docs.google.com/drawings/export/svg?id=1yeHPc2AqDeXanOV0Zi8MirHApMjf1Sa_2UCOt_9Avds" title="scalable-cloud-model"></div>
-			</div>
-            
-    		<div class="slide">
-				<hgroup>
-					<h1>Cloud Computing Concepts</h1>
+					<h1>Binary Framing Layer</h1>
 				</hgroup>
 				<ul class="x-small">
-					<li><b>Resource Pooling</b></li>
+					<li>Binary framing layer</li>
 					<ul>
-						<li>Resources reused by multiple tenants (multitenancy)</li>
-						<li>Resources: CPU, memory, storage, network</li> 
+						<li>defines how HTTP messages are encapsulated and transferred </li>
+						<li>communication is split into messages and frames in binary format</li>
 					</ul>
-					<li><b>On-demand and Self-service</b></li>
+					<img src="img/binary_framing_layer.png" style="width: 700px">
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>HTTP/2 Communication</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Data exchange between the client and server</li>
 					<ul>
-						<li>Resources are provisioned as they are requested<br/>and when they are required</li>
-						<li>No human interaction, automatic</li>
+						<li>break down of the communication into frames</li>
+						<li>frames are mapped to messages that belong to a particular stream</li>
+						<li>communication is <b>multiplexed within a single TCP connection</b>.</li>
 					</ul>
-					<li><b>Scalability and Elasticity</b></li>
-					<ul>
-						<li>Infrastructure may grow and shrink according to needs</li>
-						<li>Automatic or manual</li>
+					<li>Stream</li>
+				 	<ul>
+						<li>bi-directional flow of bytes in a connection</li>
+						<li>may carry one or more messages</li>
+						<li>may have a priority</li>
 					</ul>
-					<li><b>Pay-per-use</b></li>
+					<li>Message</li>
 					<ul>
-						<li>Consumers only pay for resources when they use them</li>
+						<li>a sequence of frames</li>
+						<li>it maps to logical request or response message</li>
+					</ul>
+					<li>Frame</li>
+					<ul>
+						<li>the smallest unit of communication
+						<li>each has a frame header which identifies a stream to which it belongs.</li>
 					</ul>
 				</ul>
 			</div>
 
-    		<div class="slide">
+			<div class="slide">
 				<hgroup>
-					<h1>Cloud Computing Concepts (Cont.)</h1>
+					<h1>Streams, messages, and frames</h1>
 				</hgroup>
-				<ul class="small">
-					<li>Service Models (aka Cloud Layers)</li>
+				<ul class="x-small">
+					<img src="img/streams.png" style="width: 600px; margin-top: 10px">
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Request and response multiplexing</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Parallel requests</li>
 					<ul>
-						<li>IaaS &ndash; Infrastructure as a Service</li>
-						<li>PaaS &ndash; Platform as a Service</li>
+						<li>HTTP/1.x can use HTTP pipelining; they open multiple connections</li>
 						<ul>
-							<li>MWaaS, DBaaS, ...</li>
+							<li>browser typically opens up six connections</li>
 						</ul>
-						<li>SaaS &ndash; Software as a Service</li>
+						<li>HTTP/2 allows full request and response multiplexing</li>
+						<ul>
+							<li>Allows for parallel in-flight streams</li>
+						</ul>
 					</ul>
-					<li>Deployment Models</li>
+					<img src="img/multiplexing.png" style="width: 600px; margin-top: 10px"> 
+					<li>Performance benefits</li>
 					<ul>
-						<li>Public Cloud</li>
-						<li>Private Cloud</li>
-						<li>Hybrid Cloud</li>
+						<li>Interleave requests/responses in parallel without blocking any one.</li>
+						<li>Deliver lower page load times by eliminating unnecessary latency</li>
+						<li>Improve utilization of available network capacity</li>
+					</ul>
+				</ul>
+			</div>
+			
+			<div class="slide">
+				<hgroup>
+					<h1>HTTP/1.x Optimization</h1>
+				</hgroup>
+				<div id="1YgCc7gq-k3j4oWy8am9wiEg4ge0UPUk4moO6NV5W-gU" class="h-drawing" style="height: 300px; margin-top: 50px"></div>
+			</div>			
+
+			<div class="slide">
+				<hgroup>
+					<h1>One connection</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Multiplexing allows for:</li>
+					<ul>
+						<li>all connections are persisted</li>
+						<li>only one connection required per origin</li>
+					</ul>
+					
+					<li>Advantages</li>
+					<ul>
+						<li>significant reduction of the overall protocol overhead</li>
+						<li>use of fewer connections reduces the memory and processing footprint along the full connection path (client, intermediaries, origin servers)</li>
+						<li>reduces operational costs and improves network capacity</li>
+						<br>
+						<li>Improves performance of HTTPS deployments</li>
+						<ul>
+							<li>fewer expensive TLS handshakes</li>
+							<li>better session reuse</li>
+							<li>overall reduction in required client and server resources</li>
+						</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Flow control</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Prevent sender from receiving data it doest not want</li>
+					<ul>
+						<li>Receiver is busy or under heavy load</li>
+						<li>Receiver can allocate fixed amount of resources for particular stream</li>
+					</ul>
+					<li>Examples</li>
+					<ul>
+						<li>Client request a video stream; a user pauses the stream</li>
+						<ul>
+							<li>the client wants to pause the stream delivery to avoid buffering</li>
+						</ul>
+						<li>A proxy server has a fast downstream and slow upstream</li>
+						<ul>
+							<li>the proxy server can control how quickly the downstream delivers data to match the speed of upstream</li>
+							<li>better control of resource usage</li>
+						</ul>
+						<li>Similar problems as in TCP control</li>
+					</ul>
+					<li>Flow control</li>
+					<ul>
+						<li>Sender and receiver both advertise stream flow control window in bytes<br>
+						    = the size of the available buffer space to hold the incoming data</li>
+						<li>exhanged by special <code>SETTINGS</code> and <code>WINDOW_UPDATE</code> frames</li>
+						<li>Flow control is hop-by-hop, not end-to-end</li>
+						<ul>
+							<li>an intermediary can set its own flow control</li>
+						</ul>
 					</ul>
 				</ul>
 			</div>
 
-    		<div class="slide">
+			<div class="slide">
 				<hgroup>
-					<h1>Cloud Provider Example &ndash; Amazon AWS</h1>
+					<h1>Server push</h1>
 				</hgroup>
-				<img style="zoom: 1.0; margin-left: 70px; margin-top: 60px" src="img/aws-cloud-architecture.jpeg"/>
+				<ul class="xx-small">
+					<li>Ability to send multiple responses for a single request</li>
+					<ul>
+						<li>A response to the request is sent back</li>
+						<li>Additonal resources can be pushed without client requesting them</li>
+						<li>Hypertext &ndash; "server knows what the client will need"</li>
+					</ul>
+					<img src="img/server-push.png" style="width: 600px; margin-top: 10px"> 
+					<li>Similar to resource inlining</li>
+					<ul>
+						<li>A resource is pushed to the client in HTML/CSS resource</li>
+					</ul>
+					<li>Performance benefits</li>
+					<ul>
+						<li>Cached by the client, reused across pages, multiplexed, declined by the client</li>
+					</ul>
+				</ul>
 			</div>
 
+			<div class="slide">
+				<hgroup>
+					<h1>Push promise</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li><code>PUSH_PROMISE</code> frames</li>
+					<ul>
+						<li>A singnal that the server intents to push resources to the client</li>
+						<li>The client needs to know which resources the server intends to push to avoid creating duplicate requests for these resources.</li>
+					</ul>
+					<li>After the client receives <code>PUSH_PROMISE</code></li>
+					<ul>
+						<li>it may decline the stream (via <code>RST_STREAM</code> frame)</li>
+						<ul>
+							<li>For example, when the resource is already in the cache</li>
+							<li>As for inline resources, this is not possible, the client always receives them</li>
+						</ul>
+						<li>it can limit the number of concurrently pushed streams</li>
+						<li>it can adjust the initial flow control window to control how much data is pushed when the stream is first opened</li>
+						<li>it can disable server push entirely</li>
+					</ul>
+					<li>pushed resources must obey the same-origin policy</li>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Stream Prioritization</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Purpose</li>
+					<ul>
+						<li>Messages split into <b>frames</b> which are delivered in multiplexed <b>streams</b></li>
+						<li>The order in which frames are delivered is important for a good performance</li> 
+						<li>Client can define stream prioritization</li>
+						<ul>
+							<li>optimizations in the browser, change prioritization based on user interaction</li>
+						</ul>
+					</ul>
+					<li>Streams' weights and dependency</li>
+					<ul>
+						<li>Each stream can be assigned an integer weight between 1 and 256.</li>
+						<li>Each stream may be given an explicit dependency on another stream.</li>
+					</ul>
+					<img src="img/stream-prioritization.png" style="width: 685px; margin-top: 10px"> 
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Stream Prioritization (cont.)</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Dependency</li>
+					<ul>
+						<li>referencing the unique identifier of another stream as its parent</li>
+						<li>if the identifier is omitted the stream is dependent on the "root stream"</li> 
+						<li>The parent stream should be allocated resources ahead of its dependencies.</li>
+						<ul>
+							<li>"Please process and deliver response D before response C"</li>
+						</ul>
+					</ul>
+					<li>Weights</li>
+					<ul>
+						<li>Sibling streams have resources allocated as per their weights</li>
+						<li>Example</li>
+						<ul>
+							<li>Sum all the weights: <code>4 + 12 = 16</code></li>
+							<li>Divide each stream weight by the total weight: <code>A = 12/16</code>, <code>B = 4/16</code></li>
+							<li>Stream <code>A</code> receives <code>3/4</code> and stream <code>B</code> receives <code>1/4</code> of available resources;<br/></li>
+						</ul>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Header compression</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Purpose</li>
+					<ul>
+						<li>Each HTTP request/response contains a set of headers (metadata)</li>
+						<li>HTTP/1.x &ndash; metadata sent as plain text, adds 500-800 bytes per transfer</li> 
+					</ul>
+					<li>HTTP/2 provides</li>
+					<ul>
+						<li>Request and response metadata are compressed sing HPACK format</li>
+						<ul>
+							<li>header fields encoded via a static Huffman code &ndash; reduces size</li>
+							<li>client and server maintain an <b>indexed list of previously seen header fields</b></li>
+						</ul>
+					</ul>
+					<img src="img/header-compression.png" style="width: 350px; margin-top: 10px"> 
+					</ul>
+				</ul>
+			</div>
+
+
 		</section>
-
-		<div class="slide outline"></div>
-
-        <section>
-            
-			<header>Cloud Architecture</header>
-    
-			<section>
-
-				<header>Service Models</header>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Web 2.0 Web Architecture</h1>
-					</hgroup>
-					<div class="h-drawing" style="height: 380px; margin-left: 10px; margin-top: 40px" alt="Web 2.0 web architecture" id="14TRFdRqtGtLWtzQ_ZCb24ZHpLr4f1n859zQoB3thwjQ"></div>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>IaaS: Infrastructure as a Service</h1>
-					</hgroup>
-					<ul class="x-small">
-						<li>Provides basic computing resources and services for application providers</li>
-						<ul>
-							<li>Services for application providers</li>
-							<li>A consumer is able to deploy and run arbitrary software</li>
-						</ul>
-						<li>Infrastructure implications</li>
-						<ul>
-							<li>Exposing of infrastructure resources through <i>abstraction</i></li>
-							<li>Support for infrastructure resources &ndash; compute (hardware/OS/VM), storage, network, etc.</li>
-							<li>Supports isolation for multitenant environments</li>
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>IaaS: Infrastructure as a Service</h1>
-					</hgroup>
-					<ul class="x-small">
-						<li>Usage</li>
-						<ul>
-							<li>Predefined machine instances (micro, small, large, extra-large)</li>
-							<ul>
-								<li>Linux OS, 613 MB of memory, 30 GB of Storage, Load Balancer, etc.</li>
-							</ul>
-							<li>Pay-per-use &ndash; pay for resources you use (time or amount); no up-front costs</li>
-						</ul>
-						<li>IaaS Services Examples</li>
-						<ul>
-							<li>Elastic Storage</li>
-							<li>Monitoring resources</li>
-							<ul>
-								<li>Amazon CloudWatch)</li>
-							</ul>
-							<li>Auto Scalling of running instances</li>
-							<li>Load Balancing &ndash; distributing incoming traffic<br/> across multiple instances</li>
-						</ul>
-						<li>IaaS providers</li>
-						<ul>
-							<li>Amazon EC2, GoGrid, Rackspace,</br>OpenNebula, ...</li>
-						</ul>
-
-					</ul>
-					<div class="h-drawing" style="height: 270px; padding-left: 220px; margin-top: -250px;" alt="Web 2.0 web architecture" id="1GnYOqlP5qCv8LMyd3yuLNdfsymoDKVRhYrSvorh4suw"></div>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>PaaS: Platform as a Service</h1>
-					</hgroup>
-
-					<ul class="x-small">
-						<li>Provides scalable platform for applications</li>
-						<ul>
-							<li>Services for application providers</li>
-							<li>No costs of buying and managing underlying infrastructure</li>
-							<ul>
-								<li>hardware and software</li>
-							</ul>
-						</ul>
-						<li>Infrastructure implications</li>
-						<ul>
-							<li>Scalable platform, deploy on-demand</li>
-							<li>Self service interface to deploy applications and services</li>
-							<li>Support for monitoring and measuring platform usage
-							<li>Model supporting isolation in multi-tenant environments
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>PaaS: Platform as a Service</h1>
-					</hgroup>
-					<ul class="x-small">
-						<li>Usage</li>
-						<ul>
-							<li>Choose software platform, e.g., JEE, .NET, Python, etc.</li>
-							<li>Pay-per-use &ndash; pay for the resources you use; no up-front costs</li>
-						</ul>
-						<li>PaaS features</li>
-						<ul>
-							<li>Auto Scalling and Load Balancing of applications</li>
-							<li>Persistent Storage - usually NoSQL database</li>
-							<li>Local development environment</li>
-							<li>Backends &ndash; for app instances with higher CPU</br>and memory demands</li>
-							<li>Administration APIs for its services</li>
-						</ul>
-						<li>PaaS providers</li>
-						<ul>
-							<li>Google App Engine, Heroku,</br>Windows Azure, etc.</li>
-						</ul>
-						<li>Limitations</li>
-						<ul>
-							<li>HTTP request limit (30 - 60 sec)</li>
-							<li>No writes to file system, no thread support</li>
-						</ul>
-					</ul>
-					<div class="h-drawing" style="height: 270px; padding-left: 220px; margin-top: -320px;" alt="Platfor as a Service example" id="1WPWgHjgD4Ew-bljCiWeyTvbNuFWs_dXnjhI333vtVbs"></div>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>SaaS: Software as a Service</h1>
-					</hgroup>
-
-					<ul class="x-small">
-						<li>Software delivery model for applications hosted in the cloud</li>
-						<ul>
-							<li>typically software for end-users</li>
-							<li>services accessed using a web browser</li>
-							<li>provides API for programmatic access</li>
-						</ul>
-						<li>SaaS characteristics</li>
-						<ul>
-							<li>Typically build on top of IaaS or PaaS</li>
-							<li>Configurable and customizable modern Web applications</li>
-							<li>Usually basic version for free, need to pay for pro version</li>
-							<li>Global availability - any computer, any device</li>
-							<li>Easy management - automatic and fast updates</li>
-							<li>Pay-per-use &ndash; pay for the time you use</li>
-						</ul>
-						<li>SaaS providers</li>
-						<ul>
-							<li>Google Apps, Salesforce, iCloud, Flickr, Picasa, ...</li>
-						</ul>
-					</ul>
-				</div>
-
-			</section>
-
-			<div class="slide outline"></div>
-            
-			<section>
-				<header>Multitenancy</header>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Multitenancy</h1>
-					</hgroup>
-					<ul class="x-small">
-						<li>Architectural approach where resources are shared between multiple tenants or consumers</li>
-						<li>Implications</li>
-						<ul>
-							<li>Centralization of infrastructure in locations with lower costs</li>
-							<li>Peak-load capacity increases</li>
-							<li>Utilisation and efficiency improvements for systems that are not well utilised</li>
-						</ul>
-						<li>Sharing options</li>
-						<ul>
-							<li>Shared Everything</li>
-							<li>Shared Infrastructure</li>
-								<ul>
-									<li>Virtual Machines</li>
-									<li>O/S virtualization</li>
-								</ul>
-						</ul>
-					</ul>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Shared Everything</h1>
-					</hgroup>
-					<ul class="x-small">
-						<li>Resources are shared between all tenants or consumers</li>
-						<ul>
-							<li>tenant: a service consumer</li>
-						</ul>
-						<li>Common for the SaaS model</li>
-						<li>The application should provide tenant isolation</li>
-						<li>Data for multiple tenants is stored in the same database tables</li>
-					</ul>
-					<div class="h-drawing" style="height: 220px; margin-left: 0px; margin-top: 20px" alt="Web 2.0 web architecture" id="17wNMQNs3vf2yyE0VzFhGbnNTjJBKKONbeS9jijYHbN4"></div>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Shared Infrastructure: Virtual Machines</h1>
-					</hgroup>
-					<ul class="x-small">
-						<li>Infrastructure shared via virtual machines</li>
-						<ul>
-							<li>each tenant has its own virtual environment</li>
-							<li>Isolation provided by hypervisor</li>
-							<ul>
-								<li>hypervisor: virtual machine manager, runs virtual machines</li>
-							</ul>
-							<li>Resource contention depends on VM capability and configuration</li>
-							<li>Adds an additional layer and processes to run and manage</li>
-						</ul>
-					</ul>
-					<div class="h-drawing" style="height: 280px; margin-left: 0px; margin-top: 10px" alt="Web 2.0 web architecture" id="1y5TMPeDujUG9aBUZ8Tf8a5vwrqT3LpjmYjb_HS5Ux1E"></div>
-				</div>
-
-				<div class="slide">
-					<hgroup>
-						<h1>Shared Infrastructure: OS Virtualization</h1>
-					</hgroup>
-					<ul class="x-small">
-						<li>Infrastructure shared via OS Virtualization</li>
-						<ul>
-							<li>Each tenant has its own processing zone</li>
-							<li>Isolation provided by the operating system</li>
-							<li>Resource contention depends on zone configuration</li>
-							<li>No VMs to run and manage, no abstraction layer between app & OS</li>
-						</ul>
-					</ul>
-					<div class="h-drawing" style="height: 280px; margin-left: 0px; margin-top: 10px" alt="Web 2.0 web architecture" id="1OIg4KQRqj_G3YUsoCFQS1E4JOpxx3Yg63PGeRMhkupE"></div>
-				</div>
-
-			</section>
-		</section>
-
+		
 	</body>
 </html>	
