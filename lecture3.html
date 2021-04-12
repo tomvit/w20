@@ -745,51 +745,6 @@
 
     <div class="slide">
       <hgroup>
-        <h1>System Architecture</h1>
-      </hgroup>
-      <img src="img/pre-ccm-arch.png" style="margin-left: -100px; margin-top: 20px; zoom: 0.88"></img>
-    </div>
-
-    <div class="slide">
-      <hgroup>
-        <h1>Major Terms</h1>
-      </hgroup>
-      <ul class="xx-small">
-        <li>Node</li>
-        <ul>
-          <li>a worker machine in Kubernetes, previously known as a minion (a VM or physical machine). It uses <code>kubelet</code> and <code>kube-proxy</code> to communicate with the master and other nodes/services.</li>
-        </ul>
-        <li>Master</li>
-        <ul>
-          <li>A node that manages the cluster of nodes.</li>
-        </ul>
-        <li>Pod</li>
-        <ul>
-          <li>The basic building block of Kubernetes, one or more dependant containers.</li>
-        </ul>
-        <li>Service</li>
-        <ul>
-          <li>A set of pods with rules allowing pods to talk to each other, such as:</li>
-          <ul>
-            <li><code>NodePort</code> exposes the pod under a cluster IP.</li>
-            <li><code>LoadBalancer</code> exposes the pod for load balancing by external load balancer</li>
-          </ul>
-        </ul>
-        <li>Controllers</li>
-        <ul>
-          <li>Worker units to ensure a desired state, such as:</li>
-          <ul>
-            <li><code>ReplicaSet</code> ensures that a specified number of pod replicas are running.</li>
-            <li><code>Deployment</code> manages ReplicaSets, provides declarative updates to pods.</li>
-            <li><code>StatefulSet</code> manages deployment and scaling of a set of Pods.</li>
-            <li><code>DeamonSet</code> ensures that all (or some) Nodes run a copy of a Pod.</li>
-          </ul>
-        </ul>
-      </ul>
-    </div>
-
-    <div class="slide">
-      <hgroup>
         <h1>Features</h1>
       </hgroup>
       <ul class="xx-small">
@@ -821,6 +776,303 @@
       </ul>
     </div>
 
+    <!-- <div class="slide">
+      <hgroup>
+        <h1>Basic Terms</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>Node</li>
+        <ul>
+          <li>a worker machine in Kubernetes (a VM or physical machine).
+          <li>It uses <code>kubelet</code> and <code>kube-proxy</code> to communicate with the control plane.</li>
+        </ul>
+        <li>Control Plane</li>
+        <ul>
+          <li>A set of components that manage the Kubernetes cluster.</li>
+          <li>Can run on a separate node such as a master node.</li>
+        </ul>
+        <li>Pod</li>
+        <ul>
+          <li>The basic building block of Kubernetes, one or more dependant containers.</li>
+        </ul>
+      </ul>
+    </div> -->
+
+    <div class="slide">
+      <hgroup>
+        <h1>Architecture</h1>
+      </hgroup>
+      <img src="img/components-of-kubernetes.svg" style="width: 800px; margin-left: 50px; margin-top: 50px; zoom: 0.88"></img>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Control Plane Components</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>Global decisions about the cluster</li>
+        <ul>
+          <li>Schedulling</li>
+          <li>Detecting and responding to cluster events, starting up new pods</li>
+        </ul>
+        <li>kube-apiserver</li>
+        <ul>
+          <li>exposes the Kubernetes API</li>
+          <li>The API server is the front end for the Kubernetes control plane.</li>
+        </ul>
+        <li>etcd</li>
+        <ul>
+          <li>highly-available key value store used to store all cluster data</li>
+        </ul>
+        <li>kube-scheduler</li>
+        <ul>
+          <li>watches for newly created Pods with no assigned node</li>
+          <li>selects a node for Pods to run on.</li>
+          <li>Decision factors: resource requirements, hardware/software/policy constraints, affinity and anti-affinity specifications</li>
+        </ul>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Control Plane Components</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>kube-controller-manager</li>
+        <ul>
+          <li>runs controller to ensure the desired state of cluster objects</li>
+          <li><b>Node controller</b></li>
+          <ul>
+            <li>noticing and responding when nodes go down</li>   
+          </ul>   
+          <li><b>Job controller</b></li>
+          <ul>
+            <li>creates Pods to run one-off tasks to completion.</li>
+          </ul>
+          <li><b>Endpoints controller</b></li>
+          <ul>
+            <li>Populates the Endpoints object (that is, joins Services & Pods).</li>
+          </ul>
+        </ul>
+        <li>cloud-controller-manager</li>
+        <ul>
+          <li>Integration with cloud services (when the cluster is running in a cloud)</li>
+          <li><b>Node controller</b></li>
+          <ul>
+            <li>checks if a node has been deleted in the cloud after it stops responding</li>
+          </ul>
+          <li><b>Route controller</b></li>
+          <ul>
+            <li>For setting up routes in the underlying cloud infrastructure</li>
+          </ul>
+          <li><b>Service controller</b></li>
+          <ul>
+            <li>For creating, updating and deleting cloud provider load balancers</li>
+          </ul>
+        </ul>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Node</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>Kubernetes runtime environment</li>
+        <ul>
+          <li>Run on every node</li>
+          <li>Maintaining running pods</li>
+        </ul>
+        <li>kubelet</li>
+        <ul>
+          <li>An agent that runs on each node in the cluster</li>
+          <li>It makes sure that containers are running in a Pod.</li>
+        </ul>
+        <li>kube-proxy</li>
+        <ul>
+          <li>maintains network rules on nodes</li>
+          <li>network rules allow network communication to Pods from inside or outside of the cluster</li>
+          <li>uses the operating system packet filtering layer or forwards the traffic itself.</li>
+        </ul>
+        <li>Container runtime</li>
+        <ul>
+          <li>Responsible for running containers</li>
+          <li>Kubernetes supports several container runtimes (containerd, CRI-O)</li>
+          <li>Any implementation of the Kubernetes CRI (Container Runtime Interface)</li>
+        </ul>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Container Stack</h1>
+      </hgroup>
+      <div class="h-drawing" style="padding-top: 20px; padding-left: 20px; width: 600px" id="1H0E2ljSysot6vb-m8T1hyy4XtyDz3QLb07H-Q0lbgqs"></div>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Pod</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>Pod</li>
+        <ul>
+          <li>A group of one or more tightly-coupled containers.</li>
+          <li>Containers share storage and network resources.</li>
+          <li>A Pod runs a single instance of a given application</li>
+          <li>Pod's containers are always co-located and co-scheduled</li>
+          <li>Pod's containers run in a shared context, i.e. in a set of Linux namespaces</li>
+        </ul>
+        <li>Pods are created using workload resources</li>
+        <ul>
+          <li>You do not create them directly</li>
+        </ul>
+        <li>Pods in a Kubernetes cluster are used in two main ways</li>
+        <ul>
+          <li>Run a single container, the most common Kubernetes use case</li>
+          <li>Run multiple containers that need to work together</li>
+        </ul>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Workloads</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>An application running on Kubernetes</li>
+        <li>Workloads run in a set of Pods</li>
+        <li>Pre-defined workload resources to manage lifecylce of Pods</li>
+        <ul>
+          <li><b>Deployment</b> and ReplicaSet</li>
+          <ul>
+            <li>managing a stateless application workload</li>
+            <li>any Pod in the Deployment is interchangeable and can be replaced if needed</li>
+          </ul>
+          <li><b>StatefulSet</b></li>
+          <ul>
+            <li>one or more related Pods that track state</li>
+            <li>For example, if a workload records data persistently, run a StatefulSet that matches each Pod with a persistent volume.</li>
+          </ul>
+          <li>DaemonSet</li>
+          <ul>
+            <li>Ensures that all (or some) Nodes run a copy of a Pod</li>
+            <li>Such as a cluster storage daemon, logs collection, node monitoring running on every node</li>
+          </ul>
+          <li>Job and CronJob</li>
+          <ul>
+            <li>Define tasks that run to completion and then stop.</li>
+            <li>Jobs represent one-off tasks, whereas CronJobs recur according to a schedule.</li>
+          </ul>
+        </ul>
+      </ul>
+    </div>
+
+    <!-- <div class="slide">
+      <hgroup>
+        <h1>Objects</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>Persistent entities in the cluster</li>
+        <ul>
+          <li>running containerized applications (and on which nodes)</li>
+          <li>resources available to applications</li>
+          <li>policies around how applications behave</li>
+          <ul>
+            <li>restart policies, upgrades, and fault-tolerance</li>
+          </ul>
+        </ul>
+        <li>Object is a record of intent</li>
+        <ul>
+          <li>Described objects is a <b>desired state</b> of the cluster</li>
+          <li>When an object is created, the Kubernetes ensures that object exists</li>
+        </ul>
+        <li>Object spec and status</li>
+        <ul>
+          <li>Spec</li>
+          <ul>
+            <li>Desired state of the object</li>
+            <li>Description of characteristics of the object</li>
+          </ul>
+          <li>Status</li>
+          <ul>
+            <li>The current state of the object</li>
+            <li>Supplied and updated by Kubernetes</li>
+          </ul>
+        </ul>
+      </ul>
+    </div> -->
+
+    <div class="slide">
+      <hgroup>
+        <h1>Deployment Spec Example</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>Deployment spec</li>
+        <pre class="brush: bash; class-name: ''">
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: nginx-deployment
+          spec:
+            selector:
+              matchLabels:
+                app: nginx          
+            replicas: 3 # tells deployment to run 3 pods matching the template
+            template:
+              metadata:
+                labels:
+                  app: nginx
+              spec:
+                containers:
+                - name: nginx
+                  image: nginx:1.14.2
+                  ports:
+                  - containerPort: 80          
+        </pre>
+        <ul>
+          <li>A desired state of an application running in the cluster</li>
+          <li>Kubernetes reads the Deployment spec and starts three app instances</li>
+          <li>If an instance fails, Kubernetes starts a replacement app instance</li>
+        </ul>
+      </ul>
+    </div>
+    
+    <div class="slide">
+      <hgroup>
+        <h1>Service</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>Networking</li>
+        <ul>
+          <li>Containers within a Pod use networking to communicate via loopback</li>
+          <li>Cluster networking provides communication between different Pods.</li>
+        </ul>
+        <li>Service resource</li>
+        <ul>
+          <li>An abstract way to expose an application running on a set of Pods</li>
+          <li>Example: a set of Pods with a label <code>app=nginx</code>, each listens on <code>tcp/9376</code></li>
+          <pre class="brush: bash; class-name: ''">
+            apiVersion: v1
+            kind: Service
+            metadata:
+              name: my-service
+            spec:
+              selector:
+                app: nginx
+              ports:
+                - protocol: TCP
+                  port: 80
+                  targetPort: 9376            
+          </pre>
+          <li>This specification creates a new Service object named <code>my-service</code></li>
+          <li>The servive targets <code>tcp/9376</code> on any Pod with the <code>app=nginx</code> label.</li>
+          <li>Kubernetes assigns this Service a cluster IP address, which is used by the Service proxies.</li>
+        </ul>
+      </ul>
+    </div>
+    
+    
     <div class="slide">
       <hgroup>
         <h1>Demo</h1>
