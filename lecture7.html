@@ -7,7 +7,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
         <meta name="course"   content="Web 2.0"/>
-		<meta name="lecture"  content="Lecture 8"/>
+		<meta name="lecture"  content="Lecture 7"/>
    		<meta name="keywords" content="HTTP/2"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
@@ -136,7 +136,7 @@
 
 			<div class="slide">
 				<hgroup>
-					<h1>Streams, messages, and frames</h1>
+					<h1>Streams, Messages, and Frames</h1>
 				</hgroup>
 				<ul class="x-small">
 					<img src="img/streams.png" style="width: 600px; margin-top: 10px">
@@ -145,26 +145,58 @@
 
 			<div class="slide">
 				<hgroup>
-					<h1>Request and response multiplexing</h1>
+					<h1>Request and Response Multiplexing</h1>
 				</hgroup>
-				<ul class="x-small">
+				<ul class="xx-small">
 					<li>Parallel requests</li>
 					<ul>
 						<li>HTTP/1.x can use HTTP pipelining; they open multiple connections</li>
 						<ul>
 							<li>browser typically opens up six connections</li>
+							<li>One response can be delivered at a time (response queuing) per connection</li>
+							<ul>
+								<li>Head of line blocking problem</li>
+							</ul>
 						</ul>
 						<li>HTTP/2 allows full request and response multiplexing</li>
 						<ul>
 							<li>Allows for parallel in-flight streams</li>
+							<li>There are 3 parallel streams in the below example:</li>
+							<img src="img/multiplexing.png" style="width: 550px; margin-top: 0px"> 
 						</ul>
 					</ul>
-					<img src="img/multiplexing.png" style="width: 600px; margin-top: 10px"> 
 					<li>Performance benefits</li>
 					<ul>
 						<li>Interleave requests/responses in parallel without blocking any one.</li>
 						<li>Deliver lower page load times by eliminating unnecessary latency</li>
 						<li>Improve utilization of available network capacity</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Request and Response Multiplexing Benefits</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Interleave multiple requests and responses</li>
+					<ul>
+						<li>Requests or responses are not blocked on any other requests or response</li>
+					</ul>
+					<li>A single TCP connection</li>
+					<ul>
+						<li>Multiple requests and responses can be delivered in parallel</li>
+					</ul>
+					<li>Remove HTTP/1.x workarounds</li>
+					<ul>
+						<li>Concatenated files</li>
+						<li>Image sprites</li>
+						<li>Domain sharding</li>
+					</ul>
+					<li>Deliver lower page load times</li>
+					<ul>
+						<li>Eliminates unnecessary latency</li>
+						<li>Improves utilization of available newtork capacity</li>
 					</ul>
 				</ul>
 			</div>
@@ -204,13 +236,91 @@
 
 			<div class="slide">
 				<hgroup>
+					<h1>Browser Request Prioritization</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Not all resources have equal priority when rendering a page</li>
+					<ul>
+						<li>HTTP/2 stream prioritization</li>
+						<li>Requests are prioritized based on type of asset, location on the page, and learned priority from previous visits</li>
+						<ul>
+							<li>If page loading was blocked on an asset, the asset priority gets increased</li>
+						</ul>
+					</ul>
+
+					<li>DOM, CSSOM and JavaScript</li>
+					<img src="img/dom-cssom-js.png" style="padding-top: 5px; width: 600px"></img>
+					<ul>
+						<li>HTML document is critical to construct DOM</li>
+						<li>CCS is required to construct CSSOM</li>
+						<li>Both DOM and CSSOM construction can be blocked on JavaScript resources</li>
+						<ul>
+							<li>A script can issue <code>doc.write</code> and block DOM parsing and construction</li>
+							<li>A script can query for a computed style of an object; the script can block on CSS</li>
+						</ul>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Stream Prioritization</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Purpose</li>
+					<ul>
+						<li>Messages split into <b>frames</b> which are delivered in multiplexed <b>streams</b></li>
+						<li>The order in which frames are delivered is important for a good performance</li> 
+						<li>Client can define stream prioritization</li>
+						<ul>
+							<li>optimizations in the browser, change prioritization based on user interaction</li>
+						</ul>
+					</ul>
+					<li>Streams' weights and dependency</li>
+					<ul>
+						<li>Each stream can be assigned an integer weight between 1 and 256.</li>
+						<li>Each stream may be given an explicit dependency on another stream.</li>
+					</ul>
+					<img src="img/stream-prioritization.png" style="width: 685px; margin-top: 10px"> 
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Stream Prioritization (cont.)</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Dependency</li>
+					<ul>
+						<li>referencing the unique identifier of another stream as its parent</li>
+						<li>if the identifier is omitted the stream is dependent on the "root stream"</li> 
+						<li>The parent stream should be allocated resources ahead of its dependencies.</li>
+						<ul>
+							<li>"Please process and deliver response D before response C"</li>
+						</ul>
+					</ul>
+					<li>Weights</li>
+					<ul>
+						<li>Sibling streams have resources allocated as per their weights</li>
+						<li>Example</li>
+						<ul>
+							<li>Sum all the weights: <code>4 + 12 = 16</code></li>
+							<li>Divide each stream weight by the total weight: <code>A = 12/16</code>, <code>B = 4/16</code></li>
+							<li>Stream <code>A</code> receives <code>3/4</code> and stream <code>B</code> receives <code>1/4</code> of available resources;<br/></li>
+						</ul>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
 					<h1>Flow control</h1>
 				</hgroup>
 				<ul class="xx-small">
 					<li>Prevent sender from receiving data it doest not want</li>
 					<ul>
 						<li>Receiver is busy or under heavy load</li>
-						<li>Receiver can allocate fixed amount of resources for particular stream</li>
+						<li>Receiver is willing to allocate fixed amount of resources for a stream</li>
 					</ul>
 					<li>Examples</li>
 					<ul>
@@ -223,7 +333,10 @@
 							<li>the proxy server can control how quickly the downstream delivers data to match the speed of upstream</li>
 							<li>better control of resource usage</li>
 						</ul>
-						<li>Similar problems as in TCP control</li>
+						<li>Similar problems as in TCP flow control</li>
+						<ul>
+							<li>TCP flow control has no app-level API to regulate delivery of streams</li>
+						</ul>
 					</ul>
 					<li>Flow control</li>
 					<ul>
@@ -288,56 +401,6 @@
 
 			<div class="slide">
 				<hgroup>
-					<h1>Stream Prioritization</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Purpose</li>
-					<ul>
-						<li>Messages split into <b>frames</b> which are delivered in multiplexed <b>streams</b></li>
-						<li>The order in which frames are delivered is important for a good performance</li> 
-						<li>Client can define stream prioritization</li>
-						<ul>
-							<li>optimizations in the browser, change prioritization based on user interaction</li>
-						</ul>
-					</ul>
-					<li>Streams' weights and dependency</li>
-					<ul>
-						<li>Each stream can be assigned an integer weight between 1 and 256.</li>
-						<li>Each stream may be given an explicit dependency on another stream.</li>
-					</ul>
-					<img src="img/stream-prioritization.png" style="width: 685px; margin-top: 10px"> 
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Stream Prioritization (cont.)</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Dependency</li>
-					<ul>
-						<li>referencing the unique identifier of another stream as its parent</li>
-						<li>if the identifier is omitted the stream is dependent on the "root stream"</li> 
-						<li>The parent stream should be allocated resources ahead of its dependencies.</li>
-						<ul>
-							<li>"Please process and deliver response D before response C"</li>
-						</ul>
-					</ul>
-					<li>Weights</li>
-					<ul>
-						<li>Sibling streams have resources allocated as per their weights</li>
-						<li>Example</li>
-						<ul>
-							<li>Sum all the weights: <code>4 + 12 = 16</code></li>
-							<li>Divide each stream weight by the total weight: <code>A = 12/16</code>, <code>B = 4/16</code></li>
-							<li>Stream <code>A</code> receives <code>3/4</code> and stream <code>B</code> receives <code>1/4</code> of available resources;<br/></li>
-						</ul>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
 					<h1>Header compression</h1>
 				</hgroup>
 				<ul class="xx-small">
@@ -348,7 +411,7 @@
 					</ul>
 					<li>HTTP/2 provides</li>
 					<ul>
-						<li>Request and response metadata are compressed sing HPACK format</li>
+						<li>Request and response metadata are compressed using HPACK format</li>
 						<ul>
 							<li>header fields encoded via a static Huffman code &ndash; reduces size</li>
 							<li>client and server maintain an <b>indexed list of previously seen header fields</b></li>
