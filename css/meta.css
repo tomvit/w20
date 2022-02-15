@@ -20,7 +20,7 @@
 }
 
 .meta_semester:before {
-	content: "CTU Summer Semester 2020/2021";
+	content: "CTU Summer Semester 2021/2022";
 }
 
 .meta_org:before {
@@ -36,7 +36,7 @@
 }
 
 .meta_orgweb:before {
-	content: "http://vitvar.com/courses/w20";
+	content: "https://vitvar.com/lectures";
 }
 
 div.oppa {
