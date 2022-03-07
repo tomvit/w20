@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<!--
+	Web 2.0, CTU course slides
+	(cc) 2010-2014 Tomas Vitvar, tomas@vitvar.com
+-->
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="course" content="Web 2.0" />
+  <meta name="lecture" content="Lecture 3" />
+  <meta name="keywords" content="SaaS, IaaS, PaaS" />
+
+  <link type="text/css" rel="stylesheet" href="css/meta.css">
+  </link>
+  <link type="text/css" rel="stylesheet" href="css/ctu-fit.css">
+  </link>
+  <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css">
+  </link>
+
+  <script type="text/javascript" src="humla/lib/humla.js"></script>
+  <title>Cloud Native and Microservices</title>
+</head>
+
+<body>
+
+  <footer>
+    <p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester" />,&nbsp;
+      <span class="meta_twitter" /></p>
+    <p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
+  </footer>
+
+  <div class="slide intro">
+    <hgroup>
+      <h1><span class="meta_course" /></h1>
+      <h2>#META_LECTURE#: #TITLE#</h2>
+    </hgroup>
+    <div class="author">
+      <p class="meta_author" />
+      <p><span class="meta_email" /> &bull; <span class="meta_twitter" /> &bull;
+        <span class="meta_web" /></p>
+    </div>
+    <center>
+      <div class="meta_logo"></div>
+    </center>
+    <div class="org">
+      <p class="meta_org" />
+      <p><span class="meta_orgfac" /> &bull; <span class="meta_field" />
+        &bull; <span class="meta_orgweb" /></p>
+    </div>
+    <div class="etc">
+      <div class="text-info">
+        Modified: #LAST_MODIFIED#<br />
+        Humla v#HUMLA_VERSION#
+      </div>
+      <a href="http://creativecommons.org/licenses/by-sa/3.0/">
+        <div class="license"></div>
+      </a>
+      <div class="oppa"></div>
+    </div>
+  </div>
+
+  <div class="slide outline"></div>
+
+  <section>
+    <header>Cloud Native</header>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Overview</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>The <span id="cnfs" class="h-ref"></span></li>
+        <ul>
+          <li>Motto: Building sustainable ecosystems for cloud native software</li>
+          <li>CNFS is part of the nonprofit Linux Foundation</li>
+        </ul>
+        <li>Cloud Native = scalable apps running in modern cloud environments</li>
+        <ul>
+          <li>containers, service mashes, microservices</li>
+          <li>Apps must be usually re-built from scratch or refactored</li>  
+          <li>Benefits:</li>
+          <ul>
+            <li>loosely coupled systems that are resilient, manageable, and observable</li>
+            <li>automation allowing for predictable and frequent changes with minimal effort</li>
+          </ul>
+          <li>Trail Map</li>
+          <ul>
+            <li>provides an overview for enterprises starting their cloud native journey<span class="h-ref" id="cnfs-trail-map"/></li>
+          </ul>
+        </ul>
+        <li>Lift and Shift</li>
+        <ul>
+          <li>Cloud transition program in organizations</li>
+          <li>Move app from on-premise to the cloud</li>
+          <li>Benefits</li>
+          <ul>
+            <li>Infrastructure cost cutting (OPEX vs. CAPEX)</li>
+            <li>Improved operations (scaling up/down if possible can be faster)</li>
+          </ul>
+        </ul>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>CNFS Trail Map</h1>
+      </hgroup>
+      <img src="img/cncf-trail-map.png" style="width: 100%"/>
+    </div>
+    
+  </section>
+
+  <div class="slide outline"></div>
+
+  <section>
+    <header>Microservices</header>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Overview</h1>
+      </hgroup>
+      <ul>
+        <li>Emerging software architecture</li>
+        <ul>
+          <li>monolithic vs. decoupled applications</li>
+          <li>applications as independenly deployable services</li>
+        </ul>
+        <img src="img/microservices.png" style="zoom: 0.7"></img>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Major Characteristics</h1>
+      </hgroup>
+      <ul>
+        <li>Loosely coupled</li>
+        <ul>
+          <li>Integrated using well-defined interfaces</li>
+        </ul>
+        <li>Technology-agnostic protocols</li>
+        <ul>
+          <li>HTTP, they use REST architecture</li>
+        </ul>
+        <li>Independently deployable and easy to replace</li>
+        <ul>
+          <li>A change in small part requires to redeploy only that part</li>
+        </ul>
+        <li>Organized around capabilities</li>
+        <ul>
+          <li>such as accounting, billing, recommendation, etc.</li>
+        </ul>
+        <li>Impplemented using different technologies</li>
+        <ul>
+          <li>polyglot &ndash; programming languages, databases</li>
+        </ul>
+      </ul>
+    </div>
+
+  </section>
+
+  <div class="slide outline"></div>
+
+  <section>
+
+    <header>Containers</header>
+
+    <section>
+      <header>Overview</header>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Virtual Machines vs. Containers</h1>
+        </hgroup>
+        <div class="h-drawing" style="height:450px; margin-top: 30px" id="13MxlAselSiJfnL7o8NwX87x2SzlPbLdJ56Zi87Ex00w"></div>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Overview</h1>
+        </hgroup>
+
+        <ul class="x-small">
+          <li>Linux Containers</li>
+          <ul>
+            <li>Introduced in 2008</li>
+            <li>Allow to run a process tree in a isolated system-level "virtualization"</li>
+            <li>Use much less resources and disk space than traditional virtualization</li>
+          </ul>
+          <li>Implementations</li>
+          <ul>
+            <li>LXC &ndash; default implementation in Linux</li>
+            <li>Docker Containers</li>
+            <ul>
+              <li>Builds on Linux namespaces and union file system (OverlayFS)</li>
+              <li>A way to build, commit and share images</li>
+              <li>Build images using a description file called Dockerfile</li>
+              <li>Large number of available base and re-usable images</li>
+            </ul>
+          </ul>
+          <li>Monolithic design originally</li>
+          <ul>
+            <li>Now several layers</li>
+            <li>container runtime</li>
+            <li>container engine</li>
+          </ul>
+          <div class="h-drawing" id="1XcnPNd8sFL3BztQqVtv6Xf4XUNrpzQHAsDm9Ma6D_S8" style="text-align:left; height: 160px; margin-top: -120px; margin-left: 350px"/>
+        </ul>
+      </div>
+      
+      <div class="slide">
+        <hgroup>
+          <h1>Containerd</h1>
+        </hgroup>
+
+        <img src="img/container-arch.jpeg" style="height: 240px; margin-top: 20px; margin-left: 20px"/>
+        <ul class="xx-small">
+          <li>Container engine</li>
+          <ul>
+            <li>Accepts user inputs (via CLI or API), pulling images from registry, preparing metadata to be passed to container runtime</li>
+          </ul>
+          <li>Container runtime</li>
+          <ul>
+            <li>Abstraction from syscalls or OS specific functionality to run containers on linux, windows, solaris, etc.</li>
+            <li>Uses <code>runc</code> and <code>container-shim</code></li>
+            <li>Communicates with kernel to start containerized processes</li>
+          </ul>
+        </ul>
+      </div>
+      
+      <div class="slide">
+        <hgroup>
+          <h1>Terminology</h1>
+        </hgroup>
+        <ul class="xx-small">
+          <li>Image</li>
+          <ul>
+            <li>An image contains a union of layered filesystems stacked on top of each other</li>
+            <li>Immutable, it does not have state and it never changes</li>
+          </ul>
+          <li>Container</li>
+          <ul>
+            <li>One or more processes running in one or more isolated namespaces in a filesystem provided by the image</li>
+          </ul>
+          <li>Container Engine/Runtime</li>
+          <ul>
+            <li>The core processes providing container capabilities on a host</li>
+          </ul>
+          <li>Client</li>
+          <ul>
+            <li>An app (e.g. CLI, custom app), communicates with a container engine by its API</li>
+          </ul>
+          <li>Registry</li>
+          <ul>
+            <li>A hosted service containing repository of images</li>
+            <li>A registry provides a registry API to search, pull and push images</li>
+            <li>Docker Hub is the default Docker registry</li>
+          </ul>
+          <li>Swarm</li>
+          <ul>
+            <li>A cluster of one or more docker engines</li>
+          </ul>
+        </ul>
+      </div>
+    </section>
+
+    <div class="slide outline"></div>
+
+    <section>
+
+      <header>Linux Namespaces</header>
+    
+      <div class="slide">
+        <hgroup>
+          <h1>Linux Namespaces</h1>
+        </hgroup>
+        <ul class="xx-small">
+          <li>Isolation of Linux processes, there are <b>7 namespaces</b></li>
+          <ul>
+            <li>Mount, UTS, IPC, PID, Network, User, Cgroup</li>
+            <li>By default, every process is a member of a default namespace of each type</li>
+            <li>In case no additional namespace configuration is in place, processes and all their direct children will reside in this exact namespace</li>
+            <li>Run <code>lsns</code> to check namespaces the process is in</li>
+            <pre class="brush: plain; gutter: 'false'">
+              $ lsns
+              NS         TYPE  NPROCS   PID USER   COMMAND
+              4026531836 pid        2 30873 oracle -bash
+              4026531837 user     108  1636 oracle /bin/bash /u01/oracle/scripts/startWebLogicContainer.sh
+              4026531838 uts        2 30873 oracle -bash
+              4026531839 ipc        2 30873 oracle -bash
+              4026531840 mnt        2 30873 oracle -bash
+              4026531956 net      108  1636 oracle /bin/bash /u01/oracle/scripts/startWebLogicContainer.sh
+              4026532185 mnt       13 13542 oracle /bin/bash /u01/oracle/scripts/startNM_ohs.sh
+              4026532192 pid       13  2798 oracle /bin/bash /u01/oracle/scripts/startNM_ohs.sh
+              ...
+            </pre>
+          </ul>
+          <li>Flexible configuration, for example:</li>
+          <ul>
+            <li>You can run two apps that only share the network namespace, e.g. <code>4026531956</code></li>
+            <li>The apps can talk to each other</li>
+            <li>Any other app (not in this namespace) won't be able to talk to the apps</li>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Types: mnt, uts, ipc and pid</h1>
+        </hgroup>
+        <ul class="xx-small">
+          <li><code>mnt</code> namespace</li>
+          <ul>
+            <li>Isolates filesystem mount points</li>
+            <li>Restricts the view of the global file hierarchy</li>
+            <li>Each namespace has its own set of mount points</li>
+          </ul>
+          <li><code>uts</code> namespace</li>
+          <ul>
+            <li>The value of the hostname is isolated between different UTS namespaces</li>
+          </ul>          
+          <li><code>ipc</code> namespace</li>
+          <ul>
+            <li>Isolates interprocess communication resources</li>
+            <li>message queues, semaphore, and shared memory</li>
+          </ul>
+          <li><code>pid</code> namespace</li>
+          <ul>
+            <li>Isolates PID number space</li>
+            <li>A process ID number space gets isolated</li>
+            <ul>
+              <li>Processes can have PIDs starting from the value 1</li>
+              <li>Real PIDs outside of the namespace of the same process is a different number</li>
+            </ul>
+            <li>Containers have their own init processes with a PID value of 1</li>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Types: net</h1>
+        </hgroup>
+        <ul class="xx-small">
+          <li><code>net</code> namespace</li>
+          <ul>
+            <li>Processes have their own private network stack (interfaces, routing tables, sockets)</li>
+            <li>Communication with external network stack is done by a virtual ethernet bridge</li>
+            <img src="img/container-bridge.png" style="height: 200px; margin-top: 10px; margin-bottom: 10px"/>
+            <li>On the host there is a <b>userland proxy</b> or <b>NAT</b></li>
+            <ul>
+              <li>NAT is a prefered solution over userland proxy (<code>/usr/bin/docker-proxy</code>)</li>
+              <li>Lack of NAT hairpinning may prevent to use NAT</li>
+            </ul>
+            <li>Use case</li>
+            <ul>
+              <li>Multiple services binding to the same port on a single machine, e.g. <code>tcp/80</code></li>
+              <li>A port in the host is mapped to the port exposed by a process in the NS</li>
+            </ul>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Types: user</h1>
+        </hgroup>
+        <ul class="xx-small">
+          <li><code>user</code> namespace</li>
+          <ul>
+            <li>Isolates UID/GID number spaces</li>
+          </ul>
+          <li><code>cgroup</code> namespace</li>
+          <ul>
+            <li>Isolate cgroup root directory</li>
+          </ul>
+        </ul>
+      </div>
+      
+    </section>
+
+    <div class="slide outline"></div>
+
+    <section>
+
+      <header>Images</header>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Container Images</h1>
+        </hgroup>
+        <img style="margin-left: 50px; margin-top: 15px; margin-bottom: 10px; height: 280px" src="./img/docker-container-stack.png" />
+        <ul class="x-small" style="margin-left: -10px">
+          <ul>
+            <li>Containers are made up of R/O layers via a storage driver<br />(OverlayFS, AUFS, etc.)</li>
+            <li>Containers are designed to support a single application</li>
+            <li>Instances are ephemeral, persistent data is stored in bind
+              mounts or data volume containers.</li>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Image Layering with OverlayFS</h1>
+        </hgroup>
+        <ul class="x-small">
+          <li>OverlayFS</li>
+          <ul>
+            <li>A filesystem service implementing a <b>union mount</b> for other file systems.</li>
+            <li>Docker uses <code>overlay</code> and <code>overlay2</code> storage drivers
+              to build and manage on-disk structures of images and containers.</li>
+          </ul>
+          <li>Image Layering</li>
+          <ul>
+            <li>OverlayFS takes two directories on a single Linux host, layers one on top of the other, and provides
+              a single unified view.</li>
+            <li>Only works for two layers, in multi-layered images hard links are used to
+              reference data shared with lower layers.</li>
+          </ul>
+          <img src="img/overlay_constructs.jpg" style="width: 700px; margin-top: 10px" />
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Image Layers Example</h1>
+        </hgroup>
+        <ul class="xx-small" style="margin-top:20px; zoom:0.9">
+          <li>Pulling out the image from the registry</li>
+          <pre class="brush: plain; gutter: 'false'">
+            $ docker pull ubuntu
+
+            Using default tag: latest
+            latest: Pulling from library/ubuntu
+
+            5ba4f30e5bea: Pull complete
+            9d7d19c9dc56: Pull complete
+            ac6ad7efd0f9: Pull complete
+            e7491a747824: Pull complete
+            a3ed95caeb02: Pull complete
+            Digest: sha256:46fb5d001b88ad904c5c732b086b596b92cfb4a4840a3abd0e35dbb6870585e4
+            Status: Downloaded newer image for ubuntu:latest
+          </pre>
+          <ul>
+            <li>Each image layer has its own directory under <code>/var/lib/docker/overlay/</code>.</li>
+            <li>This is where the contents of each image layer are stored.</li>
+          </ul>
+          <li>Directories on the file system</li>
+          <pre class="brush: plain; gutter: 'false'">
+            $ ls -l /var/lib/docker/overlay/
+
+            total 20
+            drwx------ 3 root root 4096 Jun 20 16:11 38f3ed2eac129654acef11c32670b534670c3a06e483fce313d72e3e0a15baa8
+            drwx------ 3 root root 4096 Jun 20 16:11 55f1e14c361b90570df46371b20ce6d480c434981cbda5fd68c6ff61aa0a5358
+            drwx------ 3 root root 4096 Jun 20 16:11 824c8a961a4f5e8fe4f4243dab57c5be798e7fd195f6d88ab06aea92ba931654
+            drwx------ 3 root root 4096 Jun 20 16:11 ad0fe55125ebf599da124da175174a4b8c1878afe6907bf7c78570341f308461
+            drwx------ 3 root root 4096 Jun 20 16:11 edab9b5e5bf73f2997524eebeac1de4cf9c8b904fa8ad3ec43b3504196aa3801
+          </pre>
+          <ul>
+            <li>The organization of files allows for efficient use of disk space.</li>
+            <li>There are <b>files unique to every layer</b> and <b>hard links to files</b> shared with lower layers</li>
+          </ul>
+        </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Dockerfile</h1>
+        </hgroup>
+        <ul class="xx-small" style="zoom: 0.90">
+          <li>Dockerfile is a script that creates a new image</li>
+          <pre class="brush: plain; gutter: 'false'">
+          # This is a comment
+          FROM oraclelinux:7
+          MAINTAINER Tomas Vitvar &lt;tomas@vitvar.com>
+          RUN yum install -q -y httpd
+          EXPOSE 80
+          CMD httpd -X
+          </pre>
+
+          <li>A line in the Dockerfile will create an intermediary layer</li>
+
+          <pre class="brush: plain; gutter: 'false'">
+          $ docker build -t tomvit/httpd:v1 .
+          Sending build context to Docker daemon 2.048 kB
+          Step 1 : FROM oraclelinux:7
+           ---> 4c357c6e421e
+          Step 2 : MAINTAINER Tomas Vitvar &lt;tomas@vitvar.com>
+           ---> Running in 35feebb2ffab
+           ---> 95b35d5d793e
+          Removing intermediate container 35feebb2ffab
+          Step 3 : RUN yum install -q -y httpd
+           ---> Running in 3b9aee3c3ef1
+           ---> 888c49141af9
+          Removing intermediate container 3b9aee3c3ef1
+          Step 4 : EXPOSE 80
+           ---> Running in 03e1ef9bf875
+           ---> c28545e3580c
+          Removing intermediate container 03e1ef9bf875
+          Step 5 : CMD httpd -X
+           ---> Running in 3c1c0273a1ef
+          </pre>
+
+          <ul class="no-bullet">
+            <li>If processing fails at some step, all preceeding steps will be loaded from the cache on the next run.</li>
+          </ul>
+
+
+        </ul>
+      </div>
+
+    </section>
+
+    <div class="slide outline"></div>
+
+    <section>
+
+      <header>Working with Docker</header>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Docker Container State Diagram</h1>
+        </hgroup>
+
+        <div class="h-drawing" style="width: 780px" id="1JGxpdEWDh9lBbLg3JFVr53LBg1BM520LYXyYkdi-2ws"></div>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Commands (1)</h1>
+        </hgroup>
+        <ul class="xx-small no-bullet" style="zoom:0.95">
+          <li><code>docker version</code></li>
+          <ul>
+            <li>list current version of docker engine and client</li>
+          </ul>
+          <li><code>docker search &lt;image&gt;</code></li>
+          <ul>
+            <li>search for an image in the registry</li>
+          </ul>
+          <li><code>docker pull &lt;image[:version]&gt;</code></li>
+          <ul>
+            <li>download an image of a specific version from the registry</li>
+            <li>if the version is not provided, the latest version will be downloaded</li>
+          </ul>
+          <li><code>docker images</code></li>
+          <ul>
+            <li>list all local images</li>
+          </ul>
+          <li><code>docker run -it &lt;image[:version]&gt; &lt;command&gt;</code></li>
+          <ul>
+            <li>start the image and run the command inside the image</li>
+            <li>if the image is not found locally, it will be downloaded from the registry</li>
+            <li>option <code>-i</code> starts the container in interactive mode</li>
+            <li>option <code>-t</code> allocates a pseudo TTY</li>
+          </ul>
+          <li><code>docker ps [-as]</code></li>
+          <ul>
+            <li>list all running containers</li>
+            <li>option <code>-a</code> will list all containers including the stopped ones.</li>
+            <li>option <code>-s</code> will list the container's size.</li>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Commands (2)</h1>
+        </hgroup>
+        <ul class="xx-small no-bullet" style="zoom:0.95">
+          <li><code>docker rm &lt;container&gt;</code></li>
+          <ul>
+            <li>remove the container</li>
+          </ul>
+          <li><code>docker rmi &lt;image&gt;</code></li>
+          <ul>
+            <li>remove the image</li>
+          </ul>
+          <li><code>docker commit &lt;container&gt; &lt;name[:version]&gt;</code></li>
+          <ul>
+            <li>create an image from the container with the name and the version</li>
+          </ul>
+          <li><code>docker history &lt;image&gt;</code></li>
+          <ul>
+            <li>display the image history</li>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Networking and Linking</h1>
+        </hgroup>
+        <ul class="xx-small">
+          <li>There are 3 docker networks by default</li>
+          <ul>
+            <li><b>bridge</b> &ndash; container can access host's network (default)</li>
+            <ul>
+              <li>Docker creates subnet <code>172.17.0.0/16</code> and gateway to the network</li>
+              <li>When a container is started, it is automatically added to this network</li>
+              <li>All containers in this network can communicate with each other</li>
+            </ul>
+            <li><b>host</b> &ndash; all host's network interfaces will be available in the container.</li>
+            <li><b>none</b> &ndash; container will be placed on its own network and no network interfaces will be configured.</li>
+          </ul>
+          <li>Custom Network configuration</li>
+          <ul>
+            <li>You can create a new network and add containers to it</li>
+            <li>Containers in the new network can communicate with each other but the network will be isolated
+              from the host network</li>
+          </ul>
+          <li>Linking containers (legacy)</li>
+          <ul>
+            <pre class="brush: plain; gutter: 'false'">
+              $ docker run -d --name redmine-db postgres
+              $ docker run -it --link redmine-db:db postgres /bin/bash
+              root@c4b12143ebe8:/# psql -h db -U postgres
+              psql (9.6.1)
+              Type "help" for help.
+              postgres=# SELECT inet_server_addr();
+              postgres=# SELECT * FROM pg_stat_activity \x\g\x
+            </pre>
+          </ul>
+        </ul>
+      </div>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Networking Commands</h1>
+        </hgroup>
+        <ul class="xx-small no-bullet" style="zoom:0.95">
+          <li><code>docker network ls</code></li>
+          <ul>
+            <li>lists all available networks</li>
+          </ul>
+          <li><code>docker network inspect &lt;network-id&gt;</code></li>
+          <ul>
+            <li>Returns the details of specific network</li>
+          </ul>
+          <li><code>docker network create --driver bridge isolated_nw</code></li>
+          <ul>
+            <li>creates a new isolated network</li>
+          </ul>
+          <li><code>docker run -it --network=isolated_nw ubuntu bin/bash</code></li>
+          <ul>
+            <li>starts the container ubuntu and attaches it to the isolated network</li>
+          </ul>
+        </ul>
+      </div>
+
+
+      <div class="slide">
+        <hgroup>
+          <h1>Data Volumes</h1>
+        </hgroup>
+        <ul class="xx-small" style="zoom:0.95">
+          <li>Data Volume</li>
+          <ul>
+            <li>A directory that bypass the union file system</li>
+            <li>Data volumes can be shared and reused among containers</li>
+            <li>Data volume persists even if the container is deleted</li>
+            <li>It is possible to mount a shared sotrage volume as a data volue by using
+              a volume plugin to mount e.g. NFS</li>
+          </ul>
+
+          <li>Adding a data volume</li>
+          <ul>
+            <li class="no-bullet">
+              <code>docker run -d -v /webapp training/webapp python app.py</code>
+            </li>
+            <li class="no-bullet">will create a new value with name <code>webapp</code>,</li>
+            <li class="no-bullet">the location of the volume can be determined by using <code>docker inspect</code>.</li>
+
+          </ul>
+          <li>Mount a host directory as a data volume</li>
+          <ul>
+            <li class="no-bullet">
+              <code>docker run -d -v /src/webapp:/webapp training/webapp python app.py</code>
+            </li>
+            <li class="no-bullet">if the path exists in the container, it will be overlayed (not removed),</li>
+            <li class="no-bullet">if the host directory does not exist, the docker engine creates it.</li>
+
+          </ul>
+          <li>Data volume container</li>
+          <ul>
+            <li>Persistent data to be shared among two or more containers</li>
+            <li class="no-bullet">
+              <code>docker create -v /dbdata --name dbstore training/postgres /bin/true</code>
+            </li>
+            <li class="no-bullet">
+              <code>docker run -d --volumes-from dbstore --name db1 training/postgres</code>
+            </li>
+            <li class="no-bullet">
+              <code>docker run -d --volumes-from dbstore --name db2 training/postgres</code>
+            </li>
+          </ul>
+        </ul>
+      </div>
+
+    </section>
+
+    <!-- <div class="slide outline"></div>
+
+    <section>
+      <header>Swarm</header>
+
+      <div class="slide">
+        <hgroup>
+          <h1>Swarm</h1>
+        </hgroup>
+        <img src="img/swarm-diagram.png" style="width: 750px; margin-left: 25px; margin-top: 20px" />
+      </div>
+    </section> -->
+
+
+  </section>
+
+  <div class="slide outline"></div>
+
+  <section>
+    <header>Kubernetes</header>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Overview</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>In your architecture...</li>
+        <ul>
+          <li>Containers are atomic pieces of application architecture</li>
+          <li>Containers can be linked (e.g. web server, DB)</li>
+          <li>Containers access shared resources (e.g. disk volumes)</li>
+        </ul>
+        <li>Kubernetes</li>
+        <ul>
+          <li>Automation of deployments, scaling, management of containerized applications across number of nodes</li>
+          <li>Based on Borg, a parent project from Goolge</li>
+        </ul>
+        <img src="img/kubernetes-overview.png" width="400px" style="margin-top: 10px; margin-left: 20px"></img>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Features</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>Automatic binpacking</li>
+        <ul>
+          <li>Automatically places containers onto nodes based on their resource requirements and other constraints.</li>
+        </ul>
+        <li>Horizontal scaling</li>
+        <ul>
+          <li>Scales your application up and down with a simple command, with a UI, or automatically based on CPU usage.</li>
+        </ul>
+        <li>Automated rollouts and rollbacks</li>
+        <ul>
+          <li>Progressive rollout out of changes to application/configuration, monitoring application health
+            and rollback when something goes wrong.</li>
+        </ul>
+        <li>Storage orchestration</li>
+        <ul>
+          <li>Automatically mounts the storage system (local or in the cloud)</li>
+        </ul>
+        <li>Self-healing</li>
+        <ul>
+          <li>Restarts containers that fail, replaces and reschedules containers when nodes die, kills containers that don't respond to user-defined health checks.</li>
+        </ul>
+        <li>Service discovery and load balancing</li>
+        <ul>
+          <li>Gives containers their own IP addresses and a single DNS name for a set of containers, and can load-balance across them.</li>
+        </ul>
+      </ul>
+    </div>
+
+    <!-- <div class="slide">
+      <hgroup>
+        <h1>Basic Terms</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>Node</li>
+        <ul>
+          <li>a worker machine in Kubernetes (a VM or physical machine).
+          <li>It uses <code>kubelet</code> and <code>kube-proxy</code> to communicate with the control plane.</li>
+        </ul>
+        <li>Control Plane</li>
+        <ul>
+          <li>A set of components that manage the Kubernetes cluster.</li>
+          <li>Can run on a separate node such as a master node.</li>
+        </ul>
+        <li>Pod</li>
+        <ul>
+          <li>The basic building block of Kubernetes, one or more dependant containers.</li>
+        </ul>
+      </ul>
+    </div> -->
+
+    <div class="slide">
+      <hgroup>
+        <h1>Architecture</h1>
+      </hgroup>
+      <img src="img/components-of-kubernetes.svg" style="width: 800px; margin-left: 50px; margin-top: 50px; zoom: 0.88"></img>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Control Plane Components</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>Global decisions about the cluster</li>
+        <ul>
+          <li>Schedulling</li>
+          <li>Detecting and responding to cluster events, starting up new pods</li>
+        </ul>
+        <li>kube-apiserver</li>
+        <ul>
+          <li>exposes the Kubernetes API</li>
+          <li>The API server is the front end for the Kubernetes control plane.</li>
+        </ul>
+        <li>etcd</li>
+        <ul>
+          <li>highly-available key value store used to store all cluster data</li>
+        </ul>
+        <li>kube-scheduler</li>
+        <ul>
+          <li>watches for newly created Pods with no assigned node</li>
+          <li>selects a node for Pods to run on.</li>
+          <li>Decision factors: resource requirements, hardware/software/policy constraints, affinity and anti-affinity specifications</li>
+        </ul>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Control Plane Components</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>kube-controller-manager</li>
+        <ul>
+          <li>runs controller to ensure the desired state of cluster objects</li>
+          <li><b>Node controller</b></li>
+          <ul>
+            <li>noticing and responding when nodes go down</li>   
+          </ul>   
+          <li><b>Job controller</b></li>
+          <ul>
+            <li>creates Pods to run one-off tasks to completion.</li>
+          </ul>
+          <li><b>Endpoints controller</b></li>
+          <ul>
+            <li>Populates the Endpoints object (that is, joins Services & Pods).</li>
+          </ul>
+        </ul>
+        <li>cloud-controller-manager</li>
+        <ul>
+          <li>Integration with cloud services (when the cluster is running in a cloud)</li>
+          <li><b>Node controller</b></li>
+          <ul>
+            <li>checks if a node has been deleted in the cloud after it stops responding</li>
+          </ul>
+          <li><b>Route controller</b></li>
+          <ul>
+            <li>For setting up routes in the underlying cloud infrastructure</li>
+          </ul>
+          <li><b>Service controller</b></li>
+          <ul>
+            <li>For creating, updating and deleting cloud provider load balancers</li>
+          </ul>
+        </ul>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Node</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>Kubernetes runtime environment</li>
+        <ul>
+          <li>Run on every node</li>
+          <li>Maintaining running pods</li>
+        </ul>
+        <li>kubelet</li>
+        <ul>
+          <li>An agent that runs on each node in the cluster</li>
+          <li>It makes sure that containers are running in a Pod.</li>
+        </ul>
+        <li>kube-proxy</li>
+        <ul>
+          <li>maintains network rules on nodes</li>
+          <li>network rules allow network communication to Pods from inside or outside of the cluster</li>
+          <li>uses the operating system packet filtering layer or forwards the traffic itself.</li>
+        </ul>
+        <li>Container runtime</li>
+        <ul>
+          <li>Responsible for running containers</li>
+          <li>Kubernetes supports several container runtimes (containerd, CRI-O)</li>
+          <li>Any implementation of the Kubernetes CRI (Container Runtime Interface)</li>
+        </ul>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Container Stack</h1>
+      </hgroup>
+      <div class="h-drawing" style="padding-top: 21px; padding-left: 21px; width: 600px" id="1H0E2ljSysot6vb-m8T1hyy4XtyDz3QLb07H-Q0lbgqs"></div>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Pod</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>Pod</li>
+        <ul>
+          <li>A group of one or more tightly-coupled containers.</li>
+          <li>Containers share storage and network resources.</li>
+          <li>A Pod runs a single instance of a given application</li>
+          <li>Pod's containers are always co-located and co-scheduled</li>
+          <li>Pod's containers run in a shared context, i.e. in a set of Linux namespaces</li>
+        </ul>
+        <li>Pods are created using workload resources</li>
+        <ul>
+          <li>You do not create them directly</li>
+        </ul>
+        <li>Pods in a Kubernetes cluster are used in two main ways</li>
+        <ul>
+          <li>Run a single container, the most common Kubernetes use case</li>
+          <li>Run multiple containers that need to work together</li>
+        </ul>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <hgroup>
+        <h1>Workloads</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>An application running on Kubernetes</li>
+        <li>Workloads run in a set of Pods</li>
+        <li>Pre-defined workload resources to manage lifecylce of Pods</li>
+        <ul>
+          <li><b>Deployment</b> and ReplicaSet</li>
+          <ul>
+            <li>managing a stateless application workload</li>
+            <li>any Pod in the Deployment is interchangeable and can be replaced if needed</li>
+          </ul>
+          <li><b>StatefulSet</b></li>
+          <ul>
+            <li>one or more related Pods that track state</li>
+            <li>For example, if a workload records data persistently, run a StatefulSet that matches each Pod with a persistent volume.</li>
+          </ul>
+          <li>DaemonSet</li>
+          <ul>
+            <li>Ensures that all (or some) Nodes run a copy of a Pod</li>
+            <li>Such as a cluster storage daemon, logs collection, node monitoring running on every node</li>
+          </ul>
+          <li>Job and CronJob</li>
+          <ul>
+            <li>Define tasks that run to completion and then stop.</li>
+            <li>Jobs represent one-off tasks, whereas CronJobs recur according to a schedule.</li>
+          </ul>
+        </ul>
+      </ul>
+    </div>
+
+    <!-- <div class="slide">
+      <hgroup>
+        <h1>Objects</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>Persistent entities in the cluster</li>
+        <ul>
+          <li>running containerized applications (and on which nodes)</li>
+          <li>resources available to applications</li>
+          <li>policies around how applications behave</li>
+          <ul>
+            <li>restart policies, upgrades, and fault-tolerance</li>
+          </ul>
+        </ul>
+        <li>Object is a record of intent</li>
+        <ul>
+          <li>Described objects is a <b>desired state</b> of the cluster</li>
+          <li>When an object is created, the Kubernetes ensures that object exists</li>
+        </ul>
+        <li>Object spec and status</li>
+        <ul>
+          <li>Spec</li>
+          <ul>
+            <li>Desired state of the object</li>
+            <li>Description of characteristics of the object</li>
+          </ul>
+          <li>Status</li>
+          <ul>
+            <li>The current state of the object</li>
+            <li>Supplied and updated by Kubernetes</li>
+          </ul>
+        </ul>
+      </ul>
+    </div> -->
+
+    <div class="slide">
+      <hgroup>
+        <h1>Deployment Spec Example</h1>
+      </hgroup>
+      <ul class="x-small">
+        <li>Deployment spec</li>
+        <pre class="brush: bash; class-name: ''">
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: nginx-deployment
+          spec:
+            selector:
+              matchLabels:
+                app: nginx          
+            replicas: 3 # tells deployment to run 3 pods matching the template
+            template:
+              metadata:
+                labels:
+                  app: nginx
+              spec:
+                containers:
+                - name: nginx
+                  image: nginx:1.14.2
+                  ports:
+                  - containerPort: 80          
+        </pre>
+        <ul>
+          <li>A desired state of an application running in the cluster</li>
+          <li>Kubernetes reads the Deployment spec and starts three app instances</li>
+          <li>If an instance fails, Kubernetes starts a replacement app instance</li>
+        </ul>
+      </ul>
+    </div>
+    
+    <div class="slide">
+      <hgroup>
+        <h1>Service</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>Networking</li>
+        <ul>
+          <li>Containers within a Pod use networking to communicate via loopback</li>
+          <li>Cluster networking provides communication between different Pods.</li>
+        </ul>
+        <li>Service resource</li>
+        <ul>
+          <li>An abstract way to expose an application running on a set of Pods</li>
+          <li>Example: a set of Pods with a label <code>app=nginx</code>, each listens on <code>tcp/9376</code></li>
+          <pre class="brush: bash; class-name: ''">
+            apiVersion: v1
+            kind: Service
+            metadata:
+              name: my-service
+            spec:
+              selector:
+                app: nginx
+              ports:
+                - protocol: TCP
+                  port: 80
+                  targetPort: 9376            
+          </pre>
+          <li>This specification creates a new Service object named <code>my-service</code></li>
+          <li>The servive targets <code>tcp/9376</code> on any Pod with the <code>app=nginx</code> label.</li>
+          <li>Kubernetes assigns this Service a cluster IP address, which is used by the Service proxies.</li>
+        </ul>
+      </ul>
+    </div>
+    
+    
+    <div class="slide">
+      <hgroup>
+        <h1>Demo</h1>
+      </hgroup>
+      <ul class="xx-small">
+        <li>Environment Setup</li>
+        <ul class="no-bullet">
+          <li><code>minikube</code> &ndash; a local virtual machine (running a master and a single node)</li>
+          <li><code>kubectl</code> &ndash; CLI to access Kubernetes cluster</li>
+        </ul>
+        <li>Steps</li>
+
+        <style>
+          #steps li {
+            margin-top: 5px;
+          }
+        </style>
+
+        <ol id="steps">
+          <li>create <code>hello-node</code> app in node.js and test it [see <a href="examples/kubernetes/hellonode/server.js">server.js</a>]<br />
+            <code>node server.js</code></li>
+          <li>create docker image for the app [see <a href="examples/kubernetes/hellonode/Dockerfile">Dockerfile</a>]<br />
+            <code>docker build -t hello-node:v1 .</code></li>
+          <li>deploy the app to Kubernetes by using <code>kubectl</code><br />
+            <code>kubectl run hello-node --image=hello-node:v1 --port=8080</code></li>
+          <li>Expose the app as a load balancer service.<br />
+            <code>kubectl expose deployment hello-node --type=LoadBalancer</code></li>
+          <li>Explore the app in minikube dashboard.<br />
+            <code>minikube dashboard</code></li>
+          <li>Fire requests at the service and count them [see <a href="examples/kubernetes/hellonode/test.sh">test.sh</a>]<br />
+            <code>./test.sh</code>.</li>
+          <li>Change the number of replicas by using the dashboard or <code>kubectl</code>.</li>
+        </ol>
+    </div>
+
+
+
+  </section>
+
+
+
+  </section>
