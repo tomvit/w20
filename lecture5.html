@@ -754,7 +754,7 @@
 						// shows a dialog to ask the user for authorization
 						function requestAuth() {
 							document.getElementById("ati").value = "";
-							url = "https://accounts.google.com/o/oauth2/auth?scope=https://www.google.com/m8/feeds&" +
+							url = "https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/contacts&" +
 								"client_id=621535099260.apps.googleusercontent.com&redirect_uri=" +
 								"https://w20.vitvar.com/examples/oauth/callback.html&response_type=token";
 							var newWindow = window.open(url, 'name', 'height=600,width=450');
@@ -778,7 +778,7 @@
 								requestAuth();
 							} else {
 								ati.value = at;
-								var url = "https://www.google.com/m8/feeds/contacts/default/full?oauth_token=" +
+								var url = "https://people.googleapis.com/v1/people/me/connections?personFields=addresses,names&oauth_token=" +
 									at + "&alt=json";
 								try {
 									// send XHR, synchronously 
@@ -791,9 +791,10 @@
 
 									// format and display output
 									var l = "";
-									for (i = 0; i < data.feed.entry.length; i++)
-										if (data.feed.entry[i].title.$t != "")
-											l += "<p>" + data.feed.entry[i].title.$t + "</p>";
+									for (i = 0; i < data.connections.length; i++)
+									  try {
+									    l += "<p>" + data.connections[i].names[0].displayNameLastFirst + "</p>";
+									  } catch (e) { }
 									document.getElementById("contacts_out").innerHTML = l;
 
 								} catch (e) {
