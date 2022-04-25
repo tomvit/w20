@@ -1,16 +1,6 @@
 {
     "extensions": [
         
-        {   "id" : "latex",
-            "object" : "ex_latex",
-            "scripts"  : [ { "src" : "humla/lib/ext/latex.js" } ],    
-            "styles"   : [ { "src" : "humla/lib/ext/latex.css", "media" : "screen, print" } ],
-            "params"   : {
-                "mathtex" : "http://lx.vitvar.com/cgi-bin/mt/mathtex.cgi?\\dpi{300}\\gammacorrection{0.5}"
-            },
-            "enabled" : true 
-        },
-        
         {   "id" : "github",
             "object" : "ex_github",
             "scripts" : [ { "src" : "humla/lib/ext/github.js" } ],
@@ -23,9 +13,8 @@
 
         {   "id" : "references",
             "object" : "ex_references",
-            "scripts" : [ { "src" : "lib/feed-tables/lib/feed-tables.js" },
-                          { "src" : "lib/humla/ext/references.js", "g": 1 },
-                          { "src" : "https://spreadsheets.google.com/feeds/list/0AoooUkEfVrhldENEczhyeFU5MVZNZFo4amwtVURxdEE/oda/public/basic?alt=json&callback=ex_references.loadReferences", "g": 5 }],
+            "scripts" : [ { "src" : "lib/humla/ext/references.js", "g": 1 },
+                          { "src" : "https://sheets.googleapis.com/v4/spreadsheets/1ydaux0SMZ083U_U_5EqsTn9vsiwCkOlGHyphesles_w/values/References?alt=json&key=AIzaSyDiv2_uSfpa7O9XKvNEktC2BQ7AYv0jZ2M&callback=ex_references.loadReferences", "g": 5 }],
             "styles"  : [ { "src" : "lib/humla/ext/references.css",  "media" : "screen, print" } ],               
             "enabled" : true 
         },
