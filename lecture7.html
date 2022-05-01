@@ -51,6 +51,8 @@
 			</div>
 		</div>
 		
+    <div class="slide outline"></div>
+    
 		<section>
 			<header>Introduction</header>
 
@@ -89,6 +91,56 @@
 					</ul>
 				</ul>
 			</div>
+      
+      <div class="slide">
+				<hgroup>
+					<h1>Establishing a HTTP/2 Connection</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Negotiating HTTP/2 via a secure connection with TLS and ALPN</li>
+          <ul>
+            <li>Client sends a protocol (HTTP/2) in a TLS <code>ClientHello</code> message. 
+          </ul>
+					<li>Upgrading a plaintext connection to HTTP/2 without prior knowledge</li>
+          <ul>
+            <li>Client starts HTTP/1.1 and then sends an upgrade request</li> 
+            <div style="zoom: 0.95; margin-left: -15px">
+            <pre class="brush: bash; class-name: 'tight'">
+              GET /page HTTP/1.1
+              Host: server.example.com
+              Connection: Upgrade, HTTP2-Settings
+              Upgrade: h2c 
+              HTTP2-Settings: (SETTINGS payload) 
+
+              HTTP/1.1 200 OK 
+              Content-length: 243
+              Content-type: text/html
+
+              (... HTTP/1.1 response ...)
+
+                        (or)
+
+              HTTP/1.1 101 Switching Protocols 
+              Connection: Upgrade
+              Upgrade: h2c
+
+              (... HTTP/2 response ...)
+            </pre></div>
+          </ul>
+          <li>Initiating a plaintext HTTP/2 connection with prior knowledge</li>
+          <ul>
+            <li>Client gets information about server's HTTP/2 via DNS or manual configuration.</li>
+            <li>Client initiates HTTP/2 and if it does not work, it falls back to HTTP/1.1</li>
+          </ul> 
+				</ul>
+      </div>
+      
+    </section>
+    
+    <div class="slide outline"></div>
+    
+    <section>
+			<header>Binary Framing</header>
 
 			<div class="slide">
 				<hgroup>
@@ -225,23 +277,6 @@
          </ul>
 			</div>
 
-      <div class="slide">
-				<hgroup>
-					<h1>Binary Framing &ndash; Frame Header</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>9-byte frame header</li>
-          <img src="img/frame-header.svg" style="width: 600px"></img>
-          <li>Fields</li>
-					<ul>
-						<li><code>length</code> &ndash; 24 bits, allows a frame to carry 2<sup>24</sup> bytes of data.</li>
-            <li><code>type</code> &ndash; 8 bits, determines the format and semantics of the frame.</li>
-            <li><code>flags</code> &ndash; 8 bits, defines frame-type specific boolean flags.</li>
-            <li><code>stream identifier</code> &ndash; 31 bits, uniquely identifies the HTTP/2 stream.</li>
-				   </ul>
-         </ul>
-			</div>
-
 			<div class="slide">
 				<hgroup>
 					<h1>Request and Response Multiplexing Benefits</h1>
@@ -269,13 +304,6 @@
 				</ul>
 			</div>
 			
-			<div class="slide">
-				<hgroup>
-					<h1>HTTP/1.x Optimization</h1>
-				</hgroup>
-				<div id="1YgCc7gq-k3j4oWy8am9wiEg4ge0UPUk4moO6NV5W-gU" class="h-drawing" style="height: 300px; margin-top: 50px"></div>
-			</div>			
-
 			<!-- <div class="slide">
 				<hgroup>
 					<h1>One connection</h1>
@@ -301,6 +329,13 @@
 						</ul>
 				</ul>
 			</div> -->
+
+    </section>
+    
+    <div class="slide outline"></div>
+    
+    <section>
+			<header>Stream Prioritization</header>
 
 			<div class="slide">
 				<hgroup>
@@ -380,6 +415,13 @@
 				</ul>
 			</div>
 
+    </section>
+    
+    <div class="slide outline"></div>
+    
+    <section>
+			<header>Flow Control</header>
+
 			<div class="slide">
 				<hgroup>
 					<h1>Flow control</h1>
@@ -418,6 +460,13 @@
 					</ul>
 				</ul>
 			</div>
+
+    </section>
+    
+    <div class="slide outline"></div>
+
+    <section>
+			<header>Server Push</header>
 
 			<div class="slide">
 				<hgroup>
@@ -467,6 +516,13 @@
 				</ul>
 			</div>
 
+    </section>
+    
+    <div class="slide outline"></div>
+
+    <section>
+			<header>Header Compression</header>
+
 			<div class="slide">
 				<hgroup>
 					<h1>Header compression</h1>
@@ -482,16 +538,15 @@
 						<li>Request and response metadata are compressed using HPACK format</li>
 						<ul>
 							<li>header fields encoded via a static Huffman code &ndash; reduces size</li>
-							<li>client and server maintain an <b>indexed list of previously seen header fields</b></li>
+							<li>client and server maintain an <b>indexed list of previously seen header fields</b> in static and dynamic tables</li>
 						</ul>
 					</ul>
-					<img src="img/header-compression.png" style="width: 350px; margin-top: 10px"> 
+					<img src="img/header-compression.png" style="width: 340px; margin-top: 0px"> 
 					</ul>
 				</ul>
 			</div>
 
-
-		</section>
+    </section>
 		
 	</body>
 </html>	
