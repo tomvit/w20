@@ -564,7 +564,7 @@
 			<hgroup>
 				<h1>WebSocket</h1>
 			</hgroup>
-			<ul class="x-small">
+			<ul class="xx-small">
 				<li>Specifications</li>
 				<ul>
 					<li>IETF defines <span id="websocket" class="h-ref"></span></li>
@@ -587,17 +587,21 @@
 					</ul>
 					<li>support multiple server-side endpoints</li>
 				</ul>
-				<li>Two phases</li>
+        <li>Custom URL scheme: <code>ws</code> and <code>wss</code> (TCP and TLS)</li>
+        <ul>
+          <li>WebSocket can be used over non-HTTP connections outside of browsers</li>
+        </ul>        
+				<li>Options to establish a WebSocket connection</li>
 				<ul>
-					<li>Handshake &ndash; as an <b>upgrade</b> of a HTTP connection</li>
-					<li>data transfer &ndash; the protocol-specific on-the-wire data transfer</li>
+          <li>TLS and ALPN</li>
+					<li>HTTP/1.1 connection upgrade</li>
 				</ul>
 			</ul>
 		</div>
 
 		<div class="slide">
 			<hgroup>
-				<h1>Handshake &ndash; Request</h1>
+				<h1>Connection Upgrade &ndash; Request</h1>
 			</hgroup>
 			<ul class="small">
 				<li>Request</li>
@@ -623,7 +627,7 @@
 
 		<div class="slide">
 			<hgroup>
-				<h1>Handshake &ndash; Response</h1>
+				<h1>Connection Upgrade &ndash; Response</h1>
 			</hgroup>
 			<ul class="xx-small">
 				<li>Response</li>
@@ -660,7 +664,7 @@
 				<h1>Data Transfer</h1>
 			</hgroup>
 			<ul class="xx-small">
-				<li>After successful handshake</li>
+				<li>After a successful connection upgrade</li>
 				<ul>
 					<li>socket between the client and the "resource" at the server is established</li>
 					<li>client and the server can both read and write from/to the socket</li>
