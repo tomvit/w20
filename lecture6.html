@@ -774,14 +774,19 @@
 				</ul>
 				<li>WebSocket</li>
 				<ul>
-					<li>There is no head-of-line blocking problem</li>
+					<li>Large messages can cause the head of line blocking on the client</li>
 					<li>Messages can be split into more frames</li>
 					<li>But frames cannot be interleaved</li>
 				</ul>
 				<li class="no-bullet">&rArr; A large message with more frames may block frames of other messages</li>
 				<li>You need to be careful of payload size of each message</li>
 				<ul>
-					<li>You should split large message into multiple application messages</li>
+					<li>You should:</li>
+          <ul>
+             <li>split large message into multiple application messages</li>
+             <li>monitor amount of messages in the client's buffer</li>
+             <li>send data when buffer is empty</li>
+           </ul>
 				</ul>
 				<li>Each WebSocket connection requires a dedicated TCP connection</li>
 				<ul>
@@ -789,6 +794,69 @@
 				</ul>
 			</ul>
 		</div>
+
+    <div class="slide">
+			<hgroup>
+				<h1>WebSocket Browser API</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li>Client-side API</li>
+				<ul>
+					<li>clients to utilize WebSocket, supported by all modern browsers</li>
+					<li>Hides complexity of WebSocket protocol for the developer</li>
+				</ul>
+				<li>JavaScript example</li>
+				<pre class="brush: javascript; class-name: tight">
+					// ws is a new URL schema for WebSocket protocol; 'chat' is a sub-protocol
+					var connection = new WebSocket('ws://server.example.org/chat', 'chat');
+
+					// When the connection is open, send some data to the server
+					connection.onopen = function () {
+					  // connection.protocol contains sub-protocol selected by the server
+					  console.log('subprotocol is: ' + connection.protocol); 
+					  connection.send('data'); 
+					};
+					
+					// Log errors
+					connection.onerror = function (error) {
+					  console.log('WebSocket Error ' + error);
+					};
+					
+					// Log messages from the server
+					connection.onmessage = function (e) {
+					  console.log('Server: ' + e.data);
+					};
+					
+					...
+					
+					// closes the connection
+					connection.close()</pre>
+			</ul>
+		</div>
+
+    <div class="slide">
+			<hgroup>
+				<h1>Avoid Head of Line Blocking</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li>Example code to monitor a client buffer size</li>
+        <pre class="brush: javascript; class-name: tight">
+          var ws = new WebSocket('wss://example.com/socket');
+
+          ws.onopen = function () {
+            subscribeToApplicationUpdates(function(evt) { 
+              if (ws.bufferedAmount == 0) 
+                ws.send(evt.data); 
+            });
+          };          
+        </pre>
+        <ul>
+          <li>A call to <code>send</code> is asynchronous</li>
+          <li>Multiple calls to <code>send</code> will fill the client buffer</li>
+        </ul>
+			</ul>
+		</div>
+
 
 		<div class="slide">
 			<hgroup>
@@ -821,45 +889,6 @@
 						timeout server  30s
 						timeout tunnel  1h</pre>				
 				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>WebSocket API</h1>
-			</hgroup>
-			<ul class="xx-small">
-				<li>Client-side API</li>
-				<ul>
-					<li>clients to utilize WebSocket, supported by Chrome, Safari</li>
-					<li>Hides complexity of WebSocket protocol for the developer</li>
-				</ul>
-				<li>JavaScript example</li>
-				<pre class="brush: javascript; class-name: tight">
-					// ws is a new URL schema for WebSocket protocol; 'chat' is a sub-protocol
-					var connection = new WebSocket('ws://server.example.org/chat', 'chat');
-
-					// When the connection is open, send some data to the server
-					connection.onopen = function () {
-					  // connection.protocol contains sub-protocol selected by the server
-					  console.log('subprotocol is: ' + connection.protocol); 
-					  connection.send('data'); 
-					};
-					
-					// Log errors
-					connection.onerror = function (error) {
-					  console.log('WebSocket Error ' + error);
-					};
-					
-					// Log messages from the server
-					connection.onmessage = function (e) {
-					  console.log('Server: ' + e.data);
-					};
-					
-					...
-					
-					// closes the connection
-					connection.close()</pre>
 			</ul>
 		</div>
 
