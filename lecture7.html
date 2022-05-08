@@ -8,7 +8,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
         <meta name="course"   content="Web 2.0"/>
 		<meta name="lecture"  content="Lecture 7"/>
-   		<meta name="keywords" content="HTTP/2"/>
+   		<meta name="keywords" content="HTTP/2, HTTP/3"/>
            
         <link type="text/css" rel="stylesheet" href="css/meta.css"></link>   
         <link type="text/css" rel="stylesheet" href="css/ctu-fit.css"></link>   
@@ -140,412 +140,619 @@
     <div class="slide outline"></div>
     
     <section>
-			<header>Binary Framing</header>
+      <header>HTTP/2</header>
+    
+      <section>
+  			<header>Binary Framing</header>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Binary Framing Layer</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Binary framing layer</li>
-					<ul>
-						<li>defines how HTTP messages are encapsulated and transferred </li>
-						<li>communication is split into messages and frames in binary format</li>
-					</ul>
-					<img src="img/binary_framing_layer.png" style="width: 700px">
-				</ul>
-			</div>
+  			<div class="slide">
+  				<hgroup>
+  					<h1>Binary Framing Layer</h1>
+  				</hgroup>
+  				<ul class="x-small">
+  					<li>Binary framing layer</li>
+  					<ul>
+  						<li>defines how HTTP messages are encapsulated and transferred </li>
+  						<li>communication is split into messages and frames in binary format</li>
+  					</ul>
+  					<img src="img/binary_framing_layer.png" style="width: 700px">
+  				</ul>
+  			</div>
 
-			<div class="slide">
-				<hgroup>
-					<h1>HTTP/2 Communication</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Data exchange between the client and server</li>
-					<ul>
-						<li>break down of the communication into frames</li>
-						<li>frames are mapped to messages that belong to a particular stream</li>
-						<li>communication is <b>multiplexed within a single TCP connection</b>.</li>
-					</ul>
-					<li>Stream</li>
-				 	<ul>
-						<li>bi-directional flow of bytes in a connection</li>
-						<li>may carry one or more messages</li>
-						<li>may have a priority</li>
-					</ul>
-					<li>Message</li>
-					<ul>
-						<li>a sequence of frames</li>
-						<li>it maps to logical request or response message</li>
-					</ul>
-					<li>Frame</li>
-					<ul>
-						<li>the smallest unit of communication
-						<li>each has a frame header which identifies a stream to which it belongs.</li>
-					</ul>
-				</ul>
-			</div>
+  			<div class="slide">
+  				<hgroup>
+  					<h1>HTTP/2 Communication</h1>
+  				</hgroup>
+  				<ul class="x-small">
+  					<li>Data exchange between the client and server</li>
+  					<ul>
+  						<li>break down of the communication into frames</li>
+  						<li>frames are mapped to messages that belong to a particular stream</li>
+  						<li>communication is <b>multiplexed within a single TCP connection</b>.</li>
+  					</ul>
+  					<li>Stream</li>
+  				 	<ul>
+  						<li>bi-directional flow of bytes in a connection</li>
+  						<li>may carry one or more messages</li>
+  						<li>may have a priority</li>
+  					</ul>
+  					<li>Message</li>
+  					<ul>
+  						<li>a sequence of frames</li>
+  						<li>it maps to logical request or response message</li>
+  					</ul>
+  					<li>Frame</li>
+  					<ul>
+  						<li>the smallest unit of communication
+  						<li>each has a frame header which identifies a stream to which it belongs.</li>
+  					</ul>
+  				</ul>
+  			</div>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Streams, Messages, and Frames</h1>
-				</hgroup>
-				<ul class="x-small">
-					<img src="img/streams.png" style="width: 600px; margin-top: 10px">
-				</ul>
-			</div>
+  			<div class="slide">
+  				<hgroup>
+  					<h1>Streams, Messages, and Frames</h1>
+  				</hgroup>
+  				<ul class="x-small">
+  					<img src="img/streams.png" style="width: 600px; margin-top: 10px">
+  				</ul>
+  			</div>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Request and Response Multiplexing</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Parallel requests</li>
-					<ul>
-						<li>HTTP/1.x can use HTTP pipelining; they open multiple connections</li>
-						<ul>
-							<li>browser typically opens up six connections</li>
-							<li>One response can be delivered at a time (response queuing) per connection</li>
-							<ul>
-								<li>Head of line blocking problem</li>
-							</ul>
-						</ul>
-						<li>HTTP/2 allows full request and response multiplexing</li>
-						<ul>
-							<li>Allows for parallel in-flight streams</li>
-							<li>There are 3 parallel streams in the below example:</li>
-							<img src="img/multiplexing.png" style="width: 550px; margin-top: 0px"> 
-						</ul>
-					</ul>
-					<li>Performance benefits</li>
-					<ul>
-						<li>Interleave requests/responses in parallel without blocking any one.</li>
-						<li>Deliver lower page load times by eliminating unnecessary latency</li>
-						<li>Improve utilization of available network capacity</li>
-					</ul>
-				</ul>
-			</div>
+  			<div class="slide">
+  				<hgroup>
+  					<h1>Request and Response Multiplexing</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+  					<li>Parallel requests</li>
+  					<ul>
+  						<li>HTTP/1.x can use HTTP pipelining; they open multiple connections</li>
+  						<ul>
+  							<li>browser typically opens up six connections</li>
+  							<li>One response can be delivered at a time (response queuing) per connection</li>
+  							<ul>
+  								<li>Head of line blocking problem</li>
+  							</ul>
+  						</ul>
+  						<li>HTTP/2 allows full request and response multiplexing</li>
+  						<ul>
+  							<li>Allows for parallel in-flight streams</li>
+  							<li>There are 3 parallel streams in the below example:</li>
+  							<img src="img/multiplexing.png" style="width: 550px; margin-top: 0px"> 
+  						</ul>
+  					</ul>
+  					<li>Performance benefits</li>
+  					<ul>
+  						<li>Interleave requests/responses in parallel without blocking any one.</li>
+  						<li>Deliver lower page load times by eliminating unnecessary latency</li>
+  						<li>Improve utilization of available network capacity</li>
+  					</ul>
+  				</ul>
+  			</div>
 
-      <div class="slide">
-				<hgroup>
-					<h1>Binary Framing &ndash; Frame Header</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>9-byte frame header</li>
-          <img src="img/frame-header.svg" style="width: 600px"></img>
-          <li>Fields</li>
-					<ul>
-						<li><code>length</code> &ndash; 24 bits, allows a frame to carry 2<sup>24</sup> bytes of data.</li>
-            <li><code>type</code> &ndash; 8 bits, determines the format and semantics of the frame.</li>
+        <div class="slide">
+  				<hgroup>
+  					<h1>Binary Framing &ndash; Frame Header</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+  					<li>9-byte frame header</li>
+            <img src="img/frame-header.svg" style="width: 600px"></img>
+            <li>Fields</li>
+  					<ul>
+  						<li><code>length</code> &ndash; 24 bits, allows a frame to carry 2<sup>24</sup> bytes of data.</li>
+              <li><code>type</code> &ndash; 8 bits, determines the format and semantics of the frame.</li>
+              <ul>
+                <li>Frame types: <code>DATA</code>, <code>HEADERS</code>, <code>PRIORITY</code>, <code>RST_STREAM</code>, <code>SETTINGS</code>, 
+                  <code>PUSH_PROMISE</code>, <code>PING</code>, <code>GOAWAY</code>, <code>WINDOW_UPDATE</code>, <code>CONTINUATION</code></li>
+              </ul>
+              <li><code>flags</code> &ndash; 8 bits, defines frame-type specific boolean flags.</li>
+              <li><code>stream identifier</code> &ndash; 31 bits, uniquely identifies the HTTP/2 stream.</li>
+  				   </ul>
+           </ul>
+  			</div>
+
+        <div class="slide">
+  				<hgroup>
+  					<h1>Stream Lifecycle</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+            <div class="h-drawing" id="1usNUqUh20OXM6EuOzoc8yLhyxt6zQAoaoMg4P1hHAzk" style="width: 480px"></div>
+            </li>
+            <li>HTTP/2 doesn’t reuse the same stream IDs</li>
             <ul>
-              <li>Frame types: <code>DATA</code>, <code>HEADERS</code>, <code>PRIORITY</code>, <code>RST_STREAM</code>, <code>SETTINGS</code>, 
-                <code>PUSH_PROMISE</code>, <code>PING</code>, <code>GOAWAY</code>, <code>WINDOW_UPDATE</code>, <code>CONTINUATION</code></li>
+              <li>A stream's lifecycle corresponds to request/response messages interaction.</li>
             </ul>
-            <li><code>flags</code> &ndash; 8 bits, defines frame-type specific boolean flags.</li>
-            <li><code>stream identifier</code> &ndash; 31 bits, uniquely identifies the HTTP/2 stream.</li>
-				   </ul>
-         </ul>
-			</div>
+            <li>A new id is assigned until it reaches <code>2<sup>31</sup></code></li>
+            <ul>
+              <li>When the last id is used, the browser sends <code>GOAWAY</code> frame to initialize a new TCP connection, and the stream ID is reset.</li>
+            </ul>
+          </ul>
+  			</div>
+        
+        <div class="slide">
+  				<hgroup>
+  					<h1>Initiating a New Stream</h1>
+  				</hgroup>
+          <img src="img/initiating-new-stream.png" style="width: 600px; padding: 20px 20px 10px"></img>
+  				<ul class="xx-small">
+            <ul>
+              <li>New stream created with request metadata</li>
+              <li>HEADERS and DATA frames sent separately</li>
+            </ul>
+           </ul>
+  			</div>
+
+        <div class="slide">
+  				<hgroup>
+  					<h1>Sending Application Data</h1>
+  				</hgroup>
+          <img src="img/sending-app-data.png" style="width: 600px; padding: 20px 20px 10px"></img>
+  				<ul class="xx-small">
+            <ul>
+              <li>App data sent in DATA frame</li>
+              <li>There are more frames that carry the data (i.e. <code>END_STREAM</code> flag is not set)</li>
+              <ul>
+                <li>The small frame size allows for efficienct multiplexing</li>
+              </ul>
+              <li>The app data is loaded by application according to the used encoding mechanism (plain text, gzip, etc.).</li>
+            </ul>
+           </ul>
+  			</div>
+
+  			<div class="slide">
+  				<hgroup>
+  					<h1>Request and Response Multiplexing Benefits</h1>
+  				</hgroup>
+  				<ul class="x-small">
+  					<li>Interleave multiple requests and responses</li>
+  					<ul>
+  						<li>Requests or responses are not blocked on any other requests or response</li>
+  					</ul>
+  					<li>A single TCP connection</li>
+  					<ul>
+  						<li>Multiple requests and responses can be delivered in parallel</li>
+  					</ul>
+  					<li>Remove HTTP/1.x workarounds</li>
+  					<ul>
+  						<li>Concatenated files</li>
+  						<li>Image sprites</li>
+  						<li>Domain sharding</li>
+  					</ul>
+  					<li>Deliver lower page load times</li>
+  					<ul>
+  						<li>Eliminates unnecessary latency</li>
+  						<li>Improves utilization of available newtork capacity</li>
+  					</ul>
+  				</ul>
+  			</div>
+
+      </section>
+      
+      <div class="slide outline"></div>
+      
+      <section>
+  			<header>Stream Prioritization</header>
+
+  			<div class="slide">
+  				<hgroup>
+  					<h1>Browser Request Prioritization</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+  					<li>Not all resources have equal priority when rendering a page</li>
+  					<ul>
+  						<li>HTTP/2 stream prioritization</li>
+  						<li>Requests are prioritized based on type of asset, location on the page, and learned priority from previous visits</li>
+  						<ul>
+  							<li>If page loading was blocked on an asset, the asset priority gets increased</li>
+  						</ul>
+  					</ul>
+
+  					<li>DOM, CSSOM and JavaScript</li>
+  					<img src="img/dom-cssom-js.png" style="padding-top: 5px; width: 600px"></img>
+  					<ul>
+  						<li>HTML document is critical to construct DOM</li>
+  						<li>CCS is required to construct CSSOM</li>
+  						<li>Both DOM and CSSOM construction can be blocked on JavaScript resources</li>
+  						<ul>
+  							<li>A script can issue <code>doc.write</code> and block DOM parsing and construction</li>
+  							<li>A script can query for a computed style of an object; the script can block on CSS</li>
+  						</ul>
+  					</ul>
+  				</ul>
+  			</div>
+
+  			<div class="slide">
+  				<hgroup>
+  					<h1>Stream Prioritization</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+  					<li>Purpose</li>
+  					<ul>
+  						<li>Messages split into <b>frames</b> which are delivered in multiplexed <b>streams</b></li>
+  						<li>The order in which frames are delivered is important for a good performance</li> 
+  						<li>Client can define stream prioritization</li>
+  						<ul>
+  							<li>optimizations in the browser, change prioritization based on user interaction</li>
+  						</ul>
+  					</ul>
+  					<li>Streams' weights and dependency</li>
+  					<ul>
+  						<li>Each stream can be assigned an integer weight between 1 and 256.</li>
+  						<li>Each stream may be given an explicit dependency on another stream.</li>
+  					</ul>
+  					<img src="img/stream-prioritization.png" style="width: 685px; margin-top: 10px"> 
+  				</ul>
+  			</div>
+
+  			<div class="slide">
+  				<hgroup>
+  					<h1>Stream Prioritization (cont.)</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+  					<li>Dependency</li>
+  					<ul>
+  						<li>referencing the unique identifier of another stream as its parent</li>
+  						<li>if the identifier is omitted the stream is dependent on the "root stream"</li> 
+  						<li>The parent stream should be allocated resources ahead of its dependencies.</li>
+  						<ul>
+  							<li>"Please process and deliver response D before response C"</li>
+  						</ul>
+  					</ul>
+  					<li>Weights</li>
+  					<ul>
+  						<li>Sibling streams have resources allocated as per their weights</li>
+  						<li>Example</li>
+  						<ul>
+  							<li>Sum all the weights: <code>4 + 12 = 16</code></li>
+  							<li>Divide each stream weight by the total weight: <code>A = 12/16</code>, <code>B = 4/16</code></li>
+  							<li>Stream <code>A</code> receives <code>3/4</code> and stream <code>B</code> receives <code>1/4</code> of available resources;<br/></li>
+  						</ul>
+  					</ul>
+  				</ul>
+  			</div>
+        
+        <div class="slide">
+  				<hgroup>
+  					<h1>Dependency priorities</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+            <li>Grouping streams</li>
+            <ul>
+              <li>Streams that are never opened with HEADERS frame</li>
+              <li>They exist as nodes in the dependency tree that other streams depend on</li>
+            </ul>
+  					<li>Dependency groups in <a href="http://bitsup.blogspot.com/2015/01/http2-dependency-priorities-in-firefox.html">Firefox</a></li>
+  					<ul>
+  						<li>Five fixed dependency groups</li>
+              <li>crearted with <code>PRIORITY</code> frame when a session is established.</li>
+              <li>Every new stream depends on them</li>
+  					</ul>
+            <li>Example (from a <a href="https://gitlab.com/wireshark/wireshark/-/blob/master/test/captures/http2_follow_multistream.pcapng">sample http2 packets</a>)</li>
+  				</ul>
+          <div class="h-drawing" style="width: 760px" id="1S2445HeTWEQdKnMWFd76g4NcOm3kH7CFc5ORT4ZiGAQ"></div>
+  			</div>
+        
+
+      </section>
+      
+      <div class="slide outline"></div>
+      
+      <section>
+  			<header>Flow Control</header>
+
+  			<div class="slide">
+  				<hgroup>
+  					<h1>Flow control</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+  					<li>Prevent sender from receiving data it doest not want</li>
+  					<ul>
+  						<li>Receiver is busy or under heavy load</li>
+  						<li>Receiver is willing to allocate fixed amount of resources for a stream</li>
+  					</ul>
+  					<li>Examples</li>
+  					<ul>
+  						<li>Client request a video stream; a user pauses the stream</li>
+  						<ul>
+  							<li>the client wants to pause the stream delivery to avoid buffering</li>
+  						</ul>
+  						<li>A proxy server has a fast downstream and slow upstream</li>
+  						<ul>
+  							<li>the proxy server can control how quickly the downstream delivers data to match the speed of upstream</li>
+  							<li>better control of resource usage</li>
+  						</ul>
+  						<li>Similar problems as in TCP flow control</li>
+  						<ul>
+  							<li>TCP flow control has no app-level API to regulate delivery of streams</li>
+  						</ul>
+  					</ul>
+  					<li>Flow control</li>
+  					<ul>
+  						<li>Sender and receiver both advertise stream flow control window in bytes<br>
+  						    = the size of the available buffer space to hold the incoming data</li>
+  						<li>exhanged by special <code>SETTINGS</code> and <code>WINDOW_UPDATE</code> frames</li>
+  						<li>Flow control is hop-by-hop, not end-to-end</li>
+  						<ul>
+  							<li>an intermediary can set its own flow control</li>
+  						</ul>
+  					</ul>
+  				</ul>
+  			</div>
+
+        <div class="slide">
+  				<hgroup>
+  					<h1>Flow Control Example</h1>
+  				</hgroup>
+          <div class="h-drawing" id="1sdhCIqKbP3SjjhVGt5zyvU-RKZnEct-eDSQBMKZmOEU"></div>
+  				<ul class="xx-small">
+            <li>Window size</li>
+            <ul>
+              <li>The client and server maintains the window size for each stream and a connection.</li>
+              <li>How much data the client can still send to the server and vise-versa.</li>
+              <li><code>WINDOW_UPDATE</code> provides an increment of the current window size.</li>
+              <li>When the window size is zero, no data is sent until the other party changes it.</li>
+            </ul>
+  				</ul>
+  			</div>
+
+      </section>
+      
+      <div class="slide outline"></div>
+
+      <section>
+  			<header>Server Push</header>
+
+  			<div class="slide">
+  				<hgroup>
+  					<h1>Server push</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+  					<li>Ability to send multiple responses for a single request</li>
+  					<ul>
+  						<li>A response to the request is sent back</li>
+  						<li>Additonal resources can be pushed without client requesting them</li>
+  						<li>Hypertext &ndash; "server knows what the client will need"</li>
+  					</ul>
+  					<img src="img/server-push.png" style="width: 600px; margin-top: 10px"> 
+  					<li>Similar to resource inlining</li>
+  					<ul>
+  						<li>A resource is pushed to the client in HTML/CSS resource</li>
+  					</ul>
+  					<li>Performance benefits</li>
+  					<ul>
+  						<li>Cached by the client, reused across pages, multiplexed, declined by the client</li>
+  					</ul>
+  				</ul>
+  			</div>
+
+  			<div class="slide">
+  				<hgroup>
+  					<h1>Push promise</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+  					<li><code>PUSH_PROMISE</code> frames</li>
+  					<ul>
+  						<li>A singnal that the server intents to push resources to the client</li>
+  						<li>The client needs to know which resources the server intends to push to avoid creating duplicate requests for these resources.</li>
+  					</ul>
+  					<li>After the client receives <code>PUSH_PROMISE</code></li>
+  					<ul>
+  						<li>it may decline the stream (via <code>RST_STREAM</code> frame)</li>
+  						<ul>
+  							<li>For example, when the resource is already in the cache</li>
+  							<li>As for inline resources, this is not possible, the client always receives them</li>
+  						</ul>
+  						<li>it can limit the number of concurrently pushed streams</li>
+  						<li>it can adjust the initial flow control window to control how much data is pushed when the stream is first opened</li>
+  						<li>it can disable server push entirely</li>
+  					</ul>
+  					<li>pushed resources must obey the same-origin policy</li>
+  				</ul>
+  			</div>
+
+        <div class="slide">
+  				<hgroup>
+  					<h1>Implementation</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+  					<li>You need to implement Server Push at the app level</li>
+  					<ul>
+              <li>Your server may provide a library/API to do so</li>
+              <ul>
+                <li>Node express middleware: <a href="https://www.npmjs.com/package/http2-express-autopush"><code>http2-express-autopush</code></a></li>
+                <li>Nginx: <a href="https://www.nginx.com/blog/nginx-1-13-9-http2-server-push/">http2 server push</a></li>
+              </ul>
+            </ul>
+            <pre class="brush: bash; class-name: ''">
+              server {
+                  # Ensure that HTTP/2 is enabled for the server        
+                  listen 443 ssl http2;
+
+                  ssl_certificate ssl/certificate.pem;
+                  ssl_certificate_key ssl/key.pem;
+
+                  root /var/www/html;
+
+                  # whenever a client requests demo.html, also push
+                  # /style.css, /image1.jpg and /image2.jpg
+                  location = /demo.html {
+                      http2_push /style.css;
+                      http2_push /image1.jpg;
+                      http2_push /image2.jpg;
+                  }
+              }            </pre>
+  				</ul>
+  			</div>
+
+        <div class="slide">
+  				<hgroup>
+  					<h1>Rules for server push</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+            <li>Performance analysis by Google</li>
+            <ul>
+              <li>see <a href="https://docs.google.com/document/d/1K0NykTXBbbbTlv60t5MyJvXjqKGsCVNYHyLEXIxYMv0/edit#heading=h.ke8t5vjw3jh4">Rules of Thumb for HTTP/2 Push</a></li>
+            </ul>
+            <li>Server push may not always lead to a better performance, such as:</li>
+            <ul>
+              <li>Push just enough resources to fill idle network time, and no more.</li>
+              <div class="h-drawing" id="1Fwq8iUtmoXrISPoJyQ98t3Kx-KGHEMLHNtDn14slHAM" style="margin-left: -50px; width: 700px"></div>
+            </ul>
+  				</ul>
+  			</div>
+
+      </section>
+      
+      <div class="slide outline"></div>
+
+      <section>
+  			<header>Header Compression</header>
+
+  			<div class="slide">
+  				<hgroup>
+  					<h1>Header compression</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+  					<li>Purpose</li>
+  					<ul>
+  						<li>Each HTTP request/response contains a set of headers (metadata)</li>
+  						<li>HTTP/1.x &ndash; metadata sent as plain text, adds 500-800 bytes per transfer</li> 
+  					</ul>
+  					<li>HTTP/2 provides</li>
+  					<ul>
+  						<li>Request and response metadata are compressed using HPACK format</li>
+  						<ul>
+  							<li>header fields encoded via a static Huffman code &ndash; reduces size</li>
+  							<li>client and server maintain an <b>indexed list of previously seen header fields</b> in static and dynamic tables</li>
+  						</ul>
+  					</ul>
+  					<img src="img/header-compression.png" style="width: 340px; margin-top: 0px"> 
+  					</ul>
+  				</ul>
+  			</div>
+
+        <div class="slide">
+  				<hgroup>
+  					<h1>Static and Dynamic Tables</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+  					<li>Static table</li>
+  					<ul>
+              <li>Pre-defined table of <code>61</code> header fiedls and values where each has assigned an index</li>
+              <li>Defined in <a href="https://datatracker.ietf.org/doc/html/rfc7541#appendix-A">HPACK: Header Compression for HTTP/2</a>
+              <div class="h-drawing" id="14q4w3njXdPE4OS69brs_HhC7QlOIzSv9NvOc3hwMzPA" style="margin-left: -40px"></div>
+              <li>Decompressed size is <code>10</code> bytes (<code>name+value</code> length)</li>
+              <li>The real size is <code>1</code> byte.
+  					</ul>
+  					<li>Dynamic table</li>
+  					<ul>
+  						<li>Dynamically created table of header fields that do not exist in the static table.</li>
+              <li>It is maintained by the client and the server</li>
+              <li>There are entries starting with index <code>62</code>
+            </ul>
+  				</ul>
+  			</div>
+
+      </section>
+
+      <div class="slide outline"></div>
+
+      <section>
+  			<header>HTTP/2 Analysis</header>
+
+        <div class="slide">
+  				<hgroup>
+  					<h1>nghttp</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+  					<li>Command line tool</li>
+  					<ul>
+  						<li><code>nghttp</code> can establish HTTP/2 connection, send a request and receive a response</li>
+              <li>It can display frames and other information</li>
+              <img src="/img/nghttp-example.png" style="height: 600px; margin-left: -20px; margin-top: 10px"></img>
+            </ul>
+  				</ul>
+  			</div>
+
+  			<div class="slide">
+  				<hgroup>
+  					<h1>Wireshark and HTTP/2 Traffic</h1>
+  				</hgroup>
+  				<ul class="xx-small">
+  					<li>HTTP/2 is encrypted</li>
+  					<ul>
+  						<li>You can capture packets in Wireshark/tcpdump but they are encrypted</li>
+              <li>The browser (FF, Chrome, Opera) can dump keys in <a href="https://firefox-source-docs.mozilla.org/security/nss/legacy/key_log_format/index.html">NSS Key Log Format</a></li>
+  					  <li>You can use the log to decrypt the communication in Wireshark</li>
+            </ul>
+            <li>Demo at <code>https://kde.vitvar.com</code></li>
+            <ol style="margin-left: -10px">
+              <li style="margin-top: 20px">Configure an env variable <code>SSLKEYLOGFILE</code> to point to a file on the filesystem</li>
+              <li>Start <b>firefox</b> browser; check the keylog file was created.</li>
+              <li>Start <b>wireshark</b>; configure the keylog file in <i>pre-master secret log filename</i></li> 
+              <li>Start packet capture on <code>eth0</code> using the filter:<br/><code>((dst host 185.199 and src host 192.168) or<br/>(dst host 192.168 and src host 185.199))</code></li>
+              <ul>
+                <li>This captures the packets in both directions between the client and the server and back</li> 
+              </ul>
+              <li>Point <b>firefox</b> to https://vitvar.com</li>
+              <li>Check captured packets in the <b>wireshark</b></li>
+              <ul>
+                <li>There should be decrypted HTTP/2 communication.</li>
+              </ul>
+            </ol>
+            
+  				</ul>
+  			</div>
+
+      </section>
+
+      
+    </section>
+    
+    <div class="slide outline"></div>
+    
+    <section>
+      <header>HTTP/3</header>
       
       <div class="slide">
-				<hgroup>
-					<h1>Initiating a New Stream</h1>
-				</hgroup>
-        <img src="img/initiating-new-stream.png" style="width: 600px; padding: 20px 20px 10px"></img>
-				<ul class="xx-small">
+        <hgroup>
+          <h1>HTTP/2 Drawbacks</h1>
+        </hgroup>
+        <ul class="x-small">
+          <li>HTTP/2 is dependant on TCP</li>
+          <li>TCP head-of-line blocking</li>
           <ul>
-            <li>New stream created with request metadata</li>
-            <li>HEADERS and DATA frames sent separately</li>
+            <img src="/img/tcp-hol.svg" style="height: 200px"></img>
+            <li>When TCP segment does not arrive, it needs to be transmitted</li>
+            <li>This may delay all HTTP/2 streams</li>
           </ul>
-         </ul>
-			</div>
+          <li>There must always be TLS handshake after TCP hanshake</li>
+          <ul>
+            <li>HTTP/2 can only be used with TLS</li>
+          </ul>
+          
+        </ul>
+      </div>
 
       <div class="slide">
-				<hgroup>
-					<h1>Sending Application Data</h1>
-				</hgroup>
-        <img src="img/sending-app-data.png" style="width: 600px; padding: 20px 20px 10px"></img>
-				<ul class="xx-small">
+        <hgroup>
+          <h1>HTTP/3</h1>
+        </hgroup>
+        <ul class="x-small">
+          <li>Protocol stack</li>
+        </ul>
+        <div class="h-drawing" id="1J5uJmqD-RiXPPZA4Lk3fVqmUxGUffW94SoEw5enu01o" style="width: 400px"></div>
+        <ul class="x-small">
+          <li>HTTP semantic does not change across HTTP versions</li>
+          <li>New transport protocol QUIC</li>
           <ul>
-            <li>App data sent in DATA frame</li>
-            <li>There are more frames that carry the data (i.e. <code>END_STREAM</code> flag is not set)</li>
-            <ul>
-              <li>The small frame size allows for efficienct multiplexing</li>
-            </ul>
-            <li>The app data is loaded by application according to the used encoding mechanism (plain text, gzip, etc.).</li>
+            <li>Based on UDP</li>
+            <li>Reduced connection establishment time</li>
+            <li>Multiplexing without head of line blocking</li>
+            <li>Connection migration</li>
           </ul>
-         </ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Request and Response Multiplexing Benefits</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Interleave multiple requests and responses</li>
-					<ul>
-						<li>Requests or responses are not blocked on any other requests or response</li>
-					</ul>
-					<li>A single TCP connection</li>
-					<ul>
-						<li>Multiple requests and responses can be delivered in parallel</li>
-					</ul>
-					<li>Remove HTTP/1.x workarounds</li>
-					<ul>
-						<li>Concatenated files</li>
-						<li>Image sprites</li>
-						<li>Domain sharding</li>
-					</ul>
-					<li>Deliver lower page load times</li>
-					<ul>
-						<li>Eliminates unnecessary latency</li>
-						<li>Improves utilization of available newtork capacity</li>
-					</ul>
-				</ul>
-			</div>
-			
-			<!-- <div class="slide">
-				<hgroup>
-					<h1>One connection</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Multiplexing allows for:</li>
-					<ul>
-						<li>all connections are persisted</li>
-						<li>only one connection required per origin</li>
-					</ul>
-					
-					<li>Advantages</li>
-					<ul>
-						<li>significant reduction of the overall protocol overhead</li>
-						<li>use of fewer connections reduces the memory and processing footprint along the full connection path (client, intermediaries, origin servers)</li>
-						<li>reduces operational costs and improves network capacity</li>
-						<br>
-						<li>Improves performance of HTTPS deployments</li>
-						<ul>
-							<li>fewer expensive TLS handshakes</li>
-							<li>better session reuse</li>
-							<li>overall reduction in required client and server resources</li>
-						</ul>
-				</ul>
-			</div> -->
-
-    </section>
-    
-    <div class="slide outline"></div>
-    
-    <section>
-			<header>Stream Prioritization</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Browser Request Prioritization</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Not all resources have equal priority when rendering a page</li>
-					<ul>
-						<li>HTTP/2 stream prioritization</li>
-						<li>Requests are prioritized based on type of asset, location on the page, and learned priority from previous visits</li>
-						<ul>
-							<li>If page loading was blocked on an asset, the asset priority gets increased</li>
-						</ul>
-					</ul>
-
-					<li>DOM, CSSOM and JavaScript</li>
-					<img src="img/dom-cssom-js.png" style="padding-top: 5px; width: 600px"></img>
-					<ul>
-						<li>HTML document is critical to construct DOM</li>
-						<li>CCS is required to construct CSSOM</li>
-						<li>Both DOM and CSSOM construction can be blocked on JavaScript resources</li>
-						<ul>
-							<li>A script can issue <code>doc.write</code> and block DOM parsing and construction</li>
-							<li>A script can query for a computed style of an object; the script can block on CSS</li>
-						</ul>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Stream Prioritization</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Purpose</li>
-					<ul>
-						<li>Messages split into <b>frames</b> which are delivered in multiplexed <b>streams</b></li>
-						<li>The order in which frames are delivered is important for a good performance</li> 
-						<li>Client can define stream prioritization</li>
-						<ul>
-							<li>optimizations in the browser, change prioritization based on user interaction</li>
-						</ul>
-					</ul>
-					<li>Streams' weights and dependency</li>
-					<ul>
-						<li>Each stream can be assigned an integer weight between 1 and 256.</li>
-						<li>Each stream may be given an explicit dependency on another stream.</li>
-					</ul>
-					<img src="img/stream-prioritization.png" style="width: 685px; margin-top: 10px"> 
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Stream Prioritization (cont.)</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Dependency</li>
-					<ul>
-						<li>referencing the unique identifier of another stream as its parent</li>
-						<li>if the identifier is omitted the stream is dependent on the "root stream"</li> 
-						<li>The parent stream should be allocated resources ahead of its dependencies.</li>
-						<ul>
-							<li>"Please process and deliver response D before response C"</li>
-						</ul>
-					</ul>
-					<li>Weights</li>
-					<ul>
-						<li>Sibling streams have resources allocated as per their weights</li>
-						<li>Example</li>
-						<ul>
-							<li>Sum all the weights: <code>4 + 12 = 16</code></li>
-							<li>Divide each stream weight by the total weight: <code>A = 12/16</code>, <code>B = 4/16</code></li>
-							<li>Stream <code>A</code> receives <code>3/4</code> and stream <code>B</code> receives <code>1/4</code> of available resources;<br/></li>
-						</ul>
-					</ul>
-				</ul>
-			</div>
-
-    </section>
-    
-    <div class="slide outline"></div>
-    
-    <section>
-			<header>Flow Control</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Flow control</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Prevent sender from receiving data it doest not want</li>
-					<ul>
-						<li>Receiver is busy or under heavy load</li>
-						<li>Receiver is willing to allocate fixed amount of resources for a stream</li>
-					</ul>
-					<li>Examples</li>
-					<ul>
-						<li>Client request a video stream; a user pauses the stream</li>
-						<ul>
-							<li>the client wants to pause the stream delivery to avoid buffering</li>
-						</ul>
-						<li>A proxy server has a fast downstream and slow upstream</li>
-						<ul>
-							<li>the proxy server can control how quickly the downstream delivers data to match the speed of upstream</li>
-							<li>better control of resource usage</li>
-						</ul>
-						<li>Similar problems as in TCP flow control</li>
-						<ul>
-							<li>TCP flow control has no app-level API to regulate delivery of streams</li>
-						</ul>
-					</ul>
-					<li>Flow control</li>
-					<ul>
-						<li>Sender and receiver both advertise stream flow control window in bytes<br>
-						    = the size of the available buffer space to hold the incoming data</li>
-						<li>exhanged by special <code>SETTINGS</code> and <code>WINDOW_UPDATE</code> frames</li>
-						<li>Flow control is hop-by-hop, not end-to-end</li>
-						<ul>
-							<li>an intermediary can set its own flow control</li>
-						</ul>
-					</ul>
-				</ul>
-			</div>
-
-    </section>
-    
-    <div class="slide outline"></div>
-
-    <section>
-			<header>Server Push</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Server push</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Ability to send multiple responses for a single request</li>
-					<ul>
-						<li>A response to the request is sent back</li>
-						<li>Additonal resources can be pushed without client requesting them</li>
-						<li>Hypertext &ndash; "server knows what the client will need"</li>
-					</ul>
-					<img src="img/server-push.png" style="width: 600px; margin-top: 10px"> 
-					<li>Similar to resource inlining</li>
-					<ul>
-						<li>A resource is pushed to the client in HTML/CSS resource</li>
-					</ul>
-					<li>Performance benefits</li>
-					<ul>
-						<li>Cached by the client, reused across pages, multiplexed, declined by the client</li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Push promise</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li><code>PUSH_PROMISE</code> frames</li>
-					<ul>
-						<li>A singnal that the server intents to push resources to the client</li>
-						<li>The client needs to know which resources the server intends to push to avoid creating duplicate requests for these resources.</li>
-					</ul>
-					<li>After the client receives <code>PUSH_PROMISE</code></li>
-					<ul>
-						<li>it may decline the stream (via <code>RST_STREAM</code> frame)</li>
-						<ul>
-							<li>For example, when the resource is already in the cache</li>
-							<li>As for inline resources, this is not possible, the client always receives them</li>
-						</ul>
-						<li>it can limit the number of concurrently pushed streams</li>
-						<li>it can adjust the initial flow control window to control how much data is pushed when the stream is first opened</li>
-						<li>it can disable server push entirely</li>
-					</ul>
-					<li>pushed resources must obey the same-origin policy</li>
-				</ul>
-			</div>
-
-    </section>
-    
-    <div class="slide outline"></div>
-
-    <section>
-			<header>Header Compression</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Header compression</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Purpose</li>
-					<ul>
-						<li>Each HTTP request/response contains a set of headers (metadata)</li>
-						<li>HTTP/1.x &ndash; metadata sent as plain text, adds 500-800 bytes per transfer</li> 
-					</ul>
-					<li>HTTP/2 provides</li>
-					<ul>
-						<li>Request and response metadata are compressed using HPACK format</li>
-						<ul>
-							<li>header fields encoded via a static Huffman code &ndash; reduces size</li>
-							<li>client and server maintain an <b>indexed list of previously seen header fields</b> in static and dynamic tables</li>
-						</ul>
-					</ul>
-					<img src="img/header-compression.png" style="width: 340px; margin-top: 0px"> 
-					</ul>
-				</ul>
-			</div>
-
+        </ul>
+      </div>
+      
     </section>
 		
 	</body>
