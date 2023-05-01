@@ -154,7 +154,7 @@
 						# to encode in linux
 						echo "novak:heslo" | base64
 						> bm92YWs6aGVzbG8K
-							
+
 						# and to decode
 						echo "bm92YWs6aGVzbG8K" | base64 -d # use capital "D" in OS X
 						> novak:heslo</pre>
@@ -187,16 +187,16 @@
 					<li>Server requests authentication with <code>WWW-Authenticate</code></li>
 					<pre class="brush:bash; class-name: 'tight'">
 								&lt; HTTP/1.1 401 Unauthorized
-								&lt; WWW-Authenticate: Digest realm="ProtectedArea", 
-								  nonce="BbdQof3DBAA=a293ff3d724989371610f03015f2d23f3cd2c045", 
+								&lt; WWW-Authenticate: Digest realm="ProtectedArea",
+								  nonce="BbdQof3DBAA=a293ff3d724989371610f03015f2d23f3cd2c045",
 								  algorithm=MD5, domain="/", qop="auth"</pre>
 					<li>Client calculates a response hash by using the realm, his/her username, the password, and the
 						quality of protection (QoP) and requests the resource with <code>authorization</code> header</li>
 					<pre class="brush:bash; class-name: 'tight'">
 								> GET / HTTP/1.1
 								> Authorization: Digest username="novak", realm="ProtectedArea",
-								  nonce="BbdQof3DBAA=a293ff3d724989371610f03015f2d23f3cd2c045", uri="/", 
-								  algorithm=MD5, response="c4ea2293aeb318826d1e533f363efd90", qop=auth, 
+								  nonce="BbdQof3DBAA=a293ff3d724989371610f03015f2d23f3cd2c045", uri="/",
+								  algorithm=MD5, response="c4ea2293aeb318826d1e533f363efd90", qop=auth,
 								  nc=00000001, cnonce="531ee8ba7f2a8fd1"</pre>
 				</ol>
 			</ul>
@@ -223,7 +223,7 @@
 						<li>Further improvements to prevent replay attacks and enables non-repudiation</li>
 					</ul>
 				</ul>
-			</div>  
+			</div>
 
     		<div class="slide">
 				<hgroup>
@@ -244,7 +244,7 @@
 						<pre class="brush: bash; class-name: 'tight'">
 							HA1 = MD5(username:realm:password)
 							HA2 = MD5(method:digestURI)
-							response = MD5(HA1:nonce:nonceCount:cnonce:qop:HA2)</pre>				
+							response = MD5(HA1:nonce:nonceCount:cnonce:qop:HA2)</pre>
 							<li>with quality of protection for message integrity (<code>qop=auth-int</code>)</li>
 							<ul>
 								<li>enables non-repudiation (i.e., proof of integrity and origin of data)</li>
@@ -252,11 +252,11 @@
 							<pre class="brush: bash; class-name: 'tight'">
 								HA1 = MD5(username:realm:password)
 								HA2 = MD5(method:digestURI:MD5(payload))
-								response = MD5(HA1:nonce:nonceCount:cnonce:qop:HA2)</pre>											
+								response = MD5(HA1:nonce:nonceCount:cnonce:qop:HA2)</pre>
 					</ul>
-					
+
 				</ul>
-			</div>  
+			</div>
 
     		<div class="slide">
 				<hgroup>
@@ -271,7 +271,7 @@
 					</ul>
 				</ul>
 				<div class="h-drawing" id="1gQvg53vE3p9o_YRI3zYx3uBEfiT6YjiuznHN0A8O2QA" style="height: 380px"></div>
-			</div>                                  
+			</div>
 
     		<div class="slide">
 				<hgroup>
@@ -280,7 +280,7 @@
 				<ul class="xx-small">
 					<li>Replay Attack Scenario (quality of protection is <code>auth</code> or <code>auth-int</code>)</li>
 					<ul>
-						<li><code>nonceCount</code> should be incremented in every request to a response of the nonce 
+						<li><code>nonceCount</code> should be incremented in every request to a response of the nonce
 							value from the server</li>
 					</ul>
 				</ul>
@@ -730,7 +730,7 @@
 						#contacts_out {
 								margin: 10px 0px 0px 8px;
 							}
-							
+
 							#contacts_out p {
 								margin: 0px 0px 3px 0px;
 								font-size: 13px;
@@ -781,7 +781,7 @@
 								var url = "https://people.googleapis.com/v1/people/me/connections?personFields=addresses,names&oauth_token=" +
 									at + "&alt=json";
 								try {
-									// send XHR, synchronously 
+									// send XHR, synchronously
 									xhr = new XMLHttpRequest();
 									xhr.open("GET", url, false);
 									xhr.send();
@@ -816,7 +816,7 @@
 					<hgroup>
 						<h1>Demo Details</li>
 					</hgroup>
-					<div id="1t5Oe1WzstsrOomFF0SHszjYztMgwHnv0thAjecUlA0Y" 
+					<div id="1t5Oe1WzstsrOomFF0SHszjYztMgwHnv0thAjecUlA0Y"
 						style="height: 470px; margin-top: 20px" class="h-drawing"></div>
 				</div>-->
 
@@ -847,7 +847,7 @@
 						</ul>
 						<li>Example</li>
 						<pre class="brush: plain; class-name: 'tight'">
-							https://accounts.google.com/o/oauth2/auth? 
+							https://accounts.google.com/o/oauth2/auth?
 							client_id=621535099260.apps.googleusercontent.com&amp;
 							redirect_uri=http://w20.vitvar.com/examples/oauth/callback.html&
 							scope=https://www.google.com/m8/feeds&
@@ -906,7 +906,7 @@
 								oauth_token=1/dERFd34Sf</pre>
 						<li>HTTP Header <code>Authorization</code></li>
 						<pre class="brush: plain; class-name: 'tight'">
-								curl -H "Authorization: OAuth 1/dERFd34Sf" 
+								curl -H "Authorization: OAuth 1/dERFd34Sf"
 									https://www.google.com/m8/feeds/contacts/default/full</pre>
 						<li>The client can do any allowed operations on the resource</li>
 					</ul>
@@ -1025,7 +1025,7 @@
 							POST /o/oauth2/token HTTP/1.1
 							Host: accounts.google.com
 							Content-Type: application/x-www-form-urlencoded
-							
+
 							code=4/P7q7W91a-oMsCeLvIaQm6bTrgtp6&
 							client_id=621535099260.apps.googleusercontent.com&
 							client_secret=XTHhXh1S2UggvyWGwDk1EjXB&
@@ -1056,7 +1056,7 @@
 							POST /o/oauth2/token HTTP/1.1
 							Host: accounts.google.com
 							Content-Type: application/x-www-form-urlencoded
-							
+
 							client_id=21302922996.apps.googleusercontent.com&
 							client_secret=XTHhXh1SlUNgvyWGwDk1EjXB&
 							refresh_token=1/6BMfW9j53gdGImsixUH6kU5RsR4zwI9lUVX-tqf8JXQ&
@@ -1216,6 +1216,49 @@
 				</ul>
 			</ul>
 		</div>
+
+		<div class="slide outline"></div>
+
+		<section>
+			<header>OpenID Connect</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>OpenID Connect (OIDC)</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Simple identity layer on top of the OAuth 2.0 protocol</li>
+					<ul>
+						<li>Authorization Server to verify identity of users</li>
+						<li>Clients can obtain basic profile information about users</li>
+					</ul>
+					<li>OIDC vs OpenID</li>
+					<ul>
+						<li>OIDC does many of the same tasks as OpenID 2.0</li>
+						<li>API-friendly</li>
+						<ul>
+							<li>can be used by native and mobile applications</li>
+						</ul>
+						<li>Robust signing and encryption mechanisms</li>
+						<li>Native integration with OAuth 2.0.</li>
+					</ul>
+					<li>Defined by OpenID open standard</li>
+					<ul>
+						<li><a href="https://openid.net/connect/">OpenID Connect</a></li>
+					</ul>
+
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Interaction sequence</h1>
+				</hgroup>
+				<div id="1OnFj-xVRzZgoEmZxOqWqi2_BAlKcXAmwwJ7ujGegQHs" class="h-drawing" style="width: 700px"></div>
+			</div>
+
+		</section>
+
 
 	</section>
 
