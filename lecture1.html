@@ -26,7 +26,8 @@
 
 	<footer>
 		<p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester" />,&nbsp;
-			<span class="meta_twitter" /></p>
+			<span class="meta_twitter" />
+		</p>
 		<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
 	</footer>
 
@@ -38,7 +39,8 @@
 		<div class="author">
 			<p class="meta_author" />
 			<p><span class="meta_email" /> &bull; <span class="meta_twitter" /> &bull;
-				<span class="meta_web" /></p>
+				<span class="meta_web" />
+			</p>
 		</div>
 		<center>
 			<div class="meta_logo"></div>
@@ -100,7 +102,7 @@
 			<hgroup>
 				<h1>Programming Models</h1>
 			</hgroup>
-						
+
 			<ul class="small">
 				<li>Concurrency</li>
 				<ul>
@@ -124,14 +126,14 @@
 					</ul>
 					<li>Threads can access shared memory; you need to controll this</li>
 				</ul>
-			</ul>			
+			</ul>
 		</div>
-		
+
 		<div class="slide">
 			<hgroup>
 				<h1>Asynchronous I/O</h1>
 			</hgroup>
-		
+
 			<ul class="small">
 				<li>Asynchronous I/O</li>
 				<ul>
@@ -143,16 +145,16 @@
 				<ul>
 					<li>Tasks are running in so called <b>event loop</b></li>
 					<li>A task is able to "pause" when they wait for some result</li>
-					<ul>						
+					<ul>
 						<li>A task let other tasks to run</li>
 					</ul>
 					<li>Asynchronous code faciliates concurrent execution</li>
 					<ul>
 						<li>It gives the "look and feel" of concurrent execution</li>
 					</ul>
-			  </ul>			
-	  </div>
-		
+				</ul>
+		</div>
+
 	</section>
 
 	<div class="slide outline"></div>
@@ -164,7 +166,8 @@
 			<hgroup>
 				<h1>Web 2.0 Application Architecture</h1>
 			</hgroup>
-			<div id="1MXZwvAJA_NKdUnVm-1DNBtgFdCsoYSNIjkfaP2Q4TlY" class="h-drawing" style="height: 470px; margin-top: 20px"></div>
+			<div id="1MXZwvAJA_NKdUnVm-1DNBtgFdCsoYSNIjkfaP2Q4TlY" class="h-drawing"
+				style="height: 470px; margin-top: 20px"></div>
 		</div>
 
 		<div class="slide">
@@ -176,7 +179,7 @@
 				<li>Client-side (browser) and server-side (node.js, AppsScript)</li>
 				<li>Standard</li>
 				<ul>
-					<li>Current stable release is ECMAScript 2020</li>
+					<li>Current stable release is ECMAScript 2021/June 2021</li>
 				</ul>
 				<li>Major characteristics</li>
 				<ul>
@@ -200,8 +203,9 @@
 			<hgroup>
 				<h1>Javascript Runtime</h1>
 			</hgroup>
-			<div id="1kfGhsbXThWPmWqMx6-Y8UkBUlgoaCbiJCFQ7qIIcddQ" format="png" class="h-drawing" style="height: 270px; margin-top: 20px"></div>
-			<ul class="xx-small">	
+			<div id="1kfGhsbXThWPmWqMx6-Y8UkBUlgoaCbiJCFQ7qIIcddQ" format="png" class="h-drawing"
+				style="height: 270px; margin-top: 20px"></div>
+			<ul class="xx-small">
 				<li>Stack</li>
 				<ul>
 					<li>Contains frames, i.e. function parameters and local variables</li>
@@ -222,7 +226,7 @@
 			<hgroup>
 				<h1>Stack</h1>
 			</hgroup>
-			<ul class="xx-small">	
+			<ul class="xx-small">
 				<li>When running a program...</li>
 				<pre class="brush: js; class-name: ''">
 					function foo(b) {
@@ -235,7 +239,7 @@
 					  return foo(x * y)
 					}
 
-					console.log(bar(7)) //returns 42</pre>	
+					console.log(bar(7)) //returns 42</pre>
 				<ol style="margin-left: -40px">
 					<li>calling <code>bar</code>: a frame is created with bar's arguments and variables.</li>
 					<li><code>bar</code> calls <code>foo</code>: a new frame with foo's args and vars is created.</li>
@@ -249,12 +253,12 @@
 			<hgroup>
 				<h1>Event Loop</h1>
 			</hgroup>
-			<ul class="xx-small">	
+			<ul class="xx-small">
 				<li>Event loop</li>
 				<pre class="brush: js; class-name: ''">
 	      while (queue.waitForMessage()) {
 	        queue.processNextMessage()
-	      }</pre>	
+	      }</pre>
 				<ul>
 					<li>Message = data + callback to be processed</li>
 					<li>Messages are process completely one by one</li>
@@ -262,7 +266,7 @@
 						<li>No "clashes" across messages' processing</li>
 						<li>Processing should not block for a long time &ndash; Workers</li>
 					</ul>
-					<li>Brwoser adds a new message when an event occurs and there is an event listener</li>			
+					<li>Brwoser adds a new message when an event occurs and there is an event listener</li>
 				</ul>
 				<li>Run-to-completion</li>
 				<ul>
@@ -280,19 +284,20 @@
 			<hgroup>
 				<h1>Handling Request</h1>
 			</hgroup>
-			<div class="h-drawing" style="text-align: left; height: 425px" id="1aenRIcg3RqexY-9a1i0Bu2yWKzpSe0j9ULQ9u-gxNis"></div>
+			<div class="h-drawing" style="text-align: left; height: 425px"
+				id="1aenRIcg3RqexY-9a1i0Bu2yWKzpSe0j9ULQ9u-gxNis"></div>
 		</div>
 
 		<div class="slide">
 			<hgroup>
 				<h1>Multiple Runtimes</h1>
 			</hgroup>
-			<ul class="x-small">					
+			<ul class="x-small">
 				<li>Runtime</li>
-					<ul>
-						<li>Stack, Heap, Message Queue</li>
-						<li><code>iframe</code> and a Web worker has its own runtimes</li>
-					</ul>
+				<ul>
+					<li>Stack, Heap, Message Queue</li>
+					<li><code>iframe</code> and a Web worker has its own runtimes</li>
+				</ul>
 				<li>Communication between runtimes</li>
 				<ul>
 					<li>Runtimes communicate via <code>postMessage</code></li>
@@ -336,7 +341,7 @@
 				}
 
 				// ... and terminate
-				myWorker.terminate()</pre>	
+				myWorker.terminate()</pre>
 			</ul>
 		</div>
 
@@ -357,7 +362,8 @@
 						<li>You do not need to deal with concurrency issues</li>
 					</ul>
 					<li>More threads to realize I/O</li>
-					<li>Open sourced, <span id="nodejs-github" class="h-ref">@GitHub</span>, many <span id="nodejs-libs" class="h-ref">libraries</span></li>
+					<li>Open sourced, <span id="nodejs-github" class="h-ref">@GitHub</span>, many <span id="nodejs-libs"
+							class="h-ref">libraries</span></li>
 					<li>Future platform for Web 2.0 apps</li>
 				</ul>
 				<li>Every I/O as an event</li>
@@ -403,7 +409,9 @@
 				<ul>
 					<li>Six phases, each phase has a FIFO queue of callbacks to execute.</li>
 					<ul>
-						<li><b>timers</b> &ndash; executes callbacks sheduled by <code>setTimeout()</code> and <code>setInterval()</code></li>
+						<li><b>timers</b> &ndash; executes callbacks sheduled by <code>setTimeout()</code> and
+							<code>setInterval()</code>
+						</li>
 						<li><b>I/O callbacks</b> &ndash; executes all I/O callbacks except close callbacks.</li>
 						<li><b>idle/prepare</b> &ndash; used internally</li>
 						<li><b>poll</b> &ndash; retrieve new I/O events</li>
