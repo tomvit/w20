@@ -252,6 +252,71 @@
 
 		</section>
 
+		<div class="slide outline"></div>
+
+		<section>
+			<header>Fetch API</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Fetch API</h1>
+				</hgroup>
+				<ul class="small">
+					<li>XHR is callback-based, Fetch is promise-based</li>
+					<li>Interface to accessing requests and responses</li>
+					<ul>
+						<li>Provides global <code>fetch</code> method to fetch resources asynchronously</li>
+						<li>Can be easilly used in service workers</li>
+						<li>Supports CORS and other extensions to HTTP</li>
+					</ul>
+					<li>Interfaces</li>
+					<ul>
+						<li><code>Request</code> &ndash; represents a request to be made</li>
+						<li><code>Response</code> &ndash; represents a response to a request</li>
+						<li><code>Headers</code> &ndash; represents response/request headers</li>
+					</ul>
+					<li>Basic usage:</li>
+					<pre class="brush: javascript; class-name: 'tight'">
+						async function logMovies() {
+							const response = await fetch("http://example.com/movies.json");
+							const movies = await response.json();
+							console.log(movies);
+						}</pre>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Making request</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>A <code>fetch</code> function is available in global <code>window</code></li>
+					<li>It takes <code>path</code> and returns <code>Promise</code></li>
+					<pre class="brush: javascript; class-name: 'tight'">
+						fetch('https://api.github.com/users/tomvit')
+							.then(response => response.json())
+							.then(data => console.log(data))
+							.catch(error => console.error('Error:', error));</pre>
+					<li>You can make <code>no-cors</code> request</li>
+					<ul>
+						<li>With Fetch, the request will be handled as with putting <code>src</code> to
+							<code>img</code>
+						</li>
+					</ul>
+					<pre class="brush: javascript; class-name: 'tight'">
+						fetch('https://google.com', {
+							mode: 'no-cors',
+						  }).then(function (response) {
+							console.log(response.type); 
+						  });</pre>
+					<li>You can access low-level body stream</li>
+					<ul>
+						<li>With XHR, the whole <code>responseText</code> would be loaded into memory.</li>
+						<li>With Fetch, you can read chunks of response and cancel the stream when needed.</li>
+					</ul>
+			</div>
+
+		</section>
 	</section>
 
 	<div class="slide outline"></div>
@@ -308,7 +373,8 @@
 					<ul>
 						<li>Alice, Bob</li>
 						<ul>
-							<li>Normal users, usually Alices wants to send a message to Bob or Alice accesses a Bob's
+							<li>Normal users, usually Alices wants to send a message to Bob or Alice accesses a
+								Bob's
 								site.</li>
 						</ul>
 						<li>Eve</li>
@@ -337,7 +403,8 @@
 					<li>Stateful Server</li>
 					<ul>
 						<li>Server remembers the session information in a server memory</li>
-						<li>Server memory is a non-persistent storage, when server restarts the memory content is lost!
+						<li>Server memory is a non-persistent storage, when server restarts the memory content is
+							lost!
 						</li>
 					</ul>
 				</ul>
@@ -362,7 +429,8 @@
 						</ul>
 						<li>Alice loads the page in her browser</li>
 						<ul>
-							<li>Alice is authenticated to the bank's website, the browser sends Alice's authentication
+							<li>Alice is authenticated to the bank's website, the browser sends Alice's
+								authentication
 								cookies
 								with the request.</li>
 						</ul>
@@ -384,7 +452,8 @@
 				<ul>
 					<li>Exploits a trust of a user in a website</li>
 				</ul>
-				<div id="1pOK4HZPt7d4j-KSllCa8BUx5Amjlq28L6sQh3Wac8kI" class="h-drawing" style="height: 250px"></div>
+				<div id="1pOK4HZPt7d4j-KSllCa8BUx5Amjlq28L6sQh3Wac8kI" class="h-drawing" style="height: 250px">
+				</div>
 				<ul class="small">
 					<li>Example Scenario</li>
 					<ol>
@@ -439,7 +508,8 @@
 					</ul>
 					<li>Allow for <b>cross-site HTTP requests</b></li>
 					<ul>
-						<li>HTTP requests for resources from a different domain than the domain of the resource making
+						<li>HTTP requests for resources from a different domain than the domain of the resource
+							making
 							the request.</li>
 					</ul>
 					<li>W3C Recommendation</li>
@@ -457,13 +527,15 @@
 				<hgroup>
 					<h1>CORS Protocol &ndash; GET</h1>
 				</hgroup>
-				<div style="height: 280px" id="1cAgbH75PndD38nY1IJo4QfN5Yp7siHQXfNF5oD6x9SM" class="h-drawing"></div>
+				<div style="height: 280px" id="1cAgbH75PndD38nY1IJo4QfN5Yp7siHQXfNF5oD6x9SM" class="h-drawing">
+				</div>
 				<ul class="x-small">
 					<li>Read-only resource access via HTTP GET</li>
 					<li>Headers:</li>
 					<ul>
 						<li><code>Origin</code> &ndash; identifies the origin of the request</li>
-						<li><code>Access-Control-Allow-Origin</code> &ndash; defines who can access the resource</li>
+						<li><code>Access-Control-Allow-Origin</code> &ndash; defines who can access the resource
+						</li>
 						<li>either the full domain name or the wildcard (*) is allowed.</li>
 					</ul>
 				</ul>
@@ -473,7 +545,8 @@
 				<hgroup>
 					<h1>CORS Protocol &ndash; other methods and "preflight"</h1>
 				</hgroup>
-				<div style="height: 320px" id="1-dVhDx5pka4BElYu0WzFkqkLQWsb8aphcy16l-bET80" class="h-drawing"></div>
+				<div style="height: 320px" id="1-dVhDx5pka4BElYu0WzFkqkLQWsb8aphcy16l-bET80" class="h-drawing">
+				</div>
 				<ul class="xx-small">
 					<li>Preflight request queries the resource using <code>OPTIONS</code> method</li>
 					<ul>
