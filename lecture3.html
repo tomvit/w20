@@ -1,1117 +1,1308 @@
 <!DOCTYPE html>
 <!--
 	Web 2.0, CTU course slides
-	(cc) 2010-2014 Tomas Vitvar, tomas@vitvar.com
+	(cc) 2010-2013 Tomas Vitvar, tomas@vitvar.com
 -->
 <html>
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta name="course" content="Web 2.0" />
-  <meta name="lecture" content="Lecture 3" />
-  <meta name="keywords" content="SaaS, IaaS, PaaS" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="course" content="Web 2.0" />
+	<meta name="lecture" content="Lecture 3" />
+	<meta name="keywords" content="OAuth 2.0, TLS, open id, security, authorization, authentication" />
 
-  <link type="text/css" rel="stylesheet" href="css/meta.css">
-  </link>
-  <link type="text/css" rel="stylesheet" href="css/ctu-fit.css">
-  </link>
-  <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css">
-  </link>
+	<link type="text/css" rel="stylesheet" href="css/meta.css">
+	</link>
+	<link type="text/css" rel="stylesheet" href="css/ctu-fit.css">
+	</link>
+	<link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css">
+	</link>
 
-  <script type="text/javascript" src="humla/lib/humla.js"></script>
-  <title>Cloud Native and Microservices</title>
+	<script type="text/javascript" src="humla/lib/humla.js"></script>
+	<title>Security</title>
 </head>
 
 <body>
 
-  <footer>
-    <p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester" />,&nbsp;
-      <span class="meta_twitter" /></p>
-    <p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
-  </footer>
-
-  <div class="slide intro">
-    <hgroup>
-      <h1><span class="meta_course" /></h1>
-      <h2>#META_LECTURE#: #TITLE#</h2>
-    </hgroup>
-    <div class="author">
-      <p class="meta_author" />
-      <p><span class="meta_email" /> &bull; <span class="meta_twitter" /> &bull;
-        <span class="meta_web" /></p>
-    </div>
-    <center>
-      <div class="meta_logo"></div>
-    </center>
-    <div class="org">
-      <p class="meta_org" />
-      <p><span class="meta_orgfac" /> &bull; <span class="meta_field" />
-        &bull; <span class="meta_orgweb" /></p>
-    </div>
-    <div class="etc">
-      <div class="text-info">
-        Modified: #LAST_MODIFIED#<br />
-        Humla v#HUMLA_VERSION#
-      </div>
-      <a href="http://creativecommons.org/licenses/by-sa/3.0/">
-        <div class="license"></div>
-      </a>
-      <div class="oppa"></div>
-    </div>
-  </div>
-
-  <div class="slide outline"></div>
-
-  <section>
-    <header>Cloud Native</header>
-
-    <div class="slide">
-      <hgroup>
-        <h1>Overview</h1>
-      </hgroup>
-      <ul class="xx-small">
-        <li>The <span id="cnfs" class="h-ref"></span></li>
-        <ul>
-          <li>Motto: Building sustainable ecosystems for cloud native software</li>
-          <li>CNFS is part of the nonprofit Linux Foundation</li>
-        </ul>
-        <li>Cloud Native = scalable apps running in modern cloud environments</li>
-        <ul>
-          <li>containers, service mashes, microservices</li>
-          <li>Apps must be usually re-built from scratch or refactored</li>  
-          <li>Benefits:</li>
-          <ul>
-            <li>loosely coupled systems that are resilient, manageable, and observable</li>
-            <li>automation allowing for predictable and frequent changes with minimal effort</li>
-          </ul>
-          <li>Trail Map</li>
-          <ul>
-            <li>provides an overview for enterprises starting their cloud native journey<span class="h-ref" id="cnfs-trail-map"/></li>
-          </ul>
-        </ul>
-        <li>Lift and Shift</li>
-        <ul>
-          <li>Cloud transition program in organizations</li>
-          <li>Move app from on-premise to the cloud</li>
-          <li>Benefits</li>
-          <ul>
-            <li>Infrastructure cost cutting (OPEX vs. CAPEX)</li>
-            <li>Improved operations (scaling up/down if possible can be faster)</li>
-          </ul>
-        </ul>
-      </ul>
-    </div>
-
-    <div class="slide">
-      <hgroup>
-        <h1>CNFS Trail Map</h1>
-      </hgroup>
-      <img src="img/cncf-trail-map.png" style="width: 100%"/>
-    </div>
-    
-  </section>
-
-  <div class="slide outline"></div>
-
-  <section>
-    <header>Microservices</header>
-
-    <div class="slide">
-      <hgroup>
-        <h1>Overview</h1>
-      </hgroup>
-      <ul>
-        <li>Emerging software architecture</li>
-        <ul>
-          <li>monolithic vs. decoupled applications</li>
-          <li>applications as independenly deployable services</li>
-        </ul>
-        <img src="img/microservices.png" style="zoom: 0.7"></img>
-      </ul>
-    </div>
-
-    <div class="slide">
-      <hgroup>
-        <h1>Major Characteristics</h1>
-      </hgroup>
-      <ul>
-        <li>Loosely coupled</li>
-        <ul>
-          <li>Integrated using well-defined interfaces</li>
-        </ul>
-        <li>Technology-agnostic protocols</li>
-        <ul>
-          <li>HTTP, they use REST architecture</li>
-        </ul>
-        <li>Independently deployable and easy to replace</li>
-        <ul>
-          <li>A change in small part requires to redeploy only that part</li>
-        </ul>
-        <li>Organized around capabilities</li>
-        <ul>
-          <li>such as accounting, billing, recommendation, etc.</li>
-        </ul>
-        <li>Impplemented using different technologies</li>
-        <ul>
-          <li>polyglot &ndash; programming languages, databases</li>
-        </ul>
-      </ul>
-    </div>
-
-  </section>
-
-  <div class="slide outline"></div>
-
-  <section>
-
-    <header>Containers</header>
-
-    <section>
-      <header>Overview</header>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Virtual Machines vs. Containers</h1>
-        </hgroup>
-        <div class="h-drawing" style="height:450px; margin-top: 30px" id="13MxlAselSiJfnL7o8NwX87x2SzlPbLdJ56Zi87Ex00w"></div>
-      </div>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Overview</h1>
-        </hgroup>
-
-        <ul class="x-small">
-          <li>Linux Containers</li>
-          <ul>
-            <li>Introduced in 2008</li>
-            <li>Allow to run a process tree in a isolated system-level "virtualization"</li>
-            <li>Use much less resources and disk space than traditional virtualization</li>
-          </ul>
-          <li>Implementations</li>
-          <ul>
-            <li>LXC &ndash; default implementation in Linux</li>
-            <li>Docker Containers</li>
-            <ul>
-              <li>Builds on Linux namespaces and union file system (OverlayFS)</li>
-              <li>A way to build, commit and share images</li>
-              <li>Build images using a description file called Dockerfile</li>
-              <li>Large number of available base and re-usable images</li>
-            </ul>
-          </ul>
-          <li>Monolithic design originally</li>
-          <ul>
-            <li>Now several layers</li>
-            <li>container runtime</li>
-            <li>container engine</li>
-          </ul>
-          <div class="h-drawing" id="1XcnPNd8sFL3BztQqVtv6Xf4XUNrpzQHAsDm9Ma6D_S8" style="text-align:left; height: 160px; margin-top: -120px; margin-left: 350px"/>
-        </ul>
-      </div>
-      
-      <div class="slide">
-        <hgroup>
-          <h1>Containerd</h1>
-        </hgroup>
-
-        <img src="img/container-arch.jpeg" style="height: 240px; margin-top: 20px; margin-left: 20px"/>
-        <ul class="xx-small">
-          <li>Container engine</li>
-          <ul>
-            <li>Accepts user inputs (via CLI or API), pulling images from registry, preparing metadata to be passed to container runtime</li>
-          </ul>
-          <li>Container runtime</li>
-          <ul>
-            <li>Abstraction from syscalls or OS specific functionality to run containers on linux, windows, solaris, etc.</li>
-            <li>Uses <code>runc</code> and <code>container-shim</code></li>
-            <li>Communicates with kernel to start containerized processes</li>
-          </ul>
-        </ul>
-      </div>
-      
-      <div class="slide">
-        <hgroup>
-          <h1>Terminology</h1>
-        </hgroup>
-        <ul class="xx-small">
-          <li>Image</li>
-          <ul>
-            <li>An image contains a union of layered filesystems stacked on top of each other</li>
-            <li>Immutable, it does not have state and it never changes</li>
-          </ul>
-          <li>Container</li>
-          <ul>
-            <li>One or more processes running in one or more isolated namespaces in a filesystem provided by the image</li>
-          </ul>
-          <li>Container Engine/Runtime</li>
-          <ul>
-            <li>The core processes providing container capabilities on a host</li>
-          </ul>
-          <li>Client</li>
-          <ul>
-            <li>An app (e.g. CLI, custom app), communicates with a container engine by its API</li>
-          </ul>
-          <li>Registry</li>
-          <ul>
-            <li>A hosted service containing repository of images</li>
-            <li>A registry provides a registry API to search, pull and push images</li>
-            <li>Docker Hub is the default Docker registry</li>
-          </ul>
-          <li>Swarm</li>
-          <ul>
-            <li>A cluster of one or more docker engines</li>
-          </ul>
-        </ul>
-      </div>
-    </section>
-
-    <div class="slide outline"></div>
-
-    <section>
-
-      <header>Linux Namespaces</header>
-    
-      <div class="slide">
-        <hgroup>
-          <h1>Linux Namespaces</h1>
-        </hgroup>
-        <ul class="xx-small">
-          <li>Isolation of Linux processes, there are <b>7 namespaces</b></li>
-          <ul>
-            <li>Mount, UTS, IPC, PID, Network, User, Cgroup</li>
-            <li>By default, every process is a member of a default namespace of each type</li>
-            <li>In case no additional namespace configuration is in place, processes and all their direct children will reside in this exact namespace</li>
-            <li>Run <code>lsns</code> to check namespaces the process is in</li>
-            <pre class="brush: plain; gutter: 'false'">
-              $ lsns
-              NS         TYPE  NPROCS   PID USER   COMMAND
-              4026531836 pid        2 30873 oracle -bash
-              4026531837 user     108  1636 oracle /bin/bash /u01/oracle/scripts/startWebLogicContainer.sh
-              4026531838 uts        2 30873 oracle -bash
-              4026531839 ipc        2 30873 oracle -bash
-              4026531840 mnt        2 30873 oracle -bash
-              4026531956 net      108  1636 oracle /bin/bash /u01/oracle/scripts/startWebLogicContainer.sh
-              4026532185 mnt       13 13542 oracle /bin/bash /u01/oracle/scripts/startNM_ohs.sh
-              4026532192 pid       13  2798 oracle /bin/bash /u01/oracle/scripts/startNM_ohs.sh
-              ...
-            </pre>
-          </ul>
-          <li>Flexible configuration, for example:</li>
-          <ul>
-            <li>You can run two apps that only share the network namespace, e.g. <code>4026531956</code></li>
-            <li>The apps can talk to each other</li>
-            <li>Any other app (not in this namespace) won't be able to talk to the apps</li>
-          </ul>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Types: mnt, uts, ipc and pid</h1>
-        </hgroup>
-        <ul class="xx-small">
-          <li><code>mnt</code> namespace</li>
-          <ul>
-            <li>Isolates filesystem mount points</li>
-            <li>Restricts the view of the global file hierarchy</li>
-            <li>Each namespace has its own set of mount points</li>
-          </ul>
-          <li><code>uts</code> namespace</li>
-          <ul>
-            <li>The value of the hostname is isolated between different UTS namespaces</li>
-          </ul>          
-          <li><code>ipc</code> namespace</li>
-          <ul>
-            <li>Isolates interprocess communication resources</li>
-            <li>message queues, semaphore, and shared memory</li>
-          </ul>
-          <li><code>pid</code> namespace</li>
-          <ul>
-            <li>Isolates PID number space</li>
-            <li>A process ID number space gets isolated</li>
-            <ul>
-              <li>Processes can have PIDs starting from the value 1</li>
-              <li>Real PIDs outside of the namespace of the same process is a different number</li>
-            </ul>
-            <li>Containers have their own init processes with a PID value of 1</li>
-          </ul>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Types: net</h1>
-        </hgroup>
-        <ul class="xx-small">
-          <li><code>net</code> namespace</li>
-          <ul>
-            <li>Processes have their own private network stack (interfaces, routing tables, sockets)</li>
-            <li>Communication with external network stack is done by a virtual ethernet bridge</li>
-            <img src="img/container-bridge.png" style="height: 200px; margin-top: 10px; margin-bottom: 10px"/>
-            <li>On the host there is a <b>userland proxy</b> or <b>NAT</b></li>
-            <ul>
-              <li>NAT is a prefered solution over userland proxy (<code>/usr/bin/docker-proxy</code>)</li>
-              <li>Lack of NAT hairpinning may prevent to use NAT</li>
-            </ul>
-            <li>Use case</li>
-            <ul>
-              <li>Multiple services binding to the same port on a single machine, e.g. <code>tcp/80</code></li>
-              <li>A port in the host is mapped to the port exposed by a process in the NS</li>
-            </ul>
-          </ul>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Types: user</h1>
-        </hgroup>
-        <ul class="xx-small">
-          <li><code>user</code> namespace</li>
-          <ul>
-            <li>Isolates UID/GID number spaces</li>
-          </ul>
-          <li><code>cgroup</code> namespace</li>
-          <ul>
-            <li>Isolate cgroup root directory</li>
-          </ul>
-        </ul>
-      </div>
-      
-    </section>
-
-    <div class="slide outline"></div>
-
-    <section>
-
-      <header>Images</header>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Container Images</h1>
-        </hgroup>
-        <img style="margin-left: 50px; margin-top: 15px; margin-bottom: 10px; height: 280px" src="./img/docker-container-stack.png" />
-        <ul class="x-small" style="margin-left: -10px">
-          <ul>
-            <li>Containers are made up of R/O layers via a storage driver<br />(OverlayFS, AUFS, etc.)</li>
-            <li>Containers are designed to support a single application</li>
-            <li>Instances are ephemeral, persistent data is stored in bind
-              mounts or data volume containers.</li>
-          </ul>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Image Layering with OverlayFS</h1>
-        </hgroup>
-        <ul class="x-small">
-          <li>OverlayFS</li>
-          <ul>
-            <li>A filesystem service implementing a <b>union mount</b> for other file systems.</li>
-            <li>Docker uses <code>overlay</code> and <code>overlay2</code> storage drivers
-              to build and manage on-disk structures of images and containers.</li>
-          </ul>
-          <li>Image Layering</li>
-          <ul>
-            <li>OverlayFS takes two directories on a single Linux host, layers one on top of the other, and provides
-              a single unified view.</li>
-            <li>Only works for two layers, in multi-layered images hard links are used to
-              reference data shared with lower layers.</li>
-          </ul>
-          <img src="img/overlay_constructs.jpg" style="width: 700px; margin-top: 10px" />
-        </ul>
-      </div>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Image Layers Example</h1>
-        </hgroup>
-        <ul class="xx-small" style="margin-top:20px; zoom:0.9">
-          <li>Pulling out the image from the registry</li>
-          <pre class="brush: plain; gutter: 'false'">
-            $ docker pull ubuntu
-
-            Using default tag: latest
-            latest: Pulling from library/ubuntu
-
-            5ba4f30e5bea: Pull complete
-            9d7d19c9dc56: Pull complete
-            ac6ad7efd0f9: Pull complete
-            e7491a747824: Pull complete
-            a3ed95caeb02: Pull complete
-            Digest: sha256:46fb5d001b88ad904c5c732b086b596b92cfb4a4840a3abd0e35dbb6870585e4
-            Status: Downloaded newer image for ubuntu:latest
-          </pre>
-          <ul>
-            <li>Each image layer has its own directory under <code>/var/lib/docker/overlay/</code>.</li>
-            <li>This is where the contents of each image layer are stored.</li>
-          </ul>
-          <li>Directories on the file system</li>
-          <pre class="brush: plain; gutter: 'false'">
-            $ ls -l /var/lib/docker/overlay/
-
-            total 20
-            drwx------ 3 root root 4096 Jun 20 16:11 38f3ed2eac129654acef11c32670b534670c3a06e483fce313d72e3e0a15baa8
-            drwx------ 3 root root 4096 Jun 20 16:11 55f1e14c361b90570df46371b20ce6d480c434981cbda5fd68c6ff61aa0a5358
-            drwx------ 3 root root 4096 Jun 20 16:11 824c8a961a4f5e8fe4f4243dab57c5be798e7fd195f6d88ab06aea92ba931654
-            drwx------ 3 root root 4096 Jun 20 16:11 ad0fe55125ebf599da124da175174a4b8c1878afe6907bf7c78570341f308461
-            drwx------ 3 root root 4096 Jun 20 16:11 edab9b5e5bf73f2997524eebeac1de4cf9c8b904fa8ad3ec43b3504196aa3801
-          </pre>
-          <ul>
-            <li>The organization of files allows for efficient use of disk space.</li>
-            <li>There are <b>files unique to every layer</b> and <b>hard links to files</b> shared with lower layers</li>
-          </ul>
-        </ul>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Dockerfile</h1>
-        </hgroup>
-        <ul class="xx-small" style="zoom: 0.90">
-          <li>Dockerfile is a script that creates a new image</li>
-          <pre class="brush: plain; gutter: 'false'">
-          # This is a comment
-          FROM oraclelinux:7
-          MAINTAINER Tomas Vitvar &lt;tomas@vitvar.com>
-          RUN yum install -q -y httpd
-          EXPOSE 80
-          CMD httpd -X
-          </pre>
-
-          <li>A line in the Dockerfile will create an intermediary layer</li>
-
-          <pre class="brush: plain; gutter: 'false'">
-          $ docker build -t tomvit/httpd:v1 .
-          Sending build context to Docker daemon 2.048 kB
-          Step 1 : FROM oraclelinux:7
-           ---> 4c357c6e421e
-          Step 2 : MAINTAINER Tomas Vitvar &lt;tomas@vitvar.com>
-           ---> Running in 35feebb2ffab
-           ---> 95b35d5d793e
-          Removing intermediate container 35feebb2ffab
-          Step 3 : RUN yum install -q -y httpd
-           ---> Running in 3b9aee3c3ef1
-           ---> 888c49141af9
-          Removing intermediate container 3b9aee3c3ef1
-          Step 4 : EXPOSE 80
-           ---> Running in 03e1ef9bf875
-           ---> c28545e3580c
-          Removing intermediate container 03e1ef9bf875
-          Step 5 : CMD httpd -X
-           ---> Running in 3c1c0273a1ef
-          </pre>
-
-          <ul class="no-bullet">
-            <li>If processing fails at some step, all preceeding steps will be loaded from the cache on the next run.</li>
-          </ul>
-
-
-        </ul>
-      </div>
-
-    </section>
-
-    <div class="slide outline"></div>
-
-    <section>
-
-      <header>Working with Docker</header>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Docker Container State Diagram</h1>
-        </hgroup>
-
-        <div class="h-drawing" style="width: 780px" id="1JGxpdEWDh9lBbLg3JFVr53LBg1BM520LYXyYkdi-2ws"></div>
-      </div>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Commands (1)</h1>
-        </hgroup>
-        <ul class="xx-small no-bullet" style="zoom:0.95">
-          <li><code>docker version</code></li>
-          <ul>
-            <li>list current version of docker engine and client</li>
-          </ul>
-          <li><code>docker search &lt;image&gt;</code></li>
-          <ul>
-            <li>search for an image in the registry</li>
-          </ul>
-          <li><code>docker pull &lt;image[:version]&gt;</code></li>
-          <ul>
-            <li>download an image of a specific version from the registry</li>
-            <li>if the version is not provided, the latest version will be downloaded</li>
-          </ul>
-          <li><code>docker images</code></li>
-          <ul>
-            <li>list all local images</li>
-          </ul>
-          <li><code>docker run -it &lt;image[:version]&gt; &lt;command&gt;</code></li>
-          <ul>
-            <li>start the image and run the command inside the image</li>
-            <li>if the image is not found locally, it will be downloaded from the registry</li>
-            <li>option <code>-i</code> starts the container in interactive mode</li>
-            <li>option <code>-t</code> allocates a pseudo TTY</li>
-          </ul>
-          <li><code>docker ps [-as]</code></li>
-          <ul>
-            <li>list all running containers</li>
-            <li>option <code>-a</code> will list all containers including the stopped ones.</li>
-            <li>option <code>-s</code> will list the container's size.</li>
-          </ul>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Commands (2)</h1>
-        </hgroup>
-        <ul class="xx-small no-bullet" style="zoom:0.95">
-          <li><code>docker rm &lt;container&gt;</code></li>
-          <ul>
-            <li>remove the container</li>
-          </ul>
-          <li><code>docker rmi &lt;image&gt;</code></li>
-          <ul>
-            <li>remove the image</li>
-          </ul>
-          <li><code>docker commit &lt;container&gt; &lt;name[:version]&gt;</code></li>
-          <ul>
-            <li>create an image from the container with the name and the version</li>
-          </ul>
-          <li><code>docker history &lt;image&gt;</code></li>
-          <ul>
-            <li>display the image history</li>
-          </ul>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Networking and Linking</h1>
-        </hgroup>
-        <ul class="xx-small">
-          <li>There are 3 docker networks by default</li>
-          <ul>
-            <li><b>bridge</b> &ndash; container can access host's network (default)</li>
-            <ul>
-              <li>Docker creates subnet <code>172.17.0.0/16</code> and gateway to the network</li>
-              <li>When a container is started, it is automatically added to this network</li>
-              <li>All containers in this network can communicate with each other</li>
-            </ul>
-            <li><b>host</b> &ndash; all host's network interfaces will be available in the container.</li>
-            <li><b>none</b> &ndash; container will be placed on its own network and no network interfaces will be configured.</li>
-          </ul>
-          <li>Custom Network configuration</li>
-          <ul>
-            <li>You can create a new network and add containers to it</li>
-            <li>Containers in the new network can communicate with each other but the network will be isolated
-              from the host network</li>
-          </ul>
-          <li>Linking containers (legacy)</li>
-          <ul>
-            <pre class="brush: plain; gutter: 'false'">
-              $ docker run -d --name redmine-db postgres
-              $ docker run -it --link redmine-db:db postgres /bin/bash
-              root@c4b12143ebe8:/# psql -h db -U postgres
-              psql (9.6.1)
-              Type "help" for help.
-              postgres=# SELECT inet_server_addr();
-              postgres=# SELECT * FROM pg_stat_activity \x\g\x
-            </pre>
-          </ul>
-        </ul>
-      </div>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Networking Commands</h1>
-        </hgroup>
-        <ul class="xx-small no-bullet" style="zoom:0.95">
-          <li><code>docker network ls</code></li>
-          <ul>
-            <li>lists all available networks</li>
-          </ul>
-          <li><code>docker network inspect &lt;network-id&gt;</code></li>
-          <ul>
-            <li>Returns the details of specific network</li>
-          </ul>
-          <li><code>docker network create --driver bridge isolated_nw</code></li>
-          <ul>
-            <li>creates a new isolated network</li>
-          </ul>
-          <li><code>docker run -it --network=isolated_nw ubuntu bin/bash</code></li>
-          <ul>
-            <li>starts the container ubuntu and attaches it to the isolated network</li>
-          </ul>
-        </ul>
-      </div>
-
-
-      <div class="slide">
-        <hgroup>
-          <h1>Data Volumes</h1>
-        </hgroup>
-        <ul class="xx-small" style="zoom:0.95">
-          <li>Data Volume</li>
-          <ul>
-            <li>A directory that bypass the union file system</li>
-            <li>Data volumes can be shared and reused among containers</li>
-            <li>Data volume persists even if the container is deleted</li>
-            <li>It is possible to mount a shared sotrage volume as a data volue by using
-              a volume plugin to mount e.g. NFS</li>
-          </ul>
-
-          <li>Adding a data volume</li>
-          <ul>
-            <li class="no-bullet">
-              <code>docker run -d -v /webapp training/webapp python app.py</code>
-            </li>
-            <li class="no-bullet">will create a new value with name <code>webapp</code>,</li>
-            <li class="no-bullet">the location of the volume can be determined by using <code>docker inspect</code>.</li>
-
-          </ul>
-          <li>Mount a host directory as a data volume</li>
-          <ul>
-            <li class="no-bullet">
-              <code>docker run -d -v /src/webapp:/webapp training/webapp python app.py</code>
-            </li>
-            <li class="no-bullet">if the path exists in the container, it will be overlayed (not removed),</li>
-            <li class="no-bullet">if the host directory does not exist, the docker engine creates it.</li>
-
-          </ul>
-          <li>Data volume container</li>
-          <ul>
-            <li>Persistent data to be shared among two or more containers</li>
-            <li class="no-bullet">
-              <code>docker create -v /dbdata --name dbstore training/postgres /bin/true</code>
-            </li>
-            <li class="no-bullet">
-              <code>docker run -d --volumes-from dbstore --name db1 training/postgres</code>
-            </li>
-            <li class="no-bullet">
-              <code>docker run -d --volumes-from dbstore --name db2 training/postgres</code>
-            </li>
-          </ul>
-        </ul>
-      </div>
-
-    </section>
-
-    <!-- <div class="slide outline"></div>
-
-    <section>
-      <header>Swarm</header>
-
-      <div class="slide">
-        <hgroup>
-          <h1>Swarm</h1>
-        </hgroup>
-        <img src="img/swarm-diagram.png" style="width: 750px; margin-left: 25px; margin-top: 20px" />
-      </div>
-    </section> -->
-
-
-  </section>
-
-  <div class="slide outline"></div>
-
-  <section>
-    <header>Kubernetes</header>
-
-    <div class="slide">
-      <hgroup>
-        <h1>Overview</h1>
-      </hgroup>
-      <ul class="x-small">
-        <li>In your architecture...</li>
-        <ul>
-          <li>Containers are atomic pieces of application architecture</li>
-          <li>Containers can be linked (e.g. web server, DB)</li>
-          <li>Containers access shared resources (e.g. disk volumes)</li>
-        </ul>
-        <li>Kubernetes</li>
-        <ul>
-          <li>Automation of deployments, scaling, management of containerized applications across number of nodes</li>
-          <li>Based on Borg, a parent project from Goolge</li>
-        </ul>
-        <img src="img/kubernetes-overview.png" width="400px" style="margin-top: 10px; margin-left: 20px"></img>
-      </ul>
-    </div>
-
-    <div class="slide">
-      <hgroup>
-        <h1>Features</h1>
-      </hgroup>
-      <ul class="xx-small">
-        <li>Automatic binpacking</li>
-        <ul>
-          <li>Automatically places containers onto nodes based on their resource requirements and other constraints.</li>
-        </ul>
-        <li>Horizontal scaling</li>
-        <ul>
-          <li>Scales your application up and down with a simple command, with a UI, or automatically based on CPU usage.</li>
-        </ul>
-        <li>Automated rollouts and rollbacks</li>
-        <ul>
-          <li>Progressive rollout out of changes to application/configuration, monitoring application health
-            and rollback when something goes wrong.</li>
-        </ul>
-        <li>Storage orchestration</li>
-        <ul>
-          <li>Automatically mounts the storage system (local or in the cloud)</li>
-        </ul>
-        <li>Self-healing</li>
-        <ul>
-          <li>Restarts containers that fail, replaces and reschedules containers when nodes die, kills containers that don't respond to user-defined health checks.</li>
-        </ul>
-        <li>Service discovery and load balancing</li>
-        <ul>
-          <li>Gives containers their own IP addresses and a single DNS name for a set of containers, and can load-balance across them.</li>
-        </ul>
-      </ul>
-    </div>
-
-    <!-- <div class="slide">
-      <hgroup>
-        <h1>Basic Terms</h1>
-      </hgroup>
-      <ul class="xx-small">
-        <li>Node</li>
-        <ul>
-          <li>a worker machine in Kubernetes (a VM or physical machine).
-          <li>It uses <code>kubelet</code> and <code>kube-proxy</code> to communicate with the control plane.</li>
-        </ul>
-        <li>Control Plane</li>
-        <ul>
-          <li>A set of components that manage the Kubernetes cluster.</li>
-          <li>Can run on a separate node such as a master node.</li>
-        </ul>
-        <li>Pod</li>
-        <ul>
-          <li>The basic building block of Kubernetes, one or more dependant containers.</li>
-        </ul>
-      </ul>
-    </div> -->
-
-    <div class="slide">
-      <hgroup>
-        <h1>Architecture</h1>
-      </hgroup>
-      <img src="img/components-of-kubernetes.svg" style="width: 800px; margin-left: 50px; margin-top: 50px; zoom: 0.88"></img>
-    </div>
-
-    <div class="slide">
-      <hgroup>
-        <h1>Control Plane Components</h1>
-      </hgroup>
-      <ul class="x-small">
-        <li>Global decisions about the cluster</li>
-        <ul>
-          <li>Schedulling</li>
-          <li>Detecting and responding to cluster events, starting up new pods</li>
-        </ul>
-        <li>kube-apiserver</li>
-        <ul>
-          <li>exposes the Kubernetes API</li>
-          <li>The API server is the front end for the Kubernetes control plane.</li>
-        </ul>
-        <li>etcd</li>
-        <ul>
-          <li>highly-available key value store used to store all cluster data</li>
-        </ul>
-        <li>kube-scheduler</li>
-        <ul>
-          <li>watches for newly created Pods with no assigned node</li>
-          <li>selects a node for Pods to run on.</li>
-          <li>Decision factors: resource requirements, hardware/software/policy constraints, affinity and anti-affinity specifications</li>
-        </ul>
-      </ul>
-    </div>
-
-    <div class="slide">
-      <hgroup>
-        <h1>Control Plane Components</h1>
-      </hgroup>
-      <ul class="x-small">
-        <li>kube-controller-manager</li>
-        <ul>
-          <li>runs controller to ensure the desired state of cluster objects</li>
-          <li><b>Node controller</b></li>
-          <ul>
-            <li>noticing and responding when nodes go down</li>   
-          </ul>   
-          <li><b>Job controller</b></li>
-          <ul>
-            <li>creates Pods to run one-off tasks to completion.</li>
-          </ul>
-          <li><b>Endpoints controller</b></li>
-          <ul>
-            <li>Populates the Endpoints object (that is, joins Services & Pods).</li>
-          </ul>
-        </ul>
-        <li>cloud-controller-manager</li>
-        <ul>
-          <li>Integration with cloud services (when the cluster is running in a cloud)</li>
-          <li><b>Node controller</b></li>
-          <ul>
-            <li>checks if a node has been deleted in the cloud after it stops responding</li>
-          </ul>
-          <li><b>Route controller</b></li>
-          <ul>
-            <li>For setting up routes in the underlying cloud infrastructure</li>
-          </ul>
-          <li><b>Service controller</b></li>
-          <ul>
-            <li>For creating, updating and deleting cloud provider load balancers</li>
-          </ul>
-        </ul>
-      </ul>
-    </div>
-
-    <div class="slide">
-      <hgroup>
-        <h1>Node</h1>
-      </hgroup>
-      <ul class="x-small">
-        <li>Kubernetes runtime environment</li>
-        <ul>
-          <li>Run on every node</li>
-          <li>Maintaining running pods</li>
-        </ul>
-        <li>kubelet</li>
-        <ul>
-          <li>An agent that runs on each node in the cluster</li>
-          <li>It makes sure that containers are running in a Pod.</li>
-        </ul>
-        <li>kube-proxy</li>
-        <ul>
-          <li>maintains network rules on nodes</li>
-          <li>network rules allow network communication to Pods from inside or outside of the cluster</li>
-          <li>uses the operating system packet filtering layer or forwards the traffic itself.</li>
-        </ul>
-        <li>Container runtime</li>
-        <ul>
-          <li>Responsible for running containers</li>
-          <li>Kubernetes supports several container runtimes (containerd, CRI-O)</li>
-          <li>Any implementation of the Kubernetes CRI (Container Runtime Interface)</li>
-        </ul>
-      </ul>
-    </div>
-
-    <div class="slide">
-      <hgroup>
-        <h1>Container Stack</h1>
-      </hgroup>
-      <div class="h-drawing" style="padding-top: 21px; padding-left: 21px; width: 600px" id="1H0E2ljSysot6vb-m8T1hyy4XtyDz3QLb07H-Q0lbgqs"></div>
-    </div>
-
-    <div class="slide">
-      <hgroup>
-        <h1>Pod</h1>
-      </hgroup>
-      <ul class="x-small">
-        <li>Pod</li>
-        <ul>
-          <li>A group of one or more tightly-coupled containers.</li>
-          <li>Containers share storage and network resources.</li>
-          <li>A Pod runs a single instance of a given application</li>
-          <li>Pod's containers are always co-located and co-scheduled</li>
-          <li>Pod's containers run in a shared context, i.e. in a set of Linux namespaces</li>
-        </ul>
-        <li>Pods are created using workload resources</li>
-        <ul>
-          <li>You do not create them directly</li>
-        </ul>
-        <li>Pods in a Kubernetes cluster are used in two main ways</li>
-        <ul>
-          <li>Run a single container, the most common Kubernetes use case</li>
-          <li>Run multiple containers that need to work together</li>
-        </ul>
-      </ul>
-    </div>
-
-    <div class="slide">
-      <hgroup>
-        <h1>Workloads</h1>
-      </hgroup>
-      <ul class="xx-small">
-        <li>An application running on Kubernetes</li>
-        <li>Workloads run in a set of Pods</li>
-        <li>Pre-defined workload resources to manage lifecylce of Pods</li>
-        <ul>
-          <li><b>Deployment</b> and ReplicaSet</li>
-          <ul>
-            <li>managing a stateless application workload</li>
-            <li>any Pod in the Deployment is interchangeable and can be replaced if needed</li>
-          </ul>
-          <li><b>StatefulSet</b></li>
-          <ul>
-            <li>one or more related Pods that track state</li>
-            <li>For example, if a workload records data persistently, run a StatefulSet that matches each Pod with a persistent volume.</li>
-          </ul>
-          <li>DaemonSet</li>
-          <ul>
-            <li>Ensures that all (or some) Nodes run a copy of a Pod</li>
-            <li>Such as a cluster storage daemon, logs collection, node monitoring running on every node</li>
-          </ul>
-          <li>Job and CronJob</li>
-          <ul>
-            <li>Define tasks that run to completion and then stop.</li>
-            <li>Jobs represent one-off tasks, whereas CronJobs recur according to a schedule.</li>
-          </ul>
-        </ul>
-      </ul>
-    </div>
-
-    <!-- <div class="slide">
-      <hgroup>
-        <h1>Objects</h1>
-      </hgroup>
-      <ul class="x-small">
-        <li>Persistent entities in the cluster</li>
-        <ul>
-          <li>running containerized applications (and on which nodes)</li>
-          <li>resources available to applications</li>
-          <li>policies around how applications behave</li>
-          <ul>
-            <li>restart policies, upgrades, and fault-tolerance</li>
-          </ul>
-        </ul>
-        <li>Object is a record of intent</li>
-        <ul>
-          <li>Described objects is a <b>desired state</b> of the cluster</li>
-          <li>When an object is created, the Kubernetes ensures that object exists</li>
-        </ul>
-        <li>Object spec and status</li>
-        <ul>
-          <li>Spec</li>
-          <ul>
-            <li>Desired state of the object</li>
-            <li>Description of characteristics of the object</li>
-          </ul>
-          <li>Status</li>
-          <ul>
-            <li>The current state of the object</li>
-            <li>Supplied and updated by Kubernetes</li>
-          </ul>
-        </ul>
-      </ul>
-    </div> -->
-
-    <div class="slide">
-      <hgroup>
-        <h1>Deployment Spec Example</h1>
-      </hgroup>
-      <ul class="x-small">
-        <li>Deployment spec</li>
-        <pre class="brush: bash; class-name: ''">
-          apiVersion: apps/v1
-          kind: Deployment
-          metadata:
-            name: nginx-deployment
-          spec:
-            selector:
-              matchLabels:
-                app: nginx          
-            replicas: 3 # tells deployment to run 3 pods matching the template
-            template:
-              metadata:
-                labels:
-                  app: nginx
-              spec:
-                containers:
-                - name: nginx
-                  image: nginx:1.14.2
-                  ports:
-                  - containerPort: 80          
-        </pre>
-        <ul>
-          <li>A desired state of an application running in the cluster</li>
-          <li>Kubernetes reads the Deployment spec and starts three app instances</li>
-          <li>If an instance fails, Kubernetes starts a replacement app instance</li>
-        </ul>
-      </ul>
-    </div>
-    
-    <div class="slide">
-      <hgroup>
-        <h1>Service</h1>
-      </hgroup>
-      <ul class="xx-small">
-        <li>Networking</li>
-        <ul>
-          <li>Containers within a Pod use networking to communicate via loopback</li>
-          <li>Cluster networking provides communication between different Pods.</li>
-        </ul>
-        <li>Service resource</li>
-        <ul>
-          <li>An abstract way to expose an application running on a set of Pods</li>
-          <li>Example: a set of Pods with a label <code>app=nginx</code>, each listens on <code>tcp/9376</code></li>
-          <pre class="brush: bash; class-name: ''">
-            apiVersion: v1
-            kind: Service
-            metadata:
-              name: my-service
-            spec:
-              selector:
-                app: nginx
-              ports:
-                - protocol: TCP
-                  port: 80
-                  targetPort: 9376            
-          </pre>
-          <li>This specification creates a new Service object named <code>my-service</code></li>
-          <li>The servive targets <code>tcp/9376</code> on any Pod with the <code>app=nginx</code> label.</li>
-          <li>Kubernetes assigns this Service a cluster IP address, which is used by the Service proxies.</li>
-        </ul>
-      </ul>
-    </div>
-    
-    
-    <div class="slide">
-      <hgroup>
-        <h1>Demo</h1>
-      </hgroup>
-      <ul class="xx-small">
-        <li>Environment Setup</li>
-        <ul class="no-bullet">
-          <li><code>minikube</code> &ndash; a local virtual machine (running a master and a single node)</li>
-          <li><code>kubectl</code> &ndash; CLI to access Kubernetes cluster</li>
-        </ul>
-        <li>Steps</li>
-
-        <style>
-          #steps li {
-            margin-top: 5px;
-          }
-        </style>
-
-        <ol id="steps">
-          <li>create <code>hello-node</code> app in node.js and test it [see <a href="examples/kubernetes/hellonode/server.js">server.js</a>]<br />
-            <code>node server.js</code></li>
-          <li>create docker image for the app [see <a href="examples/kubernetes/hellonode/Dockerfile">Dockerfile</a>]<br />
-            <code>docker build -t hello-node:v1 .</code></li>
-          <li>deploy the app to Kubernetes by using <code>kubectl</code><br />
-            <code>kubectl run hello-node --image=hello-node:v1 --port=8080</code></li>
-          <li>Expose the app as a load balancer service.<br />
-            <code>kubectl expose deployment hello-node --type=LoadBalancer</code></li>
-          <li>Explore the app in minikube dashboard.<br />
-            <code>minikube dashboard</code></li>
-          <li>Fire requests at the service and count them [see <a href="examples/kubernetes/hellonode/test.sh">test.sh</a>]<br />
-            <code>./test.sh</code>.</li>
-          <li>Change the number of replicas by using the dashboard or <code>kubectl</code>.</li>
-        </ol>
-    </div>
-
-
-
-  </section>
-
-
-
-  </section>
+	<footer>
+		<p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester" />,&nbsp;
+			<span class="meta_twitter" />
+		</p>
+		<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
+	</footer>
+
+	<div class="slide intro">
+		<hgroup>
+			<h1><span class="meta_course" /></h1>
+			<h2>#META_LECTURE#: #TITLE#</h2>
+		</hgroup>
+		<div class="author">
+			<p class="meta_author" />
+			<p><span class="meta_email" /> &bull; <span class="meta_twitter" /> &bull;
+				<span class="meta_web" />
+			</p>
+		</div>
+		<center>
+			<div class="meta_logo"></div>
+		</center>
+		<div class="org">
+			<p class="meta_org" />
+			<p><span class="meta_orgfac" /> &bull; <span class="meta_field" />
+				&bull; <span class="meta_orgweb" /></p>
+		</div>
+		<div class="etc">
+			<div class="text-info">
+				Modified: #LAST_MODIFIED#<br />
+				Humla v#HUMLA_VERSION#
+			</div>
+			<a href="http://creativecommons.org/licenses/by-sa/3.0/">
+				<div class="license"></div>
+			</a>
+			<div class="oppa"></div>
+		</div>
+	</div>
+
+	<div class="slide outline"></div>
+
+	<section>
+		<header>Security Concepts</header>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Web Service Security Concepts</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Securing the client-server communcation</li>
+				<ul>
+					<li>Message-level security</li>
+					<li>Transport-level security</li>
+				</ul>
+				<li>Ensure</li>
+				<ul>
+					<li>Authentication &ndash; verify a client's identity</li>
+					<li>Authorizaton &ndash; rights to access resources</li>
+					<li>Message Confidentiality &ndash; keep message content secret</li>
+					<li>Message Integrity &ndash; message content does not change during transmission</li>
+					<li>Non-repudiation &ndash; proof of integrity and origin of data</li>
+				</ul>
+				<div class="h-drawing" style="height: 190px; margin-top: 30px"
+					id="1JhEX5OGpHhQY49mxA4-r7taripW6bkWwLCu94BU9QFI"></div>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Data on the Web</h1>
+			</hgroup>
+			<div class="h-drawing" style="height: 450px" id="161LY9K1fWd-G3iNpulEEEXq1yoxvjsQxombdyV4Yyfc"></div>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Authentication and Authorization</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Authentication</li>
+				<ul>
+					<li>verification of user's identity</li>
+				</ul>
+				<li>Authorization</li>
+				<ul>
+					<li>verification that a user has rights to access a resource</li>
+				</ul>
+				<li>Standard: HTTP authentication</li>
+				<ul>
+					<li>HTTP defines two options</li>
+					<ul>
+						<li>Basic Access Authentication</li>
+						<li>Digest Access Authentication</li>
+					</ul>
+					<li>They are defined in</li>
+					<ul>
+						<li><span class="h-ref" id="rfc-2616">RFC 2616: Hypertext
+								Transfer Protocol &ndash; HTTP/1.1</span></li>
+						<li><span class="h-ref" id="rfc-2617">RFC 2617:
+								HTTP Authentication: Basic and Digest Access Authentication</span></li>
+					</ul>
+				</ul>
+				<li>Custom/proprietary: use of cookies</li>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Basic Access Authentication</h1>
+			</hgroup>
+			<div class="h-drawing" style="height: 280px" id="1OYyQduAQYodoiQ48uYTCB1iVn6UHcCcdDocjLOA9b9Y"></div>
+			<ul class="x-small">
+				<li>Realm</li>
+				<ul>
+					<li>an identifier of the space on the server (~ a collection of resources and their sub-resources)
+					</li>
+					<li>A client may associate a valid credentials with realms such that it copies authorization
+						information
+						in requests for which server requires authentication (by <code>WWW-Authenticate</code> header)
+					</li>
+				</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Basic Access Authentication &ndash; Credentials</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Credentials</li>
+				<ul>
+					<li>credentials are base64 encoded</li>
+					<li>the format is: <code>username:password</code></li>
+				</ul>
+				<pre class="brush: bash">
+						# to encode in linux
+						echo "novak:heslo" | base64
+						> bm92YWs6aGVzbG8K
+
+						# and to decode
+						echo "bm92YWs6aGVzbG8K" | base64 -d # use capital "D" in OS X
+						> novak:heslo</pre>
+
+				<li>Comments</li>
+				<ul class="x-small">
+					<li>When TLS is not used, the password can be read</li>
+					<li>An attacker can repeat interactions</li>
+				</ul>
+			</ul>
+
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Digest Access Authentication</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li>RFC 2617 &ndash; Basic and Digest Access Authentication</li>
+				<ul>
+					<li>No password between a client and a server but a hash value</li>
+					<li>Simple and advanced mechanisms (only server-generated nonce value &ndash; replay-attacks or
+						with client-generated nonce value)</li>
+				</ul>
+				<li>Basic Steps</li>
+				<ol>
+					<li>Client accesses a protected area</li>
+					<pre class="brush:bash; class-name: 'tight'">
+							> GET / HTTP/1.1</pre>
+					<li>Server requests authentication with <code>WWW-Authenticate</code></li>
+					<pre class="brush:bash; class-name: 'tight'">
+								&lt; HTTP/1.1 401 Unauthorized
+								&lt; WWW-Authenticate: Digest realm="ProtectedArea",
+								  nonce="BbdQof3DBAA=a293ff3d724989371610f03015f2d23f3cd2c045",
+								  algorithm=MD5, domain="/", qop="auth"</pre>
+					<li>Client calculates a response hash by using the realm, his/her username, the password, and the
+						quality of protection (QoP) and requests the resource with <code>authorization</code> header
+					</li>
+					<pre class="brush:bash; class-name: 'tight'">
+								> GET / HTTP/1.1
+								> Authorization: Digest username="novak", realm="ProtectedArea",
+								  nonce="BbdQof3DBAA=a293ff3d724989371610f03015f2d23f3cd2c045", uri="/",
+								  algorithm=MD5, response="c4ea2293aeb318826d1e533f363efd90", qop=auth,
+								  nc=00000001, cnonce="531ee8ba7f2a8fd1"</pre>
+				</ol>
+			</ul>
+		</div>
+
+		<!--	<div class="slide">
+				<hgroup>
+					<h1>Nonce and QoP</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Nonce</li>
+					<ul>
+						<li>A value to identify an interaction that should occur only once</li>
+						<li><code>nonce</code> &ndash; generated by the server</li>
+						<ul>
+							<li>may have a time period for which the nonce is valid</li>
+							<li>may be computed using client IP, ETag of the resource, etc.</li>
+							<li>this limits chances for the replay attack.</li>
+						</ul>
+						<li><code>cnonce</code> &ndash; generated by the client</li>
+					</ul>
+					<li>QoP &ndash; quality of protection</li>
+					<ul>
+						<li>Further improvements to prevent replay attacks and enables non-repudiation</li>
+					</ul>
+				</ul>
+			</div>
+
+    		<div class="slide">
+				<hgroup>
+					<h1>Algorithms</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Algorithm for <code>response</code> value of <code>authorization</code> header</li>
+					<ul>
+						<li>No quality of protection (<code>qop</code> is missing or <code>qop=none</code>)</li>
+						<ul>
+							<li>limits chances of replay-attacks</li>
+						</ul>
+						<pre class="brush: bash; class-name: 'tight'">
+							HA1 = MD5(username:realm:password)
+							HA2 = MD5(method:digestURI)
+							response = MD5(HA1:nonce:HA2)</pre>
+						<li>with quality of protection (<code>qop=auth</code>)</li>
+						<pre class="brush: bash; class-name: 'tight'">
+							HA1 = MD5(username:realm:password)
+							HA2 = MD5(method:digestURI)
+							response = MD5(HA1:nonce:nonceCount:cnonce:qop:HA2)</pre>
+							<li>with quality of protection for message integrity (<code>qop=auth-int</code>)</li>
+							<ul>
+								<li>enables non-repudiation (i.e., proof of integrity and origin of data)</li>
+							</ul>
+							<pre class="brush: bash; class-name: 'tight'">
+								HA1 = MD5(username:realm:password)
+								HA2 = MD5(method:digestURI:MD5(payload))
+								response = MD5(HA1:nonce:nonceCount:cnonce:qop:HA2)</pre>
+					</ul>
+
+				</ul>
+			</div>
+
+    		<div class="slide">
+				<hgroup>
+					<h1>Replay Attack</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Replay Attack Scenario (quality of protection is <code>none</code>)</li>
+					<ul>
+						<li>The communication is not encrypted (i.e., no use of HTTPS)</li>
+						<li>Eve listens to the Alice's communication (e.g. on a proxy server)</li>
+						<li>Eve resends requests with headers from Alice's requests</li>
+					</ul>
+				</ul>
+				<div class="h-drawing" id="1gQvg53vE3p9o_YRI3zYx3uBEfiT6YjiuznHN0A8O2QA" style="height: 380px"></div>
+			</div>
+
+    		<div class="slide">
+				<hgroup>
+					<h1>Replay Attack (Cont.)</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Replay Attack Scenario (quality of protection is <code>auth</code> or <code>auth-int</code>)</li>
+					<ul>
+						<li><code>nonceCount</code> should be incremented in every request to a response of the nonce
+							value from the server</li>
+					</ul>
+				</ul>
+				<div class="h-drawing" id="1Jto8zZvp-q7IANoQ0lckKsPHP1e5LetG7nJs8jI3Xyg" style="height: 380px"></div>
+			</div>      -->
+
+	</section>
+
+	<div class="slide outline"></div>
+
+	<section>
+		<header>Transport Level Security</header>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Overview</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>SSL and TLS</li>
+				<ul>
+					<li>SSL and TLS is used interchangeably</li>
+					<li>SSL 3.0 developed by Netscape</li>
+					<li>IETF standardization of SSL 3.0 is TLS 1.0</li>
+					<ul>
+						<li>TLS 1.0 is upgrade of SSL 3.0</li>
+					</ul>
+					<li>Due to security flaws in TLS 1.0, TLS 1.1 and TLS 1.2 were created</li>
+				</ul>
+				<li>TLS layer</li>
+				<img src="img/TLS.png" style="height: 250px" />
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>TLS Services</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li>Encryption</li>
+				<ul>
+					<li>Peers must agree on ciphersuite and keys</li>
+					<li>This is achieved by <b>TLS handshake</b></li>
+				</ul>
+				<li>Authentication</li>
+				<ul>
+					<li>Peers can authenticate their identity</li>
+					<ul>
+						<li>The client can verify that the server is who it is claimed to be</li>
+						<li>Achieved by "Chain of Trust and Certificate Authoritites"</li>
+						<li>The server can also verify the client</li>
+					</ul>
+				</ul>
+				<li>Integrity</li>
+				<ul>
+					<li>TLS provives message framing mechanism</li>
+					<li>Every message is signed with Message Authentication Code (MAC)</li>
+					<ul>
+						<li>MAC hashes data in a message and combines the resulting hash with a key (negotiated during
+							the TLS handshake)</li>
+						<li>The result is a message authentication code sent with the message</li>
+					</ul>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>TLS Handshake Protocol</h1>
+			</hgroup>
+			<img src="img/tls-handshake.png" style="padding-top: 10px; padding-left: 20px; height: 300px" />
+			<ul class="xx-small">
+				<li>TLS Handshake</li>
+				<ul>
+					<li class="no-bullet">56 ms: ClientHello, TLS protocol version, list of ciphersuites, TLS options
+					</li>
+					<li class="no-bullet">84 ms: ServerHello, TLS protocol version, ciphersuite, certificate</li>
+					<li class="no-bullet">112 ms: RSA or Diffie-Hellman key exchange</li>
+					<li class="no-bullet">140 ms: Message integrity checks, sends encrypted "Finished" message</li>
+					<li class="no-bullet">168 ms: Decrypts the message, app data can be sent</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Key Exchange</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li>RSA key exhange(Rivest–Shamir–Adleman)</li>
+				<ul>
+					<li>The client generates a symetric key</li>
+					<li>The client encrypts the key with the server's public key</li>
+					<li>The client sends the encrpyed key to the server</li>
+					<li>The server uses its private key to decrypt the symetric key</li>
+				</ul>
+				<li>RSA critical weekness</li>
+				<ul>
+					<li>The same public-private key pair is used to:</li>
+					<ul>
+						<li>authenticate the server (the server's private key is used to sign and verify the handshake)
+						</li>
+						<li>encrypt the symetric key</li>
+					</ul>
+					<li>When an attacker gets hold of the server private key</li>
+					<ul>
+						<li>It can decrypt the entire session</li>
+					</ul>
+				</ul>
+				<li>Diffie-Hellman key exhange</li>
+				<ul>
+					<li>Client and server can negoriate shared secret without its explicit communication</li>
+					<ul>
+						<li>Attacker cannot get the key</li>
+					</ul>
+					<li>Reduction of risk of compromising of the past communications</li>
+					<ul>
+						<li>New key can be generated as part of every key exchange</li>
+						<li>Old keys can be discarded</li>
+					</ul>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>TLS and Proxy Servers</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li>TLS Offloading</li>
+				<ul>
+					<li>Inbound TLS connection, plain outbound connection</li>
+					<li>Proxy can inspect messages</li>
+				</ul>
+				<li>TLS Bridging</li>
+				<ul>
+					<li>Inbound TLS connection, new outbound TLS connection</li>
+					<li>Proxy can inspect messages</li>
+				</ul>
+				<li>End-to-End TLS (TLS pass-through)</li>
+				<ul>
+					<li>TLS connection is passed-through the proxy</li>
+					<li>Proxy cannot inspect messages</li>
+				</ul>
+				<li>Load balancer</li>
+				<ul>
+					<li>Can use TLS offloading or TLS bridging</li>
+					<li>Can use TLS pass-through with help of Server Name Indication (SNI)</li>
+				</ul>
+			</ul>
+		</div>
+
+	</section>
+
+	<div class="slide outline"></div>
+
+	<section>
+		<header>JSON Web Token</header>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Overview</h1>
+			</hgroup>
+			<ul>
+				<li>JSON Web Token (JWT)</li>
+				<ul>
+					<li>Open standard (RFC 7519)</li>
+					<li>Mechanism to securely transmit information between parties as a JSON object.</li>
+					<li>Can be <b>verified</b> and <b>trusted</b> as it is <b>digitally signed</b>.</li>
+				</ul>
+				<li>Basic concepts</li>
+				<ul>
+					<li>Compact</li>
+					<ul>
+						<li>has a small size</li>
+						<li>can be transmitted via a URL, POST, HTTP header.</li>
+					</ul>
+					<li>Self-contained</li>
+					<ul>
+						<li>payload contains all required user information.</li>
+					</ul>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Use of JWT</h1>
+			</hgroup>
+			<ul>
+				<li>Authentication</li>
+				<ul>
+					<li>After user logs in, following requests contain JWT token.</li>
+					<li>Single Sign On widely uses JWT nowadays</li>
+				</ul>
+				<li>Information Exchange</li>
+				<ul>
+					<li>Signature ensures senders are who they say they are.</li>
+					<li>Message integrity &ndash; signature calculated using the header and the payload.</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>JWT Structure</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li class="no-bullet"><code>&lt;header&gt;.&lt;payload&gt;.&lt;signature&gt;</code></li>
+				<li>Header</li>
+				<ul>
+					<li>Contains two parts, the type of the token (JWT) and the hashing algorithm being used (e.g. HMAC,
+						SHA256, RSA).</li>
+
+					<pre class="brush: javascript; class-name: 'tight'; gutter: false">
+							{
+							  "alg": "HS256",
+							  "typ": "JWT"
+							}</pre>
+				</ul>
+				<li>Payload</li>
+				<ul>
+					<li>Contains the claims, i.e. statements about an entity (e.g. user).</li>
+					<li>Can be registered, public and private</li>
+					<li>Registered and public should be defined in <a
+							href="https://www.iana.org/assignments/jwt/jwt.xhtml">IANA JSON Web Token Registry</a></li>
+
+					<pre class="brush: javascript; class-name: 'tight'; gutter: false">
+							{
+							  "sub": "1234567890",
+							  "name": "John Doe",
+							  "admin": true
+							}</pre>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>JWT Structure (Cont.)</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Signature</li>
+				<ul>
+					<li>Signed encoded header, encoded payload and a secret.</li>
+					<li>For example, signature using HMAC SHA256 algorithm</li>
+
+					<pre class="brush: plain; class-name: 'tight'; gutter: false">
+						HMACSHA256(
+  							base64UrlEncode(header) + "." +
+  							base64UrlEncode(payload),
+  							secret)</pre>
+				</ul>
+				<li>Example</li>
+				<ul>
+					<li>JWT is a three Base64-URL strings separated by dots</li>
+					<img src="img/jwt-example.png" style="width: 600px"></img>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>How to use JWT</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<img src="img/jwt-diagram.png"
+					style="margin-left: 90px; margin-bottom: 5px; margin-top: 5px; width: 550px"></img>
+				<ol>
+					<li>User sends username and password</li>
+					<li>Server verifies user, creates JWT token with a secret and a expiration time</li>
+					<li>Server sends JWT token back to the Browser</li>
+					<li>Browser sends JWT token on subsequent interations</li>
+				</ol>
+				<ul>
+					<li class="no-bullet"><b>Notes</b></li>
+					<ul>
+						<li>Authorization header does not behave the same as cookies!</li>
+						<li>JWT should not contain secrets (passwords) as it can be read<br />(on the client or if
+							non-https connection is used)</li>
+					</ul>
+				</ul>
+		</div>
+
+
+	</section>
+
+	<div class="slide outline"></div>
+
+	<section>
+		<header>OAuth 2.0</header>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Motivation</h1>
+			</hgroup>
+			<ul>
+				<li>Cloud Computing &ndash; Software as a Service</li>
+				<ul>
+					<li>Users utilize apps in clouds</li>
+					<ul>
+						<li>they access <b>resources</b> via Web browsers</li>
+						<li>they store their data in the cloud</li>
+						<li>Google Docs, Contacts, etc.</li>
+					</ul>
+					<li>The trend is that SaaS are open</li>
+					<ul>
+						<li>can be extended by 3rd-party developers through APIs</li>
+						<li>attract more users &rArr; increases value of apps</li>
+					</ul>
+					<li>Apps extensions need to have an access to users' data</li>
+				</ul>
+				<li>Need for a new mechanism to access resources</li>
+				<ul>
+					<li><b>Users can grant access to third-party apps without exposing
+							their users' credentials</b></li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>When there is no OAuth</h1>
+			</hgroup>
+			<div id="1wy5WvxoCMRKcNVCo59i25gvxNIH-1-LPiNLBJcePeq8" class="h-drawing" style="height: 350px"></div>
+			<ul class="xx-small">
+				<li>Users must share their credentials with the 3rd-party app</li>
+				<li>Users cannot control what and how long the app can access resources</li>
+				<li>Users must trust the app</li>
+				<ul>
+					<li>In case of misuse, users can only change their passwords</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>OAuth 2.0 Protocol</h1>
+			</hgroup>
+			<ul class="small">
+				<li>OAuth Objectives</li>
+				<ul>
+					<li>users can grant access to third-party applications</li>
+					<li>users can revoke access any time</li>
+					<li>supports:</li>
+					<ul>
+						<li>client-side web apps (implicit grant),</li>
+						<li>server-side apps (authorization code), and</li>
+						<li>native (desktop) apps (authorization code)</li>
+					</ul>
+				</ul>
+				<li>History</li>
+				<ul class="x-small">
+					<li>Initiated by Google, Twitter, Yahoo!</li>
+					<li>Different, non-standard protocols first: ClientLogin, AuthSub</li>
+					<li>OAuth 1.0 &ndash; first standard, security problems, quite complex</li>
+					<li>OAuth 2.0 &ndash; new version, not backward compatibile with 1.0</li>
+				</ul>
+				<li>Specifications and adoption</li>
+				<ul class="x-small">
+					<li><span class="h-ref" id="oauth"></span></li>
+					<li><span class="h-ref" id="oauth20-google"></span></li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Terminology</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li><b>Client</b></li>
+				<ul>
+					<li>a third-party app accessing resources owned by <b>resource owner</b></li>
+				</ul>
+				<li><b>Resource Owner</b> (also user)</li>
+				<ul>
+					<li>a person that owns a resource stored in the <b>resource server</b></li>
+				</ul>
+				<li><b>Authorization and Token Endpoints</b></li>
+				<ul>
+					<li>endpoints provided by an <b>authorization server</b> through which
+						a <b>resource owner</b> authorizes requests.</li>
+				</ul>
+				<li><b>Resource Server</b></li>
+				<ul>
+					<li>an app that stores resources owned by a <b>resource owner</b></li>
+					<li>For example, contacts in Google Contacts</li>
+				</ul>
+				<li><b>Authorization Code</b></li>
+				<ul>
+					<li>a code that a <b>client</b> uses to request <b>access tokens</b> to access resources</li>
+				</ul>
+				<li><b>Access Token</b></li>
+				<ul>
+					<li>a code that a <b>client</b> uses to access resources</li>
+				</ul>
+			</ul>
+			</ul>
+		</div>
+
+		<div class="slide outline"></div>
+
+		<section>
+			<header>Client-side Web Apps</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Client-side Web Apps</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Simplified version of OAuth 2.0 protocol</li>
+					<ul>
+						<li>JavaScript/AJAX apps running in a browser</li>
+						<li>Apps that cannot easily "remember" app state</li>
+						<li>limited number of interactions</li>
+					</ul>
+					<li>Architecture</li>
+					<ul>
+						<li>User-agent processes a javascript/HTML code from the client</li>
+						<li>No need of authorization code</li>
+					</ul>
+					<li>Basic Steps</li>
+					<ul>
+						<li>A client redirects a user agent to the authorization endpoint</li>
+						<li>A resource owner grants an access to the client</li>
+						<ul>
+							<li>or he/she rejects the request</li>
+						</ul>
+						<li>Authorization server provides an <code>access_token</code> to the client</li>
+						<li>Client access the resource with the <code>access_token</code></li>
+						<li>When the token expires, client requests a new token</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Demo &ndash; List of Contacts</li>
+				</hgroup>
+				<ul class="small">
+					<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"
+						type="text/javascript"></script>
+					<li>Display your Google contacts</li>
+					<ul>
+						<li>this demo requests authorization from you to access your Google contacts using client-side
+							OAuth 2.0 protocol
+							and then displays the contacts below. In order to transfer <code>access_token</code> from
+							authorization window,
+							it stores the <code>access_token</code> in a cookie.</li>
+						<li><code>access_token</code> <input style="font-size: 18px" id="ati" type="text" value=""
+								size="60"></input></li>
+						<li><a href="javascript:showContacts()">Show contacts</a> or <a target="revokew"
+								href="https://www.google.com/accounts/IssuedAuthSubTokens">revoke access</a></li>
+					</ul>
+
+					<div id="contacts_out" style="height: 200px; overflow: hidden"></div>
+
+					<style>
+						#contacts_out {
+							margin: 10px 0px 0px 8px;
+						}
+
+						#contacts_out p {
+							margin: 0px 0px 3px 0px;
+							font-size: 13px;
+						}
+					</style>
+
+					<script type="text/javascript">
+						// gets the cookie based on its name
+						function getCookie(c_name) {
+							var i, x, y, ARRcookies = document.cookie.split(";");
+							for (i = 0; i < ARRcookies.length; i++) {
+								x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+								y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+								x = x.replace(/^\s+|\s+$/g, "");
+								if (x == c_name) {
+									return unescape(y);
+								}
+							}
+						}
+
+						// shows a dialog to ask the user for authorization
+						function requestAuth() {
+							document.getElementById("ati").value = "";
+							url = "https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/contacts&" +
+								"client_id=621535099260.apps.googleusercontent.com&redirect_uri=" +
+								"https://w20.vitvar.com/examples/oauth/callback.html&response_type=token";
+							var newWindow = window.open(url, 'name', 'height=600,width=450');
+							if (window.focus) {
+								newWindow.focus();
+							}
+							return;
+						}
+
+						// displays contacts; if not authorized asks for authorization first
+						function showContacts() {
+							document.getElementById("contacts_out").innerHTML = "";
+							var ati = document.getElementById("ati");
+							var at = getCookie("w20-token");
+
+							if (ati.value != "")
+								at = ati.value;
+
+							if (at == null) {
+								// access token not found, request authorization
+								requestAuth();
+							} else {
+								ati.value = at;
+								var url = "https://people.googleapis.com/v1/people/me/connections?personFields=addresses,names&oauth_token=" +
+									at + "&alt=json";
+								try {
+									// send XHR, synchronously
+									xhr = new XMLHttpRequest();
+									xhr.open("GET", url, false);
+									xhr.send();
+
+									// get the JSON data
+									data = eval("(" + xhr.responseText + ')');
+
+									// format and display output
+									var l = "";
+									for (i = 0; i < data.connections.length; i++)
+										try {
+											l += "<p>" + data.connections[i].names[0].displayNameLastFirst + "</p>";
+										} catch (e) { }
+									document.getElementById("contacts_out").innerHTML = l;
+
+								} catch (e) {
+									// error, 101 is a network error such as invalid token
+									if (e.code == 101)
+										requestAuth();
+									else
+										// throw the error otherwise
+										throw e;
+								}
+							}
+						}
+					</script>
+
+				</ul>
+			</div>
+
+			<!--<div class="slide">
+					<hgroup>
+						<h1>Demo Details</li>
+					</hgroup>
+					<div id="1t5Oe1WzstsrOomFF0SHszjYztMgwHnv0thAjecUlA0Y"
+						style="height: 470px; margin-top: 20px" class="h-drawing"></div>
+				</div>-->
+
+			<div class="slide">
+				<hgroup>
+					<h1>Client-side Web Apps Protocol</li>
+				</hgroup>
+				<div id="1Qik6Z_dLbSkcQmS7ubWtcUpyvhF12zqqLgcY634Y7TA"
+					style="height: 440px; margin-top: 20px; margin-left: -10px" class="h-drawing"></div>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Redirection &ndash; Step 1</li>
+				</hgroup>
+				<ul class="x-small">
+					<li>Methods and Parameters</li>
+					<ul>
+						<li>Methods: <code>GET</code> or <code>POST</code></li>
+						<li>example authorazation endpoint url (Google):
+							<code>https://accounts.google.com/o/oauth2/auth</code>
+						</li>
+						<li>query string parameters or <code>application/x-www-form-urlencoded</code></li>
+						<ul>
+							<li><code>client_id</code> &ndash; id of the client that was previously registered</li>
+							<li><code>redirect_uri</code> &ndash; an URI that auth. server will redirect to when user
+								grants/rejects</li>
+							<li><code>scope</code> &ndash; string identifying resources/services to be accessed</li>
+							<li><code>response_type</code> &ndash; type of the response (<code>token</code> or
+								<code>code</code>)
+							</li>
+							<li><code>state</code> (optional) &ndash; state between request and redirect</li>
+							</li>
+						</ul>
+						<li>Example</li>
+						<pre class="brush: plain; class-name: 'tight'">
+							https://accounts.google.com/o/oauth2/auth?
+							client_id=621535099260.apps.googleusercontent.com&amp;
+							redirect_uri=http://w20.vitvar.com/examples/oauth/callback.html&
+							scope=https://www.google.com/m8/feeds&
+							response_type=token</pre>
+					</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Callback &ndash; steps 4 and 5</li>
+				</hgroup>
+				<ul class="small">
+					<li>Resource owner grants the access</li>
+					<ul>
+						<li>authorization server calls back <code>redirect_uri</code></li>
+						<li>client parses URL in JavaScript (Step 5)</li>
+						<ul>
+							<li>extracts <code>access_token</code> and <code>expires_in</code>
+								(by using <code>window.location.hash</code>)</li>
+						</ul>
+						<li>Example:</li>
+						<pre class="brush: plain">
+							https://w20.vitvar.com/examples/oauth/callback.html#
+							access_token=1/QbZfgDNsnd&
+							expires_in=4301</pre>
+					</ul>
+					<li>Resource owner rejects the access</li>
+					<ul>
+						<li>authorization server calls back <code>redirect_uri</code> with query string parameter
+							<code>error=access_denied</code>
+						</li>
+						<li>Example:</li>
+						<pre class="brush: plain">
+								hhttp://w20.vitvar.com/examples/oauth/callback.html?
+								error=access_denied</pre>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Accessing Resources &ndash; Step 6</li>
+				</hgroup>
+				<ul class="x-small">
+					<li>Request</li>
+					<ul>
+						<li>client can access resources defined by <code>scope</code></li>
+						<li>resources' URIs defined in a particular documentation</li>
+						<li>Example Google Contacts</li>
+						<ul>
+							<li>to access all users' contacts stored in Google</li>
+							<li><code>scope</code> is <code>https://www.google.com/m8/feeds</code></li>
+						</ul>
+						<li>Query string parameter <code>oauth_token</code></li>
+						<pre class="brush: plain; class-name: 'tight'">
+							curl https://www.google.com/m8/feeds/contacts/default/full?
+								oauth_token=1/dERFd34Sf</pre>
+						<li>HTTP Header <code>Authorization</code></li>
+						<pre class="brush: plain; class-name: 'tight'">
+								curl -H "Authorization: OAuth 1/dERFd34Sf"
+									https://www.google.com/m8/feeds/contacts/default/full</pre>
+						<li>The client can do any allowed operations on the resource</li>
+					</ul>
+					<li>Response</li>
+					<ul>
+						<li>Success &ndash; <code>200 OK</code></li>
+						<li>Error &ndash; <code>401 Unauthorized</code> when
+							token expires or the client hasn't performed the authorization request.</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Cross-Origin Resource Sharing</li>
+				</hgroup>
+				<div id="1UBnN8oyshd9h67q-xNiXq4bSoBBsx7D0E2PQA1gkB2s" class="h-drawing" style="height: 430px"></div>
+				<ul>
+					<ul class="small" style="margin-top: 20px">
+						<li>see <a target="lec4" href="lecture4.html#/sameorigin"> Same Origin and Cross-Origin</a> for
+							details</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Example Application Registration</h1>
+				</hgroup>
+				<center>
+					<img src="img/GoogleAPIConsole.png" style="height: 450px; margin-top: 20px"
+						alt="Google API Console"></img>
+				</center>
+			</div>
+
+		</section>
+
+		<div class="slide outline"></div>
+
+		<section>
+			<header>Server-side Web Apps</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Server-side Web Apps</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Additional interactions</li>
+					<ul>
+						<li>server-side code (any language), the app can maintain the state</li>
+						<li>additional interactions, authorization code</li>
+					</ul>
+					<li>Architecture</li>
+					<ul>
+						<li>Client at a server requests, remembers and refresh access tokens</li>
+					</ul>
+					<li>Basic steps</li>
+					<ul>
+						<li>Client redirects user agent to the authorization endpoint</li>
+						<li>Resource owner grants access to the client or rejects the request</li>
+						<li style="color: maroon">Authorization server provides <b>authorization code</b> to the client
+						</li>
+						<li style="color: maroon">Client requests <b>access</b> and <b>refresh tokens</b> from the auth.
+							server</li>
+						<li style="color: maroon">Client access the resource with the access token</li>
+						<li style="color: maroon">When the token expires, client refreshes a token with refresh token
+						</li>
+					</ul>
+					<li>Advantages</li>
+					<ul>
+						<li>Access tokens not visible to clients, they are stored at the server</li>
+						<li>more secure, clients need to authenticate before they can get tokens</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Server-side Web Apps Protocol</li>
+				</hgroup>
+				<div id="1dzS2Ol7ZLq-ZyN2o608ywULbaeTsaRlj1u-8EHkmRH0"
+					style="height: 440px; margin-top: 20px; margin-left: -10px" class="h-drawing"></div>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Redirection &ndash; Step 1</li>
+				</hgroup>
+				<ul class="x-small">
+					<li>Methods and Parameters</li>
+					<ul>
+						<li>same as for client-side app, except <code>response_type</code> must be <code>code</code>
+						</li>
+					</ul>
+					<li>Example</li>
+					<pre class="brush: plain; class-name: 'tight'">
+							https://accounts.google.com/o/oauth2/auth?
+							client_id=621535099260.apps.googleusercontent.com&
+							redirect_uri=http://w20.vitvar.com/examples/oauth/callback.html&
+							scope=https://www.google.com/m8/feeds&
+							response_type=code</pre>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Callback + Access Token Request &ndash; steps 4, 5</li>
+				</hgroup>
+				<ul class="x-small">
+					<li>Callback</li>
+					<ul>
+						<li>authorization server calls back <code>redirect_uri</code></li>
+						<li>client gets the <code>code</code> and requests <code>access_token</code></li>
+						<li>example (resource owner grants access):<br />
+							<code>http://w20.vitvar.com/examples/oauth/callback.html?code=4/P7...</code>
+						</li>
+						<li>when user rejects &rarr; same as client-side access</li>
+					</ul>
+					<li>Access token request</li>
+					<ul>
+						<li><code>POST</code> request to token endpoint<br />
+							&rarr; example Google token endpoint:
+							<code>https://accounts.google.com/o/oauth2/token</code>
+						</li>
+						<pre class="brush: plain; class-name: 'tight'">
+							POST /o/oauth2/token HTTP/1.1
+							Host: accounts.google.com
+							Content-Type: application/x-www-form-urlencoded
+
+							code=4/P7q7W91a-oMsCeLvIaQm6bTrgtp6&
+							client_id=621535099260.apps.googleusercontent.com&
+							client_secret=XTHhXh1S2UggvyWGwDk1EjXB&
+							redirect_uri=http://w20.vitvar.com/examples/oauth/callback.html&
+							grant_type=authorization_code</pre>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Access Token (cont.)</li>
+				</hgroup>
+				<ul class="x-small">
+					<li>Access token response</li>
+					<ul>
+						<li>Token endpoint responds with <code>access_token</code> and <code>refresh_token</code></li>
+						<pre class="brush: javascript">
+							{ "access_token"   : "1/fFAGRNJru1FTz70BzhT3Zg",
+							  "expires_in"     : 3920,
+							  "refresh_token"  : "1/6BMfW9j53gdGImsixUH6kU5RsR4zwI9lUVX-tqf8JXQ" }</pre>
+					</ul>
+					<li>Refreshing a token</li>
+					<ul>
+						<li><code>POST</code> request to the token endpoint with <code>grant_type=refresh_token</code>
+							and
+							the previously obtained value of <code>refresh_token</code></li>
+						<pre class="brush: plain">
+							POST /o/oauth2/token HTTP/1.1
+							Host: accounts.google.com
+							Content-Type: application/x-www-form-urlencoded
+
+							client_id=21302922996.apps.googleusercontent.com&
+							client_secret=XTHhXh1SlUNgvyWGwDk1EjXB&
+							refresh_token=1/6BMfW9j53gdGImsixUH6kU5RsR4zwI9lUVX-tqf8JXQ&
+							grant_type=refresh_token</pre>
+					</ul>
+					<li>Accessing a resource is the same as in the client-side app</li>
+				</ul>
+			</div>
+
+		</section>
+
+		<!-- <div class="slide outline"></div>
+
+		<section>
+			<header>OAuth 2.0 vs. OAuth 1.0</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Why new version?</h1>
+				</hgroup>
+				<ul class="small">
+					<li>OAuth 1.0 in brief</li>
+					<ul>
+						<li>security not based on SSL</li>
+						<li>client must sign every request using a defined algorithm</li>
+						<ul>
+							<li>e.g., public-private key signatures by RSA</li>
+						</ul>
+						<li>More complex to be implemented by clients</li>
+						<ul>
+							<li>although client libraries exist</li>
+						</ul>
+						<li>not suitable for JavaScript-based clients</li>
+					</ul>
+					<li>OAuth 2.0 simplifies the process</li>
+					<ul>
+						<li>SSL is required for all communications to generate the token</li>
+						<li>Signatures are not required for the actual API calls once the token has been generated</li>
+						<ul>
+							<li>SSL is also strongly recommended here</li>
+						</ul>
+						<li>supports various clients including JavaScript and mobile</li>
+					</ul>
+				</ul>
+			</div>
+		</section>
+
+	</section> -->
+	</section>
+
+	<div class="slide outline"></div>
+
+	<section>
+		<header>OpenID</header>
+
+		<div class="slide">
+			<hgroup>
+				<h1>OpenID Protocol</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Motivation &ndash; many user accounts</li>
+				<ul>
+					<li>users need to maintain many accounts to access various services</li>
+					<li>multiple passwords problem</li>
+				</ul>
+				<li>Objectives</li>
+				<ul>
+					<li>allows apps to utilize an OpenID provider</li>
+					<ul>
+						<li>a third-party authentication service</li>
+						<li>federated login</li>
+					</ul>
+					<li>users have one account with the OpenID provider and
+						use it for apps that support the provider</li>
+				</ul>
+				<li>OpenID providers</li>
+				<ul>
+					<li>it is a protocol, anybody can build a provider</li>
+					<li>Google, Yahoo!, Seznam.cz, etc.</li>
+				</ul>
+				<li>Specification</li>
+				<ul>
+					<li><span id="openid" class="h-ref"></span></li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Interaction Sequence</h1>
+			</hgroup>
+			<div id="1GSYwFzCiTi8QtQK1Ywgz1e2rVs-6VjuEJhnBb3E_ZEY" class="h-drawing" style="height: 340px"></div>
+			<ul class="xx-small">
+				<li>Discovery &ndash; discovery of a service associated with a resource</li>
+				<li>XRDS &ndash; eXtensible Resource Descriptor Sequence</li>
+				<ul>
+					<li>format for discovery result</li>
+					<li>developed to serve resource discovery for OpenID</li>
+					<li>Web app retrieves endpoint to send login authentication requests</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Login Authentication Request &ndash; Step 5</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Example Google OpenID provider</li>
+				<pre class="brush: plain">
+					https://www.google.com/accounts/o8/id
+					?openid.ns=http://specs.openid.net/auth/2.0
+					&openid.return_to=https://www.example.com/checkauth
+					&openid.realm=http://www.example.com/
+					&openid.assoc_handle=ABSmpf6DNMw
+					&openid.mode=checkid_setup</pre>
+				<li>Parameters</li>
+				<ul>
+					<li><code>ns</code> &ndash; protocol version (obtained from the XRDS)</li>
+					<li><code>mode</code> &ndash; type of message or additional semantics
+						(<code>checkid_setup</code> indicates that interaction between the provider and the user
+						is allowed during authentication)</li>
+					<li><code>return_to</code> &ndash; callback page the provider sends the result</li>
+					<li><code>realm</code> &ndash; domain the user will trust, consistent with <code>return_to</code>
+					</li>
+					<li><code>assoc_handle</code> &ndash; "log in" for web app with openid provider</li>
+					<li class="no-bullet" style="margin-top: 20px">* Not all fields shown,
+						check the OpenID spec for the full list of fields and their values</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Login Authentication Response &ndash; Step 8</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>User logins successfully</li>
+				<pre class="brush: plain">
+					http://www.example.com/checkauth
+					?openid.ns=http://specs.openid.net/auth/2.0
+					&openid.mode=id_res
+					&openid.return_to=http://www.example.com:8080/checkauth
+					&openid.assoc_handle=ABSmpf6DNMw
+					&openid.identity=https://www.google.com/accounts/o8/id/id=ACyQatiscWvwqs4UQV_U</pre>
+				<ul>
+					<li>Web app will use <code>identity</code> to identify user in the application</li>
+					<li>response is also signed using a list of fields in the response (not shown in the listing)</li>
+				</ul>
+				<li>User cancels</li>
+				<pre class="brush: plain">
+					http://www.example.com/checkauth
+					?openid.mode=cancel
+					&openid.ns=http://specs.openid.net/auth/2.0</pre>
+				<ul>
+					<li class="no-bullet" style="margin-top: 20px">* Not all fields shown,
+						check the OpenID spec for the full list of fields and their values</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide outline"></div>
+
+		<section>
+			<header>OpenID Connect</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>OpenID Connect (OIDC)</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Simple identity layer on top of the OAuth 2.0 protocol</li>
+					<ul>
+						<li>Authorization Server to verify identity of users</li>
+						<li>Clients can obtain basic profile information about users</li>
+					</ul>
+					<li>OIDC vs OpenID</li>
+					<ul>
+						<li>OIDC does many of the same tasks as OpenID 2.0</li>
+						<li>API-friendly</li>
+						<ul>
+							<li>can be used by native and mobile applications</li>
+						</ul>
+						<li>Robust signing and encryption mechanisms</li>
+						<li>Native integration with OAuth 2.0.</li>
+					</ul>
+					<li>Defined by OpenID open standard</li>
+					<ul>
+						<li><a href="https://openid.net/connect/">OpenID Connect</a></li>
+					</ul>
+
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Interaction sequence</h1>
+				</hgroup>
+				<div id="1OnFj-xVRzZgoEmZxOqWqi2_BAlKcXAmwwJ7ujGegQHs" class="h-drawing" style="width: 700px"></div>
+			</div>
+
+		</section>
+
+
+	</section>
+
+
+
+
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
 	Web 2.0, CTU course slides
-	(cc) 2010-2013 Tomas Vitvar, tomas@vitvar.com
+	(cc) 2010-2014 Tomas Vitvar, tomas@vitvar.com
 -->
 <html>
 
@@ -9,7 +9,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="course" content="Web 2.0" />
 	<meta name="lecture" content="Lecture 5" />
-	<meta name="keywords" content="OAuth 2.0, TLS, open id, security, authorization, authentication" />
+	<meta name="keywords" content="SaaS, IaaS, PaaS" />
 
 	<link type="text/css" rel="stylesheet" href="css/meta.css">
 	</link>
@@ -19,14 +19,15 @@
 	</link>
 
 	<script type="text/javascript" src="humla/lib/humla.js"></script>
-	<title>Security</title>
+	<title>Cloud Architectures</title>
 </head>
 
 <body>
 
 	<footer>
 		<p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester" />,&nbsp;
-			<span class="meta_twitter" /></p>
+			<span class="meta_twitter" />
+		</p>
 		<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
 	</footer>
 
@@ -38,7 +39,8 @@
 		<div class="author">
 			<p class="meta_author" />
 			<p><span class="meta_email" /> &bull; <span class="meta_twitter" /> &bull;
-				<span class="meta_web" /></p>
+				<span class="meta_web" />
+			</p>
 		</div>
 		<center>
 			<div class="meta_logo"></div>
@@ -63,1156 +65,480 @@
 	<div class="slide outline"></div>
 
 	<section>
-		<header>Security Concepts</header>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Web Service Security Concepts</h1>
-			</hgroup>
-			<ul class="x-small">
-				<li>Securing the client-server communcation</li>
-				<ul>
-					<li>Message-level security</li>
-					<li>Transport-level security</li>
-				</ul>
-				<li>Ensure</li>
-				<ul>
-					<li>Authentication &ndash; verify a client's identity</li>
-					<li>Authorizaton &ndash; rights to access resources</li>
-					<li>Message Confidentiality &ndash; keep message content secret</li>
-					<li>Message Integrity &ndash; message content does not change during transmission</li>
-					<li>Non-repudiation &ndash; proof of integrity and origin of data</li>
-				</ul>
-				<div class="h-drawing" style="height: 190px; margin-top: 30px" id="1JhEX5OGpHhQY49mxA4-r7taripW6bkWwLCu94BU9QFI"></div>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Data on the Web</h1>
-			</hgroup>
-			<div class="h-drawing" style="height: 450px" id="161LY9K1fWd-G3iNpulEEEXq1yoxvjsQxombdyV4Yyfc"></div>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Authentication and Authorization</h1>
-			</hgroup>
-			<ul class="small">
-				<li>Authentication</li>
-				<ul>
-					<li>verification of user's identity</li>
-				</ul>
-				<li>Authorization</li>
-				<ul>
-					<li>verification that a user has rights to access a resource</li>
-				</ul>
-				<li>Standard: HTTP authentication</li>
-				<ul>
-					<li>HTTP defines two options</li>
-					<ul>
-						<li>Basic Access Authentication</li>
-						<li>Digest Access Authentication</li>
-					</ul>
-					<li>They are defined in</li>
-					<ul>
-						<li><span class="h-ref" id="rfc-2616">RFC 2616: Hypertext
-								Transfer Protocol &ndash; HTTP/1.1</span></li>
-						<li><span class="h-ref" id="rfc-2617">RFC 2617:
-								HTTP Authentication: Basic and Digest Access Authentication</span></li>
-					</ul>
-				</ul>
-				<li>Custom/proprietary: use of cookies</li>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Basic Access Authentication</h1>
-			</hgroup>
-			<div class="h-drawing" style="height: 280px" id="1OYyQduAQYodoiQ48uYTCB1iVn6UHcCcdDocjLOA9b9Y"></div>
-			<ul class="x-small">
-				<li>Realm</li>
-				<ul>
-					<li>an identifier of the space on the server (~ a collection of resources and their sub-resources)</li>
-					<li>A client may associate a valid credentials with realms such that it copies authorization information
-						in requests for which server requires authentication (by <code>WWW-Authenticate</code> header)</li>
-				</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Basic Access Authentication &ndash; Credentials</h1>
-			</hgroup>
-			<ul class="small">
-				<li>Credentials</li>
-				<ul>
-					<li>credentials are base64 encoded</li>
-					<li>the format is: <code>username:password</code></li>
-				</ul>
-				<pre class="brush: bash">
-						# to encode in linux
-						echo "novak:heslo" | base64
-						> bm92YWs6aGVzbG8K
-
-						# and to decode
-						echo "bm92YWs6aGVzbG8K" | base64 -d # use capital "D" in OS X
-						> novak:heslo</pre>
-
-				<li>Comments</li>
-				<ul class="x-small">
-					<li>When TLS is not used, the password can be read</li>
-					<li>An attacker can repeat interactions</li>
-				</ul>
-			</ul>
-
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Digest Access Authentication</h1>
-			</hgroup>
-			<ul class="xx-small">
-				<li>RFC 2617 &ndash; Basic and Digest Access Authentication</li>
-				<ul>
-					<li>No password between a client and a server but a hash value</li>
-					<li>Simple and advanced mechanisms (only server-generated nonce value &ndash; replay-attacks or
-						with client-generated nonce value)</li>
-				</ul>
-				<li>Basic Steps</li>
-				<ol>
-					<li>Client accesses a protected area</li>
-					<pre class="brush:bash; class-name: 'tight'">
-							> GET / HTTP/1.1</pre>
-					<li>Server requests authentication with <code>WWW-Authenticate</code></li>
-					<pre class="brush:bash; class-name: 'tight'">
-								&lt; HTTP/1.1 401 Unauthorized
-								&lt; WWW-Authenticate: Digest realm="ProtectedArea",
-								  nonce="BbdQof3DBAA=a293ff3d724989371610f03015f2d23f3cd2c045",
-								  algorithm=MD5, domain="/", qop="auth"</pre>
-					<li>Client calculates a response hash by using the realm, his/her username, the password, and the
-						quality of protection (QoP) and requests the resource with <code>authorization</code> header</li>
-					<pre class="brush:bash; class-name: 'tight'">
-								> GET / HTTP/1.1
-								> Authorization: Digest username="novak", realm="ProtectedArea",
-								  nonce="BbdQof3DBAA=a293ff3d724989371610f03015f2d23f3cd2c045", uri="/",
-								  algorithm=MD5, response="c4ea2293aeb318826d1e533f363efd90", qop=auth,
-								  nc=00000001, cnonce="531ee8ba7f2a8fd1"</pre>
-				</ol>
-			</ul>
-		</div>
-
-		<!--	<div class="slide">
-				<hgroup>
-					<h1>Nonce and QoP</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Nonce</li>
-					<ul>
-						<li>A value to identify an interaction that should occur only once</li>
-						<li><code>nonce</code> &ndash; generated by the server</li>
-						<ul>
-							<li>may have a time period for which the nonce is valid</li>
-							<li>may be computed using client IP, ETag of the resource, etc.</li>
-							<li>this limits chances for the replay attack.</li>
-						</ul>
-						<li><code>cnonce</code> &ndash; generated by the client</li>
-					</ul>
-					<li>QoP &ndash; quality of protection</li>
-					<ul>
-						<li>Further improvements to prevent replay attacks and enables non-repudiation</li>
-					</ul>
-				</ul>
-			</div>
-
-    		<div class="slide">
-				<hgroup>
-					<h1>Algorithms</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Algorithm for <code>response</code> value of <code>authorization</code> header</li>
-					<ul>
-						<li>No quality of protection (<code>qop</code> is missing or <code>qop=none</code>)</li>
-						<ul>
-							<li>limits chances of replay-attacks</li>
-						</ul>
-						<pre class="brush: bash; class-name: 'tight'">
-							HA1 = MD5(username:realm:password)
-							HA2 = MD5(method:digestURI)
-							response = MD5(HA1:nonce:HA2)</pre>
-						<li>with quality of protection (<code>qop=auth</code>)</li>
-						<pre class="brush: bash; class-name: 'tight'">
-							HA1 = MD5(username:realm:password)
-							HA2 = MD5(method:digestURI)
-							response = MD5(HA1:nonce:nonceCount:cnonce:qop:HA2)</pre>
-							<li>with quality of protection for message integrity (<code>qop=auth-int</code>)</li>
-							<ul>
-								<li>enables non-repudiation (i.e., proof of integrity and origin of data)</li>
-							</ul>
-							<pre class="brush: bash; class-name: 'tight'">
-								HA1 = MD5(username:realm:password)
-								HA2 = MD5(method:digestURI:MD5(payload))
-								response = MD5(HA1:nonce:nonceCount:cnonce:qop:HA2)</pre>
-					</ul>
-
-				</ul>
-			</div>
-
-    		<div class="slide">
-				<hgroup>
-					<h1>Replay Attack</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Replay Attack Scenario (quality of protection is <code>none</code>)</li>
-					<ul>
-						<li>The communication is not encrypted (i.e., no use of HTTPS)</li>
-						<li>Eve listens to the Alice's communication (e.g. on a proxy server)</li>
-						<li>Eve resends requests with headers from Alice's requests</li>
-					</ul>
-				</ul>
-				<div class="h-drawing" id="1gQvg53vE3p9o_YRI3zYx3uBEfiT6YjiuznHN0A8O2QA" style="height: 380px"></div>
-			</div>
-
-    		<div class="slide">
-				<hgroup>
-					<h1>Replay Attack (Cont.)</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Replay Attack Scenario (quality of protection is <code>auth</code> or <code>auth-int</code>)</li>
-					<ul>
-						<li><code>nonceCount</code> should be incremented in every request to a response of the nonce
-							value from the server</li>
-					</ul>
-				</ul>
-				<div class="h-drawing" id="1Jto8zZvp-q7IANoQ0lckKsPHP1e5LetG7nJs8jI3Xyg" style="height: 380px"></div>
-			</div>      -->
-
-	</section>
-
-	<div class="slide outline"></div>
-
-	<section>
-		<header>Transport Level Security</header>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Overview</h1>
-			</hgroup>
-			<ul class="x-small">
-				<li>SSL and TLS</li>
-				<ul>
-					<li>SSL and TLS is used interchangeably</li>
-					<li>SSL 3.0 developed by Netscape</li>
-					<li>IETF standardization of SSL 3.0 is TLS 1.0</li>
-					<ul>
-						<li>TLS 1.0 is upgrade of SSL 3.0</li>
-					</ul>
-					<li>Due to security flaws in TLS 1.0, TLS 1.1 and TLS 1.2 were created</li>
-				</ul>
-				<li>TLS layer</li>
-				<img src="img/TLS.png" style="height: 250px" />
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>TLS Services</h1>
-			</hgroup>
-			<ul class="xx-small">
-				<li>Encryption</li>
-				<ul>
-					<li>Peers must agree on ciphersuite and keys</li>
-					<li>This is achieved by <b>TLS handshake</b></li>
-				</ul>
-				<li>Authentication</li>
-				<ul>
-					<li>Peers can authenticate their identity</li>
-					<ul>
-						<li>The client can verify that the server is who it is claimed to be</li>
-						<li>Achieved by "Chain of Trust and Certificate Authoritites"</li>
-						<li>The server can also verify the client</li>
-					</ul>
-				</ul>
-				<li>Integrity</li>
-				<ul>
-					<li>TLS provives message framing mechanism</li>
-					<li>Every message is signed with Message Authentication Code (MAC)</li>
-					<ul>
-						<li>MAC hashes data in a message and combines the resulting hash with a key (negotiated during the TLS handshake)</li>
-						<li>The result is a message authentication code sent with the message</li>
-					</ul>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>TLS Handshake Protocol</h1>
-			</hgroup>
-			<img src="img/tls-handshake.png" style="padding-top: 10px; padding-left: 20px; height: 300px" />
-			<ul class="xx-small">
-				<li>TLS Handshake</li>
-				<ul>
-					<li class="no-bullet">56 ms: ClientHello, TLS protocol version, list of ciphersuites, TLS options</li>
-					<li class="no-bullet">84 ms: ServerHello, TLS protocol version, ciphersuite, certificate</li>
-					<li class="no-bullet">112 ms: RSA or Diffie-Hellman key exchange</li>
-					<li class="no-bullet">140 ms: Message integrity checks, sends encrypted "Finished" message</li>
-					<li class="no-bullet">168 ms: Decrypts the message, app data can be sent</li>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Key Exchange</h1>
-			</hgroup>
-			<ul class="xx-small">
-				<li>RSA key exhange(Rivest–Shamir–Adleman)</li>
-				<ul>
-					<li>The client generates a symetric key</li>
-					<li>The client encrypts the key with the server's public key</li>
-					<li>The client sends the encrpyed key to the server</li>
-					<li>The server uses its private key to decrypt the symetric key</li>
-				</ul>
-				<li>RSA critical weekness</li>
-				<ul>
-					<li>The same public-private key pair is used to:</li>
-					<ul>
-						<li>authenticate the server (the server's private key is used to sign and verify the handshake)</li>
-						<li>encrypt the symetric key</li>
-					</ul>
-					<li>When an attacker gets hold of the server private key</li>
-					<ul>
-						<li>It can decrypt the entire session</li>
-					</ul>
-				</ul>
-				<li>Diffie-Hellman key exhange</li>
-				<ul>
-					<li>Client and server can negoriate shared secret without its explicit communication</li>
-					<ul>
-						<li>Attacker cannot get the key</li>
-					</ul>
-					<li>Reduction of risk of compromising of the past communications</li>
-					<ul>
-						<li>New key can be generated as part of every key exchange</li>
-						<li>Old keys can be discarded</li>
-					</ul>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>TLS and Proxy Servers</h1>
-			</hgroup>
-			<ul class="xx-small">
-				<li>TLS Offloading</li>
-				<ul>
-					<li>Inbound TLS connection, plain outbound connection</li>
-					<li>Proxy can inspect messages</li>
-				</ul>
-				<li>TLS Bridging</li>
-				<ul>
-					<li>Inbound TLS connection, new outbound TLS connection</li>
-					<li>Proxy can inspect messages</li>
-				</ul>
-				<li>End-to-End TLS (TLS pass-through)</li>
-				<ul>
-					<li>TLS connection is passed-through the proxy</li>
-					<li>Proxy cannot inspect messages</li>
-				</ul>
-				<li>Load balancer</li>
-				<ul>
-					<li>Can use TLS offloading or TLS bridging</li>
-					<li>Can use TLS pass-through with help of Server Name Indication (SNI)</li>
-				</ul>
-			</ul>
-		</div>
-
-	</section>
-
-	<div class="slide outline"></div>
-
-	<section>
-		<header>JSON Web Token</header>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Overview</h1>
-			</hgroup>
-			<ul>
-				<li>JSON Web Token (JWT)</li>
-				<ul>
-					<li>Open standard (RFC 7519)</li>
-					<li>Mechanism to securely transmit information between parties as a JSON object.</li>
-					<li>Can be <b>verified</b> and <b>trusted</b> as it is <b>digitally signed</b>.</li>
-				</ul>
-				<li>Basic concepts</li>
-				<ul>
-					<li>Compact</li>
-					<ul>
-						<li>has a small size</li>
-						<li>can be transmitted via a URL, POST, HTTP header.</li>
-					</ul>
-					<li>Self-contained</li>
-					<ul>
-						<li>payload contains all required user information.</li>
-					</ul>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Use of JWT</h1>
-			</hgroup>
-			<ul>
-				<li>Authentication</li>
-				<ul>
-					<li>After user logs in, following requests contain JWT token.</li>
-					<li>Single Sign On widely uses JWT nowadays</li>
-				</ul>
-				<li>Information Exchange</li>
-				<ul>
-					<li>Signature ensures senders are who they say they are.</li>
-					<li>Message integrity &ndash; signature calculated using the header and the payload.</li>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>JWT Structure</h1>
-			</hgroup>
-			<ul class="x-small">
-				<li class="no-bullet"><code>&lt;header&gt;.&lt;payload&gt;.&lt;signature&gt;</code></li>
-				<li>Header</li>
-				<ul>
-					<li>Contains two parts, the type of the token (JWT) and the hashing algorithm being used (e.g. HMAC, SHA256, RSA).</li>
-
-					<pre class="brush: javascript; class-name: 'tight'; gutter: false">
-							{
-							  "alg": "HS256",
-							  "typ": "JWT"
-							}</pre>
-				</ul>
-				<li>Payload</li>
-				<ul>
-					<li>Contains the claims, i.e. statements about an entity (e.g. user).</li>
-					<li>Can be registered, public and private</li>
-					<li>Registered and public should be defined in <a href="https://www.iana.org/assignments/jwt/jwt.xhtml">IANA JSON Web Token Registry</a></li>
-
-					<pre class="brush: javascript; class-name: 'tight'; gutter: false">
-							{
-							  "sub": "1234567890",
-							  "name": "John Doe",
-							  "admin": true
-							}</pre>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>JWT Structure (Cont.)</h1>
-			</hgroup>
-			<ul class="x-small">
-				<li>Signature</li>
-				<ul>
-					<li>Signed encoded header, encoded payload and a secret.</li>
-					<li>For example, signature using HMAC SHA256 algorithm</li>
-
-					<pre class="brush: plain; class-name: 'tight'; gutter: false">
-						HMACSHA256(
-  							base64UrlEncode(header) + "." +
-  							base64UrlEncode(payload),
-  							secret)</pre>
-				</ul>
-				<li>Example</li>
-				<ul>
-					<li>JWT is a three Base64-URL strings separated by dots</li>
-					<img src="img/jwt-example.png" style="width: 600px"></img>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>How to use JWT</h1>
-			</hgroup>
-			<ul class="xx-small">
-				<img src="img/jwt-diagram.png" style="margin-left: 90px; margin-bottom: 5px; margin-top: 5px; width: 550px"></img>
-				<ol>
-					<li>User sends username and password</li>
-					<li>Server verifies user, creates JWT token with a secret and a expiration time</li>
-					<li>Server sends JWT token back to the Browser</li>
-					<li>Browser sends JWT token on subsequent interations</li>
-				</ol>
-				<ul>
-					<li class="no-bullet"><b>Notes</b></li>
-					<ul>
-						<li>Authorization header does not behave the same as cookies!</li>
-						<li>JWT should not contain secrets (passwords) as it can be read<br />(on the client or if non-https connection is used)</li>
-					</ul>
-				</ul>
-		</div>
-
-
-	</section>
-
-	<div class="slide outline"></div>
-
-	<section>
-		<header>OAuth 2.0</header>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Motivation</h1>
-			</hgroup>
-			<ul>
-				<li>Cloud Computing &ndash; Software as a Service</li>
-				<ul>
-					<li>Users utilize apps in clouds</li>
-					<ul>
-						<li>they access <b>resources</b> via Web browsers</li>
-						<li>they store their data in the cloud</li>
-						<li>Google Docs, Contacts, etc.</li>
-					</ul>
-					<li>The trend is that SaaS are open</li>
-					<ul>
-						<li>can be extended by 3rd-party developers through APIs</li>
-						<li>attract more users &rArr; increases value of apps</li>
-					</ul>
-					<li>Apps extensions need to have an access to users' data</li>
-				</ul>
-				<li>Need for a new mechanism to access resources</li>
-				<ul>
-					<li><b>Users can grant access to third-party apps without exposing
-							their users' credentials</b></li>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>When there is no OAuth</h1>
-			</hgroup>
-			<div id="1wy5WvxoCMRKcNVCo59i25gvxNIH-1-LPiNLBJcePeq8" class="h-drawing" style="height: 350px"></div>
-			<ul class="xx-small">
-				<li>Users must share their credentials with the 3rd-party app</li>
-				<li>Users cannot control what and how long the app can access resources</li>
-				<li>Users must trust the app</li>
-				<ul>
-					<li>In case of misuse, users can only change their passwords</li>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>OAuth 2.0 Protocol</h1>
-			</hgroup>
-			<ul class="small">
-				<li>OAuth Objectives</li>
-				<ul>
-					<li>users can grant access to third-party applications</li>
-					<li>users can revoke access any time</li>
-					<li>supports:</li>
-					<ul>
-						<li>client-side web apps (implicit grant),</li>
-						<li>server-side apps (authorization code), and</li>
-						<li>native (desktop) apps (authorization code)</li>
-					</ul>
-				</ul>
-				<li>History</li>
-				<ul class="x-small">
-					<li>Initiated by Google, Twitter, Yahoo!</li>
-					<li>Different, non-standard protocols first: ClientLogin, AuthSub</li>
-					<li>OAuth 1.0 &ndash; first standard, security problems, quite complex</li>
-					<li>OAuth 2.0 &ndash; new version, not backward compatibile with 1.0</li>
-				</ul>
-				<li>Specifications and adoption</li>
-				<ul class="x-small">
-					<li><span class="h-ref" id="oauth"></span></li>
-					<li><span class="h-ref" id="oauth20-google"></span></li>
-				</ul>
-			</ul>
-		</div>
+		<header>Introduction</header>
 
 		<div class="slide">
 			<hgroup>
 				<h1>Terminology</h1>
 			</hgroup>
-			<ul class="x-small">
-				<li><b>Client</b></li>
+			<ul>
+				<li>Cloud computing</li>
+				<li>*aaS</li>
+				<li>DevOps</li>
+				<li>Cloud Native, Microservices</li>
+				<li>Serverless</li>
+		</div>
+
+
+		<div class="slide">
+			<hgroup>
+				<h1>What is a Cloud?</h1>
+			</hgroup>
+			<ul class="small">
+				<li>A different way of thinking</li>
 				<ul>
-					<li>a third-party app accessing resources owned by <b>resource owner</b></li>
+					<li>Got your grand mum's savings under your pillow?</li>
+					<ul>
+						<li>probably not, you better have them in your bank</li>
+					</ul>
+					<li>Data is your major asset</li>
+					<li>you better have them in a "bank" too</li>
+					<li>Someone can abuse your data?<br />
+					<li>banks bankrupt too, sometimes &ndash; it is a risk you take</li>
+					<li>there is a market and a competition</li>
+					</li>
 				</ul>
-				<li><b>Resource Owner</b> (also user)</li>
+				<li>Outsourcing of application infrastructure</li>
 				<ul>
-					<li>a person that owns a resource stored in the <b>resource server</b></li>
+					<li>Reliability and availability</li>
+					<li>Low costs &ndash; pay-per-use</li>
+					<li>Elasticity &ndash; can dynamically grow with your apps</li>
+					<li>CAPEX vs. OPEX</li>
 				</ul>
-				<li><b>Authorization and Token Endpoints</b></li>
-				<ul>
-					<li>endpoints provided by an <b>authorization server</b> through which
-						a <b>resource owner</b> authorizes requests.</li>
-				</ul>
-				<li><b>Resource Server</b></li>
-				<ul>
-					<li>an app that stores resources owned by a <b>resource owner</b></li>
-					<li>For example, contacts in Google Contacts</li>
-				</ul>
-				<li><b>Authorization Code</b></li>
-				<ul>
-					<li>a code that a <b>client</b> uses to request <b>access tokens</b> to access resources</li>
-				</ul>
-				<li><b>Access Token</b></li>
-				<ul>
-					<li>a code that a <b>client</b> uses to access resources</li>
-				</ul>
-			</ul>
 			</ul>
 		</div>
 
-		<div class="slide outline"></div>
-
-		<section>
-			<header>Client-side Web Apps</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Client-side Web Apps</h1>
-				</hgroup>
-				<ul class="small">
-					<li>Simplified version of OAuth 2.0 protocol</li>
-					<ul>
-						<li>JavaScript/AJAX apps running in a browser</li>
-						<li>Apps that cannot easily "remember" app state</li>
-						<li>limited number of interactions</li>
-					</ul>
-					<li>Architecture</li>
-					<ul>
-						<li>User-agent processes a javascript/HTML code from the client</li>
-						<li>No need of authorization code</li>
-					</ul>
-					<li>Basic Steps</li>
-					<ul>
-						<li>A client redirects a user agent to the authorization endpoint</li>
-						<li>A resource owner grants an access to the client</li>
-						<ul>
-							<li>or he/she rejects the request</li>
-						</ul>
-						<li>Authorization server provides an <code>access_token</code> to the client</li>
-						<li>Client access the resource with the <code>access_token</code></li>
-						<li>When the token expires, client requests a new token</li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Demo &ndash; List of Contacts</li>
-				</hgroup>
-				<ul class="small">
-					<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js" type="text/javascript"></script>
-					<li>Display your Google contacts</li>
-					<ul>
-						<li>this demo requests authorization from you to access your Google contacts using client-side OAuth 2.0 protocol
-							and then displays the contacts below. In order to transfer <code>access_token</code> from authorization window,
-							it stores the <code>access_token</code> in a cookie.</li>
-						<li><code>access_token</code> <input style="font-size: 18px" id="ati" type="text" value="" size="60"></input></li>
-						<li><a href="javascript:showContacts()">Show contacts</a> or <a target="revokew" href="https://www.google.com/accounts/IssuedAuthSubTokens">revoke access</a></li>
-					</ul>
-
-					<div id="contacts_out" style="height: 200px; overflow: hidden"></div>
-
-					<style>
-						#contacts_out {
-								margin: 10px 0px 0px 8px;
-							}
-
-							#contacts_out p {
-								margin: 0px 0px 3px 0px;
-								font-size: 13px;
-							}
-						</style>
-
-					<script type="text/javascript">
-						// gets the cookie based on its name
-						function getCookie(c_name) {
-							var i, x, y, ARRcookies = document.cookie.split(";");
-							for (i = 0; i < ARRcookies.length; i++) {
-								x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
-								y = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
-								x = x.replace(/^\s+|\s+$/g, "");
-								if (x == c_name) {
-									return unescape(y);
-								}
-							}
-						}
-
-						// shows a dialog to ask the user for authorization
-						function requestAuth() {
-							document.getElementById("ati").value = "";
-							url = "https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/contacts&" +
-								"client_id=621535099260.apps.googleusercontent.com&redirect_uri=" +
-								"https://w20.vitvar.com/examples/oauth/callback.html&response_type=token";
-							var newWindow = window.open(url, 'name', 'height=600,width=450');
-							if (window.focus) {
-								newWindow.focus();
-							}
-							return;
-						}
-
-						// displays contacts; if not authorized asks for authorization first
-						function showContacts() {
-							document.getElementById("contacts_out").innerHTML = "";
-							var ati = document.getElementById("ati");
-							var at = getCookie("w20-token");
-
-							if (ati.value != "")
-								at = ati.value;
-
-							if (at == null) {
-								// access token not found, request authorization
-								requestAuth();
-							} else {
-								ati.value = at;
-								var url = "https://people.googleapis.com/v1/people/me/connections?personFields=addresses,names&oauth_token=" +
-									at + "&alt=json";
-								try {
-									// send XHR, synchronously
-									xhr = new XMLHttpRequest();
-									xhr.open("GET", url, false);
-									xhr.send();
-
-									// get the JSON data
-									data = eval("(" + xhr.responseText + ')');
-
-									// format and display output
-									var l = "";
-									for (i = 0; i < data.connections.length; i++)
-									  try {
-									    l += "<p>" + data.connections[i].names[0].displayNameLastFirst + "</p>";
-									  } catch (e) { }
-									document.getElementById("contacts_out").innerHTML = l;
-
-								} catch (e) {
-									// error, 101 is a network error such as invalid token
-									if (e.code == 101)
-										requestAuth();
-									else
-										// throw the error otherwise
-										throw e;
-								}
-							}
-						}
-					</script>
-
-				</ul>
-			</div>
-
-			<!--<div class="slide">
-					<hgroup>
-						<h1>Demo Details</li>
-					</hgroup>
-					<div id="1t5Oe1WzstsrOomFF0SHszjYztMgwHnv0thAjecUlA0Y"
-						style="height: 470px; margin-top: 20px" class="h-drawing"></div>
-				</div>-->
-
-			<div class="slide">
-				<hgroup>
-					<h1>Client-side Web Apps Protocol</li>
-				</hgroup>
-				<div id="1Qik6Z_dLbSkcQmS7ubWtcUpyvhF12zqqLgcY634Y7TA" style="height: 440px; margin-top: 20px; margin-left: -10px" class="h-drawing"></div>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Redirection &ndash; Step 1</li>
-				</hgroup>
-				<ul class="x-small">
-					<li>Methods and Parameters</li>
-					<ul>
-						<li>Methods: <code>GET</code> or <code>POST</code></li>
-						<li>example authorazation endpoint url (Google): <code>https://accounts.google.com/o/oauth2/auth</code></li>
-						<li>query string parameters or <code>application/x-www-form-urlencoded</code></li>
-						<ul>
-							<li><code>client_id</code> &ndash; id of the client that was previously registered</li>
-							<li><code>redirect_uri</code> &ndash; an URI that auth. server will redirect to when user grants/rejects</li>
-							<li><code>scope</code> &ndash; string identifying resources/services to be accessed</li>
-							<li><code>response_type</code> &ndash; type of the response (<code>token</code> or <code>code</code>)</li>
-							<li><code>state</code> (optional) &ndash; state between request and redirect</li>
-							</li>
-						</ul>
-						<li>Example</li>
-						<pre class="brush: plain; class-name: 'tight'">
-							https://accounts.google.com/o/oauth2/auth?
-							client_id=621535099260.apps.googleusercontent.com&amp;
-							redirect_uri=http://w20.vitvar.com/examples/oauth/callback.html&
-							scope=https://www.google.com/m8/feeds&
-							response_type=token</pre>
-					</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Callback &ndash; steps 4 and 5</li>
-				</hgroup>
-				<ul class="small">
-					<li>Resource owner grants the access</li>
-					<ul>
-						<li>authorization server calls back <code>redirect_uri</code></li>
-						<li>client parses URL in JavaScript (Step 5)</li>
-						<ul>
-							<li>extracts <code>access_token</code> and <code>expires_in</code>
-								(by using <code>window.location.hash</code>)</li>
-						</ul>
-						<li>Example:</li>
-						<pre class="brush: plain">
-							https://w20.vitvar.com/examples/oauth/callback.html#
-							access_token=1/QbZfgDNsnd&
-							expires_in=4301</pre>
-					</ul>
-					<li>Resource owner rejects the access</li>
-					<ul>
-						<li>authorization server calls back <code>redirect_uri</code> with query string parameter
-							<code>error=access_denied</code></li>
-						<li>Example:</li>
-						<pre class="brush: plain">
-								hhttp://w20.vitvar.com/examples/oauth/callback.html?
-								error=access_denied</pre>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Accessing Resources &ndash; Step 6</li>
-				</hgroup>
-				<ul class="x-small">
-					<li>Request</li>
-					<ul>
-						<li>client can access resources defined by <code>scope</code></li>
-						<li>resources' URIs defined in a particular documentation</li>
-						<li>Example Google Contacts</li>
-						<ul>
-							<li>to access all users' contacts stored in Google</li>
-							<li><code>scope</code> is <code>https://www.google.com/m8/feeds</code></li>
-						</ul>
-						<li>Query string parameter <code>oauth_token</code></li>
-						<pre class="brush: plain; class-name: 'tight'">
-							curl https://www.google.com/m8/feeds/contacts/default/full?
-								oauth_token=1/dERFd34Sf</pre>
-						<li>HTTP Header <code>Authorization</code></li>
-						<pre class="brush: plain; class-name: 'tight'">
-								curl -H "Authorization: OAuth 1/dERFd34Sf"
-									https://www.google.com/m8/feeds/contacts/default/full</pre>
-						<li>The client can do any allowed operations on the resource</li>
-					</ul>
-					<li>Response</li>
-					<ul>
-						<li>Success &ndash; <code>200 OK</code></li>
-						<li>Error &ndash; <code>401 Unauthorized</code> when
-							token expires or the client hasn't performed the authorization request.</li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Cross-Origin Resource Sharing</li>
-				</hgroup>
-				<div id="1UBnN8oyshd9h67q-xNiXq4bSoBBsx7D0E2PQA1gkB2s" class="h-drawing" style="height: 430px"></div>
+		<div class="slide">
+			<hgroup>
+				<h1>What is a Cloud?</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Any app you access over the web?</li>
+				<li>A datacenter?</li>
 				<ul>
-					<ul class="small" style="margin-top: 20px">
-						<li>see <a target="lec4" href="lecture4.html#/sameorigin"> Same Origin and Cross-Origin</a> for details</li>
+					<li>Offers virtualization</li>
+					<li>Any company having a datacenter wants to move to</li>
+				</ul>
+				<li>Cloud provider should also offer services, such as:</li>
+				<ul>
+					<li>scalability, storage</li>
+					<li>Possible to configure programmatically</li>
+					<ul>
+						<li>integration to enterprise administration processes</li>
+						<li>usually REST interface</li>
 					</ul>
 				</ul>
-			</div>
+			</ul>
+		</div>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Example Application Registration</h1>
-				</hgroup>
-				<center>
-					<img src="img/GoogleAPIConsole.png" style="height: 450px; margin-top: 20px" alt="Google API Console"></img>
-				</center>
-			</div>
-
-		</section>
-
-		<div class="slide outline"></div>
-
-		<section>
-			<header>Server-side Web Apps</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Server-side Web Apps</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Additional interactions</li>
-					<ul>
-						<li>server-side code (any language), the app can maintain the state</li>
-						<li>additional interactions, authorization code</li>
-					</ul>
-					<li>Architecture</li>
-					<ul>
-						<li>Client at a server requests, remembers and refresh access tokens</li>
-					</ul>
-					<li>Basic steps</li>
-					<ul>
-						<li>Client redirects user agent to the authorization endpoint</li>
-						<li>Resource owner grants access to the client or rejects the request</li>
-						<li style="color: maroon">Authorization server provides <b>authorization code</b> to the client</li>
-						<li style="color: maroon">Client requests <b>access</b> and <b>refresh tokens</b> from the auth. server</li>
-						<li style="color: maroon">Client access the resource with the access token</li>
-						<li style="color: maroon">When the token expires, client refreshes a token with refresh token</li>
-					</ul>
-					<li>Advantages</li>
-					<ul>
-						<li>Access tokens not visible to clients, they are stored at the server</li>
-						<li>more secure, clients need to authenticate before they can get tokens</li>
-					</ul>
+		<div class="slide">
+			<hgroup>
+				<h1>Traditional Solution to Infrastructure</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Traditional hardware model</li>
+				<ul>
+					<li>Up-front hardware investments</li>
+					<li>Hardware not optimally utilized</li>
 				</ul>
-			</div>
+			</ul>
+			<div class="h-drawing" style="height: 350px; margin-left: -10px"
+				id="17jEYye-th5U5T-N-iE1gR7f_k5Bwrk9P7z9yYC4EZlw"><img style="height: 350px; "
+					alt="traditional-hardware"
+					src="https://docs.google.com/drawings/export/svg?id=17jEYye-th5U5T-N-iE1gR7f_k5Bwrk9P7z9yYC4EZlw"
+					title="traditional-hardware"></div>
+		</div>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Server-side Web Apps Protocol</li>
-				</hgroup>
-				<div id="1dzS2Ol7ZLq-ZyN2o608ywULbaeTsaRlj1u-8EHkmRH0" style="height: 440px; margin-top: 20px; margin-left: -10px" class="h-drawing"></div>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Redirection &ndash; Step 1</li>
-				</hgroup>
-				<ul class="x-small">
-					<li>Methods and Parameters</li>
-					<ul>
-						<li>same as for client-side app, except <code>response_type</code> must be <code>code</code></li>
-					</ul>
-					<li>Example</li>
-					<pre class="brush: plain; class-name: 'tight'">
-							https://accounts.google.com/o/oauth2/auth?
-							client_id=621535099260.apps.googleusercontent.com&
-							redirect_uri=http://w20.vitvar.com/examples/oauth/callback.html&
-							scope=https://www.google.com/m8/feeds&
-							response_type=code</pre>
+		<div class="slide">
+			<hgroup>
+				<h1>Good Performance – Cloud Solution</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Cloud Computing model</li>
+				<ul>
+					<li>No up-front hardware investments</li>
+					<li>Hardware optimally utilized</li>
 				</ul>
-			</div>
+			</ul>
+			<div class="h-drawing" style="height: 350px; margin-left: -10px"
+				id="1yeHPc2AqDeXanOV0Zi8MirHApMjf1Sa_2UCOt_9Avds"><img style="height: 350px; "
+					alt="scalable-cloud-model"
+					src="https://docs.google.com/drawings/export/svg?id=1yeHPc2AqDeXanOV0Zi8MirHApMjf1Sa_2UCOt_9Avds"
+					title="scalable-cloud-model"></div>
+		</div>
 
-			<div class="slide">
-				<hgroup>
-					<h1>Callback + Access Token Request &ndash; steps 4, 5</li>
-				</hgroup>
-				<ul class="x-small">
-					<li>Callback</li>
+		<div class="slide">
+			<hgroup>
+				<h1>CAPEX vs. OPEX</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li>Captial expenditure/capital expense (CAPEX)</li>
+				<ul>
+					<li>money to spend to buy, maintain or improve fixed assets</li>
 					<ul>
-						<li>authorization server calls back <code>redirect_uri</code></li>
-						<li>client gets the <code>code</code> and requests <code>access_token</code></li>
-						<li>example (resource owner grants access):<br />
-							<code>http://w20.vitvar.com/examples/oauth/callback.html?code=4/P7...</code></li>
-						<li>when user rejects &rarr; same as client-side access</li>
+						<li>buildings, vehicels, equipment or land</li>
 					</ul>
-					<li>Access token request</li>
-					<ul>
-						<li><code>POST</code> request to token endpoint<br />
-							&rarr; example Google token endpoint: <code>https://accounts.google.com/o/oauth2/token</code></li>
-						<pre class="brush: plain; class-name: 'tight'">
-							POST /o/oauth2/token HTTP/1.1
-							Host: accounts.google.com
-							Content-Type: application/x-www-form-urlencoded
-
-							code=4/P7q7W91a-oMsCeLvIaQm6bTrgtp6&
-							client_id=621535099260.apps.googleusercontent.com&
-							client_secret=XTHhXh1S2UggvyWGwDk1EjXB&
-							redirect_uri=http://w20.vitvar.com/examples/oauth/callback.html&
-							grant_type=authorization_code</pre>
-					</ul>
+					<li>have impact on costs vs. profit and tax</li>
 				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Access Token (cont.)</li>
-				</hgroup>
-				<ul class="x-small">
-					<li>Access token response</li>
-					<ul>
-						<li>Token endpoint responds with <code>access_token</code> and <code>refresh_token</code></li>
-						<pre class="brush: javascript">
-							{ "access_token"   : "1/fFAGRNJru1FTz70BzhT3Zg",
-							  "expires_in"     : 3920,
-							  "refresh_token"  : "1/6BMfW9j53gdGImsixUH6kU5RsR4zwI9lUVX-tqf8JXQ" }</pre>
-					</ul>
-					<li>Refreshing a token</li>
-					<ul>
-						<li><code>POST</code> request to the token endpoint with <code>grant_type=refresh_token</code> and
-							the previously obtained value of <code>refresh_token</code></li>
-						<pre class="brush: plain">
-							POST /o/oauth2/token HTTP/1.1
-							Host: accounts.google.com
-							Content-Type: application/x-www-form-urlencoded
-
-							client_id=21302922996.apps.googleusercontent.com&
-							client_secret=XTHhXh1SlUNgvyWGwDk1EjXB&
-							refresh_token=1/6BMfW9j53gdGImsixUH6kU5RsR4zwI9lUVX-tqf8JXQ&
-							grant_type=refresh_token</pre>
-					</ul>
-					<li>Accessing a resource is the same as in the client-side app</li>
+				<div class="h-drawing" style="text-align: left; height: 200px"
+					id="1sdY1xuBXn_jH1t2dnBjOygeesr41TiV44Ht_Kfum6pU"></div>
+				<li>Operational expenditure (OPEX)</li>
+				<ul>
+					<li>ongoing costs for running a product, business, or systems</li>
+					<li>OPEX are entirely tax-deductible</li>
 				</ul>
-			</div>
-
-		</section>
-
-		<!-- <div class="slide outline"></div>
-
-		<section>
-			<header>OAuth 2.0 vs. OAuth 1.0</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Why new version?</h1>
-				</hgroup>
-				<ul class="small">
-					<li>OAuth 1.0 in brief</li>
-					<ul>
-						<li>security not based on SSL</li>
-						<li>client must sign every request using a defined algorithm</li>
-						<ul>
-							<li>e.g., public-private key signatures by RSA</li>
-						</ul>
-						<li>More complex to be implemented by clients</li>
-						<ul>
-							<li>although client libraries exist</li>
-						</ul>
-						<li>not suitable for JavaScript-based clients</li>
-					</ul>
-					<li>OAuth 2.0 simplifies the process</li>
-					<ul>
-						<li>SSL is required for all communications to generate the token</li>
-						<li>Signatures are not required for the actual API calls once the token has been generated</li>
-						<ul>
-							<li>SSL is also strongly recommended here</li>
-						</ul>
-						<li>supports various clients including JavaScript and mobile</li>
-					</ul>
+				<li>Cloud lets you trade CAPEX for OPEX</li>
+				<ul>
+					<li>No investments in data centers and infrastructures</li>
+					<li>You pay only when you consume resources</li>
 				</ul>
-			</div>
-		</section>
+			</ul>
+		</div>
 
-	</section> -->
+		<div class="slide">
+			<hgroup>
+				<h1>Cloud Computing Concepts</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li><b>On-demand and self-service</b></li>
+				<ul>
+					<li>Resources are provisioned as they are requested<br />and when they are required</li>
+					<li>No human interaction, automatic</li>
+				</ul>
+				<li><b>Broad network access</b></li>
+				<ul>
+					<li>Capabilities are available over the network</li>
+				</ul>
+				<li><b>Resource pooling</b></li>
+				<ul>
+					<li>Provider's computing resources reused by multiple tenants (multitenancy)</li>
+					<li>Resourcces are dynamically assigned/re-assigned according to demand</li>
+					<li>Computing resources: CPU, memory, storage, network</li>
+				</ul>
+				<li><b>Scalability and elasticity</b></li>
+				<ul>
+					<li>Infrastructure may grow and shrink according to needs</li>
+					<li>Automatic or manual</li>
+				</ul>
+				<li><b>Measured service</b></li>
+				<ul>
+					<li>Resource usage can be monitored, controlled and reported</li>
+				</ul>
+				<li><b>Pay-per-use</b></li>
+				<ul>
+					<li>Consumers only pay for resources when they use them</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Cloud Computing Concepts (Cont.)</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Service Models (aka Cloud Layers)</li>
+				<ul>
+					<li>IaaS &ndash; Infrastructure as a Service</li>
+					<li>PaaS &ndash; Platform as a Service, Serverless</li>
+					<ul>
+						<li>MWaaS, DBaaS, ...</li>
+						<li>FaaS</li>
+					</ul>
+					<li>SaaS &ndash; Software as a Service</li>
+				</ul>
+				<li>Deployment Models</li>
+				<ul>
+					<li>Public Cloud</li>
+					<li>Private Cloud</li>
+					<li>Hybrid Cloud</li>
+				</ul>
+			</ul>
+		</div>
+
 	</section>
 
 	<div class="slide outline"></div>
 
 	<section>
-		<header>OpenID</header>
 
-		<div class="slide">
-			<hgroup>
-				<h1>OpenID Protocol</h1>
-			</hgroup>
-			<ul class="x-small">
-				<li>Motivation &ndash; many user accounts</li>
-				<ul>
-					<li>users need to maintain many accounts to access various services</li>
-					<li>multiple passwords problem</li>
-				</ul>
-				<li>Objectives</li>
-				<ul>
-					<li>allows apps to utilize an OpenID provider</li>
+		<header>Cloud Architecture</header>
+
+		<section>
+
+			<header>Service Models</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Service Models</h1>
+				</hgroup>
+				<img style="width: 750px; margin-left: 10px; margin-top: 60px" src="img/cloud-service-models.png" />
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>IaaS: Infrastructure as a Service</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Usage</li>
 					<ul>
-						<li>a third-party authentication service</li>
-						<li>federated login</li>
+						<li>Predefined shapes of compute instances (e.g. micro, small, large, extra-large)</li>
+						<ul>
+							<li>for example: RedHat 7.8, 613 MB of memory, 1 TB block storage</li>
+						</ul>
+						<li>Pay-per-use &ndash; pay for resources you use (time or amount)</li>
+						<ul>
+							<li>no up-front costs</li>
+						</ul>
 					</ul>
-					<li>users have one account with the OpenID provider and
-						use it for apps that support the provider</li>
+					<li>IaaS Services Examples</li>
+					<ul>
+						<li>Load balancer</li>
+						<li>Autoscaling</li>
+						<li>Connectivity with on-premise network</li>
+						<li>Resource monitoring</li>
+					</ul>
+					<li>IaaS providers</li>
+					<ul>
+						<li>Amazon EC2, GoGrid, Rackspace, OpenNebula, Google Cloud, Oracle OCI, ...</li>
+					</ul>
 				</ul>
-				<li>OpenID providers</li>
-				<ul>
-					<li>it is a protocol, anybody can build a provider</li>
-					<li>Google, Yahoo!, Seznam.cz, etc.</li>
+				<!-- <div class="h-drawing" style="height: 270px; padding-left: 220px; margin-top: -250px;" alt="Web 2.0 web architecture" id="1GnYOqlP5qCv8LMyd3yuLNdfsymoDKVRhYrSvorh4suw"></div> -->
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>PaaS: Platform as a Service</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Usage</li>
+					<ul>
+						<li>Choose software platform, e.g., JEE, .NET, Python, etc.</li>
+						<li>Pay-per-use &ndash; pay for the resources you use; no up-front costs</li>
+						<li>Cloud native, microservices, containers</li>
+					</ul>
+					<li>PaaS features</li>
+					<ul>
+						<li>Serverless</li>
+						<li>Auto Scalling and Load balancing</li>
+						<li>Local development environment</li>
+						<li>Administration API</li>
+					</ul>
+					<li>PaaS providers</li>
+					<ul>
+						<li>Google App Engine &ndash; first PaaS service</li>
+						<li>Today, mostly Kubernetes, Google, Heroku, Azure, AWS, Oracle</li>
+					</ul>
 				</ul>
-				<li>Specification</li>
+				<!-- <div class="h-drawing" style="height: 270px; padding-left: 220px; margin-top: -220px;" alt="Platfor as a Service example" id="1WPWgHjgD4Ew-bljCiWeyTvbNuFWs_dXnjhI333vtVbs"></div> -->
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>SaaS: Software as a Service</h1>
+				</hgroup>
+
+				<ul class="x-small">
+					<li>Software delivery model for applications hosted in the cloud</li>
+					<ul>
+						<li>typically software for end-users</li>
+						<li>services accessed using a web browser</li>
+						<li>provides API for programmatic access</li>
+					</ul>
+					<li>SaaS characteristics</li>
+					<ul>
+						<li>Typically build on top of IaaS or PaaS</li>
+						<li>Configurable and customizable modern Web applications</li>
+						<li>Usually basic version for free, need to pay for "pro" version</li>
+						<li>Global availability - any computer, any device</li>
+						<li>Easy management - automatic and fast updates</li>
+						<li>Pay-per-use &ndash; pay for the time you use</li>
+					</ul>
+					<li>SaaS providers</li>
+					<ul>
+						<li>Google Apps, Salesforce, ...</li>
+					</ul>
+				</ul>
+			</div>
+
+		</section>
+
+		<div class="slide outline"></div>
+
+		<section>
+			<header>Multitenancy</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Multitenancy</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Architectural approach where resources are shared between multiple tenants or consumers</li>
+					<li>Implications</li>
+					<ul>
+						<li>Centralization of infrastructure in locations with lower costs</li>
+						<li>Peak-load capacity increases</li>
+						<li>Utilisation and efficiency improvements for systems that are not well utilised</li>
+					</ul>
+					<li>Sharing options</li>
+					<ul>
+						<li>Shared Everything</li>
+						<li>Shared Infrastructure</li>
+						<ul>
+							<li>Virtual Machines</li>
+							<li>OS "virtualization"</li>
+						</ul>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Shared Everything</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Resources are shared between all tenants or consumers</li>
+					<ul>
+						<li>tenant: a service consumer</li>
+					</ul>
+					<li>Common for the SaaS model</li>
+					<li>The application should provide tenant isolation</li>
+					<li>Data for multiple tenants is stored in the same database tables</li>
+				</ul>
+				<div class="h-drawing" style="height: 220px; margin-left: 0px; margin-top: 20px"
+					alt="Web 2.0 web architecture" id="17wNMQNs3vf2yyE0VzFhGbnNTjJBKKONbeS9jijYHbN4"></div>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Shared Infrastructure: Virtual Machines</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Infrastructure shared via virtual machines</li>
+					<ul>
+						<li>each tenant has its own virtual environment</li>
+						<li>Isolation provided by hypervisor</li>
+						<ul>
+							<li>hypervisor: virtual machine manager, runs virtual machines</li>
+						</ul>
+						<li>Resource contention depends on VM capability and configuration</li>
+						<li>Adds an additional layer and processes to run and manage</li>
+					</ul>
+				</ul>
+				<div class="h-drawing" style="height: 280px; margin-left: 0px; margin-top: 10px"
+					alt="Web 2.0 web architecture" id="1y5TMPeDujUG9aBUZ8Tf8a5vwrqT3LpjmYjb_HS5Ux1E"></div>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Shared Infrastructure: OS Virtualization</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Infrastructure shared via OS Virtualization</li>
+					<ul>
+						<li>Each tenant has its own processing zone</li>
+						<li>Isolation provided by the operating system</li>
+						<li>Resource contention depends on zone configuration</li>
+						<li>No VMs to run and manage, no abstraction layer between app & OS</li>
+					</ul>
+				</ul>
+				<div class="h-drawing" style="height: 280px; margin-left: 0px; margin-top: 10px"
+					alt="Web 2.0 web architecture" id="1OIg4KQRqj_G3YUsoCFQS1E4JOpxx3Yg63PGeRMhkupE"></div>
+			</div>
+
+		</section>
+	</section>
+
+	<div class="slide outline"></div>
+
+	<section>
+		<header>Infrastructure as a Service</header>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Overview</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Infrastructure = environment where your app is running</li>
+				<li>Tenancy = your "space" in the cloud</li>
+				<li>What you need</li>
 				<ul>
-					<li><span id="openid" class="h-ref"></span></li>
+					<li>Servers (compute instances) to run your app in a location (region)</li>
+					<li>Connectivity</li>
+					<ul>
+						<li>Private network for intra-communication</li>
+						<li>Public network for internet communication</li>
+						<li>Firewall (security) rules</li>
+						<li>Route tables</li>
+					</ul>
+					<li>Storage</li>
+					<ul>
+						<li>Operating system</li>
+						<li>Your app data</li>
+					</ul>
+					<li>Identity Management</li>
+					<ul>
+						<li>Who and how can access and control your tenancy</li>
+					</ul>
+					<li>Monitoring, Logging, Auditing</li>
 				</ul>
 			</ul>
 		</div>
 
 		<div class="slide">
 			<hgroup>
-				<h1>Interaction Sequence</h1>
+				<h1>Region</h1>
 			</hgroup>
-			<div id="1GSYwFzCiTi8QtQK1Ywgz1e2rVs-6VjuEJhnBb3E_ZEY" class="h-drawing" style="height: 340px"></div>
 			<ul class="xx-small">
-				<li>Discovery &ndash; discovery of a service associated with a resource</li>
-				<li>XRDS &ndash; eXtensible Resource Descriptor Sequence</li>
+				<li>Region = location on a planet where cloud data centers are located</li>
+				<img src="img/cloud-regions.png" style="width: 650px; padding-bottom: 10px" />
+				<li>Why location matters...</li>
 				<ul>
-					<li>format for discovery result</li>
-					<li>developed to serve resource discovery for OpenID</li>
-					<li>Web app retrieves endpoint to send login authentication requests</li>
+					<li>Latency - your users should be close to your app</li>
+					<li>Regulations - your data should be stored in EU</li>
+					<li>Connectivity to external providers</li>
+					<ul>
+						<li>Such as other cloud vendors</li>
+					</ul>
 				</ul>
 			</ul>
 		</div>
 
 		<div class="slide">
 			<hgroup>
-				<h1>Login Authentication Request &ndash; Step 5</h1>
+				<h1>Datacenters</h1>
 			</hgroup>
-			<ul class="x-small">
-				<li>Example Google OpenID provider</li>
-				<pre class="brush: plain">
-					https://www.google.com/accounts/o8/id
-					?openid.ns=http://specs.openid.net/auth/2.0
-					&openid.return_to=https://www.example.com/checkauth
-					&openid.realm=http://www.example.com/
-					&openid.assoc_handle=ABSmpf6DNMw
-					&openid.mode=checkid_setup</pre>
-				<li>Parameters</li>
+			<ul class="xx-small">
+				<li>Datacenter (aka Availability Domain &ndash; AD)</li>
 				<ul>
-					<li><code>ns</code> &ndash; protocol version (obtained from the XRDS)</li>
-					<li><code>mode</code> &ndash; type of message or additional semantics
-						(<code>checkid_setup</code> indicates that interaction between the provider and the user
-						is allowed during authentication)</li>
-					<li><code>return_to</code> &ndash; callback page the provider sends the result</li>
-					<li><code>realm</code> &ndash; domain the user will trust, consistent with <code>return_to</code></li>
-					<li><code>assoc_handle</code> &ndash; "log in" for web app with openid provider</li>
-					<li class="no-bullet" style="margin-top: 20px">* Not all fields shown,
-						check the OpenID spec for the full list of fields and their values</li>
+					<li>Computing resources in a location within a region</li>
+					<li>One or more datacenters exsit in a region</li>
+					<ul>
+						<li>They are completely de-correlated, independent</li>
+						<li>They have separated power supply, do not share underlying infrastructure</li>
+						<li>If one DC fails, the other one is up and running</li>
+					</ul>
 				</ul>
+				<img src="img/cloud-iaas-layers.png" style="width: 650px; padding-top: 0px" />
 			</ul>
 		</div>
 
 		<div class="slide">
 			<hgroup>
-				<h1>Login Authentication Response &ndash; Step 8</h1>
+				<h1>Off-box Network Virtualization</h1>
 			</hgroup>
-			<ul class="x-small">
-				<li>User logins successfully</li>
-				<pre class="brush: plain">
-					http://www.example.com/checkauth
-					?openid.ns=http://specs.openid.net/auth/2.0
-					&openid.mode=id_res
-					&openid.return_to=http://www.example.com:8080/checkauth
-					&openid.assoc_handle=ABSmpf6DNMw
-					&openid.identity=https://www.google.com/accounts/o8/id/id=ACyQatiscWvwqs4UQV_U</pre>
+			<ul class="xx-small">
+				<li>Gen 1.0 Cloud, inefficient Resource Sharing</li>
 				<ul>
-					<li>Web app will use <code>identity</code> to identify user in the application</li>
-					<li>response is also signed using a list of fields in the response (not shown in the listing)</li>
+					<li>On-Premise virtualization to share resources amongst multiple tenants in the cloud.</li>
+					<img src="img/network-virt-gen10.png" style="width: 650px; padding-top: 0px" />
 				</ul>
-				<li>User cancels</li>
-				<pre class="brush: plain">
-					http://www.example.com/checkauth
-					?openid.mode=cancel
-					&openid.ns=http://specs.openid.net/auth/2.0</pre>
+				<li>Gen 2.0 Cloud</li>
 				<ul>
-					<li class="no-bullet" style="margin-top: 20px">* Not all fields shown,
-						check the OpenID spec for the full list of fields and their values</li>
+					<li>Smart-NIC accelerated SR-IOV (Single Root I/O Virtualization)</li>
+					<ul>
+						<li>Networking is a specialized function, needs hardware/sillicon to accelerate it</li>
+					</ul>
+					<img src="img/sr-iov.png" style="width: 450px; padding-top: 0px" />
 				</ul>
 			</ul>
 		</div>
@@ -1220,48 +546,428 @@
 		<div class="slide outline"></div>
 
 		<section>
-			<header>OpenID Connect</header>
+			<header>Networking</header>
 
 			<div class="slide">
 				<hgroup>
-					<h1>OpenID Connect (OIDC)</h1>
+					<h1>Virtual Cloud Network</h1>
 				</hgroup>
-				<ul class="small">
-					<li>Simple identity layer on top of the OAuth 2.0 protocol</li>
+				<ul class="xx-small">
+					<li>VCN = a private network in a <b>single region</b> in which your instances reside</li>
+					<li>A a single and contigous IPV4 CIDR block of your choice</li>
 					<ul>
-						<li>Authorization Server to verify identity of users</li>
-						<li>Clients can obtain basic profile information about users</li>
-					</ul>
-					<li>OIDC vs OpenID</li>
-					<ul>
-						<li>OIDC does many of the same tasks as OpenID 2.0</li>
-						<li>API-friendly</li>
+						<li>CIDR (classless inter-domain routing) notation</li>
+						<li>IP address:</li>
 						<ul>
-							<li>can be used by native and mobile applications</li>
+							<li>network prefix (the most significant bits) and</li>
+							<li>interfaces on the network (least significant bits) ~ network hosts</li>
 						</ul>
-						<li>Robust signing and encryption mechanisms</li>
-						<li>Native integration with OAuth 2.0.</li>
+						<li>Example: <code>192.168.1.0/24</code></li>
+						<ul>
+							<li>IP range: <code>192.168.1.0</code> - <code>192.168.1.255</code></li>
+						</ul>
 					</ul>
-					<li>Defined by OpenID open standard</li>
+					<li>You further create subnets on a VCN to organize your instances</li>
 					<ul>
-						<li><a href="https://openid.net/connect/">OpenID Connect</a></li>
+						<li>The subnets must be "within" the VCN, they can span across ADs</li>
+						<li>Example: using <code>27</code> bits for a subnet mask allow for 8 subnets</li>
+						<ul>
+							<li><code>192.168.1.0/27</code>, <code>192.168.1.32/27</code>, <code>192.168.1.64/27</code>,
+								...</li>
+							<li>Each subnet can have 32 hosts</li>
+						</ul>
 					</ul>
-
+					<div class="h-drawing" style="text-align: left; height: 140px; margin-left: 0px; margin-top: 0px"
+						alt="CIDR network and subnets" id="1dXQa_c6etroY6oHBgXWaDg5obRiFPG4fu5n7r2os830"></div>
 				</ul>
 			</div>
 
 			<div class="slide">
 				<hgroup>
-					<h1>Interaction sequence</h1>
+					<h1>VCN Routing and Security</h1>
 				</hgroup>
-				<div id="1OnFj-xVRzZgoEmZxOqWqi2_BAlKcXAmwwJ7ujGegQHs" class="h-drawing" style="width: 700px"></div>
+				<ul class="xx-small">
+					<li>Private and Public subnets</li>
+					<ul>
+						<li>Public can communicate in/out from/to Internet</li>
+						<li>Internet traffic routed to public subnet</li>
+						<li>Private can be completely isolated or communicate to Internet only</li>
+					</ul>
+					<li>Route tables</li>
+					<ul>
+						<li>Required to route across subnets and in/out from the Internet</li>
+					</ul>
+					<li>Security</li>
+					<ul>
+						<li>Control access to/from the subnet</li>
+					</ul>
+					<img src="img/vcn-example.png" style="height: 250px; padding-top: 0px; padding-left: 10px" />
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Peering</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Local Peering</li>
+					<ul>
+						<li>Connecting two VCNs in a region</li>
+					</ul>
+					<li>Remote Peering</li>
+					<ul>
+						<li>Connecting two VCNs across regions</li>
+					</ul>
+					<li>Connectivity with on-premise datacenter</li>
+					<ul>
+						<li>Fast connection needs to be in place</li>
+						<li>Secure VPN needs to be established</li>
+					</ul>
+					<img src="img/peering.png" style="height: 250px; padding-top: 10px; padding-left: 10px" />
+				</ul>
+			</div>
+		</section>
+
+		<div class="slide outline"></div>
+
+		<section>
+			<header>Compute</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Compute Instances</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Shape = amount of memory and CPU an instance is using</li>
+					<ul>
+						<li>There are classes of shapes that you can choose from</li>
+						<li>Standard and HPC/GPU shapes</li>
+					</ul>
+					<li>Virtual Machine (VM) &ndash; multi-tenant model</li>
+					<ul>
+						<li>A hypervisor to virtualize the underlying Bare Metal server into smaller VMs</li>
+					</ul>
+					<li>Bare Metal (BM) &ndash; single-tenant model</li>
+					<ul>
+						<li>Direct hardware access, full bare metal server</li>
+						<li>Types of workloads: performance intensive, require a specific hypervisor</li>
+					</ul>
+					<li>Dedicated VM Hosts (DVM) &ndash; single-tenant model</li>
+					<ul>
+						<li>VM instances running on dedicated single-tenant servers</li>
+						<li>Not shared with other customers</li>
+					</ul>
+					<img src="img/compute-instances.png"
+						style="text-align: right; height: 120px; padding-top: 5px; margin-bottom: -20px; padding-left: 10px" />
+					<li>States: start, stop, reboot, terminate</li>
+					<ul>
+						<li>Billing pauses in STOP state but depends on shape</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Image</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Image</li>
+					<ul>
+						<li>A template of a virtual hard drive with OS</li>
+						<li>Other software, libraries, configurations, etc.</li>
+					</ul>
+					<li>Stored on a boot volume</li>
+					<li>Base images are provided</li>
+					<ul>
+						<li>CentOS, Ubuntu, Windows Server, Oracle Linux, RedHat, etc.</li>
+						<li>Some may require licence costs</li>
+					</ul>
+					<li>Custom images</li>
+					<ul>
+						<li>You can create a custom image from the base image</li>
+						<li>Specific packages, libraries or custom configuiration</li>
+						<li>You store the image in the object storage</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Autoscaling</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Instance configuration</li>
+					<ul>
+						<li>OS image, metadata, shape, vNICs, storage, subnets</li>
+						<li>Apply configuration to multiple instances at the same time</li>
+						<ul>
+							<li>You can manage them all together (start, stop, terminate)</li>
+						</ul>
+						<img src="img/instance-config-pool.png" style="height: 100px; margin-top: 0px" />
+					</ul>
+					<li>Autoscaling</li>
+					<ul>
+						<li>Automatically adjust a number of compute instances in an instance pool</li>
+						<li>Control using performance metrics such CPU or memory utilization</li>
+						<li>cooldown period &ndash; time between scale in and scale out (e.g. 300 seconds)</li>
+					</ul>
+					<img src="img/autoscaling.png" style="height: 170px; margin-top: 0px" />
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Load Balancer</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Managed service</li>
+					<ul>
+						<li>Health check &ndash; checks health status of backends (TCP, HTTP)</li>
+						<li>Algorithm &ndash; round-robin, IP hash, least connections</li>
+					</ul>
+					<li>Supports protocols</li>
+					<ul>
+						<li>TCP, HTTP 1.1, HTTP/2, WebSocket, SSL termination, end-to-end SSL</li>
+						<li>Supports sticky sessions (sessions persistence)</li>
+					</ul>
+					<li>High Availability</li>
+					<ul>
+						<li>Primary and stand-by LB</li>
+						<li>Each LB is in different AD</li>
+						<li>Failover uses floating IP</li>
+					</ul>
+					<img src="img/load-balancer.png" style="height: 320px; margin-left: 300px; margin-top: -120px" />
+				</ul>
+			</div>
+
+
+		</section>
+
+		<div class="slide outline"></div>
+
+		<section>
+			<header>Storage</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Object Storage</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Types of data to store</li>
+					<ul>
+						<li>Storage for unstructured data (images, media files, logs, backups)</li>
+						<li>Data managed as objects, provides API using HTTP verbs</li>
+					</ul>
+					<li>Namespace</li>
+					<ul>
+						<li>Logical entity that serves as top-level container for all bueckts and objects</li>
+						<li>Each tenancy is provided one unique namespace</li>
+					</ul>
+					<li>Bucket</li>
+					<ul>
+						<li>A logical container for storing objects</li>
+						<li>Bucket names must be unique within tenancy</li>
+						<li>Hot bucket &ndash; standard, can be accessed immediatelly</li>
+						<li>Cold bucket &ndash; rarely accessed data, need to be restored</li>
+						<ul>
+							<li>Minimum retention, such as 90 days</li>
+							<li>Time to First Byte (TTFB) is in hours, e.g. 4 hours</li>
+						</ul>
+					</ul>
+					<li>Object and metadata</li>
+					<ul>
+						<li>data managed as objects regardless data type</li>
+					</ul>
+					<li>Example object URL path:</li>
+					<ul>
+						<li class="no-bullet"><code>/n/&lt;namespace>/b/&lt;bucket>/o/&lt;object_name></code>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Block Storage</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Local NVMe SSD device</li>
+					<ul>
+						<li>Locally attached device, provided by some shapes, 200K IOPS - 1M IOPS</li>
+						<li>Workloads that require high storage performance</li>
+						<li>usually no RAID, snapshots, backups</li>
+					</ul>
+					<li>Block volumes</li>
+					<ul>
+						<li>Reside in storage servers</li>
+						<li>NVMe SSD based, up to 35K IOPS</li>
+						<li>Data stored on block volumes beyond the lifespan of compute instance</li>
+						<li>Multiple replicas across multiple storage servers</li>
+					</ul>
+					<li>File Storage</li>
+					<ul>
+						<li>Network file server (NFS)</li>
+						<li>Client mounts a <b>mount target</b> (NFS endpoint) and an <b>export path</b></li>
+						<li>Example</li>
+						<ul>
+							<li class="no-bullet"><code>sudo mount 10.0.0.6/example1/path /mnt/mountpointA</code>
+						</ul>
+					</ul>
+				</ul>
 			</div>
 
 		</section>
 
 
-	</section>
+		<!-- <div class="slide">
+			<hgroup>
+				<h1>Terminology (1)</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li>Region</li>
+				<ul>
+					<li>A localized geographical area</li>
+					<li>A cloud provider usually has multiple regions around the world.</li>
+				</ul>
+				<li>Availability Domain</li>
+				<ul>
+					<li>A datacenter in a region; there can be more AD in a region</li>
+				</ul>
+				<li>Tenancy</li>
+				<ul>
+					<li>Isolated partition where a customer creates and organizes cloud resources.</li>
+				</ul>
+				<li>Instance</li>
+				<ul>
+					<li>Compute host running in the cloud</li>
+				</ul>
+				<li>Bare Metal</li>
+				<ul>
+					<li>Physical host that run directly on bare metal servers without hypervisor</li>
+				</ul>
+				<li>Shape/Class</li>
+				<ul>
+					<li>Amount of computing resources allocated to the instance</li>
+					<li>CPUs, Memory, Local Disk, Network Bandwidth, Number of VNICs</li>
+				</ul>
+				<li>Image</li>
+				<ul>
+					<li>A template of a virtual hard drive that defines operating system and other software for an instance.</li>
+				</ul>
 
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Terminology (2)</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li>Instance Pool</li>
+				<ul>
+					<li>A group of instances</li>
+				</ul>
+
+				<li>Virtual Cloud Network (VCN)</li>
+				<ul>
+					<li>A virtual network in which instances run</li>
+					<li>It includes: <b>subnets</b>, <b>route tables</b>, <b>firewall rules</b>, <b>gateways</b></li>
+				</ul>
+				<li>Block Volume</li>
+				<ul>
+					<li>A virtual disk providing persistent storage</li>
+					<li>It can be used as a volume attached to the instance</li>
+				</ul>
+				<li>Object Storage</li>
+				<ul>
+					<li>Allows to store and manage data as objects in logical containers (<b>buckets</b>)</li>
+					<li>The data can be of any type and are usually of large size</li>
+					<li>The data does not change frequently</li>
+					<li>Examples: data backup, storing unstructured data, sensor-generated data</li>
+				</ul>
+
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Access and Usage</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Layers</li>
+				<ul>
+					<li>Cloud Infrastructure &rarr; REST API &rarr; CLI, Web Console, other tools</li>
+				</ul>
+				<li>Key pair</li>
+				<ul>
+					<li>Authentication mechanism using <b>public</b> and <b>private</b> key</li>
+					<li>public key is uploaded to an instance, a client uses the private key to authenticate</li>
+					<li>Example: ssh using key authentication to access ssh deamon running in Linux</li>
+				</ul>
+			</ul>
+
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>IaaS Example</h1>
+			</hgroup>
+			<img src="img/example-iaas.png" style="width: 700px; padding: 20px"></img>
+		</div> -->
+
+		<div class="slide outline"></div>
+
+		<section>
+			<header>Infrastructure as Code</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Overview</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Definition</li>
+					<ul>
+						<li>Application envs (in a cloud) managed via definition files</li>
+						<li>Version control, team development, scripting, etc.</li>
+					</ul>
+					<li>Major Technologies</li>
+					<ul>
+						<li><b>Configuration Management Tools</b></li>
+						<ul>
+							<li>install and manage software on machines that already exist</li>
+							<li>Examples: Ansible, Chef, Puppet</li>
+						</ul>
+						<li><b>Abstraction of cloud infrastructure</b></li>
+						<ul>
+							<li>Terraform</li>
+						</ul>
+					</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Terraform</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Higher-level abstraction of the datacenter and associated services</li>
+					<li>Supports many service providers</li>
+					<ul>
+						<li>Google, Microsoft, Oracle, AWS</li>
+					</ul>
+					<li>Steps</li>
+					<ol>
+						<li>Description of resources in Hashicorp Configuration Language (HCL)</li>
+						<ul>
+							<li>instances, networks, firewall rules, routing tables, etc. </li>
+						</ul>
+						<li>Terraform generates execution plan to reach the desired state</li>
+						<li>Terraform executes the plan to reach the desired state; can generate incremental execution
+							plan</li>
+					</ol>
+			</div>
+
+		</section>
+
+	</section>
 
 
 

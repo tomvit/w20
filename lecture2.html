@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
 	Web 2.0, CTU course slides
-	(cc) 2010-2014 Tomas Vitvar, tomas@vitvar.com
+	(cc) 2010-2013 Tomas Vitvar, tomas@vitvar.com
 -->
 <html>
 
@@ -9,7 +9,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="course" content="Web 2.0" />
 	<meta name="lecture" content="Lecture 2" />
-	<meta name="keywords" content="SaaS, IaaS, PaaS" />
+	<meta name="keywords" content="JSON, JSONP, JavaScript, AJAX, CORS" />
 
 	<link type="text/css" rel="stylesheet" href="css/meta.css">
 	</link>
@@ -19,14 +19,15 @@
 	</link>
 
 	<script type="text/javascript" src="humla/lib/humla.js"></script>
-	<title>Cloud Architectures</title>
+	<title>Browser Networking</title>
 </head>
 
 <body>
 
 	<footer>
 		<p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester" />,&nbsp;
-			<span class="meta_twitter" /></p>
+			<span class="meta_twitter" />
+		</p>
 		<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
 	</footer>
 
@@ -38,7 +39,8 @@
 		<div class="author">
 			<p class="meta_author" />
 			<p><span class="meta_email" /> &bull; <span class="meta_twitter" /> &bull;
-				<span class="meta_web" /></p>
+				<span class="meta_web" />
+			</p>
 		</div>
 		<center>
 			<div class="meta_logo"></div>
@@ -63,895 +65,691 @@
 	<div class="slide outline"></div>
 
 	<section>
-		<header>Introduction</header>
+		<header>Browser Networking</header>
 
 		<div class="slide">
 			<hgroup>
-				<h1>Terminology</h1>
+				<h1>Browser Networking</h1>
 			</hgroup>
-			<ul>
-				<li>Cloud computing</li>
-				<li>*aaS</li>
-				<li>DevOps</li>
-				<li>Cloud Native, Microservices</li>
-				<li>Serverless</li>
+			<ul class="x-small">
+				<li>Browser</li>
+				<ul>
+					<li>Platform for fast, efficient and secure delivery of Web apps</li>
+					<li>Many components</li>
+					<ul>
+						<li>parsing, layout, style calculation of HTML and CSS, JavaScript execution speed, rendering
+							pipelines, and <b>networking stack</b></li>
+					</ul>
+					<li>When network is slow, e.g. waiting for a resource to arrive</li>
+					<ul>
+						<li>all other steps are blocked</li>
+					</ul>
+				</ul>
+				<img src="img/browser-networking-api.png" style="height: 270px"></img>
+			</ul>
 		</div>
 
+		<div class="slide">
+			<hgroup>
+				<h1>Connection Management</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Network socket management and optimization</li>
+				<ul>
+					<li>Socket reuse</li>
+					<li>Request prioritization</li>
+					<li>Protocol negotiation</li>
+					<li>Enfocring connection limits</li>
+				</ul>
+				<li>Socket manager</li>
+				<ul>
+					<li>Sockets organized in pools (connection limits and security constraints)</li>
+					<li>origin = (protocol, domain, port number)</li>
+				</ul>
+				<img src="img/socket-manager.png" style="height: 240px"></img>
+			</ul>
+		</div>
 
 		<div class="slide">
 			<hgroup>
-				<h1>What is a Cloud?</h1>
+				<h1>Network Security</h1>
 			</hgroup>
-			<ul class="small">
-				<li>A different way of thinking</li>
+			<ul class="x-small">
+				<li>No raw socket access for app code</li>
 				<ul>
-					<li>Got your grand mum's savings under your pillow?</li>
+					<li>Prevents apps from initiating any connection to host</li>
+					<li>For example port scan, connect to mail server, etc.</li>
+				</ul>
+				<li>Network security</li>
+				<ul>
+					<li><b>Connection limits</b></li>
 					<ul>
-						<li>probably not, you better have them in your bank</li>
+						<li>protect both client and server from resource exhaustion</li>
 					</ul>
-					<li>Data is your major asset</li>
-					<li>you better have them in a "bank" too</li>
-					<li>Someone can abuse your data?<br />
-					<li>banks bankrupt too, sometimes &ndash; it is a risk you take</li>
-					<li>there is a market and a competition</li>
+					<li><b>Request formatting and response processing</b></li>
+					<ul>
+						<li>Enforcing well-formed protocol semantics of outgoing requests</li>
+						<li>Response decoding to protect user from malicious servers</li>
+					</ul>
+					<li><b>TLS negotiation</b></li>
+					<ul>
+						<li>TLS handshake and verification checks on certificates</li>
+						<li>User is warned when verification fials, e.g. self-signed cert is used</li>
+					</ul>
+					<li><b>Same-origin policy</b></li>
+					<ul>
+						<li>Constraints on requests to be initiated and to which origin</li>
+					</ul>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Mashups</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Web application hybrid</li>
+				<ul>
+					<li>App uses APIs of two or more applications</li>
+				</ul>
+				<li>Types</li>
+				<ul>
+					<li>Data mashup &ndash; integration/aggregation of data (read only)</li>
+					<li>Service mashup &ndash; more sophisticated workflows (read, write)</li>
+					<li>Visualization &ndash; involves UI</li>
+					<ul>
+						<li>For example, third-party data displayed on the Google map</li>
+					</ul>
+				</ul>
+				<li>Client-Server View</li>
+				<ul>
+					<li>client-side mashups (in a browser)</li>
+					<ul>
+						<li>JavaScript, Dynamic HTML, AJAX, JSON/JSONP</li>
+					</ul>
+					<li>server-side mashups</li>
+					<ul>
+						<li>server-side integration of services and data</li>
+						<li>Any language</li>
+					</ul>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide outline"></div>
+
+		<section>
+			<header>XHR</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>XMLHttpRequest (XHR)</h1>
+				</hgroup>
+				<ul>
+					<li>Interface to utilize HTTP protocol in JavaScript</li>
+					<ul>
+						<li>standardized by <span id="webapps-wg" class="h-ref"></span> at W3C</li>
+						<li>basis for AJAX</li>
+						<ul>
+							<li>Asynchronous JavaScript and XML</li>
+						</ul>
+					</ul>
+					<li>Typical usage</li>
+					<ol>
+						<li>Browser loads a page that includes a script</li>
+						<li>User clicks on a HTML element</li>
+						<ul>
+							<li>it triggers a JavaScript function</li>
+						</ul>
+						<li>The function invokes a service through XHR</li>
+						<ul>
+							<li>same origin policy, cross-origin resource sharing</li>
+						</ul>
+						<li>The function receives data and modifies HTML in the page</li>
+					</ol>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>XHR Interface &ndash; Key Methods and Properties</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Method and properties of XHR object</li>
+					<ul>
+						<li><code>open</code>, opens the request, parameters:<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<code>method</code> &ndash; method to be used (e.g. GET, PUT,
+							POST),<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<code>url</code> &ndash; url of the resource,<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<code>asynch</code> &ndash; true to make asynchronous call,<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;<code>user</code>, <code>pass</code> &ndash; credentials for
+							authentication.</li>
+						<li><code>onReadyStateChange</code> &ndash; JavaScript function object, it is called when
+							<code>readyState</code> changes (uninitialized, loading, loaded, interactive, completed).
+						</li>
+						<li><code>send</code>, <code>abort</code> &ndash; sends or aborts the request
+							(for asynchronous calls)</li>
+						<li><code>status</code>, <code>statusText</code> &ndash; HTTP status code and a
+							corresponding text.</li>
+						<li><code>responseText</code>, <code>responseXML</code> &ndash; response as text or
+							as a DOM document (if possible).</li>
+						<li><code>onload</code> &ndash; event listener to support server push.</li>
+					</ul>
+					<li>See <span id="xhr-w3c" class="h-ref"></span>, or
+						<span id="xhr-moz" class="h-ref"></span> for a complete reference.
 					</li>
 				</ul>
-				<li>Outsourcing of application infrastructure</li>
-				<ul>
-					<li>Reliability and availability</li>
-					<li>Low costs &ndash; pay-per-use</li>
-					<li>Elasticity &ndash; can dynamically grow with your apps</li>
-					<li>CAPEX vs. OPEX</li>
-				</ul>
-			</ul>
-		</div>
+			</div>
 
-		<div class="slide">
-			<hgroup>
-				<h1>What is a Cloud?</h1>
-			</hgroup>
-			<ul class="small">
-				<li>Any app you access over the web?</li>
-				<li>A datacenter?</li>
-				<ul>
-					<li>Offers virtualization</li>
-					<li>Any company having a datacenter wants to move to</li>
-				</ul>
-				<li>Cloud provider should also offer services, such as:</li>
-				<ul>
-					<li>scalability, storage</li>
-					<li>Possible to configure programmatically</li>
-					<ul>
-						<li>integration to enterprise administration processes</li>
-						<li>usually REST interface</li>
-					</ul>
-				</ul>
-			</ul>
-		</div>
+			<div class="slide">
+				<hgroup>
+					<h1>How XHR works</h1>
+				</hgroup>
+				<div style="height: 440px; margin-top: 20px" id="1kI3tlZl6PHZ_J_uwn_SVyT8_F05yE5Hi0B9pOEI37Z8"
+					class="h-drawing"></div>
+			</div>
 
-		<div class="slide">
-			<hgroup>
-				<h1>Traditional Solution to Infrastructure</h1>
-			</hgroup>
-			<ul class="small">
-				<li>Traditional hardware model</li>
-				<ul>
-					<li>Up-front hardware investments</li>
-					<li>Hardware not optimally utilized</li>
-				</ul>
-			</ul>
-			<div class="h-drawing" style="height: 350px; margin-left: -10px" id="17jEYye-th5U5T-N-iE1gR7f_k5Bwrk9P7z9yYC4EZlw"><img style="height: 350px; " alt="traditional-hardware" src="https://docs.google.com/drawings/export/svg?id=17jEYye-th5U5T-N-iE1gR7f_k5Bwrk9P7z9yYC4EZlw"
-				  title="traditional-hardware"></div>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Good Performance – Cloud Solution</h1>
-			</hgroup>
-			<ul class="small">
-				<li>Cloud Computing model</li>
-				<ul>
-					<li>No up-front hardware investments</li>
-					<li>Hardware optimally utilized</li>
-				</ul>
-			</ul>
-			<div class="h-drawing" style="height: 350px; margin-left: -10px" id="1yeHPc2AqDeXanOV0Zi8MirHApMjf1Sa_2UCOt_9Avds"><img style="height: 350px; " alt="scalable-cloud-model" src="https://docs.google.com/drawings/export/svg?id=1yeHPc2AqDeXanOV0Zi8MirHApMjf1Sa_2UCOt_9Avds"
-				  title="scalable-cloud-model"></div>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>CAPEX vs. OPEX</h1>
-			</hgroup>
-			<ul class="xx-small">
-				<li>Captial expenditure/capital expense (CAPEX)</li>
-				<ul>
-					<li>money to spend to buy, maintain or improve fixed assets</li>
-					<ul>
-						<li>buildings, vehicels, equipment or land</li>
-					</ul>
-					<li>have impact on costs vs. profit and tax</li>
-				</ul>
-				<div class="h-drawing" style="text-align: left; height: 200px" id="1sdY1xuBXn_jH1t2dnBjOygeesr41TiV44Ht_Kfum6pU"></div>
-				<li>Operational expenditure (OPEX)</li>
-				<ul>
-					<li>ongoing costs for running a product, business, or systems</li>
-					<li>OPEX are entirely tax-deductible</li>
-				</ul>
-				<li>Cloud lets you trade CAPEX for OPEX</li>
-				<ul>
-					<li>No investments in data centers and infrastructures</li>
-					<li>You pay only when you consume resources</li>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Cloud Computing Concepts</h1>
-			</hgroup>
-			<ul class="xx-small">
-				<li><b>On-demand and self-service</b></li>
-				<ul>
-					<li>Resources are provisioned as they are requested<br />and when they are required</li>
-					<li>No human interaction, automatic</li>
-				</ul>
-				<li><b>Broad network access</b></li>
-				<ul>
-					<li>Capabilities are available over the network</li>
-				</ul>
-				<li><b>Resource pooling</b></li>
-				<ul>
-					<li>Provider's computing resources reused by multiple tenants (multitenancy)</li>
-					<li>Resourcces are dynamically assigned/re-assigned according to demand</li>
-					<li>Computing resources: CPU, memory, storage, network</li>
-				</ul>
-				<li><b>Scalability and elasticity</b></li>
-				<ul>
-					<li>Infrastructure may grow and shrink according to needs</li>
-					<li>Automatic or manual</li>
-				</ul>
-				<li><b>Measured service</b></li>
-				<ul>
-					<li>Resource usage can be monitored, controlled and reported</li>
-				</ul>
-				<li><b>Pay-per-use</b></li>
-				<ul>
-					<li>Consumers only pay for resources when they use them</li>
-				</ul>
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Cloud Computing Concepts (Cont.)</h1>
-			</hgroup>
-			<ul class="small">
-				<li>Service Models (aka Cloud Layers)</li>
-				<ul>
-					<li>IaaS &ndash; Infrastructure as a Service</li>
-					<li>PaaS &ndash; Platform as a Service, Serverless</li>
-					<ul>
-						<li>MWaaS, DBaaS, ...</li>
-						<li>FaaS</li>
-					</ul>
-					<li>SaaS &ndash; Software as a Service</li>
-				</ul>
-				<li>Deployment Models</li>
-				<ul>
-					<li>Public Cloud</li>
-					<li>Private Cloud</li>
-					<li>Hybrid Cloud</li>
-				</ul>
-			</ul>
-		</div>
+		</section>
 
 	</section>
 
 	<div class="slide outline"></div>
 
 	<section>
+		<header>Security Mechanisms</header>
 
-		<header>Cloud Architecture</header>
-
-		<section>
-
-			<header>Service Models</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Service Models</h1>
-				</hgroup>
-				<img style="width: 750px; margin-left: 10px; margin-top: 60px" src="img/cloud-service-models.png" />
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>IaaS: Infrastructure as a Service</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Usage</li>
-					<ul>
-						<li>Predefined shapes of compute instances (e.g. micro, small, large, extra-large)</li>
-						<ul>
-							<li>for example: RedHat 7.8, 613 MB of memory, 1 TB block storage</li>
-						</ul>
-						<li>Pay-per-use &ndash; pay for resources you use (time or amount)</li>
-						<ul>
-							<li>no up-front costs</li>
-						</ul>
-					</ul>
-					<li>IaaS Services Examples</li>
-					<ul>
-						<li>Load balancer</li>
-						<li>Autoscaling</li>
-						<li>Connectivity with on-premise network</li>
-						<li>Resource monitoring</li>
-					</ul>
-					<li>IaaS providers</li>
-					<ul>
-						<li>Amazon EC2, GoGrid, Rackspace, OpenNebula, Google Cloud, Oracle OCI, ...</li>
-					</ul>
-				</ul>
-				<!-- <div class="h-drawing" style="height: 270px; padding-left: 220px; margin-top: -250px;" alt="Web 2.0 web architecture" id="1GnYOqlP5qCv8LMyd3yuLNdfsymoDKVRhYrSvorh4suw"></div> -->
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>PaaS: Platform as a Service</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Usage</li>
-					<ul>
-						<li>Choose software platform, e.g., JEE, .NET, Python, etc.</li>
-						<li>Pay-per-use &ndash; pay for the resources you use; no up-front costs</li>
-						<li>Cloud native, microservices, containers</li>
-					</ul>
-					<li>PaaS features</li>
-					<ul>
-						<li>Serverless</li>
-						<li>Auto Scalling and Load balancing</li>
-						<li>Local development environment</li>
-						<li>Administration API</li>
-					</ul>
-					<li>PaaS providers</li>
-					<ul>
-						<li>Google App Engine &ndash; first PaaS service</li>
-						<li>Today, mostly Kubernetes, Google, Heroku, Azure, AWS, Oracle</li>
-					</ul>
-				</ul>
-				<!-- <div class="h-drawing" style="height: 270px; padding-left: 220px; margin-top: -220px;" alt="Platfor as a Service example" id="1WPWgHjgD4Ew-bljCiWeyTvbNuFWs_dXnjhI333vtVbs"></div> -->
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>SaaS: Software as a Service</h1>
-				</hgroup>
-
-				<ul class="x-small">
-					<li>Software delivery model for applications hosted in the cloud</li>
-					<ul>
-						<li>typically software for end-users</li>
-						<li>services accessed using a web browser</li>
-						<li>provides API for programmatic access</li>
-					</ul>
-					<li>SaaS characteristics</li>
-					<ul>
-						<li>Typically build on top of IaaS or PaaS</li>
-						<li>Configurable and customizable modern Web applications</li>
-						<li>Usually basic version for free, need to pay for "pro" version</li>
-						<li>Global availability - any computer, any device</li>
-						<li>Easy management - automatic and fast updates</li>
-						<li>Pay-per-use &ndash; pay for the time you use</li>
-					</ul>
-					<li>SaaS providers</li>
-					<ul>
-						<li>Google Apps, Salesforce, ...</li>
-					</ul>
-				</ul>
-			</div>
-
-		</section>
-
-		<div class="slide outline"></div>
-
-		<section>
-			<header>Multitenancy</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Multitenancy</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Architectural approach where resources are shared between multiple tenants or consumers</li>
-					<li>Implications</li>
-					<ul>
-						<li>Centralization of infrastructure in locations with lower costs</li>
-						<li>Peak-load capacity increases</li>
-						<li>Utilisation and efficiency improvements for systems that are not well utilised</li>
-					</ul>
-					<li>Sharing options</li>
-					<ul>
-						<li>Shared Everything</li>
-						<li>Shared Infrastructure</li>
-						<ul>
-							<li>Virtual Machines</li>
-							<li>OS "virtualization"</li>
-						</ul>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Shared Everything</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Resources are shared between all tenants or consumers</li>
-					<ul>
-						<li>tenant: a service consumer</li>
-					</ul>
-					<li>Common for the SaaS model</li>
-					<li>The application should provide tenant isolation</li>
-					<li>Data for multiple tenants is stored in the same database tables</li>
-				</ul>
-				<div class="h-drawing" style="height: 220px; margin-left: 0px; margin-top: 20px" alt="Web 2.0 web architecture" id="17wNMQNs3vf2yyE0VzFhGbnNTjJBKKONbeS9jijYHbN4"></div>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Shared Infrastructure: Virtual Machines</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Infrastructure shared via virtual machines</li>
-					<ul>
-						<li>each tenant has its own virtual environment</li>
-						<li>Isolation provided by hypervisor</li>
-						<ul>
-							<li>hypervisor: virtual machine manager, runs virtual machines</li>
-						</ul>
-						<li>Resource contention depends on VM capability and configuration</li>
-						<li>Adds an additional layer and processes to run and manage</li>
-					</ul>
-				</ul>
-				<div class="h-drawing" style="height: 280px; margin-left: 0px; margin-top: 10px" alt="Web 2.0 web architecture" id="1y5TMPeDujUG9aBUZ8Tf8a5vwrqT3LpjmYjb_HS5Ux1E"></div>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Shared Infrastructure: OS Virtualization</h1>
-				</hgroup>
-				<ul class="x-small">
-					<li>Infrastructure shared via OS Virtualization</li>
-					<ul>
-						<li>Each tenant has its own processing zone</li>
-						<li>Isolation provided by the operating system</li>
-						<li>Resource contention depends on zone configuration</li>
-						<li>No VMs to run and manage, no abstraction layer between app & OS</li>
-					</ul>
-				</ul>
-				<div class="h-drawing" style="height: 280px; margin-left: 0px; margin-top: 10px" alt="Web 2.0 web architecture" id="1OIg4KQRqj_G3YUsoCFQS1E4JOpxx3Yg63PGeRMhkupE"></div>
-			</div>
-
-		</section>
-	</section>
-
-	<div class="slide outline"></div>
-
-	<section>
-		<header>Infrastructure as a Service</header>
-
-		<div class="slide">
+		<div class="slide" id="sameorigin">
 			<hgroup>
-				<h1>Overview</h1>
+				<h1>Same Origin Policy</h1>
 			</hgroup>
-			<ul class="x-small">
-				<li>Infrastructure = environment where your app is running</li>
-				<li>Tenancy = your "space" in the cloud</li>
-				<li>What you need</li>
+			<div style="height: 310px" id="1xg_D6b_EBQDYol5Kk7b-UdhbuVsbjBHfaKaNTgH_rkY" class="h-drawing"></div>
+			<ul class="xx-small">
+				<li>JavaScript code can only access resources on the same domain</li>
 				<ul>
-					<li>Servers (compute instances) to run your app in a location (region)</li>
-					<li>Connectivity</li>
-					<ul>
-						<li>Private network for intra-communication</li>
-						<li>Public network for internet communication</li>
-						<li>Firewall (security) rules</li>
-						<li>Route tables</li>
-					</ul>
-					<li>Storage</li>
-					<ul>
-						<li>Operating system</li>
-						<li>Your app data</li>
-					</ul>
-					<li>Identity Management</li>
-					<ul>
-						<li>Who and how can access and control your tenancy</li>
-					</ul>
-					<li>Monitoring, Logging, Auditing</li>
+					<li>XHR to GET, POST, PUT, UPDATE, DELETE</li>
+					<li>Browsers apply <b>same origin policy</b></li>
+				</ul>
+				<li>Solutions</li>
+				<ul>
+					<li>JSON and JSONP (GET only)</li>
+					<li>Cross-origin Resource Sharing Protocol (CORS)</li>
 				</ul>
 			</ul>
 		</div>
 
 		<div class="slide">
 			<hgroup>
-				<h1>Region</h1>
+				<h1>Why Same Origin Policy?</h2>
 			</hgroup>
-			<ul class="xx-small">
-				<li>Region = location on a planet where cloud data centers are located</li>
-				<img src="img/cloud-regions.png" style="width: 650px; padding-bottom: 10px"/>
-				<li>Why location matters...</li>
-				<ul>
-					<li>Latency - your users should be close to your app</li>
-					<li>Regulations - your data should be stored in EU</li>
-					<li>Connectivity to external providers</li>
-					<ul>
-						<li>Such as other cloud vendors</li>
-					</ul> 
-				</ul>
+			<ul>
+				<li>Without the same origin policy, the following POST would be possible</li>
 			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Datacenters</h1>
-			</hgroup>
-			<ul class="xx-small">
-				<li>Datacenter (aka Availability Domain &ndash; AD)</li>
-				<ul>
-					<li>Computing resources in a location within a region</li>
-					<li>One or more datacenters exsit in a region</li>
-					<ul>
-						<li>They are completely de-correlated, independent</li>
-						<li>They have separated power supply, do not share underlying infrastructure</li>
-						<li>If one DC fails, the other one is up and running</li>
-					</ul>
-				</ul>  
-				<img src="img/cloud-iaas-layers.png" style="width: 650px; padding-top: 0px" />
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Off-box Network Virtualization</h1>
-			</hgroup>
-			<ul class="xx-small">
-				<li>Gen 1.0 Cloud, inefficient Resource Sharing</li>
-				<ul>
-					<li>On-Premise virtualization to share resources amongst multiple tenants in the cloud.</li>
-					<img src="img/network-virt-gen10.png" style="width: 650px; padding-top: 0px" />
-				</ul>
-				<li>Gen 2.0 Cloud</li>
-				<ul>
-					<li>Smart-NIC accelerated SR-IOV (Single Root I/O Virtualization)</li>
-					<ul>
-						<li>Networking is a specialized function, needs hardware/sillicon to accelerate it</li>
-					</ul>
-					<img src="img/sr-iov.png" style="width: 450px; padding-top: 0px" />
-				</ul>
-			</ul>
+			<div style="height: 350px; margin-top: 30px" id="1J14eY2C9O1g8oPI9GhkOn0tRCB5z_NodiBzPX2oEabY"
+				class="h-drawing"></div>
 		</div>
 
 		<div class="slide outline"></div>
 
 		<section>
-			<header>Networking</header>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Virtual Cloud Network</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>VCN = a private network in a <b>single region</b> in which your instances reside</li>
-					<li>A a single and contigous IPV4 CIDR block of your choice</li>
-					<ul>
-						<li>CIDR (classless inter-domain routing) notation</li>
-						<li>IP address:</li>
-						<ul>
-							<li>network prefix (the most significant bits) and</li>
-							<li>interfaces on the network (least significant bits) ~ network hosts</li>
-						</ul>
-						<li>Example: <code>192.168.1.0/24</code></li>
-						<ul>
-							<li>IP range: <code>192.168.1.0</code> - <code>192.168.1.255</code></li>
-						</ul>
-					</ul>
-					<li>You further create subnets on a VCN to organize your instances</li>
-					<ul>
-						<li>The subnets must be "within" the VCN, they can span across ADs</li>
-						<li>Example: using <code>27</code> bits for a subnet mask allow for 8 subnets</li>
-						<ul>
-							<li><code>192.168.1.0/27</code>, <code>192.168.1.32/27</code>, <code>192.168.1.64/27</code>, ...</li>
-							<li>Each subnet can have 32 hosts</li>
-						</ul>
-					</ul>
-					<div class="h-drawing" style="text-align: left; height: 140px; margin-left: 0px; margin-top: 0px" alt="CIDR network and subnets" id="1dXQa_c6etroY6oHBgXWaDg5obRiFPG4fu5n7r2os830"></div>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>VCN Routing and Security</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Private and Public subnets</li>
-					<ul>
-						<li>Public can communicate in/out from/to Internet</li>
-						<li>Internet traffic routed to public subnet</li>
-						<li>Private can be completely isolated or communicate to Internet only</li>
-					</ul>
-					<li>Route tables</li>
-					<ul>
-						<li>Required to route across subnets and in/out from the Internet</li>
-					</ul>
-					<li>Security</li>
-					<ul>
-						<li>Control access to/from the subnet</li>
-					</ul>
-					<img src="img/vcn-example.png" style="height: 250px; padding-top: 0px; padding-left: 10px" />
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Peering</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Local Peering</li>
-					<ul>
-						<li>Connecting two VCNs in a region</li>
-					</ul>
-					<li>Remote Peering</li>
-					<ul>
-						<li>Connecting two VCNs across regions</li>
-					</ul>
-					<li>Connectivity with on-premise datacenter</li>
-					<ul>
-						<li>Fast connection needs to be in place</li>
-						<li>Secure VPN needs to be established</li>
-					</ul>
-					<img src="img/peering.png" style="height: 250px; padding-top: 10px; padding-left: 10px"/>
-				</ul>
-			</div>
-		</section>
-		
-		<div class="slide outline"></div>
-
-		<section>
-			<header>Compute</header>
-		
-			<div class="slide">
-				<hgroup>
-					<h1>Compute Instances</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Shape = amount of memory and CPU an instance is using</li>
-					<ul>
-						<li>There are classes of shapes that you can choose from</li>
-						<li>Standard and HPC/GPU shapes</li>
-					</ul>
-					<li>Virtual Machine (VM) &ndash; multi-tenant model</li>
-					<ul>
-						<li>A hypervisor to virtualize the underlying Bare Metal server into smaller VMs</li>
-					</ul>
-					<li>Bare Metal (BM) &ndash; single-tenant model</li>
-					<ul>
-						<li>Direct hardware access, full bare metal server</li>
-						<li>Types of workloads: performance intensive, require a specific hypervisor</li>
-					</ul>
-					<li>Dedicated VM Hosts (DVM) &ndash; single-tenant model</li>
-					<ul>
-						<li>VM instances running on dedicated single-tenant servers</li>
-						<li>Not shared with other customers</li>
-					</ul>
-					<img src="img/compute-instances.png" style="text-align: right; height: 120px; padding-top: 5px; margin-bottom: -20px; padding-left: 10px"/>
-					<li>States: start, stop, reboot, terminate</li>
-					<ul>
-						<li>Billing pauses in STOP state but depends on shape</li>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Image</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Image</li>
-					<ul>
-						<li>A template of a virtual hard drive with OS</li>
-						<li>Other software, libraries, configurations, etc.</li>
-					</ul>
-					<li>Stored on a boot volume</li>
-					<li>Base images are provided</li>
-					<ul>
-						<li>CentOS, Ubuntu, Windows Server, Oracle Linux, RedHat, etc.</li>
-						<li>Some may require licence costs</li>
-					</ul>	
-					<li>Custom images</li>
-					<ul>
-						<li>You can create a custom image from the base image</li>
-						<li>Specific packages, libraries or custom configuiration</li>
-						<li>You store the image in the object storage</li>
-					</ul>
-				</ul>
-			</div>
-			
-			<div class="slide">
-				<hgroup>
-					<h1>Autoscaling</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Instance configuration</li>
-					<ul>
-						<li>OS image, metadata, shape, vNICs, storage, subnets</li>
-						<li>Apply configuration to multiple instances at the same time</li>
-						<ul>
-							<li>You can manage them all together (start, stop, terminate)</li>
-						</ul>
-						<img src="img/instance-config-pool.png" style="height: 100px; margin-top: 0px"/>
-					</ul>
-					<li>Autoscaling</li>
-					<ul>
-						<li>Automatically adjust a number of compute instances in an instance pool</li>
-						<li>Control using performance metrics such CPU or memory utilization</li>
-						<li>cooldown period &ndash; time between scale in and scale out (e.g. 300 seconds)</li>
-					</ul>
-					<img src="img/autoscaling.png" style="height: 170px; margin-top: 0px"/>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Load Balancer</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Managed service</li>
-					<ul>
-						<li>Health check &ndash; checks health status of backends (TCP, HTTP)</li>
-						<li>Algorithm &ndash; round-robin, IP hash, least connections</li>
-					</ul>
-					<li>Supports protocols</li>
-					<ul>
-						<li>TCP, HTTP 1.1, HTTP/2, WebSocket, SSL termination, end-to-end SSL</li>
-						<li>Supports sticky sessions (sessions persistence)</li>
-					</ul>
-					<li>High Availability</li>
-					<ul>
-						<li>Primary and stand-by LB</li>
-						<li>Each LB is in different AD</li>
-						<li>Failover uses floating IP</li>
-					</ul>
-					<img src="img/load-balancer.png" style="height: 320px; margin-left: 300px; margin-top: -120px"/>					
-				</ul>
-			</div>
-			
-		
-		</section>
-		
-		<div class="slide outline"></div>
-
-		<section>
-			<header>Storage</header>
-		
-			<div class="slide">
-				<hgroup>
-					<h1>Object Storage</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Types of data to store</li>
-					<ul>
-						<li>Storage for unstructured data (images, media files, logs, backups)</li>
-						<li>Data managed as objects, provides API using HTTP verbs</li>
-					</ul>
-					<li>Namespace</li>
-					<ul>
-						<li>Logical entity that serves as top-level container for all bueckts and objects</li>
-						<li>Each tenancy is provided one unique namespace</li>
-					</ul>
-					<li>Bucket</li>
-					<ul>
-						<li>A logical container for storing objects</li>
-						<li>Bucket names must be unique within tenancy</li>
-						<li>Hot bucket &ndash; standard, can be accessed immediatelly</li>
-						<li>Cold bucket &ndash; rarely accessed data, need to be restored</li>
-						<ul>
-							<li>Minimum retention, such as 90 days</li>
-							<li>Time to First Byte (TTFB) is in hours, e.g. 4 hours</li>
-						</ul>
-					</ul> 
-					<li>Object and metadata</li>
-					<ul>
-						<li>data managed as objects regardless data type</li>
-					</ul>
-					<li>Example object URL path:</li>
-					<ul>
-						<li class="no-bullet"><code>/n/&lt;namespace>/b/&lt;bucket>/o/&lt;object_name></code>
-					</ul>
-				</ul>
-			</div>
-
-			<div class="slide">
-				<hgroup>
-					<h1>Block Storage</h1>
-				</hgroup>
-				<ul class="xx-small">
-					<li>Local NVMe SSD device</li>
-					<ul>
-						<li>Locally attached device, provided by some shapes, 200K IOPS - 1M IOPS</li>
-						<li>Workloads that require high storage performance</li>
-						<li>usually no RAID, snapshots, backups</li>
-					</ul>
-					<li>Block volumes</li>
-					<ul>
-						<li>Reside in storage servers</li>
-						<li>NVMe SSD based, up to 35K IOPS</li>
-						<li>Data stored on block volumes beyond the lifespan of compute instance</li>
-						<li>Multiple replicas across multiple storage servers</li>
-					</ul>
-					<li>File Storage</li>
-					<ul>
-						<li>Network file server (NFS)</li>
-						<li>Client mounts a <b>mount target</b> (NFS endpoint) and an <b>export path</b></li>
-						<li>Example</li>
-						<ul>
-							<li class="no-bullet"><code>sudo mount 10.0.0.6/example1/path /mnt/mountpointA</code>
-						</ul>
-					</ul>
-				</ul>
-			</div>
-		
-		</section>
-
-
-		<!-- <div class="slide">
-			<hgroup>
-				<h1>Terminology (1)</h1>
-			</hgroup>
-			<ul class="xx-small">
-				<li>Region</li>
-				<ul>
-					<li>A localized geographical area</li>
-					<li>A cloud provider usually has multiple regions around the world.</li>
-				</ul>
-				<li>Availability Domain</li>
-				<ul>
-					<li>A datacenter in a region; there can be more AD in a region</li>
-				</ul>
-				<li>Tenancy</li>
-				<ul>
-					<li>Isolated partition where a customer creates and organizes cloud resources.</li>
-				</ul>
-				<li>Instance</li>
-				<ul>
-					<li>Compute host running in the cloud</li>
-				</ul>
-				<li>Bare Metal</li>
-				<ul>
-					<li>Physical host that run directly on bare metal servers without hypervisor</li>
-				</ul>
-				<li>Shape/Class</li>
-				<ul>
-					<li>Amount of computing resources allocated to the instance</li>
-					<li>CPUs, Memory, Local Disk, Network Bandwidth, Number of VNICs</li>
-				</ul>
-				<li>Image</li>
-				<ul>
-					<li>A template of a virtual hard drive that defines operating system and other software for an instance.</li>
-				</ul>
-
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Terminology (2)</h1>
-			</hgroup>
-			<ul class="xx-small">
-				<li>Instance Pool</li>
-				<ul>
-					<li>A group of instances</li>
-				</ul>
-
-				<li>Virtual Cloud Network (VCN)</li>
-				<ul>
-					<li>A virtual network in which instances run</li>
-					<li>It includes: <b>subnets</b>, <b>route tables</b>, <b>firewall rules</b>, <b>gateways</b></li>
-				</ul>
-				<li>Block Volume</li>
-				<ul>
-					<li>A virtual disk providing persistent storage</li>
-					<li>It can be used as a volume attached to the instance</li>
-				</ul>
-				<li>Object Storage</li>
-				<ul>
-					<li>Allows to store and manage data as objects in logical containers (<b>buckets</b>)</li>
-					<li>The data can be of any type and are usually of large size</li>
-					<li>The data does not change frequently</li>
-					<li>Examples: data backup, storing unstructured data, sensor-generated data</li>
-				</ul>
-
-			</ul>
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>Access and Usage</h1>
-			</hgroup>
-			<ul class="x-small">
-				<li>Layers</li>
-				<ul>
-					<li>Cloud Infrastructure &rarr; REST API &rarr; CLI, Web Console, other tools</li>
-				</ul>
-				<li>Key pair</li>
-				<ul>
-					<li>Authentication mechanism using <b>public</b> and <b>private</b> key</li>
-					<li>public key is uploaded to an instance, a client uses the private key to authenticate</li>
-					<li>Example: ssh using key authentication to access ssh deamon running in Linux</li>
-				</ul>
-			</ul>
-
-		</div>
-
-		<div class="slide">
-			<hgroup>
-				<h1>IaaS Example</h1>
-			</hgroup>
-			<img src="img/example-iaas.png" style="width: 700px; padding: 20px"></img>
-		</div> -->
-
-		<div class="slide outline"></div>
-
-		<section>
-			<header>Infrastructure as Code</header>
+			<header>Scripting Attacks</header>
 
 			<div class="slide">
 				<hgroup>
 					<h1>Overview</h1>
 				</hgroup>
-				<ul class="x-small">
-					<li>Definition</li>
+				<ul class="small">
+					<li>Scripting Attacks</li>
 					<ul>
-						<li>Application envs (in a cloud) managed via definition files</li>
-						<li>Version control, team development, scripting, etc.</li>
+						<li>Intruders make users perform action that has side effects on their resources</li>
+						<li>Intruders inject malicious code to Web pages</li>
 					</ul>
-					<li>Major Technologies</li>
+					<li>Roles in Security Scenarios</li>
 					<ul>
-						<li><b>Configuration Management Tools</b></li>
+						<li>Alice, Bob</li>
 						<ul>
-							<li>install and manage software on machines that already exist</li>
-							<li>Examples: Ansible, Chef, Puppet</li>
+							<li>Normal users, usually Alices wants to send a message to Bob or Alice accesses a Bob's
+								site.</li>
 						</ul>
-						<li><b>Abstraction of cloud infrastructure</b></li>
+						<li>Eve</li>
 						<ul>
-							<li>Terraform</li>
+							<li>A user with bad intentions, usually a passive attacker.</li>
+						</ul>
+						<li>Mallory</li>
+						<ul>
+							<li>An active attacker, usually sends a link to a page with malicious code.
 						</ul>
 					</ul>
+				</ul>
 			</div>
 
 			<div class="slide">
 				<hgroup>
-					<h1>Terraform</h1>
+					<h1>Recall: State management in HTTP</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Request-response interaction with cookies</li>
+					<ul>
+						<li>Session is a logical channel maintained by the server</li>
+					</ul>
+					<div class="h-drawing" style="height: 250px" id="1mVCe8EtqVApZVRV_RHYQKtqDNELKdo84qzCqGvAs7iA">
+					</div>
+					<li>Stateful Server</li>
+					<ul>
+						<li>Server remembers the session information in a server memory</li>
+						<li>Server memory is a non-persistent storage, when server restarts the memory content is lost!
+						</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Cross-site Request Forgery (CSRF)</h1>
 				</hgroup>
 				<ul class="x-small">
-					<li>Higher-level abstraction of the datacenter and associated services</li>
-					<li>Supports many service providers</li>
-					<ul>
-						<li>Google, Microsoft, Oracle, AWS</li>
-					</ul>
-					<li>Steps</li>
+					<li>Exploits a trust of a website in a user's browser</li>
+					<li>Scenario</li>
 					<ol>
-						<li>Description of resources in Hashicorp Configuration Language (HCL)</li>
+						<li>Mallory sends a link to Alice (in an email, in a chat, etc.)</li>
 						<ul>
-							<li>instances, networks, firewall rules, routing tables, etc. </li>
+							<li>The link points to a page that has HTML code with hrefs to Alice's private resources
+							</li>
+							<li>For example, to perform an action on Alice's account, <br />
+								it is possible to use <code>img</code> like this:</li>
+							<pre class="brush: html">
+								&lt;img src="https://bank.com/account?do=transfer_money&amp;amount=50000"/></pre>
 						</ul>
-						<li>Terraform generates execution plan to reach the desired state</li>
-						<li>Terraform executes the plan to reach the desired state; can generate incremental execution plan</li>
+						<li>Alice loads the page in her browser</li>
+						<ul>
+							<li>Alice is authenticated to the bank's website, the browser sends Alice's authentication
+								cookies
+								with the request.</li>
+						</ul>
 					</ol>
+					<li>Issues and Prevention</li>
+					<ul class="xx-small">
+						<li>The bank site vilotes REST, i.e. overloading of GET for making actions</li>
+						<li>The bank should check HTTP <code>referer</code> header</li>
+						<li>It is a "blind" attack, Mallory does not see the result</li>
+						<li>To perform POST, current browsers today use <a href="#CORS">CORS protocol</a></li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Cross-site Scripting Attack (XSS)</h1>
+				</hgroup>
+				<ul>
+					<li>Exploits a trust of a user in a website</li>
+				</ul>
+				<div id="1pOK4HZPt7d4j-KSllCa8BUx5Amjlq28L6sQh3Wac8kI" class="h-drawing" style="height: 250px"></div>
+				<ul class="small">
+					<li>Example Scenario</li>
+					<ol>
+						<li>An attacker injects a code to a page</li>
+						<li>A users executes the code in his/her browser's session</li>
+						<li>The code provides information (cookies) to the attacker</li>
+						<li>The attacker uses the cookies to access the user's data</li>
+					</ol>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>XSS Examples</h1>
+				</hgroup>
+				<ul class="small">
+					<li>Twitter in Sep 2010</li>
+					<ul>
+						<li>Injection of JavaScript code to a page using a tweet</li>
+						<li>You posted following tweet to Twitter</li>
+						<pre class="brush: plain">
+								There is a great event happening at 
+								http://someurl.com/@"onmouseover="alert('test xss')"/</pre>
+						<li>Twitter parses the link and wraps it with <code>&lt;a></code> element</li>
+						<pre class="brush: 'xml'">
+								There is a great event happening at 
+								&lt;a href="http://someurl.com/@"onmouseover="alert('test xss')" 
+									target="_blank">http://someurl.com/@"onmouseover=
+									"alert('test xss')"/&lt;/a></pre>
+						<li>See details at <span id="twitter-xss" class="h-ref"></span></li>
+					</ul>
+					<li>Other example: Google Contacts</li>
+				</ul>
 			</div>
 
 		</section>
 
+		<div class="slide outline"></div>
+
+		<section>
+			<header>Cross-origin Resource Sharing Protocol (CORS)</header>
+
+			<div class="slide" id="CORS">
+				<hgroup>
+					<h1>Overview</h1>
+				</hgroup>
+				<ul>
+					<li>Increasing number of mashup applications</li>
+					<ul>
+						<li>client-side mashups involving multiple sites</li>
+						<li>mechanism to control an access to sites from within JavaScript</li>
+					</ul>
+					<li>Allow for <b>cross-site HTTP requests</b></li>
+					<ul>
+						<li>HTTP requests for resources from a different domain than the domain of the resource making
+							the request.</li>
+					</ul>
+					<li>W3C Recommendation</li>
+					<ul>
+						<li>see <span class="h-ref" id="cors-w3c"></span></li>
+						<li>Browsers support it</li>
+						<ul>
+							<li>see <span class="h-ref" id="cors-moz"></span> at Mozilla</li>
+						</ul>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>CORS Protocol &ndash; GET</h1>
+				</hgroup>
+				<div style="height: 280px" id="1cAgbH75PndD38nY1IJo4QfN5Yp7siHQXfNF5oD6x9SM" class="h-drawing"></div>
+				<ul class="x-small">
+					<li>Read-only resource access via HTTP GET</li>
+					<li>Headers:</li>
+					<ul>
+						<li><code>Origin</code> &ndash; identifies the origin of the request</li>
+						<li><code>Access-Control-Allow-Origin</code> &ndash; defines who can access the resource</li>
+						<li>either the full domain name or the wildcard (*) is allowed.</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>CORS Protocol &ndash; other methods and "preflight"</h1>
+				</hgroup>
+				<div style="height: 320px" id="1-dVhDx5pka4BElYu0WzFkqkLQWsb8aphcy16l-bET80" class="h-drawing"></div>
+				<ul class="xx-small">
+					<li>Preflight request queries the resource using <code>OPTIONS</code> method</li>
+					<ul>
+						<li>requests other than GET (except POST w/o payload) or with custom headers</li>
+						<li>A browser should run preflight automatically for any XHR request meeting preflight
+							conditions</li>
+						<li>The browser caches responses according to <code>Access-Control-Max-Age</code></li>
+					</ul>
+				</ul>
+			</div>
+
+		</section>
 	</section>
+
+	<div class="slide outline"></div>
+
+	<section>
+		<header>JSON and JSONP</header>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Recall: JSON</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>JSON = JavaScript Object Notation</li>
+				<ul>
+					<li>Serialization format for data representation</li>
+					<li>Very easy to use in JavaScript</li>
+					<ul>
+						<li>no need to use a parser explicitly</li>
+					</ul>
+					<li>Also great support in many programming environments</li>
+				</ul>
+				<li>Key constructs</li>
+				<ul class="xx-small">
+					<li><b>object</b> is a collection of comma-separated key/value pairs:<br />
+						<code>{"name" : "tomas", "age" : 18, "student" : false, &nbsp;"car" : null}</code>
+					</li>
+					<li style="margin-top: 5px"><b>array</b> is an order list of values:<br />
+						<code>[ "prague", "innsbruck", 45 ]</code>
+					</li>
+					<li style="margin-top: 5px">can be nested: objects as values in an <b>array</b>:<br />
+						<code>[ { "name" : "tomas", "age" : 18 }, <br />&nbsp;&nbsp;{ "name" : "peter", "age" : 19 } ]</code>
+					</li>
+					<li style="margin-top: 5px">and the other way around: array as values in an <b>object</b>:<br />
+						<code>{ "cities" : ["prague", "innsbruck"],<br />&nbsp;&nbsp;"states" : ["CZ", "AT"] }</code>
+					</li>
+					<li style="margin-top: 5px">A complete grammar see <span id="json" class="h-ref"></span></li>
+				</ul>
+
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>JSON in JavaScript</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Native data format</li>
+				<pre class="brush: javascript; class-name: 'tight'">
+					// data needs to be assigned
+					var data = { "people" : ["tomas", "peter", "alice", "jana"] };
+					
+					// go through the list of people
+					for (var i = 0; i < data.people.length; i++) {
+					    var man = data.people[i];
+					    // ... do something with this man
+					}</pre>
+				<li>Responses of service calls in JSON</li>
+				<ul>
+					<li>Many support JSON, how can we load that data?</li>
+				</ul>
+				<li>Example Request-Response</li>
+				<pre class="brush: javascript; class-name: 'tight'">
+						GET http://pipes.yahoo.com/pipes/pipe.run?_id=638c670c40c97b62&_render=json
+						
+					 	{"count":1,"value":  
+						   {"title":"Web 2.0 announcements",
+						    "description":"Pipes Output",
+						    "link":"http:\/\/pipes.yahoo.com\/pipes\/pipe.info...",
+						    "pubDate":"Mon, 07 Mar 2011 18:27:20 +0000",
+						    "generator":"..."
+						    ...
+						   }
+						}</pre>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>JSONP</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Service that supports JSONP</li>
+				<ul>
+					<li>allows to specify a query string parameter for a wrapper function
+						to load the data in JavaScript code</li>
+					<li>otherwise the data cannot be used in JavaScript</li>
+					<ul>
+						<li>they're loaded into the memory but assigned to nothing</li>
+					</ul>
+				</ul>
+				<li>Example</li>
+				<ul>
+					<li>if a resource at <code style="zoom: 0.9">http://someurl.org/json_data</code> returns
+						<pre class="brush: javascript; gutter: false">
+							 { "people" : ["tomas", "peter", "alice", "jana"] }</pre>
+						then the resource at<br />
+						<code style="zoom: 0.9">http://someurl.org/json_data?_callback=loadData</code> returns
+						<pre class="brush: javascript; gutter: false">
+							 loadData({ "people" : ["tomas", "peter", "alice", "jana"] });</pre>
+					</li>
+				</ul>
+				<li>A kind of workaround for the same origin policy</li>
+				<ul>
+					<li>only <code>GET</code>, nothing else works obviously</li>
+					<li>no XHR, need to load the data through the dynamic <code>&lt;script></code> element</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>JSONP in JavaScript</h1>
+			</hgroup>
+			<ul class="xx-small">
+				<li>JSONP example</li>
+				<ul>
+					<li>loads JSON data using JSONP by dynamically inserting <code>&lt;script></code>
+						into the current document. This will download JSON data and triggers the script.</li>
+				</ul>
+				<pre class="brush: javascript">
+					var TWITTER_URL = "http://api.twitter.com/1/statuses/user_timeline.json?" + 
+					  "&screen_name=web2e&count=100&callback=loadData";
+				
+					// this needs to be loaded in window.onload
+					// after all document has finished loading...
+					function insertData() {
+					    var se = document.createElement('script');
+					    se.setAttribute("type","text/javascript");
+					    se.setAttribute("src", TWITTER_URL);	
+					    document.getElementsByTagName("head")[0].appendChild(se);	
+					    // And data will be loaded when loadDta callback fires...
+					}
+				
+					// loads the data when they arrive 
+					function loadData(data) {
+					    // we need to know the the structure of JSON data that is returned 
+					    // and code it here accordingly
+					    for (var i = 0; i < data.length; i++) {
+					        data[i].created_at // contains date the tweet was created
+					        data[i].text // contains the tweet
+					    }
+					}</pre>
+			</ul>
+		</div>
+
+		<!--	<div class="slide">
+				<hgroup>
+					<h1>JSON Vulnerability</h1>
+				</hgroup>
+                <ul class="x-small">
+                	<li>What it is</li>
+                	<ul>
+                		<li>JSON array data accessible via GET (normal access is via XHR)</li>
+                		<li>Attacker may load the data in a <code>script</code>, redefine <code>Array</code> object,
+                			and assign the data to a variable.</li>
+                		<li>Attacker's page with a script that you access:</li>
+                		<ul>
+                			<li>your browser uses your cookies to load the resource</li>
+                		</ul>
+                	</ul>
+                	<pre class="brush: html; highlight: [3,4]; class-name: tight">
+                		&lt;script type="text/javascript">
+                		var yourData;
+                		Array = function() {
+                			yourData = this;
+                		}
+                		&lt;/script>
+
+                		&lt;script src="yourdomain.cz/yoursecretdata.json" type="text/javascript">&lt;/script></pre>
+            		<li>Prevention</li>
+            		<ul class="xx-small">
+            			<li>Using prefix in the data &ndash; the prefix makes the JSON data invalid; the client must
+            				strip the prefix before parsing the data as JSON</li>
+            			<pre class="brush: javascript; class-name: tight">
+            				[ "a": "account", 433, 5543 ]</pre>
+            			<li>Use only POST for sensitive data</li>
+            		</ul>
+                </ul>					
+			</div> -->
+
+	</section>
+
+	<!--	<div class="slide outline"></div>
+	    		
+		<section>
+			<header>Application State</header>
+			
+			<div class="slide">
+				<hgroup>
+					<h1>Application State</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Application state in Web 1.0 apps</li>
+					<div style="height: 260px; margin-left: -30px" 
+						id="1ikPrTDmdmCzwR3OcGESteSMUnHQ-B9VRhuaOeQGki9A" class="h-drawing"></div>
+					<li>Application state in Web 2.0 apps</li>
+					<ul>
+						<li>JavaScript code changes the state</li>
+						<ul>
+							<li>the URL should contain the state information</li>
+						</ul>
+						<li>JavaScript cannot modify the whole URL but only the hash (<code>#</code>) part</li>
+						<li><code>http://seller.com/products</code> becomes <code>http://seller.com/#products</code></li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Application State and Web Crawling</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Obviously we want our pages to be crawlable</li>
+					<ul>
+						<li>JavaScript generated content on clients does not exist on the server</li>
+					</ul>
+					<div style="height: 250px; margin-left: -30px" id="1u-6vCrF9f6rojKEY2Dxtgrss06MckN4SV1f0YuF1ptU" 
+					  class="h-drawing"></div>
+					<li>Solutions</li>
+					<ul>
+						<li>Crawler runs headless Browser &ndash; not feasible</li>
+						<ul>
+							<li>high requirements for computing resources</li>
+						</ul>
+						<li>Server generates content according to specific rules</li>
+						<ul>
+							<li>Google AJAX Crawling</li>
+						</ul>
+					</ul>
+				</ul>				
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Google AJAX Crawling</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Steps</li>
+					<ol>
+						<li>Web app provider exposes AJAX content with pretty URLs<br/>
+						<code>http://seller.com/#!products</code></li>
+						<li>Web crawler finds those URLs</li>
+						<li>Web crawler transforms the pretty URL to ugly URL<br/>
+						<code>http://seller.com/?_escapped_fragment_=products</code></li>
+						<li>Web crawler access the content of the page at ugly URL and indexes it</li>
+					</ol>
+					<li>Prerequisites</li>
+					<ul>
+						<li>Web app provider must expose AJAX generated content at ugly URLs</li>
+						<li>Options:</li>
+						<ul>
+							<li>uses a headless browser to generate the content at the server</li>
+							<li>rewrites the JavaScript code in a server-side language</li>
+						</ul>
+					</ul>
+					<li>Reference</li>
+					<ul>
+						<li>See <span id="ajax-crawling" class="h-ref"></span> for details</li>
+					</ul>
+				</ul>				
+			</div>
+
+		</section>	-->
+
 
 
 
