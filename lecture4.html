@@ -78,7 +78,8 @@
 			<thead>
 				<tr>
 					<th width="200px"></th>
-					<th>XMLHttpRequest</th>
+					<th>XHR</th>
+					<th>Fetch API</th>
 					<th>Server-Sent Events</th>
 					<th>WebSocket</th>
 				</tr>
@@ -87,6 +88,7 @@
 				<tr>
 					<td>Request streaming</td>
 					<td>no</td>
+					<td>yes</td>
 					<td>no</td>
 					<td>yes</td>
 				</tr>
@@ -95,15 +97,18 @@
 					<td>limited</td>
 					<td>yes</td>
 					<td>yes</td>
+					<td>yes</td>
 				</tr>
 				<tr>
 					<td>Framing mechanism</td>
+					<td>HTTP</td>
 					<td>HTTP</td>
 					<td>event stream</td>
 					<td>binary framing</td>
 				</tr>
 				<tr>
 					<td>Binary data transfers</td>
+					<td>yes</td>
 					<td>yes</td>
 					<td>no (base64)</td>
 					<td>yes</td>
@@ -112,16 +117,19 @@
 					<td>Compression</td>
 					<td>yes</td>
 					<td>yes</td>
+					<td>yes</td>
 					<td>limited</td>
 				</tr>
 				<tr>
 					<td>App. transport protocol</td>
 					<td>HTTP</td>
 					<td>HTTP</td>
+					<td>HTTP</td>
 					<td>WebSocket</td>
 				</tr>
 				<tr>
 					<td>Net. transport protocol</td>
+					<td>TCP</td>
 					<td>TCP</td>
 					<td>TCP</td>
 					<td>TCP</td>
@@ -433,41 +441,65 @@
 			</ul>
 		</div>
 
-
 		<div class="slide">
 			<hgroup>
 				<h1>SSE Server-side implementation</h1>
 			</hgroup>
 			<ul class="x-small">
-				<li>Java Servlet</li>
-				<ul>
-					<li>method <code>doGet</code></li>
-				</ul>
-				<pre class="brush: java">
-					public void doGet(HttpServletRequest req, HttpServletResponse resp)
-					    throws IOException {
+				<li>Node.js server</li>
+				<pre class="brush: javascript">
+					const express = require('express')
+					const app = express()
 					
-					    // set http headers
-					    resp.setContentType("text/event-stream");
-					    resp.setHeader("cache-control", "no-cache");
+					app.get('/countdown', function (req, res) {
+					  res.writeHead(200, {
+						'Content-Type': 'text/event-stream',
+						'Cache-Control': 'no-cache',
+						'Connection': 'keep-alive'
+					  })
+					  countdown(res, 10)
+					})
 					
-						// current time in milliseconds
-					    long ms = System.currentTimeMillis(); 
-
-					    // push data to the client for 20 seconds
-					    // client should reconnect when the connection is closed
-					    while (System.currentTimeMillis() - ms < 20000) {
-					        resp.getWriter().print("data: servlet runs for " + 
-					            (System.currentTimeMillis() - ms)/1000 + " seconds.\n\n");
-					        resp.getWriter().flush();
-					        try {
-					            Thread.sleep(4000);
-					        } catch (InterruptedException e) {
-					            // do nothing;
-					        }
-					    }
-					}</pre>
+					function countdown(res, count) {
+					  res.write("data: " + count + "\n\n")
+					  if (count)
+						setTimeout(() => countdown(res, count - 1), 1000)
+					  else
+						res.end()
+					}
+					
+					app.listen(3000, () => console.log('SSE app 	on http://127.0.0.1:3000'))</pre>
 			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>SSE Server-side implementation - output</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Node.js server</li>
+				<pre class="brush: bash">
+					$ curl -vvv http://127.0.0.1:3000/countdown
+					*   Trying 127.0.0.1:3000...
+					* Connected to 127.0.0.1 (127.0.0.1) port 3000
+					> GET /countdown HTTP/1.1
+					> Host: 127.0.0.1:3000
+					> User-Agent: curl/8.4.0
+					> Accept: */*
+					>
+					< HTTP/1.1 200 OK
+					< X-Powered-By: Express
+					< Content-Type: text/event-stream
+					< Cache-Control: no-cache
+					< Connection: keep-alive
+					< Date: Mon, 25 Mar 2024 08:32:57 GMT
+					< Transfer-Encoding: chunked
+					<
+					data: 10
+					
+					data: 9
+					
+					...</ul>
 		</div>
 
 		<div class="slide">
@@ -475,7 +507,6 @@
 				<h1>Streams API</h1>
 			</hgroup>
 			<ul class="small">
-				<li>An experimental technology, a living standard</li>
 				<li>JavaScript API to programmatically access streams of data</li>
 				<ul>
 					<li>Before, the whole resource had to be read</li>
@@ -626,13 +657,13 @@
 						Sec-WebSocket-Origin: http://example.com
 						Sec-WebSocket-Protocol: chat, superchat
 						Sec-WebSocket-Version: 7</pre>
-					<li><code>Connection</code> &ndash; request to upgrade the protocol</li>
-					<li><code>Upgrade</code> &ndash; protocol to upgrade to</li>
-					<li><code>Sec-WebSocket-Key</code> &ndash; a client key for later validation</li>
-					<li><code>Sec-WebSocket-Origin</code> &ndash; origin of the request</li>
-					<li><code>Sec-WebSocket-Protocol</code> &ndash; list of sub-protocols that client supports
-						(proprietary)</li>
-				</ul>
+				<li><code>Connection</code> &ndash; request to upgrade the protocol</li>
+				<li><code>Upgrade</code> &ndash; protocol to upgrade to</li>
+				<li><code>Sec-WebSocket-Key</code> &ndash; a client key for later validation</li>
+				<li><code>Sec-WebSocket-Origin</code> &ndash; origin of the request</li>
+				<li><code>Sec-WebSocket-Protocol</code> &ndash; list of sub-protocols that client supports
+					(proprietary)</li>
+			</ul>
 			</ul>
 		</div>
 
