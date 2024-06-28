@@ -1,14 +1,13 @@
-
 .meta_course:before {
-	content: "Middleware Architectures 2";
+	content: "Middleware Architectures 1";
 }
 
 .meta_author:before {
-	content: "doc. Ing. Tomáš Vitvar, Ph.D.";
+	content: "Assoc. Prof. Tomas Vitvar, Ph.D.";
 }
 
 .meta_email:before {
-	content: "tomas@vitvar.com";
+	content: "tomas.vitvar@fit.cvut.cz";
 }
 
 .meta_twitter:before {
@@ -20,7 +19,7 @@
 }
 
 .meta_semester:before {
-	content: "CTU Summer Semester 2022/2023";
+	content: "CTU Winter Semester 2022/2023";
 }
 
 .meta_org:before {
@@ -32,21 +31,31 @@
 }
 
 .meta_field:before {
-	content: "Software and Web Engineering";
+	content: "Web Intelligence Research Group";
 }
 
 .meta_orgweb:before {
-	content: "https://vitvar.com/lectures";
+	content: "https://vitvar.com";
+}
+
+div.oracle-academy {
+	width: 200px;
+	float: left;
+	background: url('oracle-academy.png') left top no-repeat;
+	margin-left: 0px;
+	margin-top: 3px;
+	height: 50px;
+	opacity: 0.7;
 }
 
 div.oppa {
 	width: 400px;
 	/*float: left;*/
 	background: url('oppa2.png') left top no-repeat;
-	margin-left: 110px;
+	margin-left: 210px;
 	margin-top: 3px;
 	height: 50px;
-    opacity: 0.7;
+	opacity: 0.7;
 }
 
 .meta_logo {

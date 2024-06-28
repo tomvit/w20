@@ -6,27 +6,28 @@
             "scripts" : [ { "src" : "humla/lib/ext/github.js" } ],
             "styles"  : [ { "src" : "humla/lib/ext/github.css", "media" : "screen, print" } ],
             "params"  : {
-                "user-repo" : "tomvit/w20"
+                "user-repo" : "tomvit/mdw"
             },
             "enabled" : true 
         },
 
         {   "id" : "references",
             "object" : "ex_references",
-            "scripts" : [ { "src" : "lib/humla/ext/references.js", "g": 1 },
-                          { "src" : "https://sheets.googleapis.com/v4/spreadsheets/1ydaux0SMZ083U_U_5EqsTn9vsiwCkOlGHyphesles_w/values/References?alt=json&key=AIzaSyDiv2_uSfpa7O9XKvNEktC2BQ7AYv0jZ2M&callback=ex_references.loadReferences", "g": 5 }],
+            "scripts" : [ { "src" : "lib/feed-tables/lib/feed-tables.js" },
+                          { "src" : "lib/humla/ext/references.js", "g": 1 },
+                          { "src" : "https://spreadsheets.google.com/feeds/list/0AoooUkEfVrhldENEczhyeFU5MVZNZFo4amwtVURxdEE/oda/public/basic?alt=json&callback=ex_references.loadReferences", "g": 5 }],
             "styles"  : [ { "src" : "lib/humla/ext/references.css",  "media" : "screen, print" } ],               
             "enabled" : true 
         },
-        
+
         {   "id" : "follower",
             "object" : "ex_follower",
             "scripts" : [ { "src" : "humla/lib/ext/follower.js" } ],
             "params" : {
               "follow_service": "https://humla-follow.vitvar.com"
             },
-            "enabled" : true 
+            "enabled" : true
         }
-                
+        
     ]
 }

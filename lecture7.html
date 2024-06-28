@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<!--
+	SummerSOC 2024
+	(cc) 2010-2023 Tomas Vitvar, tomas@vitvar.com
+-->
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="lecture" content="SummerSOC 2024" />
+	<meta name="keywords" content="SOA, ESB, kubernetes" />
+	<meta name="author" content="Assoc. Prof. Tomas Vitvar, Ph.D." />
+
+
+	<link type="text/css" rel="stylesheet" href="css/meta.css">
+	</link>
+	<link type="text/css" rel="stylesheet" href="css/ctu-fit.css">
+	</link>
+	<link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css">
+	</link>
+
+	<script type="text/javascript" src="humla/lib/humla.js"></script>
+	<title>From Legacy to Kubernetes:<br /> The SOA Transformation</title>
+</head>
+
+<body>
+
+	<footer>
+		<p><b>From Legacy to Kubernetes: The SOA Transformation</b>,&nbsp;SummerSOC 2024, Crete, 24-29 June 2024
+		</p>
+		<p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
+	</footer>
+
+	<div class="slide intro">
+		<hgroup>
+			<h1>#TITLE#</h1>
+		</hgroup>
+		<div class="author">
+			<p class="meta_author" />
+			<p><span class="meta_email" /> &bull; <span class="meta_web" />
+			</p>
+		</div>
+		<center>
+			<div class="meta_logo"></div>
+		</center>
+		<div class="org">
+			<p class="meta_org" />
+			<p><span class="meta_orgfac" /> &bull; <span class="meta_field" />
+				&bull; <span class="meta_orgweb" /></p>
+		</div>
+	</div>
+
+	<div class="slide outline">
+	</div>
+
+	<section>
+		<header>Cloud Native</header>
+
+		<div class="slide">
+			<hgroup>
+				<h1>CNCF Trail Map</h1>
+			</hgroup>
+			<img src="img/cncf-trail-map.png" style="width: 100%" />
+		</div>
+
+		<section>
+			<header>Containers</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Container Stack</h1>
+				</hgroup>
+				<div class="h-drawing" style="height:450px; margin-top: 30px"
+					id="1-feaxnCycbDWW4rrVSGrhdBmMfKSMN9mmLDNra99Kw8">
+				</div>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Linux Namespaces</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Isolation of Linux processes, there are <b>8 namespaces</b> (kernel v5.6)</li>
+					<ul>
+						<li>Mount, UTS, IPC, PID, Network, User, Cgroup, time</li>
+						<li>By default, every process is a member of a default namespace of each type</li>
+						<li>A container runtime starts a proces in separate namespaces of each type</li>
+						<li>The process children are started in the same namespaces</li>
+						<li>Run <code>lsns</code> to check namespaces the process is in</li>
+						<pre class="brush: plain; gutter: 'false'">
+					  $ lsns
+					  NS         TYPE  NPROCS   PID USER   COMMAND
+					  4026531836 pid        2 30873 oracle -bash
+					  4026531837 user     108  1636 oracle /bin/bash /u01/oracle/scripts/startWebLogicContainer.sh
+					  4026531838 uts        2 30873 oracle -bash
+					  4026531839 ipc        2 30873 oracle -bash
+					  4026531840 mnt        2 30873 oracle -bash
+					  4026531956 net      108  1636 oracle /bin/bash /u01/oracle/scripts/startWebLogicContainer.sh
+					  4026532185 mnt       13 13542 oracle /bin/bash /u01/oracle/scripts/startNM_ohs.sh
+					  4026532192 pid       13  2798 oracle /bin/bash /u01/oracle/scripts/startNM_ohs.sh
+					  ...
+					</pre>
+					</ul>
+					<li>Flexible configuration, for example:</li>
+					<ul>
+						<li>You can run two apps that only share the network namespace, e.g. <code>4026531956</code>
+						</li>
+						<li>The apps can talk to each other</li>
+						<li>Any other app (not in this namespace) won't be able to talk to the apps</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Types: net</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li><code>net</code> namespace</li>
+					<ul>
+						<li>Processes have their own private network stack (interfaces, routing tables, sockets)</li>
+						<li>Communication with external network stack is done by a virtual ethernet bridge</li>
+						<img src="img/container-bridge.png"
+							style="height: 200px; margin-top: 10px; margin-bottom: 10px" />
+						<li>On the host there is a <b>userland proxy</b> or <b>NAT</b></li>
+						<ul>
+							<li>NAT is a prefered solution over userland proxy (<code>/usr/bin/docker-proxy</code>)</li>
+							<li>Lack of NAT hairpinning may prevent to use NAT</li>
+						</ul>
+						<li>Use case</li>
+						<ul>
+							<li>Multiple services binding to the same port on a single machine, e.g. <code>tcp/80</code>
+							</li>
+							<li>A port in the host is mapped to the port exposed by a process in the NS</li>
+						</ul>
+					</ul>
+				</ul>
+			</div>
+		</section>
+
+		<div class="slide outline">
+		</div>
+
+		<section>
+			<header>Kubernetes</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Kubernetes Architecture</h1>
+				</hgroup>
+				<img src="img/components-of-kubernetes.svg"
+					style="width: 700px; margin-left: 40px; margin-top: 50px"></img>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Overlay Network</h1>
+				</hgroup>
+				<div class="h-drawing" style="height:500px; margin-top: 10px"
+					id="1ZbDOeVexFDe2oQE6Yw1xf30HnXhpMBH3ts-eNlOpnJQ">
+				</div>
+			</div>
+
+		</section>
+
+
+	</section>
+
+	<div class="slide outline">
+	</div>
+
+	<section>
+		<header>Service Oriented Architecture</header>
+
+		<section>
+			<header>Architectures evolution</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Client/Server Architecture (three-tier)</h1>
+				</hgroup>
+				<div class="h-drawing" style="height: 150px; margin-top: 20px"
+					id="1zSrBDm5DGLfV5XIKMzKvEMQY31y38KkHuawB9a0bhrA"></div>
+				<ul class="x-small">
+					<li>All layers on separated machines</li>
+					<ul>
+						<li>Thin client &#150; browser</li>
+						<li>Monolithic architectures</li>
+					</ul>
+					<li>Drawbacks</li>
+					<ul>
+						<li>"spaghetti" integration</li>
+						<li>Limited, single app server scalability</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Client/Server Architecture (multi-tier)</h1>
+				</hgroup>
+				<div class="h-drawing" style="height: 120px; margin-top: 20px; margin-bottom: 20px"
+					id="1COkmR7I_1RUdIcrQw8_NYTA-qzY_rBrrZm5JdjkIFaY"></div>
+				<ul class="x-small">
+					<li>A middleware layer</li>
+					<ul>
+						<li>Value-added services for communications</li>
+						<li>Load balancer, proxy server, auth* servers, ..., integration middleware</li>
+					</ul>
+					<li>Drawbacks</li>
+					<ul>
+						<li>Still monolithic architectures</li>
+						<li>Deployment overhead, scalability and performance issues</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Client/Server Architecture (microservices)</h1>
+				</hgroup>
+				<div class="h-drawing" style="height: 120px; margin-top: 20px; margin-bottom: 20px"
+					id="1cRwcuZjIcdyV0BKnrT0LqaVreQgSlCbuxmvhTHM2tlY"></div>
+				<ul class="x-small">
+					<li>Microservice architecture</li>
+					<ul>
+						<li>Middleware, app and DB monoliths are microservice architecture</li>
+						<li>Improved scalability and technology neutrality of app components</li>
+					</ul>
+					<li>Service orchestration layer</li>
+					<ul>
+						<li>Kubernetes (K8s)</li>
+						<li>Large K8s cluster for all, middleware, app, DB</li>
+						<li>Separate K8s cluster</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Client/Server Architecture (<span style="text-decoration: line-through;">microservices</span>)
+					</h1>
+				</hgroup>
+				<div class="h-drawing" style="height: 120px; margin-top: 20px; margin-bottom: 20px"
+					id="1_a-ZdIt4QylghhrPV1F3kWWcZDcm9OzdyHpK9YlJbv8"></div>
+				<ul class="x-small">
+					<li>Not-a-microservice Architecture</li>
+					<ul>
+						<li>Monoliths deployed to Kubernetes cluster</li>
+						<li>Improved Deployments (via container images)</li>
+						<li>Improved fail-over</li>
+						<li>Not cheaper (Kubernetes costs come into play)</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Spaghetti Integration</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Integration is a chaos</li>
+					<ul>
+						<li>Multiple protocols problem, multiple vendors</li>
+						<li>Ad-hoc integrations</li>
+					</ul>
+					<div class="h-drawing" style="height: 340px" id="123tDQFo3Zq0LEzzhquKp1xJX4YZ6YiWC0GDNGGK1UA0"
+						alt="One to One Spaghetti Integration"></div>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Service Oriented Architecture</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Integration is organized</li>
+					<ul>
+						<li>SOA Governance</li>
+						<li>Enterprise Service Bus in the core of the architecture</li>
+						<ul>
+							<li>Monolithic system, many components to realize integrations</li>
+						</ul>
+					</ul>
+				</ul>
+				<div class="h-drawing" style="height: 360px" id="1r88j56V-4ddOCH9WDs13yphGsb4xOdKfPVChTjDqRlA"
+					alt="SOA Integration"></div>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Service Oriented Architecture</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Integration is organized</li>
+					<ul>
+						<li>SOA Governance</li>
+						<li>Enterprise Service Bus in the core of the architecture</li>
+						<ul>
+							<li>Monolithic system, many components to realize integrations</li>
+						</ul>
+					</ul>
+				</ul>
+				<div class="h-drawing" style="height: 360px" id="1-uHnuWoYea9KZgEBRkGmdpbKDT5THls9dn56XolZ1Lg"
+					alt="SOA Integration"></div>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Back to the Stone Age</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>A microservice architecture today</li>
+					<ul>
+						<li>WTF! Spaghetti??!</li>
+					</ul>
+				</ul>
+				<img src="img/microservice-architecture.png" alt="Microservice Architecture" style="height: 500px" />
+			</div>
+		</section>
+
+		<div class="slide outline">
+		</div>
+
+		<section>
+			<header>Enterprise Service Bus</header>
+
+			<div class="slide">
+				<hgroup>
+					<h1>ESB Topology</h1>
+				</hgroup>
+				<div class="h-drawing" id="1kv3XSCOUzHYFOoY6A8WsU5bPLwEPSlUorH6ofKl8dFg" style="height: 450px"></div>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Application Server Layers with ESB</h1>
+				</hgroup>
+				<div class="h-drawing" id="1iicgwoGGSOeHaBhGSyvxzcwuQCCav3MIgrzCns58xvE" style="height: 400px"></div>
+				<ul class="xx-small">
+					<li>ESB is instance running on a node</li>
+					<li>JVM process</li>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Order to Cash Integration Process Example</h1>
+				</hgroup>
+				<img src="img/order-management-process.png" style="width: 800px; margin-top: 10px"></img>
+			</div>
+		</section>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Resources Constraints</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Connection Pools, Thread Pools</li>
+				<ul>
+					<li>ESB has a pool of connections to a back-end app (R3)</li>
+					<li>A single connection is resued by multiple instances of processes</li>
+				</ul>
+			</ul>
+			<div class="h-drawing" id="1Z1QJXUUxAuRGNSw2TlOyTjvA8KwyvUFsuQgnPlvjHwQ" style="height: 390px"></div>
+		</div>
+
+	</section>
+
+	<div class="slide outline"></div>
+
+	<section>
+		<header>SOA Transformation</header>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Overview</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>BSS Stack</li>
+				<ul>
+					<li>Applications that support business operations</li>
+					<li>CRM, BRM, OMS, IDAM, Inventory, ...</li>
+				</ul>
+				<li>Large deployemnts</li>
+				<ul>
+					<li>Very large customer base</li>
+					<li>~500 services</li>
+					<li>~100 requests/second per service</li>
+				</ul>
+				<li>Target architecture</li>
+				<ul>
+					<li>Kubernetes to run apps in BSS</li>
+					<li>No microservices, monolithic architecture preserved</li>
+				</ul>
+				<div class="h-drawing" id="1_a-ZdIt4QylghhrPV1F3kWWcZDcm9OzdyHpK9YlJbv8" style="margin-top: 20px"></div>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Architecture</h1>
+			</hgroup>
+			<div class="h-drawing" id="1gtnCO6LpAHB7hnosSWN9A9uL7BQLhqFLSobW-47KlZg" style="margin-top: 5px"></div>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Wrong assumptions</h1>
+			</hgroup>
+			<ul>
+				<li>SOA becomes a microservice architecture when it is running in Kubernetes</li>
+				<ul>
+					<li>No, SOA will still be a monolithic architecture even with Kubernetes</li>
+				</ul>
+				<li>It will be possible to auto-scale SOA in Kubernetes</li>
+				<ul>
+					<li>No, auto-scaling of SOA depends on auto-scaling capabilities of SOA, not Kubernetes</li>
+				</ul>
+				<li>SOA will be more reliable and resilient with Kubernetes</li>
+				<ul>
+					<li>SOA is reliabile and resilient as SOA is, not Kubernetes</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Storage and Persistence</h1>
+			</hgroup>
+			<img style="margin-left: 50px; margin-top: 15px; margin-bottom: 10px; height: 200px"
+				src="./img/docker-container-stack.png" />
+			<ul class="x-small">
+				<li>Image layers and container layer</li>
+				<ul>
+					<li>Images are immutable</li>
+					<li>Application server and ESB binaries</li>
+				</ul>
+				<li>Persistent Volumes</li>
+				<ul>
+					<li>Mounted to containers</li>
+					<li>Operational data (logs, transaction logs), ESB configurations</li>
+				</ul>
+				<li>Database</li>
+				<ul>
+					<li>Application services</li>
+				</ul>
+			</ul>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Container image lifecycle</h1>
+			</hgroup>
+			<img style="margin-left: 50px; margin-top: 40px; margin-bottom: 10px; height: 400px"
+				src="./img/image-lifecycle.png" />
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>RMI Networking</h1>
+			</hgroup>
+			<div id="1RcWvNr_OruWdJ6BEFZYyFT3pKz4To62fbWFWnOLEgY8" style="height:230px" class="h-drawing"></div>
+			<ul class="xx-small">
+				<li>RMI requires a special setup</li>
+				<ul>
+					<li>Any external JMS call goes via RMI</li>
+					<li>Extensive usage of RMI from external clients</li>
+					<li>Requires additional "channel" configuration in ESB</li>
+				</ul>
+			</ul>
+			<div class="h-drawing" id="1V4_61ng42_IBhZBr3HHsgI00O2a1NdU_LEd9EIXO3TQ" style="height: 150px">
+			</div>
+		</div>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Auto-scaling, not really</h1>
+			</hgroup>
+			<div class="h-drawing" id="1mB2gnoKwkhClKjwY0a7T_PyzaCzO4Nk_YMKTfJI2jE0" style="height: 450px"></div>
+		</div>
+
+	</section>
+
+	<div class="slide outline">
+	</div>
+
+	<section>
+		<header>Conclusion</header>
+
+		<div class="slide">
+			<hgroup>
+				<h1>Summary</h1>
+			</hgroup>
+			<ul class="x-small">
+				<li>Phased approach</li>
+				<ul>
+					<li>Containerization first</li>
+					<li>CI/CD to build, test, deploy</li>
+					<li>Kuberneres next</li>
+				</ul>
+				<li>Advantages</li>
+				<ul>
+					<li>A step towards Kubernetes, ready to build real microservices</li>
+					<li>Teams' awarness, they learn to develop, test and operate new platform</li>
+					<li>Improved deployments (container images)</li>
+				</ul>
+				<li>Challenges</li>
+				<ul>
+					<li>Networking, technology-specific protocols</li>
+					<li>Deployments (filesystem, DB)</li>
+					<li>How to run old style apps (desktop)</li>
+					<li>Preserve ESB topology</li>
+				</ul>
+			</ul>
+		</div>
+
+
+
+</body>
+
+</html>
