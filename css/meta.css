@@ -1,4 +1,3 @@
-
 .meta_course:before {
 	content: "Middleware Architectures 2";
 }
@@ -20,7 +19,7 @@
 }
 
 .meta_semester:before {
-	content: "CTU Summer Semester 2022/2023";
+	content: "CTU Summer Semester 2024/2025";
 }
 
 .meta_org:before {
@@ -46,7 +45,7 @@ div.oppa {
 	margin-left: 110px;
 	margin-top: 3px;
 	height: 50px;
-    opacity: 0.7;
+	opacity: 0.7;
 }
 
 .meta_logo {
