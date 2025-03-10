@@ -337,6 +337,33 @@
 				</ul>
 		</div>
 
+		<div class="slide">
+			<hgroup>
+				<h1>Expiration and revocation</h1>
+			</hgroup>
+			<ul class="small">
+				<li>Expiration</li>
+				<ul>
+					<li>Tokens should be valid for a limited time</li>
+					<li>Use <code>exp</code> claim</li>
+					<ul>
+						<li>Timestamp of the token expiration</li>
+						<li>Token should be checked on every request</li>
+					</ul>
+				</ul>
+				<li>Revocation</li>
+				<ul>
+					<li>Tokens (access tokens) usually stored in memory</li>
+					<li>Tokens should be refreshed using refresh tokens</li>
+					<ul>
+						<li>Refresh tokens are stored in the DB</li>
+						<li>When you need to revoke access tokens stored them in the DB</li>
+						<li>You can expire all tokens by changing the secret on the server</li>
+					</ul>
+				</ul>
+			</ul>
+		</div>
+
 
 	</section>
 
