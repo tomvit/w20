@@ -1,7 +1,7 @@
 blueprint:
   template: development
   shell: /bin/zsh
-  image: workspaces/dev:1.10
+  image: workspaces/dev:1.12
   sudo: true
   resources:
     cpu: 16
