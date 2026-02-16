@@ -1,0 +1,10 @@
+blueprint:
+  template: development
+  shell: /bin/zsh
+  image: workspaces/dev:1.10
+  sudo: true
+  resources:
+    cpu: 16
+    memory: 16Gi
+  network:
+    networkPolicy: system
