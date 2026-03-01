@@ -343,17 +343,6 @@
 			</ul>
 		</div>
 
-		<div class="slide">
-			<hgroup>
-				<h1>Why Same Origin Policy?</h2>
-			</hgroup>
-			<ul>
-				<li>Without the same origin policy, the following POST would be possible</li>
-			</ul>
-			<div style="height: 350px; margin-top: 30px" id="1J14eY2C9O1g8oPI9GhkOn0tRCB5z_NodiBzPX2oEabY"
-				class="h-drawing"></div>
-		</div>
-
 		<div class="slide outline"></div>
 
 		<section>
@@ -363,24 +352,24 @@
 				<hgroup>
 					<h1>Overview of Web Threats</h1>
 				</hgroup>
-				<ul class="small">
+				<ul class="xx-small">
 					<li>Scripting/Web attacks</li>
 					<ul>
-						<li>CSRF: attacker causes a victim’s browser to send an authenticated request</li>
+						<li>CSRF: attacker causes a user's browser to send an authenticated request</li>
 						<li>XSS: attacker gets script to run in a trusted origin (steal data / act as user)</li>
-						<li>Clickjacking: victim is tricked into clicking UI elements they didn’t intend</li>
+						<li>Clickjacking: victim is tricked into clicking UI elements</li>
 					</ul>
 					<li>Modern context</li>
 					<ul>
 						<li>Single Page Apps (SPAs), APIs, OAuth logins, third-party scripts</li>
-						<li>Browsers added new defenses: <code>SameSite</code> cookies, CSP, Fetch/CORS, Trusted Types
+						<li>Browsers added new defenses: <code>SameSite</code> cookies, CSP, CORS, Trusted Types
 						</li>
 					</ul>
 					<li>Roles in security scenarios</li>
 					<ul>
 						<li>Alice, Bob: regular users / sites</li>
-						<li>Eve: passive attacker (observes, correlates, phishes)</li>
-						<li>Mallory: active attacker (injects content, crafts requests, drives victim browser)</li>
+						<li>Eve: passive attacker, man in the middle (MITM) (observes, phishes)</li>
+						<li>Mallory: active attacker (injects content, modifies requests, drives victim browser)</li>
 					</ul>
 				</ul>
 			</div>
@@ -395,16 +384,22 @@
 						<li>Cookies (session cookies, persistent cookies)</li>
 						<li>Bearer tokens (often in <code>Authorization: Bearer ...</code>)</li>
 					</ul>
-					<li>Cookie flags matter</li>
-					<ul>
-						<li><code>Secure</code>: only over HTTPS</li>
-						<li><code>HttpOnly</code>: not readable by JavaScript (mitigates some XSS cookie theft)</li>
-						<li><code>SameSite</code>: limits cross-site cookie sending (major CSRF mitigation)</li>
-					</ul>
 					<li>Session management patterns</li>
 					<ul>
 						<li>Stateful: server stores session data</li>
 						<li>Stateless: signed tokens (e.g., JWT) stored client-side; server validates each request</li>
+					</ul>
+					<li>Cookie flags</li>
+					<ul>
+						<li><code>Secure</code>: only over HTTPS</li>
+						<li><code>HttpOnly</code>: not readable by JavaScript</li>
+						<ul>
+							<li>Mitigates some XSS cookie theft, but not all attack scenarios</li>
+						</ul>
+						<li><code>SameSite</code>: limits cross-site cookie sending</li>
+						<ul>
+							<li>Major CSRF mitigation</li>
+						</ul>
 					</ul>
 				</ul>
 			</div>
@@ -413,10 +408,10 @@
 				<hgroup>
 					<h1>Cross-site Request Forgery (CSRF)</h1>
 				</hgroup>
-				<ul class="x-small">
-					<li>Idea</li>
+				<ul class="xx-small">
+					<li>How it works</li>
 					<ul>
-						<li>Victim’s browser sends a request to <b>bank.com</b> with victim’s credentials (cookies)</li>
+						<li>Victim’s browser sends a request to <b>bank.com</b> with user's credentials (cookies)</li>
 						<li>Attacker cannot read the response (SOP), but the <b>side effect</b> may still happen</li>
 					</ul>
 					<li>CSRF today</li>
@@ -424,20 +419,24 @@
 						<li>Many browsers now default to <code>SameSite=Lax</code> (reduces CSRF via cross-site
 							navigation)
 						</li>
-						<li>But CSRF is still relevant (misconfigured <code>SameSite=None</code>, legacy apps, subdomain
-							issues, OAuth flows)</li>
+						<li>But CSRF is still relevant</li>
+						<ul>
+							<li>misconfigured <code>SameSite=None</code>, legacy apps, subdomain
+								issues, OAuth flows</li>
+						</ul>
 					</ul>
 					<li>Typical attack shapes</li>
 					<ul>
 						<li>Cross-site <code>&lt;form method="POST"&gt;</code> submit</li>
-						<li>"State-changing GET" is still a bug, but many frameworks avoid it now</li>
+						<li>State-changing GET is still a bug, but many frameworks avoid it now</li>
 					</ul>
 					<li>Modern best practice</li>
 					<ul class="xx-small">
 						<li>Use <b>CSRF tokens</b> (synchronizer token pattern) or <b>double-submit cookie</b></li>
-						<li>Set cookies: <code>SameSite=Lax</code> (default) or <code>Strict</code> where possible; only
-							use <code>None; Secure</code> when required
-						</li>
+						<li>Set cookies: <code>SameSite=Lax</code> (default) or <code>Strict</code> where possible</li>
+						<ul>
+							<li>only use <code>None; Secure</code> when required</li>
+						</ul>
 						<li>Validate <code>Origin</code> header for state-changing requests (often better than
 							<code>Referer</code>)
 						</li>
@@ -450,10 +449,10 @@
 				<hgroup>
 					<h1>CSRF Example</h1>
 				</hgroup>
-				<ul class="small">
+				<ul class="x-small">
 					<li>Attacker page causes a victim browser to submit a form to a target origin</li>
 				</ul>
-				<pre class="brush: html">
+				<pre class="brush: html; class-name: 'tight'">
 &lt;form action="https://bank.com/transfer" method="POST"&gt;
   &lt;input type="hidden" name="to" value="mallory" /&gt;
   &lt;input type="hidden" name="amount" value="50000" /&gt;
@@ -463,11 +462,88 @@
 					<li>What makes this work?</li>
 					<ul>
 						<li>If the browser includes cookies for <code>bank.com</code> on this cross-site POST</li>
-						<li>If server does not require/validate a CSRF token (or <code>Origin</code>)</li>
+						<li>If server does not require or validate a CSRF token (or <code>Origin</code>)</li>
 					</ul>
 					<li>Why attackers like it</li>
 					<ul>
-						<li>No need to break TLS or read responses; only need the action to succeed</li>
+						<li>No need to read responses; only need the action to succeed</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide" id="csrf-tokens">
+				<hgroup>
+					<h1>CSRF Tokens</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Goal</li>
+					<ul>
+						<li>Prevent <b>cross-site request forgery</b> even when cookies are attached by the browser</li>
+						<li>Server accepts a state-changing request only if it contains a <b>secret token</b></li>
+					</ul>
+					<li>Synchronizer Token Pattern (most common)</li>
+					<ul>
+						<li>Server creates a random token bound to the user session</li>
+						<li>Token is embedded into HTML (form field) or sent as a header by JS</li>
+						<li>On POST/PUT/DELETE: server verifies token matches the session</li>
+					</ul>
+					<li>Why it works</li>
+					<ul>
+						<li>Attacker can trigger a cross-site request (e.g., <code>&lt;form&gt;</code>)</li>
+						<ul>
+							<li>but cannot read
+								the response page to obtain the token (prevented by SOP)</li>
+						</ul>
+						<li>Guessing a random token is not possible</li>
+					</ul>
+					<li>Implementation notes</li>
+					<ul class="x-small">
+						<li>Regenerate tokens periodically (or per form) and invalidate on logout</li>
+						<li>Protect token delivery with HTTPS; avoid exposing it to third-party origins</li>
+						<li>Use together with <code>SameSite</code> cookies and <code>Origin</code> checks</li>
+					</ul>
+					<pre class="brush: html; class-name: 'tight'">
+						<form action="/transfer" method="POST">
+							<input type="hidden" name="csrf_token" value="RANDOM_SESSION_BOUND_TOKEN"> ... 
+						</form></pre>
+				</ul>
+			</div>
+
+			<div class="slide" id="double-submit-cookie">
+				<hgroup>
+					<h1>Double-Submit Cookie</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Goal</li>
+					<ul>
+						<li>Block CSRF by requiring a <b>token to be sent twice</b>:</li>
+						<ul>
+							<li>as a <b>cookie</b> (automatically attached by the browser)</li>
+							<li>and as a <b>request value</b> (hidden form field or custom header)</li>
+						</ul>
+						<li>Server accepts the request only if the two values <b>match</b></li>
+					</ul>
+					<li>Typical flow</li>
+					<ul>
+						<li>Server generates random token <code>T</code></li>
+						<li>Browser stores <code>T</code> in cookie <code>csrf=T</code></li>
+						<li>POST/PUT/DELETE: <code>T</code> in <code>csrf_token</code> (form field)
+							or <code>X-CSRF-Token</code> (header)</li>
+						<li>Server verifies: <code>Cookie[csrf] == token_in_body_or_header</code></li>
+					</ul>
+					<li>Why it works</li>
+					<ul>
+						<li>Attacker can trigger a cross-site request that includes cookies, but cannot read victim
+							cookies/pages due to <b>SOP</b></li>
+						<li>Attacker cannot reliably include the matching token in the request body/header
+						</li>
+					</ul>
+					<li>Implementation notes</li>
+					<ul class="xx-small">
+						<li>Used for <b>stateless</b> setups (server does not store CSRF token in session)</li>
+						<li>Use with <code>Secure</code> and HTTPS; combine with <code>SameSite</code> and
+							<code>Origin</code> checks
+						</li>
 					</ul>
 				</ul>
 			</div>
@@ -476,12 +552,12 @@
 				<hgroup>
 					<h1>Cross-site Scripting (XSS)</h1>
 				</hgroup>
-				<ul class="small">
-					<li>Idea</li>
+				<ul class="xx-small">
+					<li>How XSS works</li>
 					<ul>
 						<li>Attacker-controlled script runs in a trusted origin (e.g., <code>https://app.com</code>)
 						</li>
-						<li>Can read/modify DOM, make same-origin requests, exfiltrate data, act as the user</li>
+						<li>Can read/modify DOM, make same-origin requests, extract data, act as the user</li>
 					</ul>
 					<li>Types</li>
 					<ul>
@@ -491,9 +567,10 @@
 					</ul>
 					<li>Today's prevention</li>
 					<ul>
-						<li>Many apps use frameworks that reduce HTML injection, but DOM-XSS via unsafe sinks still
-							happens
-						</li>
+						<li>Many apps use frameworks that reduce HTML injection</li>
+						<ul>
+							<li>But DOM-XSS via unsafe sinks still happens</li>
+						</ul>
 						<li>Third-party scripts and supply-chain risks can lead to "XSS-like" outcomes</li>
 					</ul>
 				</ul>
@@ -503,7 +580,7 @@
 				<hgroup>
 					<h1>XSS: What Attackers Do Today</h1>
 				</hgroup>
-				<ul class="x-small">
+				<ul class="xx-small">
 					<li>Common impact</li>
 					<ul>
 						<li>Session hijack is harder if cookies are <code>HttpOnly</code>, but attackers can still:</li>
@@ -524,24 +601,96 @@
 				</ul>
 			</div>
 
+			<div class="slide" id="csp">
+				<hgroup>
+					<h1>Content Security Policy (CSP)</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Goal</li>
+					<ul>
+						<li>Mitigate XSS attacks by restricting what the page can load and
+							execute
+						</li>
+						<li>Browser enforces a policy sent by the server (HTTP header or <code>&lt;meta&gt;</code>)</li>
+					</ul>
+					<li>Core idea</li>
+					<ul>
+						<li>Define allowlists for resource types (scripts, styles, images, connections, frames, ...)
+						</li>
+						<li>Block unexpected code execution (e.g., injected <code>&lt;script&gt;</code>, inline
+							handlers)</li>
+					</ul>
+					<li>Common directives</li>
+					<ul>
+						<li><code>script-src</code>: where scripts can come from; can require <code>'nonce-...'</code> /
+							hashes</li>
+						<li><code>connect-src</code>: where JS can send requests (<code>fetch</code>/XHR/WebSocket)</li>
+						<li><code>img-src</code>, <code>style-src</code>, <code>font-src</code>: resource allowlists
+						</li>
+						<li><code>object-src 'none'</code>: disable plugin content</li>
+						<li><code>base-uri</code>: restrict <code>&lt;base&gt;</code> tag abuse</li>
+						<li><code>frame-ancestors</code>: who may embed the page (clickjacking defense)</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide" id="csp-example">
+				<hgroup>
+					<h1>Nonce-based CSP Example</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Policy (sent as HTTP response header)</li>
+					<ul class="x-small">
+						<li>Only load scripts from <code>self</code></li>
+						<li>only execute inline scripts that carry the correct <b>nonce</b></li>
+						<li>Allow XHR/WebSocket only to own origin and a trusted API</li>
+						<li>Prevent plugins and clickjacking</li>
+					</ul>
+					<pre class="brush: plain; class-name: 'tight'">
+Content-Security-Policy:
+  default-src 'self';
+  script-src 'self' 'nonce-ABC123';
+  connect-src 'self' https://api.example.com;
+  object-src 'none';
+  base-uri 'self';
+  frame-ancestors 'none'</pre>
+				</ul>
+				<ul class="xx-small">
+					<li>Scripts in a page</li>
+					<ul>
+						<li>server must inject the same nonce into allowed inline scripts</li>
+					</ul>
+					<pre class="brush: html">
+&lt;script nonce="ABC123"&gt;
+  // allowed inline script
+  window.appBoot();
+&lt;/script&gt;
+
+&lt;script&gt;
+  // blocked inline script (missing nonce)
+  alert('XSS');
+&lt;/script&gt;</pre>
+				</ul>
+			</div>
+
 			<div class="slide">
 				<hgroup>
 					<h1>XSS Example: DOM-based (Common in SPAs)</h1>
 				</hgroup>
-				<ul class="small">
+				<ul class="xx-small">
 					<li>Bug pattern: untrusted data flows into a dangerous DOM sink</li>
-				</ul>
-				<pre class="brush: javascript">
+					<pre class="brush: javascript; class-name: 'tight'">
 // URL: https://app.com/welcome?name=&lt;img src=x onerror=alert(1)&gt;
 const params = new URLSearchParams(location.search);
 const name = params.get("name");
 
 // Dangerous sink:
 document.querySelector("#welcome").innerHTML = "Hi " + name;</pre>
-				<ul class="x-small">
+				</ul>
+				<ul class="xx-small">
 					<li>Fix</li>
 					<ul>
-						<li>Use <code>textContent</code> (or framework bindings) instead of <code>innerHTML</code></li>
+						<li>Use <code>textContent</code> instead of <code>innerHTML</code></li>
 						<li>If HTML is required, sanitize with a proven library and strict allowlist</li>
 					</ul>
 				</ul>
