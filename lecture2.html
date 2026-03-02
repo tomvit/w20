@@ -374,6 +374,43 @@
 				</ul>
 			</div>
 
+			<div class="slide" id="modern-web-context">
+				<hgroup>
+					<h1>Modern Web Context</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Single Page Apps (SPAs)</li>
+					<ul>
+						<li>Initial HTML shell + heavy client-side rendering</li>
+						<li>Many background requests via <code>fetch</code>/XHR; History API routing</li>
+						<li>More DOM manipulation ⇒ higher risk of <b>DOM-based XSS</b></li>
+					</ul>
+					<li>APIs (JSON/GraphQL backends)</li>
+					<ul>
+						<li>UI often calls <code>api.*</code> subdomain or separate origin</li>
+						<li><b>CORS</b> and preflight (<code>OPTIONS</code>) become common</li>
+						<li>Auth choices:</li>
+						<ul>
+							<li>Cookies ⇒ need CSRF defenses (<code>SameSite</code>, tokens, <code>Origin</code> check)
+							</li>
+							<li>Bearer tokens ⇒ no classic CSRF, but XSS can steal tokens</li>
+						</ul>
+					</ul>
+					<li>OAuth / OpenID Connect logins</li>
+					<ul>
+						<li>Redirect-based flows (IdP → app) with <code>state</code>/<code>nonce</code> validation</li>
+						<li>Token storage and cookie policies affect security and reliability</li>
+					</ul>
+					<li>Third-party scripts</li>
+					<ul>
+						<li>Analytics, tag managers, widgets run with <b>same privileges</b> as first-party JS</li>
+						<li>Supply-chain risk; mitigate with <b>CSP</b> (<code>script-src</code>), SRI, and limiting
+							<code>connect-src</code>
+						</li>
+					</ul>
+				</ul>
+			</div>
+
 			<div class="slide">
 				<hgroup>
 					<h1>Recall: State, Sessions, and Cookies</h1>
@@ -675,7 +712,7 @@ Content-Security-Policy:
 
 			<div class="slide">
 				<hgroup>
-					<h1>XSS Example: DOM-based (Common in SPAs)</h1>
+					<h1>XSS Example: DOM-based</h1>
 				</hgroup>
 				<ul class="xx-small">
 					<li>Bug pattern: untrusted data flows into a dangerous DOM sink</li>
@@ -717,6 +754,47 @@ document.querySelector("#welcome").innerHTML = "Hi " + name;</pre>
 						<li>See details at <span id="twitter-xss" class="h-ref"></span></li>
 					</ul>
 					<li>Other example: Google Contacts</li>
+				</ul>
+			</div>
+
+			<div class="slide" id="clickjacking">
+				<hgroup>
+					<h1>Clickjacking</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>How clickjacking works</li>
+					<ul>
+						<li>Attacker tricks a victim into clicking a UI element on a <b>trusted site</b></li>
+						<li>Technique: embed the trusted site in an <code>&lt;iframe&gt;</code> and
+							overlay it under a decoy button</li>
+						<li>SOP blocks reading iframe contents, but clickjacking only needs the <b>click</b></li>
+					</ul>
+					<li>Example attack concept</li>
+					<pre class="brush: html; class-name: 'tight'">
+&lt;div id="decoy"&gt;
+  Click to claim your prize
+  &lt;button&gt;Claim&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- Invisible/transparent iframe aligned so victim's click hits "Confirm" --&gt;
+&lt;iframe id="targetFrame" src="https://bank.com/transfer/confirm"&gt;&lt;/iframe&gt;
+
+&lt;style&gt;
+#targetFrame {
+  position: absolute;
+  top: 120px; left: 90px;   /* align target button under decoy */
+  width: 1000px; height: 800px;
+  opacity: 0.01; border: 0; /* nearly invisible */
+}
+#decoy { position: relative; z-index: 2; }
+&lt;/style&gt;</pre>
+				</ul>
+				<ul class="xx-small">
+					<li>Defenses</li>
+					<ul>
+						<li><code>Content-Security-Policy: frame-ancestors 'none'</code> (or allowlist trusted
+							embedders)</li>
+					</ul>
 				</ul>
 			</div>
 
