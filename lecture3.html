@@ -1521,6 +1521,8 @@ code_verifier=dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk</pre>
 					<ul>
 						<li>Authorization Server to verify identity of users</li>
 						<li>Clients can obtain basic profile information about users</li>
+						<li>OAuth answers: “what can this app access?”</li>
+						<li>OIDC answers: “who is the user?”</li>
 					</ul>
 					<li>OIDC vs OpenID</li>
 					<ul>
@@ -1540,11 +1542,221 @@ code_verifier=dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk</pre>
 				</ul>
 			</div>
 
+			<div class="slide" id="oidc-roles-tokens">
+				<hgroup>
+					<h1>OIDC Roles and Tokens</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Roles (same actors as OAuth, plus OIDC specifics)</li>
+					<ul>
+						<li><b>End-User</b>: the user who is logging in</li>
+						<li><b>Relying Party (RP)</b>: the client application (OAuth client)</li>
+						<li><b>OpenID Provider (OP)</b>: the identity provider</li>
+						<ul>
+							<li>OAuth authorization server</li>
+						</ul>
+					</ul>
+
+					<li>Tokens</li>
+					<ul>
+						<li><b>ID Token</b> (new in OIDC): proves authentication; contains identity claims</li>
+						<ul>
+							<li>almost always a <b>JWT</b> signed by the OP</li>
+						</ul>
+						<li><b>Access Token</b> (OAuth): used to call APIs / resource server</li>
+						<li><b>Refresh Token</b> (optional): used to get new tokens without re-auth</li>
+					</ul>
+				</ul>
+			</div>
+
 			<div class="slide">
 				<hgroup>
 					<h1>Interaction sequence</h1>
 				</hgroup>
-				<div id="1OnFj-xVRzZgoEmZxOqWqi2_BAlKcXAmwwJ7ujGegQHs" class="h-drawing" style="width: 700px"></div>
+				<div id="1OnFj-xVRzZgoEmZxOqWqi2_BAlKcXAmwwJ7ujGegQHs" class="h-drawing" style="width: 700px">
+				</div>
+			</div>
+
+			<div class="slide" id="oidc-auth-request">
+				<hgroup>
+					<h1>OIDC Step 1: Authentication Request</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li><b>Same redirect as OAuth</b>, but request includes OIDC parameters</li>
+					<ul>
+						<li><code>scope</code> must include <code>openid</code> (otherwise it is just OAuth)</li>
+						<li><code>nonce</code> binds the ID Token to this browser session (replay protection)</li>
+						<li><code>state</code> protects against CSRF and correlates request/response</li>
+						<li>For SPAs/native apps</li>
+						<ul>
+							<li>use Authorization Code + PKCE</li>
+						</ul>
+					</ul>
+
+					<li>Example (Auth Code + PKCE)</li>
+					<pre class="brush: plain; class-name: 'tight'">
+						GET https://idp.example.com/authorize?
+						response_type=code&
+						client_id=rp-client-123&
+						redirect_uri=https%3A%2F%2Fapp.mydomain.com%2Fcallback&
+						scope=openid%20profile%20email& 
+						state=af0ifjsldkj&
+						nonce=n-0S6_WzA2Mj&
+						code_challenge=E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM&
+						code_challenge_method=S256</pre>
+				</ul>
+			</div>
+
+			<div class="slide" id="oidc-step2-auth-consent">
+				<hgroup>
+					<h1>OIDC Step 2: User Authentication + Consent</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>What happens at the OpenID Provider (OP)</li>
+					<ul>
+						<li>User-agent displays the OP login page (if not already signed in)</li>
+						<li>End-User authenticates</li>
+						<ul>
+							<li>password, MFA, passkey, etc. (handled by the OP)</li>
+						</ul>
+						<li>OP asks for consent (if needed)</li>
+						<ul>
+							<li>based on requested <code>scope</code> (e.g., <code>openid</code>, <code>profile</code>,
+								<code>email</code>)
+							</li>
+						</ul>
+					</ul>
+					<li>Important notes</li>
+					<ul>
+						<li>Client never sees the user’s password</li>
+						<li>OP establishes its own session with the browser (often via cookies)</li>
+						<li class="no-bullet"><b>Result</b>: OP is ready to issue an authorization response (next step)
+						</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide" id="oidc-step3-redirect-code">
+				<hgroup>
+					<h1>OIDC Step 3: Redirect Back with Authorization Code</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>After successful authentication (and consent), OP redirects back</li>
+					<ul>
+						<li>Redirect target is the registered <code>redirect_uri</code></li>
+						<li>Response includes an <code>code</code> and the original <code>state</code></li>
+					</ul>
+					<li>Example success callback</li>
+					<pre class="brush: plain; class-name: 'tight'">
+						HTTP/1.1 302 Found 
+						Location: https://app.mydomain.com/callback?
+						code=SplxlOBeZQQYbYS6WxSbIA&
+						state=af0ifjsldkj</pre>
+					<li>Client responsibilities</li>
+					<ul>
+						<li><b>Verify <code>state</code></b> matches what was stored in Step 1 (CSRF protection)</li>
+						<li>Extract <code>code</code> and continue to Step 4 (token endpoint exchange)</li>
+					</ul>
+
+					<li>Error callback (user rejects or request invalid)</li>
+					<pre class="brush: plain; class-name: 'tight'">
+					Location: https://app.mydomain.com/callback?
+					error=access_denied&
+					state=af0ifjsldkj</pre>
+				</ul>
+			</div>
+
+			<div class="slide" id="oidc-step4-token-request">
+				<hgroup>
+					<h1>OIDC Step 4: Token Request</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Client exchanges the authorization <code>code</code> at the token endpoint</li>
+					<li>Example (server-side)</li>
+					<pre class="brush: plain; class-name: 'tight'">
+						POST /oauth2/token HTTP/1.1 
+						Host: idp.example.com 
+						Content-Type: application/x-www-form-urlencoded
+						grant_type=authorization_code&
+						client_id=server-client-123&
+						client_secret=CLIENT_SECRET&
+						redirect_uri=https%3A%2F%2Fserver.mydomain.com%2Fcallback&
+						code=SplxlOBeZQQYbYS6WxSbIA</pre>
+				</ul>
+				<ul class="x-small">
+					<li>Token response</li>
+					<ul>
+						<li><code>access_token</code> (OAuth)</li>
+						<li><code>id_token</code> (OIDC &ndash; identity token)</li>
+						<li><code>refresh_token</code> (optional)</li>
+					</ul>
+					<li>Example response</li>
+					<pre class="brush: javascript; class-name: 'tight'; gutter: false">
+						{ "access_token": "SlAV32hkKG", 
+						  "token_type": "Bearer", 
+						  "expires_in": 3600, 
+						  "id_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..." }</pre>
+				</ul>
+			</div>
+
+			</div>
+			<div class="slide" id="oidc-id-token-claims">
+				<hgroup>
+					<h1>ID Token (JWT) &ndash; Typical Claims</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Registered claims to validate</li>
+					<ul>
+						<li><code>iss</code> &ndash; expected issuer (the OP)</li>
+						<li><code>aud</code> &ndash; must contain your <code>client_id</code> (intended audience)</li>
+						<li><code>exp</code> &ndash; not expired (allow small clock skew)</li>
+						<li><code>iat</code> &ndash; issued at (optional policy)</li>
+						<li><code>nonce</code> &ndash; must match the nonce sent in Step 1 (replay protection)</li>
+					</ul>
+					<li>User identity</li>
+					<ul>
+						<li><code>sub</code> &ndash; stable identifier for the End-User at this OP</li>
+						<li>Profile claims are often requested via scopes</li>
+						<ul>
+							<li><code>profile</code>, <code>email</code>, <code>phone</code>, <code>address</code></li>
+						</ul>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide" id="oidc-userinfo-request">
+				<hgroup>
+					<h1>Request User Information (optional)</h1>
+				</hgroup>
+				<ul class="x-small">
+					<li>Purpose</li>
+					<ul>
+						<li>Retrieve additional user profile claims from the OP’s <code>UserInfo</code> endpoint</li>
+						<li>Use when you need more claims than what is in the <code>id_token</code> (or need fresher
+							data)</li>
+					</ul>
+					<li>Important notes</li>
+					<ul>
+						<li>Call <code>/userinfo</code> using the <b>access token</b> (not the <code>id_token</code>)
+						</li>
+						<li>Returned claims depend on granted scopes (e.g., <code>profile</code>, <code>email</code>)
+						</li>
+					</ul>
+
+					<li>Example request</li>
+					<pre class="brush: plain; class-name: 'tight'">
+						GET /userinfo HTTP/1.1 
+						Host: idp.example.com 
+						Authorization: Bearer <access_token> 
+						Accept: application/json</pre>
+					<li>Example response</li>
+					<pre class="brush: javascript; class-name: 'tight'; gutter: false">
+						{ "sub": "248289761001", 
+						  "name": "Jane Doe", 
+						  "given_name": "Jane", 
+						  "family_name": "Doe", 
+						  "email": "jane.doe@example.com" }</pre>
+				</ul>
 			</div>
 
 		</section>
