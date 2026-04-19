@@ -948,21 +948,87 @@
 					<h1>Terraform</h1>
 				</hgroup>
 				<ul class="x-small">
-					<li>Higher-level abstraction of the datacenter and associated services</li>
-					<li>Supports many service providers</li>
+					<li>Infrastructure as Code (IaC) tool by HashiCorp</li>
 					<ul>
-						<li>Google, Microsoft, Oracle, AWS</li>
+						<li>Higher-level abstraction of the datacenter and associated services</li>
+						<li>Describes infrastructure in a declarative way &ndash; you define
+							the <b>desired state</b>, Terraform figures out how to reach it</li>
 					</ul>
-					<li>Steps</li>
-					<ol>
-						<li>Description of resources in Hashicorp Configuration Language (HCL)</li>
-						<ul>
-							<li>instances, networks, firewall rules, routing tables, etc. </li>
-						</ul>
-						<li>Terraform generates execution plan to reach the desired state</li>
-						<li>Terraform executes the plan to reach the desired state; can generate incremental execution
-							plan</li>
-					</ol>
+					<li>Supports many cloud providers</li>
+					<ul>
+						<li>AWS, Google Cloud, Microsoft Azure, Oracle Cloud, and hundreds more
+							via <b>providers</b></li>
+						<li>Resources: VM instances, networks, firewall rules, DNS records,
+							storage buckets, databases, etc.</li>
+					</ul>
+					<li>Key concepts</li>
+					<ul>
+						<li><b>Provider</b> &ndash; plugin that knows how to talk to a specific API</li>
+						<li><b>Resource</b> &ndash; a single piece of infrastructure managed by Terraform</li>
+						<li><b>State</b> &ndash; file that tracks what Terraform has deployed</li>
+						<li><b>Module</b> &ndash; reusable group of resources</li>
+					</ul>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Terraform &ndash; HCL Configuration</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>HashiCorp Configuration Language (HCL) &ndash; human-readable config files</li>
+					<li>Defining a resource (Google Cloud VM instance)</li>
+					<pre class="brush: plain; gutter: 'false'">
+resource "google_compute_instance" "web" {
+  name         = "web-server"
+  machine_type = "e2-medium"
+  zone         = "us-central1-a"
+
+  boot_disk {
+    initialize_params { image = "debian-cloud/debian-12" }
+  }
+  network_interface {
+    network       = "default"
+    access_config {}   # assigns a public IP
+  }
+}
+					</pre>
+					<li>Referencing another resource: <code>google_compute_instance.web.name</code></li>
+				</ul>
+			</div>
+
+			<div class="slide">
+				<hgroup>
+					<h1>Terraform &ndash; Workflow</h1>
+				</hgroup>
+				<ul class="xx-small">
+					<li>Core workflow: <b>Write &rarr; Plan &rarr; Apply</b></li>
+					<ul>
+						<li><b>Write</b> &ndash; define resources in <code>.tf</code> files</li>
+						<li><b>Plan</b> &ndash; Terraform computes the diff between current state
+							and desired state</li>
+						<li><b>Apply</b> &ndash; Terraform executes the changes; can generate
+							incremental execution plans</li>
+					</ul>
+					<li>Key commands</li>
+					<pre class="brush: plain; gutter: 'false'">
+# initialise working directory, download providers
+$ terraform init
+
+# show what changes will be made (dry run)
+$ terraform plan
+
+# apply the changes to real infrastructure
+$ terraform apply
+
+# destroy all managed resources
+$ terraform destroy
+					</pre>
+					<li>State management</li>
+					<ul>
+						<li>State stored locally in <code>terraform.tfstate</code> by default</li>
+					</ul>
+				</ul>
 			</div>
 
 		</section>
