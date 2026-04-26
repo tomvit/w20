@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<!--
+	Web 2.0, CTU course slides
+	(cc) 2010-2014 Tomas Vitvar, tomas@vitvar.com
+-->
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="course" content="Web 2.0" />
+    <meta name="lecture" content="Lecture 7" />
+    <meta name="keywords" content="Kubernetes, Storage, PV, PVC, StorageClass, CSI" />
+
+    <link type="text/css" rel="stylesheet" href="css/meta.css">
+    </link>
+    <link type="text/css" rel="stylesheet" href="css/ctu-fit.css">
+    </link>
+    <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css">
+    </link>
+
+    <script type="text/javascript" src="humla/lib/humla.js"></script>
+    <title>Kubernetes Storage</title>
+</head>
+
+<body>
+
+    <footer>
+        <p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester" />,&nbsp;
+            <span class="meta_twitter" />
+        </p>
+        <p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
+    </footer>
+
+    <div class="slide intro">
+        <hgroup>
+            <h1><span class="meta_course" /></h1>
+            <h2>#META_LECTURE#: #TITLE#</h2>
+        </hgroup>
+        <div class="author">
+            <p class="meta_author" />
+            <p><span class="meta_email" /> &bull; <span class="meta_twitter" /> &bull;
+                <span class="meta_web" />
+            </p>
+        </div>
+        <center>
+            <div class="meta_logo"></div>
+        </center>
+        <div class="org">
+            <p class="meta_org" />
+            <p><span class="meta_orgfac" /> &bull; <span class="meta_field" />
+                &bull; <span class="meta_orgweb" /></p>
+        </div>
+        <div class="etc">
+            <div class="text-info">
+                Modified: #LAST_MODIFIED#<br />
+                Humla v#HUMLA_VERSION#
+            </div>
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/">
+                <div class="license"></div>
+            </a>
+            <div class="oppa"></div>
+        </div>
+    </div>
+
+    <div class="slide outline"></div>
+
+    <section>
+        <header>Storage Fundamentals</header>
+
+        <section>
+            <header>Introduction to Storage in Kubernetes</header>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Why Persistent Storage Matters</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>Containers are <b>ephemeral</b> by design</li>
+                    <ul>
+                        <li>When a container stops or restarts, its filesystem is discarded</li>
+                        <li>Data written inside a container is lost on Pod deletion or reschedule</li>
+                    </ul>
+                    <li>Many real-world applications require persistent data</li>
+                    <ul>
+                        <li>Databases (MySQL, PostgreSQL, MongoDB)</li>
+                        <li>Message queues (Kafka, RabbitMQ)</li>
+                        <li>File uploads, caches, configuration stores</li>
+                    </ul>
+                    <li>Kubernetes must provide a way to decouple data lifecycle from Pod lifecycle</li>
+                    <ul>
+                        <li>Data must outlive the Pod that created it</li>
+                        <li>Storage must be accessible when a Pod is rescheduled to another node</li>
+                        <li>Multiple Pods may need to share the same data</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Storage Challenges</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Data persistence</li>
+                    <ul>
+                        <li>Default container storage is tied to the container runtime layer (OverlayFS)</li>
+                        <li>All writes are lost when a container is removed</li>
+                    </ul>
+                    <li>Portability across nodes</li>
+                    <ul>
+                        <li>Pods can be rescheduled to any node in the cluster</li>
+                        <li>Node-local storage is not available after rescheduling</li>
+                    </ul>
+                    <li>Multi-tenancy and isolation</li>
+                    <ul>
+                        <li>Different applications must not access each other's data</li>
+                        <li>Storage should be namespaced and access-controlled</li>
+                    </ul>
+                    <li>Diverse storage backends</li>
+                    <ul>
+                        <li>Teams use different storage solutions: NFS, iSCSI, cloud block/file storage</li>
+                        <li>Kubernetes must abstract over all of them through a common API</li>
+                    </ul>
+                    <li>Shared access</li>
+                    <ul>
+                        <li>Some workloads need multiple Pods to read/write the same volume simultaneously</li>
+                        <li>Access semantics differ across storage backends (block vs. file vs. object)</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Kubernetes Storage Model Overview</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>Kubernetes provides a layered abstraction for storage</li>
+                    <ul>
+                        <li>Applications request storage without knowing the underlying backend</li>
+                        <li>Administrators configure and expose storage resources</li>
+                    </ul>
+                    <li>Key objects in the storage model</li>
+                    <ul>
+                        <li><b>Volume</b> &ndash; ephemeral or persistent storage attached to a Pod</li>
+                        <li><b>PersistentVolume (PV)</b> &ndash; a storage resource in the cluster</li>
+                        <li><b>PersistentVolumeClaim (PVC)</b> &ndash; a request for storage</li>
+                        <li><b>StorageClass</b> &ndash; a template for dynamically provisioning PVs</li>
+                        <li><b>CSI Driver</b> &ndash; plugin interface to external storage systems</li>
+                    </ul>
+                    <li>Two provisioning models</li>
+                    <ul>
+                        <li><b>Static</b> &ndash; administrator creates PVs manually in advance</li>
+                        <li><b>Dynamic</b> &ndash; Kubernetes creates PVs automatically on demand</li>
+                    </ul>
+                </ul>
+            </div>
+
+        </section>
+
+        <div class="slide outline"></div>
+
+        <section>
+            <header>Core Storage Abstractions</header>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Volumes</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>A <b>Volume</b> is a directory accessible to containers in a Pod</li>
+                    <ul>
+                        <li>Declared in the Pod spec; mounted into one or more containers</li>
+                        <li>Lifecycle is tied to the Pod (not the individual container)</li>
+                        <li>Data in a volume survives container restarts within the same Pod</li>
+                    </ul>
+                    <li>Common ephemeral volume types</li>
+                    <ul>
+                        <li><code>emptyDir</code> &ndash; scratch space created when Pod starts; deleted with Pod</li>
+                        <li><code>configMap</code> / <code>secret</code> &ndash; inject configuration or credentials as
+                            files</li>
+                        <li><code>downwardAPI</code> &ndash; expose Pod metadata to containers as files</li>
+                    </ul>
+                    <li>Usage example</li>
+                    <pre class="brush: bash; class-name: 'tight'">
+        spec:
+          volumes:
+          - name: cache-vol
+            emptyDir: {}
+          containers:
+          - name: app
+            image: myapp:1.0
+            volumeMounts:
+            - mountPath: /cache
+              name: cache-vol
+        </pre>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>PersistentVolume (PV)</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>A <b>PersistentVolume</b> is a cluster-level storage resource</li>
+                    <ul>
+                        <li>Provisioned by an administrator or dynamically by a StorageClass</li>
+                        <li>Independent lifecycle from any individual Pod</li>
+                        <li>Backed by a real storage system (NFS, cloud disk, local path, etc.)</li>
+                    </ul>
+                    <li>Key PV properties</li>
+                    <ul>
+                        <li><b>Capacity</b> &ndash; storage size (e.g. <code>10Gi</code>)</li>
+                        <li><b>Access Modes</b> &ndash; how the volume can be mounted (see next slide)</li>
+                        <li><b>Reclaim Policy</b> &ndash; what happens when the PV is released</li>
+                        <li><b>Volume Mode</b> &ndash; <code>Filesystem</code> (default) or <code>Block</code></li>
+                        <li><b>StorageClass</b> &ndash; class used for binding and provisioning</li>
+                    </ul>
+                    <li>PV phases</li>
+                    <ul>
+                        <li><code>Available</code> &rarr; <code>Bound</code> &rarr; <code>Released</code> &rarr;
+                            <code>Failed</code>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>PV Access Modes and Reclaim Policies</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>Access Modes</li>
+                    <ul>
+                        <li><code>ReadWriteOnce (RWO)</code> &ndash; mounted read-write by a single node</li>
+                        <li><code>ReadOnlyMany (ROX)</code> &ndash; mounted read-only by nodes</li>
+                        <li><code>ReadWriteMany (RWX)</code> &ndash; mounted read-write by nodes simultaneously
+                        </li>
+                        <li><code>ReadWriteOncePod (RWOP)</code> &ndash; read-write by a single Pod
+                        </li>
+                    </ul>
+                    <li>Not all backends support all access modes</li>
+                    <ul>
+                        <li>Block storage (AWS EBS, GCE PD) typically supports only <code>RWO</code></li>
+                        <li>Shared filesystems (NFS, Azure Files) support <code>RWX</code></li>
+                    </ul>
+                    <li>Reclaim Policies</li>
+                    <ul>
+                        <li><code>Retain</code> &ndash; PV is kept after PVC deletion; manual cleanup required</li>
+                        <li><code>Delete</code> &ndash; PV and underlying storage are deleted with the PVC</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>PersistentVolumeClaim (PVC)</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>A <b>PersistentVolumeClaim</b> is a request for storage by a user</li>
+                    <ul>
+                        <li>Declares required capacity, access mode, and a StorageClass</li>
+                        <li>Kubernetes binds the PVC to a matching PV</li>
+                        <li>The bound PV is then mountable in a Pod</li>
+                    </ul>
+                    <li>PVC is namespace-scoped; PV is cluster-scoped</li>
+                    <li>Example PVC and Pod using it</li>
+                    <div style="display: flex; gap: 1px; margin-left: -30px">
+                        <div style="flex: 1;">
+                            <pre class="brush: bash; class-name: 'tight'">
+        apiVersion: v1
+        kind: PersistentVolumeClaim
+        metadata:
+          name: my-pvc
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 5Gi
+          storageClassName: standard
+        </pre>
+                        </div>
+                        <div style="flex: 1;">
+                            <pre class="brush: bash; class-name: 'tight'">
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: my-app
+        spec:
+          volumes:
+          - name: data
+            persistentVolumeClaim:
+              claimName: my-pvc
+          containers:
+          - name: app
+            image: myapp:1.0
+            volumeMounts:
+            - mountPath: /data
+              name: data
+        </pre>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>StorageClass</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>A <b>StorageClass</b> defines a template for dynamic PV provisioning</li>
+                    <ul>
+                        <li>Specifies the provisioner (CSI driver or in-tree plugin)</li>
+                        <li>Carries parameters specific to the storage backend</li>
+                        <li>Defines the default reclaim policy for dynamically created PVs</li>
+                    </ul>
+                    <li>Benefits</li>
+                    <ul>
+                        <li>Different classes can represent different tiers: fast SSD vs. slow HDD</li>
+                        <li>Developers request storage by class name without knowing the backend</li>
+                        <li>One cluster can offer multiple classes for different use cases</li>
+                    </ul>
+                    <li>Example</li>
+                    <pre class="brush: bash; class-name: ''">
+        apiVersion: storage.k8s.io/v1
+        kind: StorageClass
+        metadata:
+          name: fast-ssd
+        provisioner: ebs.csi.aws.com
+        parameters:
+          type: gp3
+          encrypted: "true"
+        reclaimPolicy: Delete
+        volumeBindingMode: WaitForFirstConsumer
+        </pre>
+                </ul>
+            </div>
+
+        </section>
+
+    </section>
+
+    <div class="slide outline"></div>
+
+    <section>
+        <header>Storage Provisioning</header>
+
+        <section>
+            <header>Static Provisioning</header>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>What is Static Provisioning?</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Administrator creates PersistentVolumes <b>manually</b> in advance</li>
+                    <ul>
+                        <li>The underlying storage resource must already exist</li>
+                        <li>PV spec describes how to connect to the resource (NFS share, disk path, etc.)</li>
+                    </ul>
+                    <li>Workflow</li>
+                    <ol>
+                        <li>Admin provisions storage resource (e.g. creates NFS export)</li>
+                        <li>Admin creates a PV object pointing to that resource</li>
+                        <li>Developer creates a PVC requesting matching properties</li>
+                        <li>Kubernetes binds the PVC to the existing PV</li>
+                        <li>Pod mounts the volume via the PVC</li>
+                    </ol>
+                    <li>Good for</li>
+                    <ul>
+                        <li>Small clusters or on-premise setups with fixed storage infrastructure</li>
+                        <li>Workloads with specific, pre-configured storage requirements</li>
+                        <li>Environments where an administrator controls every storage resource</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Static Provisioning Example</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Admin creates a PV backed by an NFS share</li>
+                    <pre class="brush: bash; class-name: 'tight'">
+        apiVersion: v1
+        kind: PersistentVolume
+        metadata:
+          name: nfs-pv
+        spec:
+          capacity:
+            storage: 20Gi
+          accessModes:
+          - ReadWriteMany
+          persistentVolumeReclaimPolicy: Retain
+          nfs:
+            server: 192.168.1.100
+            path: /exports/data
+        </pre>
+                    <li>Developer creates a matching PVC</li>
+                    <pre class="brush: bash; class-name: 'tight'">
+        apiVersion: v1
+        kind: PersistentVolumeClaim
+        metadata:
+          name: nfs-pvc
+        spec:
+          accessModes:
+          - ReadWriteMany
+          resources:
+            requests:
+              storage: 20Gi
+        </pre>
+                    <li>Kubernetes finds the PV that satisfies the PVC criteria and binds them</li>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Static Provisioning &ndash; Pros and Cons</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>Pros</li>
+                    <ul>
+                        <li>Full administrator control over every storage resource</li>
+                        <li>Works with any storage backend regardless of CSI support</li>
+                        <li>Predictable: storage is prepared before workloads request it</li>
+                        <li>Regulated environments requiring manual approval workflows</li>
+                    </ul>
+                    <li>Cons</li>
+                    <ul>
+                        <li>Requires manual effort for every new storage resource</li>
+                        <li>Does not scale well in large or dynamic clusters</li>
+                        <li>Risk of PV/PVC mismatch causing pending claims</li>
+                        <li>Capacity may be under-utilized if not carefully matched</li>
+                        <li>No automation &ndash; developers must wait for admin action</li>
+                    </ul>
+                </ul>
+            </div>
+
+        </section>
+
+        <div class="slide outline"></div>
+
+        <section>
+            <header>Dynamic Provisioning</header>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>What is Dynamic Provisioning?</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Kubernetes automatically creates a PV when a PVC is submitted</li>
+                    <ul>
+                        <li>PVC references a <b>StorageClass</b> instead of a specific PV</li>
+                        <li>The StorageClass provisioner calls the storage backend API</li>
+                        <ul>
+                            <li>The volume is allocated</li>
+                        </ul>
+                        <li>The PV is created, bound to the PVC, and ready for use</li>
+                    </ul>
+                    <li>Workflow</li>
+                    <ol>
+                        <li>Administrator deploys a StorageClass</li>
+                        <ul>
+                            <li>Defines the provisioner (e.g. CSI driver), parameters for the backend</li>
+                        </ul>
+                        <li>Developer creates a PVC referencing the StorageClass</li>
+                        <li>Kubernetes provisioner creates a new PV on the backend</li>
+                        <li>PVC is bound to the new PV; Pod can mount it immediately</li>
+                    </ol>
+                    <li>Supported by all major cloud providers and on-premise solutions</li>
+                    <ul>
+                        <li>AWS EBS, GCE PD, Azure Disk, OpenEBS, etc.</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Dynamic Provisioning Example</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>StorageClass for AWS EBS using the CSI driver</li>
+                    <pre class="brush: bash; class-name: 'tight'">
+        apiVersion: storage.k8s.io/v1
+        kind: StorageClass
+        metadata:
+          name: aws-ebs-sc
+          annotations:
+            storageclass.kubernetes.io/is-default-class: "true"
+        provisioner: ebs.csi.aws.com
+        parameters:
+          type: gp3
+        reclaimPolicy: Delete
+        volumeBindingMode: WaitForFirstConsumer
+        </pre>
+                    <li>Developer creates a PVC (PV does not exist)</li>
+                    <pre class="brush: bash; class-name: 'tight'">
+        apiVersion: v1
+        kind: PersistentVolumeClaim
+        metadata:
+          name: app-data
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          storageClassName: aws-ebs-sc
+          resources:
+            requests:
+              storage: 10Gi
+        </pre>
+                    <li>Kubernetes calls the EBS CSI driver</li>
+                    <ul>
+                        <li>new EBS volume is created and bound</li>
+                    </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Dynamic Provisioning &ndash; Pros and Cons</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Pros</li>
+                    <ul>
+                        <li>Self-service for developers &ndash; no admin intervention required</li>
+                        <li>Scales automatically with cluster demand</li>
+                        <li>Eliminates idle pre-provisioned storage</li>
+                        <li>Integrates with cloud cost management (pay-per-use)</li>
+                        <li>Supports version control of storage configuration via StorageClass</li>
+                    </ul>
+                    <li>Cons</li>
+                    <ul>
+                        <li>Requires a working CSI driver or in-tree provisioner</li>
+                        <li>Less control over individual storage resources</li>
+                        <li>Uncontrolled PVC creation can lead to unexpected cloud costs</li>
+                        <li>Debugging provisioning failures can be complex (CSI logs, events)</li>
+                        <li>Not always available in air-gapped or strictly controlled environments</li>
+                    </ul>
+                </ul>
+            </div>
+
+        </section>
+
+    </section>
+
+    <div class="slide outline"></div>
+
+    <section>
+        <header>Storage Backends</header>
+
+        <section>
+            <header>Local Node Storage</header>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>hostPath Volumes</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Mounts a file/directory from the <b>node's filesystem</b> into the Pod</li>
+                    <ul>
+                        <li>Directly exposes a node path such as <code>/var/log</code> or <code>/data</code></li>
+                        <li>The container reads and writes directly to the node's disk</li>
+                    </ul>
+                    <li>Common use cases</li>
+                    <ul>
+                        <li>Log collection agents that need access to <code>/var/log</code></li>
+                        <li>Monitoring tools accessing <code>/proc</code> or <code>/sys</code></li>
+                        <li>Development and testing on single-node clusters</li>
+                    </ul>
+                    <li>Risks and limitations</li>
+                    <ul>
+                        <li>Tightly couples the Pod to a specific node</li>
+                        <li>If the Pod is rescheduled to another node, the data is not available</li>
+                        <li><b>Security risk</b>: container can read/modify sensitive host files</li>
+                        <li>Not suitable for multi-node production workloads</li>
+                    </ul>
+                    <li>This should generally be avoided for persistent<br />application data in production</li>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Local Persistent Volumes</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>A <b>local</b> PersistentVolume uses a dedicated disk or partition on a node</li>
+                    <ul>
+                        <li>Defined with <code>local</code> volume type in the PV spec</li>
+                        <li>Unlike <code>hostPath</code>, local PVs support standard PV/PVC lifecycle</li>
+                        <li>Kubernetes topology-aware scheduling ensures Pods land on the correct node</li>
+                    </ul>
+                    <li>Example</li>
+                    <pre class="brush: bash; class-name: 'tight'">
+        apiVersion: v1
+        kind: PersistentVolume
+        metadata:
+          name: local-pv
+        spec:
+          capacity:
+            storage: 100Gi
+          accessModes:
+          - ReadWriteOnce
+          persistentVolumeReclaimPolicy: Retain
+          storageClassName: local-storage
+          local:
+            path: /mnt/disks/ssd1
+          nodeAffinity:
+            required:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                  - worker-node-1
+        </pre>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Local Node Storage &ndash; Pros and Cons</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Pros</li>
+                    <ul>
+                        <li>Very high I/O performance &ndash; direct access to local NVMe or SSD disks</li>
+                        <li>Low latency; no network overhead</li>
+                        <li>Simple setup; no external storage system required</li>
+                        <li>Good for read-heavy workloads, caches, and stateful databases</li>
+                    </ul>
+                    <li>Cons</li>
+                    <ul>
+                        <li>Data is bound to a specific node &ndash; no built-in replication</li>
+                        <li>Node failure means data loss unless application handles replication itself</li>
+                        <li>Pod scheduling must respect node affinity &ndash; reduces scheduling flexibility</li>
+                        <li>Scaling out requires adding disks to specific nodes manually</li>
+                        <li><code>hostPath</code> is insecure and unsuitable for multi-tenant clusters</li>
+                    </ul>
+                    <li>Recommended pattern: use local volumes only with applications that manage their own data
+                        replication
+                        (e.g. distributed databases)</li>
+                </ul>
+            </div>
+
+        </section>
+
+        <div class="slide outline"></div>
+
+        <section>
+            <header>External Storage</header>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Network File System (NFS)</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>NFS is a widely used network-attached filesystem</li>
+                    <ul>
+                        <li>A central NFS server exports directories shared over the network</li>
+                        <li>Multiple Pods can mount the same NFS share simultaneously (<code>ReadWriteMany</code>)</li>
+                        <li>Supported natively in Kubernetes via the <code>nfs</code> volume type</li>
+                    </ul>
+                    <li>Typical setup</li>
+                    <ul>
+                        <li>NFS server runs on a dedicated machine or network appliance</li>
+                        <li>Kubernetes nodes mount NFS exports; data is network-accessible from all nodes</li>
+                        <li>Dynamic provisioning available via the <code>nfs-subdir-external-provisioner</code></li>
+                    </ul>
+                    <li>Example PV using NFS</li>
+                    <pre class="brush: bash; class-name: ''">
+        spec:
+          capacity:
+            storage: 50Gi
+          accessModes:
+          - ReadWriteMany
+          nfs:
+            server: nfs.example.com
+            path: /exports/shared
+        </pre>
+                    <li>Common for shared content, logs aggregation, and legacy workloads</li>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Cloud Block Storage and CSI</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Cloud providers offer managed block storage backends</li>
+                    <ul>
+                        <li><b>AWS</b>: Elastic Block Store (EBS) &ndash; provisioned via <code>ebs.csi.aws.com</code>
+                        </li>
+                        <li><b>GCP</b>: Persistent Disk (PD) &ndash; provisioned via <code>pd.csi.storage.gke.io</code>
+                        </li>
+                        <li><b>Azure</b>: Managed Disk / Azure Files &ndash; via <code>disk.csi.azure.com</code></li>
+                    </ul>
+                    <li><b>Container Storage Interface (CSI)</b></li>
+                    <ul>
+                        <li>Standard API between Kubernetes and storage plugins</li>
+                        <li>Decouples storage drivers from the Kubernetes core</li>
+                        <li>CSI driver is deployed as a DaemonSet/Deployment in the cluster</li>
+                        <li>Exposes capabilities: provision, attach, mount, snapshot, resize, clone</li>
+                    </ul>
+                    <li>CSI driver operations</li>
+                    <ul>
+                        <li><code>CreateVolume</code> / <code>DeleteVolume</code> &ndash; lifecycle management</li>
+                        <li><code>NodePublishVolume</code> / <code>NodeUnpublishVolume</code> &ndash; mount/unmount on
+                            node
+                        </li>
+                        <li><code>CreateSnapshot</code> &ndash; point-in-time backup</li>
+                    </ul>
+                    <li>On-premise options: Ceph, iSCSI, OpenEBS</li>
+                </ul>
+            </div>
+
+        </section>
+
+    </section>
+
+    <div class="slide outline"></div>
+
+    <section>
+        <header>Advanced Topics</header>
+
+        <section>
+            <header>Advanced Topics and Best Practices</header>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>StatefulSet with Persistent Storage</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li><b>StatefulSet</b> is the workload resource designed for stateful applications</li>
+                    <ul>
+                        <li>Each Pod gets a stable identity (name, DNS) and its own PVC</li>
+                        <li>PVCs are created from a <code>volumeClaimTemplates</code> section</li>
+                        <li>PVCs survive Pod deletion and are reattached when the Pod is recreated</li>
+                    </ul>
+                    <li>Example</li>
+                    <pre class="brush: bash; class-name: 'code-small'">
+        apiVersion: apps/v1
+        kind: StatefulSet
+        metadata:
+          name: mysql
+        spec:
+          serviceName: mysql
+          replicas: 3
+          template:
+            spec:
+              containers:
+              - name: mysql
+                image: mysql:8.0
+                volumeMounts:
+                - name: data
+                  mountPath: /var/lib/mysql
+          volumeClaimTemplates:
+          - metadata:
+              name: data
+            spec:
+              accessModes: [ "ReadWriteOnce" ]
+              storageClassName: fast-ssd
+              resources:
+                requests:
+                  storage: 20Gi
+        </pre>
+                    <li>Each Pod (e.g. <code>mysql-0</code>, <code>mysql-1</code>) gets its own
+                        <code>data-mysql-N</code>
+                        PVC
+                    </li>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Volume Snapshots</h1>
+                </hgroup>
+                <ul class="x-small">
+                    <li>Kubernetes supports point-in-time snapshots of PersistentVolumes</li>
+                    <ul>
+                        <li>Requires a CSI driver that implements snapshot capabilities</li>
+                        <li>Snapshots are managed via <code>VolumeSnapshot</code>, <code>VolumeSnapshotContent</code>,
+                            and <code>VolumeSnapshotClass</code> resources</li>
+                    </ul>
+                    <li>Use cases</li>
+                    <ul>
+                        <li>Backup and disaster recovery</li>
+                        <li>Creating test environments from production data</li>
+                        <li>Pre-upgrade checkpoints</li>
+                    </ul>
+                    <li>Creating a snapshot</li>
+                    <pre class="brush: bash; class-name: ''">
+        apiVersion: snapshot.storage.k8s.io/v1
+        kind: VolumeSnapshot
+        metadata:
+          name: db-snapshot
+        spec:
+          volumeSnapshotClassName: csi-aws-vsc
+          source:
+            persistentVolumeClaimName: db-pvc
+        </pre>
+                    <li>Restore: create a PVC with <code>dataSource</code> pointing to the snapshot</li>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <hgroup>
+                    <h1>Storage Best Practices</h1>
+                </hgroup>
+                <ul class="xx-small">
+                    <li>Choose the right storage type for the workload</li>
+                    <ul>
+                        <li>Use local volumes only for applications that replicate data themselves</li>
+                        <li>Use shared (RWX) storage only when multiple Pods need concurrent access</li>
+                        <li>Default to cloud block storage (CSI, RWO) for most stateful workloads in cloud</li>
+                    </ul>
+                    <li>Use dynamic provisioning wherever possible</li>
+                    <ul>
+                        <li>Reduces operational overhead and scales automatically</li>
+                        <li>Define StorageClasses for different performance tiers</li>
+                    </ul>
+                    <li>Set appropriate reclaim policies</li>
+                    <ul>
+                        <li>Use <code>Retain</code> for production data to prevent accidental deletion</li>
+                        <li>Use <code>Delete</code> for ephemeral or dev/test environments</li>
+                    </ul>
+                    <li>Enable volume snapshots for critical workloads</li>
+                    <li>Apply resource quotas on PVC requests per namespace to control costs</li>
+                    <li>Monitor storage utilization; avoid PV over-provisioning</li>
+                </ul>
+            </div>
+
+        </section>
+
+    </section>
+
+</body>
+
+</html>
