@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<!--
+	Web 2.0, CTU course slides
+	(cc) 2010-2026 Tomas Vitvar, tomas@vitvar.com
+-->
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="course" content="Web 2.0" />
+    <meta name="lecture" content="Lecture 8" />
+    <meta name="keywords"
+        content="Kubernetes, Scheduling, Consistent Hashing, Leader Election, HPA, Autoscaling, Scalability" />
+
+    <link type="text/css" rel="stylesheet" href="css/meta.css">
+    </link>
+    <link type="text/css" rel="stylesheet" href="css/ctu-fit.css">
+    </link>
+    <link type="text/css" rel="stylesheet" href="humla/lib/core/humla.css">
+    </link>
+
+    <script type="text/javascript" src="humla/lib/humla.js"></script>
+    <title>Scheduling, Scalability and HPA</title>
+</head>
+
+<body>
+
+    <footer>
+        <p><b>#META_LECTURE#: #TITLE#</b>,&nbsp;<span class="meta_semester" />,&nbsp;
+            <span class="meta_twitter" />
+        </p>
+        <p><b>&#8210; #SLIDE_NO# &#8210;</b></p>
+    </footer>
+
+    <div class="slide intro">
+        <hgroup>
+            <h1><span class="meta_course" /></h1>
+            <h2>#META_LECTURE#: #TITLE#</h2>
+        </hgroup>
+        <div class="author">
+            <p class="meta_author" />
+            <p><span class="meta_email" /> &bull; <span class="meta_twitter" /> &bull;
+                <span class="meta_web" />
+            </p>
+        </div>
+        <center>
+            <div class="meta_logo"></div>
+        </center>
+        <div class="org">
+            <p class="meta_org" />
+            <p><span class="meta_orgfac" /> &bull; <span class="meta_field" />
+                &bull; <span class="meta_orgweb" /></p>
+        </div>
+        <div class="etc">
+            <div class="text-info">
+                Modified: #LAST_MODIFIED#<br />
+                Humla v#HUMLA_VERSION#
+            </div>
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/">
+                <div class="license"></div>
+            </a>
+            <div class="oppa"></div>
+        </div>
+    </div>
+
+    <div class="slide outline"></div>
+
+    <section>
+        <header>Kubernetes Scheduling</header>
+
+        <div class="slide outline"></div>
+
+        <div class="slide">
+            <hgroup>
+                <h1>The Kubernetes Scheduler</h1>
+            </hgroup>
+            <ul class="x-small">
+                <li>The <b>kube-scheduler</b> is a control-plane component responsible for Pod placement</li>
+                <ul>
+                    <li>Watches for newly created Pods with no assigned node
+                    </li>
+                    <li>Selects the best node for each unscheduled Pod and writes the binding</li>
+                    <li>Does not start or run the Pod &ndash; done by the kubelet on the node</li>
+                </ul>
+                <li>Scheduling pipeline runs in two phases</li>
+                <ul>
+                    <li><b>Filtering</b> &ndash; eliminates nodes that cannot run the Pod (hard constraints)</li>
+                    <li><b>Scoring</b> &ndash; ranks remaining nodes and picks the highest-score one</li>
+                </ul>
+                <li>Scheduler is pluggable via the <b>Scheduling Framework</b></li>
+                <ul>
+                    <li>Extension points: <code>PreFilter</code>, <code>Filter</code>, <code>PostFilter</code>,
+                        <code>PreScore</code>, <code>Score</code>, <code>Reserve</code>, <code>Bind</code>
+                    </li>
+                    <li>Custom plugins can be compiled in or loaded as out-of-tree schedulers</li>
+                </ul>
+                <li>Multiple scheduler profiles can coexist in a single cluster</li>
+            </ul>
+        </div>
+
+        <div class="slide">
+            <hgroup>
+                <h1>Filtering &ndash; Hard Constraints</h1>
+            </hgroup>
+            <ul class="xx-small">
+                <li>A node passes filtering only when <em>all</em> predicates are satisfied</li>
+                <ul>
+                    <li><b>Resource fit</b> &ndash; requested CPU/memory must fit into allocatable capacity</li>
+                    <li><b>Node selector</b> &ndash; Pod's <code>nodeSelector</code> labels must match node labels
+                    </li>
+                    <li><b>Node affinity</b> &ndash; <code>requiredDuringSchedulingIgnoredDuringExecution</code>
+                        rules</li>
+                    <li><b>Taints and tolerations</b> &ndash; Pod must tolerate all taints on the node</li>
+                    <li><b>Volume topology</b> &ndash; PVCs must be satisfiable on the candidate node</li>
+                    <li><b>Pod anti-affinity</b> &ndash; required rules must not be violated</li>
+                </ul>
+                <li>Example: scheduling a GPU workload</li>
+                <pre class="brush: bash; class-name: 'tight'">
+spec:
+  nodeSelector:
+    accelerator: nvidia-tesla-a100
+    tolerations:
+    - key: "gpu"
+      operator: "Exists"
+      effect: "NoSchedule"
+  containers:
+  - name: trainer
+    image: pytorch/pytorch:2.3
+    resources:
+      limits:
+        nvidia.com/gpu: "1"
+</pre>
+                <li>Pods that cannot be scheduled remain in <code>Pending</code> state
+                </li>
+            </ul>
+        </div>
+
+        <div class="slide">
+            <hgroup>
+                <h1>Scoring &ndash; Soft Preferences</h1>
+            </hgroup>
+            <ul class="xx-small">
+                <li>After filtering, each remaining node receives a score 0&ndash;100</li>
+                <ul>
+                    <li>Final node score is a weighted sum across all enabled scoring plugins</li>
+                </ul>
+                <li>Final score formula</li>
+                <ul>
+                    <li><code>finalScore(node) = &sum; pluginScore(node, p) &times; pluginWeight(p)</code></li>
+                    <li>The node with the highest <code>finalScore</code> is selected; ties are broken randomly</li>
+                </ul>
+                <li>Key scoring plugins</li>
+                <ul>
+                    <li><b>LeastAllocated</b> &ndash; prefers nodes with most free CPU and memory</li>
+                    <li><b>MostAllocated</b> &ndash; bin-packing; fills nodes before using new ones</li>
+                    <li><b>NodeAffinity</b> &ndash; rewards nodes matching preferred affinity rules</li>
+                    <li><b>InterPodAffinity</b> &ndash; rewards co-location or spread based on soft rules</li>
+                    <li><b>ImageLocality</b> &ndash; prefers nodes that already have the container image</li>
+                    <li><b>TaintToleration</b> &ndash; penalises nodes with tolerated-but-present taints</li>
+                </ul>
+        </div>
+
+        <div class="slide">
+            <hgroup>
+                <h1>Kubernetes Lease-Based Leader Election</h1>
+            </hgroup>
+            <ul class="xx-small">
+                <li>Each controller that needs a leader creates a <code>coordination.k8s.io/Lease</code> object</li>
+                <ul>
+                    <li>The holder writes its identity and a <b>renewTime</b> timestamp periodically</li>
+                    <li>If renewTime is stale by more than <code>leaseDuration</code>, a candidate can acquire the
+                        lease</li>
+                    <li>Optimistic concurrency (resource version) prevents two candidates from acquiring
+                        simultaneously</li>
+                </ul>
+                <li>Parameters</li>
+                <ul>
+                    <li><code>leaseDuration</code> &ndash; how long a lease is valid without renewal (default 15 s)
+                    </li>
+                    <li><code>renewDeadline</code> &ndash; leader must renew within this window (default 10 s)</li>
+                    <li><code>retryPeriod</code> &ndash; how often candidates retry acquisition (default 2 s)</li>
+                </ul>
+                <li>Illustrated state machine</li>
+                <pre class="brush: bash; class-name: 'tight'">
+┌──────────────────────────────────────────────────┐
+│ Candidate A                                      │
+│   GET Lease → leaseDuration expired?             │
+│     YES → PUT Lease(holder=A, renewTime=now)     │
+│            → success (no conflict) → LEADER      │
+│            → 409 conflict (B won) → wait+retry   │
+│   As LEADER: every renewDeadline/2 renew lease   │
+│   On crash: lease expires → B or C takes over    │
+└──────────────────────────────────────────────────┘
+</pre>
+                <li>Inspecting the current leader:<br /> <code>kubectl get lease -n kube-system kube-scheduler -o
+                    yaml</code>
+                </li>
+            </ul>
+        </div>
+
+    </section>
+
+    <div class="slide outline"></div>
+
+    <section>
+        <header>Scalability and HPA</header>
+
+        <div class="slide">
+            <hgroup>
+                <h1>Horizontal vs. Vertical Scaling</h1>
+            </hgroup>
+            <ul class="xx-small">
+                <li><b>Vertical scaling (scale-up)</b> &ndash; give the same instance more CPU/memory</li>
+                <ul>
+                    <li>Simple to implement; no application changes required</li>
+                    <li>Pod needs to be restarted (in-place resize is possible)</li>
+                </ul>
+                <li><b>Horizontal scaling (scale-out)</b> &ndash; add more replicas of the same component</li>
+                <ul>
+                    <li>Near-linear throughput increase for stateless services</li>
+                    <li>Fault tolerance improves with replica count</li>
+                    <li>Requires applications to be <b>stateless</b> or use shared state (DB, cache)</li>
+                </ul>
+                <li>Comparison at a glance</li>
+                <ul>
+                    <li>Vertical: fast to apply, limited headroom, downtime risk, good for stateful databases</li>
+                    <li>Horizontal: unlimited (in theory), zero-downtime, preferred for web/API tiers</li>
+                </ul>
+                <li>Kubernetes supports both: <b>HPA</b> (horizontal) and <b>VPA</b> (vertical)</li>
+            </ul>
+        </div>
+
+        <div class="slide">
+            <hgroup>
+                <h1>HPA Overview</h1>
+            </hgroup>
+            <ul class="x-small">
+                <li>The <b>HorizontalPodAutoscaler</b> automatically adjusts the replica count of a workload</li>
+                <ul>
+                    <li>Targets: <code>Deployment</code>, <code>ReplicaSet</code>, <code>StatefulSet</code>, or any
+                        resource implementing the scale subresource</li>
+                    <li>Operates as a control loop running every 15 s (configurable)
+                    </li>
+                </ul>
+                <li>Supported metric types</li>
+                <ul>
+                    <li><b>Resource metrics</b> &ndash; CPU/memory utilisation from <code>metrics-server</code></li>
+                    <li><b>Custom metrics</b> &ndash; application-specific metrics via
+                        <code>custom.metrics.k8s.io</code> API
+                    </li>
+                    <li><b>Object metrics</b> &ndash; a single metric on a specific Kubernetes object (e.g. Ingress
+                        RPS)</li>
+                </ul>
+                <li>HPA does <em>not</em> start new nodes</li>
+                <ul>
+                    <li>Cluster Autoscaler is needed when no node has
+                        capacity</li>
+                </ul>
+            </ul>
+        </div>
+
+        <div class="slide">
+            <hgroup>
+                <h1>HPA Control Loop</h1>
+            </hgroup>
+            <ul class="xx-small">
+                <li>The HPA controller computes the desired replica count using the formula</li>
+                <ul>
+                    <li><code>desiredReplicas = ceil(currentReplicas &times; (currentMetric / desiredMetric))</code>
+                    </li>
+                    <li>Example: 3 replicas, CPU at 80%, target 50% &rarr; ceil(3 &times; 80/50) = ceil(4.8) =
+                        <b>5</b>
+                    </li>
+                </ul>
+                <li>Scale-down is stabilised to prevent flapping</li>
+                <ul>
+                    <li>Default stabilisation window: <b>5 minutes</b> before scaling down</li>
+                    <li>Scale-up is immediate (no default stabilisation)</li>
+                </ul>
+                <li>Control flow</li>
+                <pre class="brush: bash; class-name: 'tight'">
+Every 15 s:
+1. Fetch metric values for all Pods in the target
+2. Discard Pods in terminating or not-yet-ready state
+3. Compute desiredReplicas per metric; take the maximum
+4. if desiredReplicas < minReplicas → use minReplicas
+   if desiredReplicas > maxReplicas → use maxReplicas
+5. If stabilisation window allows → apply scale
+6. Update HPA status (currentReplicas, desiredReplicas, conditions)
+</pre>
+                <li>Observe current state: <code>kubectl get hpa -w</code></li>
+                <li>Detailed events: <code>kubectl describe hpa &lt;name&gt;</code></li>
+            </ul>
+        </div>
+
+        <div class="slide">
+            <hgroup>
+                <h1>HPA Configuration Example</h1>
+            </hgroup>
+            <ul class="xx-small">
+                <li>HPA v2 API allows multiple metrics and fine-grained scaling behaviour</li>
+                <pre class="brush: bash; class-name: 'code-small'">
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-server-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api-server
+  minReplicas: 2
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 60
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 512Mi
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 25
+        periodSeconds: 60
+    scaleUp:
+      policies:
+      - type: Pods
+        value: 4
+        periodSeconds: 30
+</pre>
+            </ul>
+        </div>
+
+        <div class="slide">
+            <hgroup>
+                <h1>Custom Metrics and KEDA</h1>
+            </hgroup>
+            <ul class="xx-small">
+                <li>Built-in CPU/memory metrics are insufficient for event-driven workloads
+                </li>
+                <li><b>Custom Metrics API</b> &ndash; adapters expose application metrics to HPA</li>
+                <ul>
+                    <li>Popular adapters: Prometheus Adapter, Datadog Cluster Agent</li>
+                    <li>Example: scale on HTTP request rate from Prometheus</li>
+                </ul>
+                <pre class="brush: bash; class-name: 'tight'">
+# HPA using a custom Prometheus metric
+metrics:
+- type: Pods
+pods:
+metric:
+    name: http_requests_per_second
+target:
+    type: AverageValue
+    averageValue: "500"
+</pre>
+                <li><b>KEDA</b> (Kubernetes Event-Driven Autoscaler)</li>
+                <ul>
+                    <li>Extends HPA with 60+ built-in scalers</li>
+                    <li>Scales on RabbitMQ queue length, Kafka consumer lag, &hellip;</li>
+                </ul>
+            </ul>
+        </div>
+
+    </section>
+
+</body>
+
+</html>
